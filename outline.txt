@@ -1,0 +1,470 @@
+engineering-os/
+│
+├── README.md
+├── pyproject.toml
+├── uv.lock
+├── .env.example
+├── docker-compose.yml
+├── Makefile
+│
+├── apps/
+│   │
+│   ├── api/
+│   │   ├── main.py
+│   │   │
+│   │   ├── routes/
+│   │   │   ├── projects.py
+│   │   │   ├── requirements.py
+│   │   │   ├── designs.py
+│   │   │   ├── analyses.py
+│   │   │   ├── tasks.py
+│   │   │   ├── agents.py
+│   │   │   ├── artifacts.py
+│   │   │   ├── bom.py
+│   │   │   ├── sourcing.py
+│   │   │   └── reviews.py
+│   │   │
+│   │   ├── websocket/
+│   │   │   └── events.py
+│   │   │
+│   │   └── dependencies.py
+│   │
+│   ├── worker/
+│   │   ├── main.py
+│   │   ├── agent_worker.py
+│   │   ├── solver_worker.py
+│   │   ├── artifact_worker.py
+│   │   └── cad_worker.py
+│   │
+│   └── frontend/
+│       ├── src/
+│       │   ├── project/
+│       │   ├── requirements/
+│       │   ├── cad/
+│       │   ├── graph/
+│       │   ├── agents/
+│       │   ├── analyses/
+│       │   ├── bom/
+│       │   └── reviews/
+│       └── package.json
+│
+│
+├── src/
+│   │
+│   ├── domain/
+│   │   │
+│   │   ├── ontology/
+│   │   │   ├── entities.py
+│   │   │   ├── relations.py
+│   │   │   ├── identifiers.py
+│   │   │   ├── schema.py
+│   │   │   └── validation.py
+│   │   │
+│   │   ├── projects/
+│   │   │   ├── project.py
+│   │   │   ├── state.py
+│   │   │   └── lifecycle.py
+│   │   │
+│   │   ├── requirements/
+│   │   │   ├── requirement.py
+│   │   │   ├── schema.py
+│   │   │   ├── allocation.py
+│   │   │   ├── verification.py
+│   │   │   └── baseline.py
+│   │   │
+│   │   ├── design/
+│   │   │   ├── design.py
+│   │   │   ├── revision.py
+│   │   │   ├── parameter.py
+│   │   │   ├── component.py
+│   │   │   ├── interface.py
+│   │   │   └── change.py
+│   │   │
+│   │   ├── analysis/
+│   │   │   ├── request.py
+│   │   │   ├── result.py
+│   │   │   ├── artifact.py
+│   │   │   └── fidelity.py
+│   │   │
+│   │   ├── verification/
+│   │   │   ├── evidence.py
+│   │   │   ├── status.py
+│   │   │   └── rules.py
+│   │   │
+│   │   ├── reviews/
+│   │   │   ├── srr.py
+│   │   │   ├── pdr.py
+│   │   │   ├── cdr.py
+│   │   │   └── readiness.py
+│   │   │
+│   │   ├── bom/
+│   │   │   ├── item.py
+│   │   │   ├── ebom.py
+│   │   │   ├── mbom.py
+│   │   │   └── costing.py
+│   │   │
+│   │   ├── sourcing/
+│   │   │   ├── component.py
+│   │   │   ├── supplier.py
+│   │   │   ├── quote.py
+│   │   │   └── lifecycle.py
+│   │   │
+│   │   └── common/
+│   │       ├── units.py
+│   │       ├── enums.py
+│   │       └── errors.py
+│   │
+│   │
+│   ├── orchestration/
+│   │   ├── orchestrator.py
+│   │   ├── project_loop.py
+│   │   ├── scheduler.py
+│   │   ├── task_planner.py
+│   │   ├── state_machine.py
+│   │   ├── workflow.py
+│   │   ├── recovery.py
+│   │   └── convergence.py
+│   │
+│   │
+│   ├── dependency/
+│   │   ├── graph.py
+│   │   ├── node.py
+│   │   ├── edge.py
+│   │   ├── compiler.py
+│   │   ├── contracts.py
+│   │   ├── traversal.py
+│   │   ├── invalidation.py
+│   │   ├── cycle_detection.py
+│   │   └── impact_analysis.py
+│   │
+│   │
+│   ├── events/
+│   │   ├── event.py
+│   │   ├── types.py
+│   │   ├── bus.py
+│   │   ├── subscriptions.py
+│   │   ├── handlers.py
+│   │   └── outbox.py
+│   │
+│   │
+│   ├── tasks/
+│   │   ├── task.py
+│   │   ├── status.py
+│   │   ├── queue.py
+│   │   ├── registry.py
+│   │   └── completion.py
+│   │
+│   │
+│   ├── agents/
+│   │   ├── runtime.py
+│   │   ├── registry.py
+│   │   ├── agent.py
+│   │   ├── permissions.py
+│   │   ├── mailbox.py
+│   │   ├── messages.py
+│   │   ├── response.py
+│   │   │
+│   │   ├── context/
+│   │   │   ├── builder.py
+│   │   │   ├── retrieval.py
+│   │   │   ├── policy.py
+│   │   │   ├── compression.py
+│   │   │   └── ranking.py
+│   │   │
+│   │   └── roles/
+│   │       ├── chief.yaml
+│   │       ├── systems.yaml
+│   │       ├── aero.yaml
+│   │       ├── structures.yaml
+│   │       ├── propulsion.yaml
+│   │       ├── cad.yaml
+│   │       ├── software.yaml
+│   │       ├── sourcing.yaml
+│   │       ├── bom.yaml
+│   │       └── verification.yaml
+│   │
+│   │
+│   ├── reasoning/
+│   │   ├── base.py
+│   │   ├── router.py
+│   │   ├── response_schema.py
+│   │   │
+│   │   └── providers/
+│   │       ├── openai.py
+│   │       ├── kimi.py
+│   │       ├── local.py
+│   │       └── proprietary.py
+│   │
+│   │
+│   ├── tools/
+│   │   ├── registry.py
+│   │   ├── definition.py
+│   │   ├── permissions.py
+│   │   │
+│   │   ├── project/
+│   │   │   ├── get_state.py
+│   │   │   ├── get_design.py
+│   │   │   ├── get_requirement.py
+│   │   │   └── publish_finding.py
+│   │   │
+│   │   ├── design/
+│   │   │   ├── propose_change.py
+│   │   │   ├── create_branch.py
+│   │   │   └── compare_designs.py
+│   │   │
+│   │   ├── engineering/
+│   │   │   ├── run_fea.py
+│   │   │   ├── run_cfd.py
+│   │   │   ├── run_topopt.py
+│   │   │   ├── run_trajectory.py
+│   │   │   ├── run_propulsion.py
+│   │   │   └── run_optimizer.py
+│   │   │
+│   │   ├── cad/
+│   │   │   ├── create_part.py
+│   │   │   ├── modify_parameter.py
+│   │   │   ├── create_assembly.py
+│   │   │   └── export_geometry.py
+│   │   │
+│   │   └── sourcing/
+│   │       ├── search_parts.py
+│   │       ├── get_quote.py
+│   │       └── find_alternates.py
+│   │
+│   │
+│   ├── solvers/
+│   │   ├── base.py
+│   │   ├── registry.py
+│   │   ├── job.py
+│   │   │
+│   │   ├── rocket/
+│   │   │   └── adapter.py
+│   │   │
+│   │   ├── structures/
+│   │   │   └── adapter.py
+│   │   │
+│   │   ├── topopt/
+│   │   │   └── adapter.py
+│   │   │
+│   │   ├── trajectory/
+│   │   │   └── adapter.py
+│   │   │
+│   │   ├── propulsion/
+│   │   │   └── adapter.py
+│   │   │
+│   │   └── cfd/
+│   │       └── adapter.py
+│   │
+│   │
+│   ├── optimization/
+│   │   ├── problem.py
+│   │   ├── objectives.py
+│   │   ├── constraints.py
+│   │   ├── design_space.py
+│   │   ├── result.py
+│   │   │
+│   │   └── algorithms/
+│   │       ├── genetic.py
+│   │       ├── nsga.py
+│   │       └── custom.py
+│   │
+│   │
+│   ├── cad/
+│   │   ├── service.py
+│   │   ├── semantic_api.py
+│   │   ├── geometry.py
+│   │   ├── assembly.py
+│   │   ├── revision.py
+│   │   │
+│   │   ├── backends/
+│   │   │   ├── occt.py
+│   │   │   └── picogk.py
+│   │   │
+│   │   └── conversion/
+│   │       ├── mesh.py
+│   │       ├── step.py
+│   │       └── analysis_geometry.py
+│   │
+│   │
+│   ├── sourcing/
+│   │   ├── service.py
+│   │   ├── normalization.py
+│   │   ├── validation.py
+│   │   ├── ranking.py
+│   │   │
+│   │   └── providers/
+│   │       ├── generic_web.py
+│   │       ├── digikey.py
+│   │       ├── mouser.py
+│   │       └── internal_catalog.py
+│   │
+│   │
+│   ├── bom/
+│   │   ├── service.py
+│   │   ├── builder.py
+│   │   ├── costing.py
+│   │   ├── alternates.py
+│   │   ├── supply_risk.py
+│   │   └── manufacturing.py
+│   │
+│   │
+│   ├── artifacts/
+│   │   ├── model.py
+│   │   ├── compiler.py
+│   │   ├── dependency.py
+│   │   │
+│   │   ├── reviews/
+│   │   │   ├── srr.py
+│   │   │   ├── pdr.py
+│   │   │   └── cdr.py
+│   │   │
+│   │   ├── technical/
+│   │   │   ├── icd.py
+│   │   │   ├── verification_matrix.py
+│   │   │   ├── traceability_matrix.py
+│   │   │   └── risk_register.py
+│   │   │
+│   │   ├── software/
+│   │   │   ├── github.py
+│   │   │   ├── api_docs.py
+│   │   │   └── release_notes.py
+│   │   │
+│   │   └── renderers/
+│   │       ├── pdf.py
+│   │       ├── docx.py
+│   │       ├── markdown.py
+│   │       └── html.py
+│   │
+│   │
+│   ├── validation/
+│   │   ├── engine.py
+│   │   ├── schema.py
+│   │   ├── units.py
+│   │   ├── provenance.py
+│   │   ├── permissions.py
+│   │   ├── solver_result.py
+│   │   └── revision.py
+│   │
+│   │
+│   ├── baselines/
+│   │   ├── manager.py
+│   │   ├── change_request.py
+│   │   ├── approval.py
+│   │   └── diff.py
+│   │
+│   │
+│   ├── provenance/
+│   │   ├── lineage.py
+│   │   ├── causality.py
+│   │   └── audit.py
+│   │
+│   │
+│   └── persistence/
+│       ├── database.py
+│       ├── transactions.py
+│       │
+│       ├── repositories/
+│       │   ├── projects.py
+│       │   ├── requirements.py
+│       │   ├── designs.py
+│       │   ├── tasks.py
+│       │   ├── messages.py
+│       │   ├── analyses.py
+│       │   ├── artifacts.py
+│       │   └── bom.py
+│       │
+│       ├── vector/
+│       │   └── pgvector.py
+│       │
+│       ├── objects/
+│       │   └── s3.py
+│       │
+│       └── cache/
+│           └── redis.py
+│
+│
+├── schemas/
+│   ├── ontology/
+│   ├── requirements/
+│   ├── tools/
+│   ├── agents/
+│   ├── messages/
+│   └── artifacts/
+│
+│
+├── migrations/
+│   └── ...
+│
+│
+├── tests/
+│   ├── unit/
+│   │   ├── domain/
+│   │   ├── dependency/
+│   │   ├── agents/
+│   │   ├── orchestration/
+│   │   └── validation/
+│   │
+│   ├── integration/
+│   │   ├── solvers/
+│   │   ├── cad/
+│   │   ├── reasoning/
+│   │   └── persistence/
+│   │
+│   ├── scenarios/
+│   │   ├── sounding_rocket/
+│   │   ├── requirement_change/
+│   │   ├── structural_failure/
+│   │   └── bom_constraint/
+│   │
+│   └── evals/
+│       ├── chief_agent/
+│       ├── structures_agent/
+│       ├── tool_selection/
+│       ├── hallucination/
+│       └── design_quality/
+│
+│
+├── examples/
+│   └── sounding_rocket/
+│       ├── project.yaml
+│       ├── requirements.yaml
+│       ├── initial_design.yaml
+│       └── run.py
+│
+│
+├── docs/
+│   ├── architecture/
+│   │   ├── overview.md
+│   │   ├── ontology.md
+│   │   ├── dependency_graph.md
+│   │   ├── agent_runtime.md
+│   │   ├── event_system.md
+│   │   └── review_gates.md
+│   │
+│   ├── api/
+│   ├── solvers/
+│   ├── agents/
+│   └── adr/
+│       ├── 0001-project-ontology.md
+│       ├── 0002-immutable-design-revisions.md
+│       ├── 0003-model-provider-abstraction.md
+│       └── 0004-event-driven-orchestration.md
+│
+│
+├── infra/
+│   ├── docker/
+│   │   ├── api.Dockerfile
+│   │   ├── worker.Dockerfile
+│   │   └── solver.Dockerfile
+│   │
+│   ├── terraform/
+│   ├── kubernetes/
+│   └── monitoring/
+│
+│
+└── scripts/
+    ├── seed_db.py
+    ├── run_worker.py
+    ├── rebuild_graph.py
+    ├── import_project.py
+    └── run_demo.py
