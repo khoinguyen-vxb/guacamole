@@ -314,7 +314,10 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         with (
             tempfile.TemporaryDirectory() as directory,
             Project(
-                Path(directory), reasoning=Conversation(), jev=TestJev()
+                Path(directory) / "state",
+                sandbox=Path(directory) / "outputs",
+                reasoning=Conversation(),
+                jev=TestJev(),
             ) as project,
         ):
             result = await project.run(
@@ -334,6 +337,16 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             self.assertIsNotNone(peers[0].parent_id)
             self.assertTrue(project.trace(peers[0].parent_id)["events"])
             self.assertTrue(project.store.list("rationale"))
+            packets = project.store.list("context")
+            self.assertEqual(
+                {packet.data["agent_id"] for packet in packets},
+                {agent.ref.id for agent in project.store.list("agent")},
+            )
+            for packet in packets:
+                self.assertEqual(
+                    json.loads(packet.data["prompt"])["state"]["sandbox"],
+                    str(project.sandbox),
+                )
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@
 import fcntl
 import hashlib
 import mimetypes
+from contextlib import ExitStack
 from pathlib import Path
 from typing import TYPE_CHECKING, Self
 
@@ -48,37 +49,78 @@ class Project:
         self,
         workspace: Path,
         *,
+        sandbox: Path | None = None,
         tools: ToolRegistry | None = None,
         reasoning: ReasoningProvider | None = None,
         jev: JevProvider | None = None,
         read_only: bool = False,
     ) -> None:
-        workspace = workspace.resolve()
+        workspace = workspace.expanduser().resolve()
         self._lock = None
-        if not read_only:
-            workspace.mkdir(parents=True, exist_ok=True)
-            self._lock = (workspace / "runtime.lock").open("a")
-            try:
-                fcntl.flock(self._lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
-            except BlockingIOError:
-                self._lock.close()
-                raise RuntimeError(
-                    "This workspace already has a running Project"
-                ) from None
-        self.store = Store(workspace, read_only=read_only)
-        self.tools = tools if tools is not None else ToolRegistry()
-        for name, annotation in (("TaskReport@1", TaskReport), ("Note@1", Note)):
-            if name not in self.tools.schemas:
-                self.tools.schema(name, annotation)
-        self.reasoning = reasoning
-        self.activity = Activity(self.store, self.tools)
-        self.contexts = ContextBuilder(self.store, self.activity, self.tools)
-        self.decisions = Decisions(self, jev)
-        self.reviews = Reviews(self)
-        self.executor = Executor(self)
-        self.runtime: Runtime | None = None
-        if not read_only:
-            self.activity.recover()
+        with ExitStack() as cleanup:
+            if not read_only:
+                workspace.mkdir(parents=True, exist_ok=True)
+                self._lock = cleanup.enter_context(
+                    (workspace / "runtime.lock").open("a")
+                )
+                try:
+                    fcntl.flock(self._lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except BlockingIOError:
+                    raise RuntimeError(
+                        "This workspace already has a running Project"
+                    ) from None
+            self.store = Store(workspace, read_only=read_only)
+            cleanup.callback(self.store.close)
+            saved = self.store.db.execute(
+                "SELECT value FROM metadata WHERE key='sandbox'"
+            ).fetchone()
+            requested = sandbox.expanduser().resolve() if sandbox is not None else None
+            self._sandbox = Path(saved[0]) if saved else requested or workspace
+            if saved and requested is not None and requested != self._sandbox:
+                raise ValueError(f"Project already uses sandbox {self._sandbox}")
+            if (
+                not saved
+                and self._sandbox != workspace
+                and (
+                    read_only
+                    or self.store.db.execute("SELECT 1 FROM records LIMIT 1").fetchone()
+                )
+            ):
+                raise ValueError(
+                    "Existing project uses its workspace as sandbox; moving stored files is required"
+                )
+            if not read_only:
+                self._sandbox.mkdir(parents=True, exist_ok=True)
+                self.store.db.execute(
+                    "INSERT OR IGNORE INTO metadata VALUES ('sandbox',?)",
+                    (str(self._sandbox),),
+                )
+            self.tools = tools if tools is not None else ToolRegistry()
+            for name, annotation in (("TaskReport@1", TaskReport), ("Note@1", Note)):
+                if name not in self.tools.schemas:
+                    self.tools.schema(name, annotation)
+            self.reasoning = reasoning
+            self.activity = Activity(self.store, self.tools)
+            self.contexts = ContextBuilder(self.store, self.activity, self.tools)
+            self.decisions = Decisions(self, jev)
+            self.reviews = Reviews(self)
+            self.executor = Executor(self)
+            self.runtime: Runtime | None = None
+            if not read_only:
+                self.activity.recover()
+            cleanup.pop_all()
+
+    @property
+    def sandbox(self) -> Path:
+        """Shared agent output directory, persisted with the project."""
+        return self._sandbox
+
+    def output_path(self, path: Path) -> Path:
+        """Resolve an output inside the sandbox, rejecting traversal and symlink escapes."""
+        resolved = (self.sandbox / path).resolve()
+        if not resolved.is_relative_to(self.sandbox):
+            raise ValueError("Output path escapes project sandbox")
+        return resolved
 
     def __enter__(self) -> Self:
         return self
@@ -124,9 +166,9 @@ class Project:
     ) -> FileRecord:
         data = path.read_bytes()
         digest = hashlib.sha256(data).hexdigest()
-        directory = self.store.directory / "artifacts" / digest
+        directory = self.output_path(Path("artifacts") / digest)
         directory.mkdir(parents=True, exist_ok=True)
-        target = directory / path.name
+        target = self.output_path(directory / path.name)
         if not target.exists():
             temporary = directory / f".{uid()}.tmp"
             temporary.write_bytes(data)
@@ -158,7 +200,7 @@ class Project:
             )
         return FileRecord(
             name=path.name,
-            path=str(target.relative_to(self.store.directory)),
+            path=str(target.relative_to(self.sandbox)),
             sha256=digest,
             media_type=media,
             origin=str(path.resolve()),
@@ -169,8 +211,8 @@ class Project:
         )
 
     def verify_file(self, file: FileRecord) -> Path:
-        path = (self.store.directory / file.path).resolve()
-        if not path.is_relative_to(self.store.directory / "artifacts"):
+        path = self.output_path(Path(file.path))
+        if not path.is_relative_to(self.sandbox / "artifacts"):
             raise ValueError("Artifact path escapes project storage")
         if hashlib.sha256(path.read_bytes()).hexdigest() != file.sha256:
             raise ValueError("Artifact content hash changed")
@@ -191,11 +233,7 @@ class Project:
         if isinstance(payload, dict):
             if payload.get("kind") == "produced_file":
                 output = ProducedFile.model_validate(payload)
-                path = Path(output.path).resolve()
-                if not path.is_relative_to(self.store.directory):
-                    raise ValueError(
-                        "Produced files must be inside the project workspace"
-                    )
+                path = self.output_path(Path(output.path))
                 file = self._file(path, producer=request_id)
                 if file.sha256 != output.sha256:
                     raise ValueError(
@@ -290,7 +328,7 @@ class Project:
             FileRecord.model_validate_json(encode(s.data))
             for s in self.store.list("job_file")
             if s.data.get("producer_request") == request_id
-            and s.data["origin"] == str(Path(path).resolve())
+            and s.data["origin"] == str(self.output_path(Path(path)))
         ]
         if len(files) != 1:
             raise ValueError("Tool must return this path as a ProducedFile")

@@ -229,18 +229,19 @@ class Reviews:
         return ref
 
     def _export(self, manifest: ReviewManifest) -> Path:
-        directory = self.project.store.directory / "reviews" / manifest.id
+        output = self.project.output_path
+        directory = output(Path("reviews") / manifest.id)
         directory.mkdir(parents=True, exist_ok=True)
         revision = self.project.store.get("review", manifest.id).ref.revision
-        path = directory / f"manifest-v{revision}.json"
+        path = output(directory / f"manifest-v{revision}.json")
         path.write_text(manifest.model_dump_json(indent=2), encoding="utf-8")
-        package = directory / f"v{revision}"
+        package = output(directory / f"v{revision}")
         package.mkdir(exist_ok=True)
         records = [
             self.project.store.resolve(ref).model_dump(mode="json")
             for ref in manifest.baseline
         ]
-        (package / "records.json").write_text(encode(records), encoding="utf-8")
+        output(package / "records.json").write_text(encode(records), encoding="utf-8")
         artifacts = []
         for deliverable in manifest.deliverables:
             for ref in deliverable.artifacts:
@@ -251,7 +252,9 @@ class Reviews:
                     source = self.project.verify_file(artifact.file)
                 except (OSError, ValueError):
                     continue  # The generated manifest already reports the missing/stale input.
-                target = package / "files" / artifact.file.sha256 / artifact.file.name
+                target = output(
+                    package / "files" / artifact.file.sha256 / artifact.file.name
+                )
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(source, target)
                 artifacts.append(
@@ -271,7 +274,7 @@ class Reviews:
             + "\n".join(f"- {item}" for item in manifest.open_items)
             + "\n"
         )
-        (package / "review.md").write_text(text, encoding="utf-8")
+        output(package / "review.md").write_text(text, encoding="utf-8")
         traces = {
             r.id: self.project.trace(r.id)
             for r in self.project.requests(decision=manifest.plan_decision)
@@ -281,5 +284,5 @@ class Reviews:
             traces[manifest.readiness_decision] = self.project.trace(
                 manifest.readiness_decision
             )
-        (package / "traces.json").write_text(encode(traces), encoding="utf-8")
+        output(package / "traces.json").write_text(encode(traces), encoding="utf-8")
         return path

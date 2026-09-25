@@ -2,6 +2,7 @@
 
 import asyncio
 import time
+from pathlib import Path
 
 from pydantic import Field
 
@@ -145,9 +146,9 @@ class Runtime:
                     "Supply a ProjectRequest or an explicit run ID to resume"
                 )
             self.request, self.run_id = ProjectRequest.model_validate(request), uid()
-            work = store.directory / "work"
+            work = self.project.output_path(Path("work"))
             work.mkdir(exist_ok=True)
-            brief = work / f"brief-{self.run_id}.txt"
+            brief = self.project.output_path(work / f"brief-{self.run_id}.txt")
             brief.write_text(request.description, encoding="utf-8")
             sources = [self.project.ingest(brief, source_id="brief")]
             for path in request.documents:
@@ -293,6 +294,7 @@ class Runtime:
         return {
             "run_id": self.run_id,
             "workspace": str(store.directory),
+            "sandbox": str(self.project.sandbox),
             "last_observation": state.observation,
             "agents": [
                 {

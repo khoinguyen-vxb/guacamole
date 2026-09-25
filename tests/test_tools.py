@@ -13,7 +13,8 @@ from unittest.mock import patch
 from mcp import Client, StdioServerParameters
 from pydantic import BaseModel, ValidationError
 
-from guacamole import Project, ToolRegistry
+from guacamole import ProducedFile, Project, ToolRegistry
+from guacamole.contracts import FileRecord
 from guacamole.tools.mcp import ToolSession, create_mcp
 from guacamole.websocket import WebSocketBridge
 
@@ -48,6 +49,89 @@ def untyped(value: dict[str, Any]) -> int:
 
 
 class ToolsTests(unittest.IsolatedAsyncioTestCase):
+    async def test_sandbox_outputs_and_persistence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            workspace, sandbox = root / "state", root / "deliverables"
+            source = root / "previous.txt"
+            source.write_text("Original supplied design")
+
+            def write(filename: str) -> ProducedFile:
+                path = project.output_path(Path(filename))
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("TEST FIXTURE: generated software")
+                return ProducedFile.from_path(path)
+
+            def return_file(path: str) -> ProducedFile:
+                return ProducedFile.from_path(Path(path))
+
+            tools = ToolRegistry()
+            generate = tools.register(write)
+            supplied = tools.register(return_file)
+            with Project(workspace, sandbox=sandbox, tools=tools) as project:
+                self.assertEqual(project.sandbox, sandbox)
+                job = project.submit(generate, {"filename": "software/main.py"})
+                output = await job.collect()
+                self.assertEqual(Path(output.path), sandbox / "software/main.py")
+                saved = project.store.model(
+                    "job_file", f"{job.id}:{output.sha256}", FileRecord
+                )
+                snapshot = project.verify_file(saved)
+                self.assertTrue(snapshot.is_relative_to(sandbox / "artifacts"))
+                self.assertFalse((workspace / "artifacts").exists())
+                source_ref = project.ingest(source)
+                imported = project.store.model("source", source_ref.id, FileRecord)
+                self.assertEqual(
+                    project.verify_file(imported).read_text(), source.read_text()
+                )
+                # Intake may read outside the sandbox; generated outputs may not escape it.
+                (sandbox / "link").symlink_to(root, target_is_directory=True)
+                for filename in (str(source), "../escape.txt", "link/escape.txt"):
+                    with (
+                        self.subTest(filename=filename),
+                        self.assertRaisesRegex(ValueError, "sandbox"),
+                    ):
+                        await project.call(generate, {"filename": filename})
+                self.assertFalse((root / "escape.txt").exists())
+                for path in (source, sandbox / "link/previous.txt"):
+                    with self.assertRaisesRegex(ValueError, "sandbox"):
+                        await project.call(supplied, {"path": str(path)})
+                event_count = len(project.events())
+
+            with Project(workspace, read_only=True) as history:
+                self.assertEqual(history.sandbox, sandbox)
+                self.assertEqual(history.verify_file(saved), snapshot)
+                self.assertEqual(len(history.events()), event_count)
+            other = root / "different"
+            with self.assertRaisesRegex(ValueError, "already uses sandbox"):
+                Project(workspace, sandbox=other)
+            self.assertFalse(other.exists())
+            with Project(workspace) as reopened:
+                self.assertEqual(reopened.sandbox, sandbox)
+                self.assertEqual(
+                    reopened.verify_file(saved).read_text(),
+                    "TEST FIXTURE: generated software",
+                )
+
+            # Historical projects without the setting retain workspace-relative snapshots.
+            legacy = root / "legacy"
+            with Project(legacy) as project:
+                legacy_ref = project.ingest(source)
+                legacy_file = project.store.model("source", legacy_ref.id, FileRecord)
+                project.store.db.execute("DELETE FROM metadata WHERE key='sandbox'")
+            with self.assertRaisesRegex(ValueError, "Existing project"):
+                Project(legacy, sandbox=other)
+            with Project(legacy, read_only=True) as history:
+                self.assertEqual(history.sandbox, legacy)
+                self.assertEqual(
+                    history.verify_file(legacy_file).read_text(), source.read_text()
+                )
+                self.assertIsNone(
+                    history.store.db.execute(
+                        "SELECT value FROM metadata WHERE key='sandbox'"
+                    ).fetchone()
+                )
+
     async def test_failed_retry_read_only_inspection_and_alias_validation(self):
         type Unsafe = dict[str, Any]
 
@@ -151,34 +235,41 @@ class ToolsTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(len(project.requests()), 1)
 
     async def test_real_stdio_client(self):
-        root = Path(__file__).resolve().parents[1]
+        server = """
+import asyncio
+import sys
+from pathlib import Path
+from guacamole import Project, ToolRegistry
+from guacamole.tools.mcp import ToolSession, serve_stdio
+from test_tools import distance, nested
+
+tools = ToolRegistry()
+tools.register(distance)
+tools.register(nested)
+with Project(Path(sys.argv[1]), sandbox=Path(sys.argv[2]), tools=tools) as project:
+    asyncio.run(serve_stdio(ToolSession(project)))
+"""
         with tempfile.TemporaryDirectory() as directory:
             async with Client(
                 StdioServerParameters(
                     command=sys.executable,
                     args=[
-                        str(root / "examples/cross_domain.py"),
-                        "--mcp",
-                        "--workspace",
-                        directory,
+                        "-B",
+                        "-c",
+                        server,
+                        str(Path(directory) / "state"),
+                        str(Path(directory) / "outputs"),
                     ],
-                    cwd=root,
+                    cwd=Path(__file__).resolve().parent,
                 )
             ) as client:
                 listing = await client.list_tools()
                 self.assertEqual(len(listing.tools), 2)
                 result = await client.call_tool(
-                    "cantilever@1",
-                    {
-                        "force_n": 10.0,
-                        "length_m": 2.0,
-                        "youngs_pa": 200e9,
-                        "inertia_m4": 1e-6,
-                    },
+                    "distance@1",
+                    {"point": {"x": -2.0}},
                 )
-                self.assertAlmostEqual(
-                    result.structured_content["result"]["tip_m"], 10 * 8 / 600000
-                )
+                self.assertEqual(result.structured_content, {"result": 2.0})
 
     async def test_cancellation_does_not_claim_thread_termination(self):
         gate = threading.Event()

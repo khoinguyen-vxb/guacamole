@@ -258,9 +258,9 @@ notification is missed. Recorded order and causal references are both retained.
 
 ## Repository boundary
 
-The runtime lives in src/guacamole. Runnable scripts live in examples and the core
-checks live in tests. The unused application/reasoning scaffolds, domain-specific
-solver adapters, numerical backends, and their submodules have been removed.
+The runtime lives in src/guacamole and the core checks live in tests. The unused
+application/reasoning scaffolds, domain-specific solver adapters, numerical backends,
+and their submodules have been removed.
 
 Tool implementations, domain schemas, and numerical dependencies are supplied by
 user projects or separately installed packages. The core generates validation and
@@ -385,8 +385,9 @@ They do not enumerate engineering disciplines.
 ## Proposed scripting interface
 
 The following uses the scripting API. Project is configured with the user's registered tools, reasoning
-provider, mandatory Jev provider, and local workspace. Public models use strict
-validation, forbid extra fields, and enforce declared numerical constraints.
+provider, mandatory Jev provider, local workspace, and optional sandbox directory.
+Public models use strict validation, forbid extra fields, and enforce declared
+numerical constraints.
 
 ```python
 from pathlib import Path
@@ -483,7 +484,17 @@ inputs they used. Changing an input invalidates dependent evidence. Dependencies
 come from explicit recorded references; they cannot be inferred reliably from
 parameter names or agent conversation.
 
-Use SQLite and a local artifact directory. On restart, unfinished local work is
+Project(workspace, sandbox=Path("results"), ...) specifies the shared agent output
+directory for CAD, software, PCB files, and other deliverables. The workspace holds
+SQLite history and the runtime lock; artifact snapshots and review packages live
+inside the sandbox. Tools use project.output_path(...) to resolve output paths
+and reject traversal or symlink escapes before writing. Returned ProducedFile
+paths are checked again during capture. This validates declared outputs; tool
+providers remain responsible for process isolation. The sandbox path is persisted
+and included in each agent's context. Omitting it on first initialization uses the
+workspace, preserving the existing layout.
+
+Use SQLite and local artifact files. On restart, unfinished local work is
 marked interrupted and reconciled using the saved request/attempt history; it is
 not silently treated as completed or automatically replayed. Inbox messages,
 response obligations, and context references survive the restart. Human review is

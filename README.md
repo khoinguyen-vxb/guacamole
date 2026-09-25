@@ -8,26 +8,41 @@ in a local SQLite workspace. There is no platform frontend or HTTP service.
 
 ```bash
 uv sync
-uv run python examples/cross_domain.py
 ```
 
-The example registers beam and thermal calculations directly. Tool input/output
-annotations generate strict runtime validation and MCP schemas. New tools do not
-require a solver adapter, agent role, or skill file in Guacamole.
+Tool input/output annotations generate strict runtime validation and MCP schemas.
+New tools do not require a solver adapter, agent role, or skill file in Guacamole.
+
+## Loading custom tools
+
+Put your typed functions in a module beside your script, or import them from an
+installed package. For example, create `engineering_tools.py`:
+
+```python
+from typing import Annotated
+from pydantic import Field
+
+type Positive = Annotated[float, Field(gt=0, allow_inf_nan=False)]
+
+def temperature_rise(power_w: Positive, resistance_k_w: Positive) -> float:
+    """Steady temperature rise in kelvin for a lumped thermal resistance."""
+    return power_w * resistance_k_w
+```
+
+Then import and register the functions you want to expose:
 
 ```python
 import asyncio
 from pathlib import Path
 from guacamole import Project, ToolRegistry
+from engineering_tools import temperature_rise
 
-def temperature_rise(power_w: float, resistance_k_w: float) -> float:
-    """Temperature rise in kelvin for a lumped thermal resistance."""
-    return power_w * resistance_k_w
-
-async def main():
+async def main() -> None:
     tools = ToolRegistry()
     tool = tools.register(temperature_rise, version="1", retry_safe=True)
-    with Project(Path(".guacamole/example"), tools=tools) as project:
+    with Project(
+        Path(".guacamole/example"), sandbox=Path("results/example"), tools=tools
+    ) as project:
         job = project.submit(tool, {"power_w": 20.0, "resistance_k_w": 0.5})
         print(await job.collect())
         print(project.trace(job.id))
@@ -35,18 +50,56 @@ async def main():
 asyncio.run(main())
 ```
 
+In this example, `temperature_rise` declares positive, finite inputs in watts and
+kelvins per watt and returns a temperature rise in kelvin. Its docstring becomes
+the tool description. Supplying `"20"` instead of a number, a negative resistance,
+or an unknown argument fails validation before execution. The same registry can
+be passed to an autonomous Project configured with reasoning and Jev providers.
+
 Use fully annotated functions, bound methods, dataclasses, or Pydantic models.
 Declare physical bounds, units, frames, and shapes in provider-owned models and
 validators. Missing annotations, `Any`/opaque objects, undeclared input fields,
 coercible strings, nonfinite values, and invalid outputs are rejected. A successful
 tool execution does not imply convergence or physical acceptance.
 
-Tools write native files under the project workspace and return
+Tools write native files under `project.sandbox` and return
 `ProducedFile.from_path(path)`. The executor snapshots the bytes before success.
 Explicit acceptance tools return `VerificationResult`. Publishing evidence checks
 that the verification actually used the claimed artifact revision. Native solver
 objects remain inside the provider. Keep credentials in provider configuration or
 environment variables rather than tool arguments, documents, or model context.
+
+## Agent sandbox
+
+Choose the directory for CAD, software, PCB files, and other deliverables when
+creating the project:
+
+```python
+with Project(
+    Path(".guacamole/rocket"),  # SQLite history and runtime lock
+    sandbox=Path("results/rocket"),  # Shared Chief/worker output directory
+    tools=tools,
+) as project:
+    destination = project.output_path(Path("software/controller.py"))
+    # A registered tool can write here and return ProducedFile.from_path(destination).
+```
+
+The sandbox is created automatically and its absolute path is included in every
+agent's context as `state.sandbox`. Tools can use `project.sandbox` or
+`project.output_path(relative_path)`; the latter rejects paths and symlinks escaping
+the sandbox. Tools create their own subdirectories and return each generated file
+as a `ProducedFile`. Artifact snapshots live in `sandbox/artifacts/`, and PDR/CDR
+packages in `sandbox/reviews/`. `FileRecord.path` is relative to the sandbox.
+Original input documents may live outside it and are copied into artifact storage.
+
+The path is saved with the project and reused when reopening it, including
+read-only inspection. On first initialization, omitting `sandbox` uses the workspace
+directory. An existing project's sandbox cannot be changed through this argument;
+repointing it would detach stored file references. Relative paths are resolved
+against the process's current directory. Tool working directories are unchanged.
+
+This boundary validates output paths; registered Python tools and their subprocesses
+retain their operating-system permissions. Providers manage any process isolation.
 
 ## Autonomous projects
 
@@ -68,10 +121,15 @@ There is no default or fallback decision provider. Test doubles are explicitly
 labelled in decision records, review manifests, and project results.
 
 ```python
+from pathlib import Path
+
 from guacamole import ContextSpec, Project, ProjectRequest
 from guacamole.providers.astra import AstraReasoning
 
-project = Project(workspace, tools=tools, reasoning=AstraReasoning(), jev=your_jev)
+project = Project(
+    workspace, sandbox=Path("results/project"), tools=tools,
+    reasoning=AstraReasoning(), jev=your_jev,
+)
 try:
     result = await project.run(ProjectRequest(
         description=your_project_description,
@@ -117,9 +175,7 @@ analysis, and outstanding evidence keep a project incomplete. The engine cannot
 manufacture CAD, electronics, software builds, or physical test results when the
 supplied tools cannot produce them.
 
-The [sounding rocket script](examples/sounding_rocket/run.py) accepts a
-`module:function` factory returning a Project with your tools and Jev configured.
-It preserves the requested brief and accepts repeated `--document` arguments.
+Supply project documents through `ProjectRequest.documents` as shown above.
 Actual rocket PDR/CDR delivery and real Jev integration are **not yet validated**;
 the offline tests exercise orchestration with labelled fixtures.
 
@@ -172,8 +228,8 @@ connection for a subscription. No listener starts automatically.
 
 ## Repository layout
 
-The runtime lives in `src/guacamole`, runnable scripts in `examples`, and checks in
-`tests`. [outline.txt](outline.txt) lists the files and their responsibilities.
+The runtime lives in `src/guacamole` and tests live in `tests`.
+[outline.txt](outline.txt) lists the files and their responsibilities.
 Engineering tools, their schemas, and numerical dependencies belong in supplied
 project code or separately installed packages.
 
@@ -182,8 +238,8 @@ project code or separately installed packages.
 ```bash
 uv sync --extra websocket
 PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m unittest discover -s tests -v
-.venv/bin/ruff check src examples tests
-.venv/bin/ruff format --check src examples tests
+.venv/bin/ruff check src tests
+.venv/bin/ruff format --check src tests
 .venv/bin/ty check
 uv lock --check
 ```

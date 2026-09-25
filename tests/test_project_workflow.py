@@ -38,9 +38,10 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
     async def test_autonomous_loop_pauses_and_resumes_at_both_human_reviews(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            sandbox = root / "outputs"
 
             def design() -> ProducedFile:
-                path = root / "fixture.txt"
+                path = project.output_path(Path("fixture.txt"))
                 path.write_text("TEST FIXTURE: not an engineering design")
                 return ProducedFile.from_path(path)
 
@@ -60,6 +61,7 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
             class Workflow(TestReasoning):
                 async def respond(self, packet):
                     assert project.context(packet.id) == packet
+                    assert json.loads(packet.prompt)["state"]["sandbox"] == str(sandbox)
                     store = project.store
                     stage = "CDR" if project.reviews.accepted("PDR") else "PDR"
                     requirement = store.maybe("requirement", "r")
@@ -160,7 +162,11 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                     )
 
             with Project(
-                root, tools=tools, reasoning=Workflow(), jev=TestJev()
+                root / "state",
+                sandbox=sandbox,
+                tools=tools,
+                reasoning=Workflow(),
+                jev=TestJev(),
             ) as project:
                 result = await project.run(
                     ProjectRequest(
@@ -180,6 +186,9 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                         if project.store.resolve(ref).data["stage"] == stage
                     )
                     self.assertTrue(project.store.resolve(ready).data["test_only"])
+                    self.assertTrue(
+                        (sandbox / "reviews" / ready.id / "v2/review.md").is_file()
+                    )
                     project.reviews.accept(
                         ready, reviewer="fixture user", disposition="Fixture acceptance"
                     )
@@ -187,6 +196,8 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(result.status, "complete")
                 self.assertTrue(result.test_only)
                 self.assertEqual(len(project.store.list("agent")), 1)
+                self.assertTrue((sandbox / "work").is_dir())
+                self.assertFalse((root / "state/reviews").exists())
 
     async def test_pdr_cdr_artifact_evidence_human_gate_and_invalidation(self):
         with tempfile.TemporaryDirectory() as directory:

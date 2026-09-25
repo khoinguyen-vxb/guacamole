@@ -48,12 +48,6 @@ guacamole/
 │       │
 │       └── websocket.py             # Optional local script control/events bridge
 │
-├── examples/
-│   ├── cross_domain.py              # Early check: register unrelated engineering tools
-│   └── sounding_rocket/
-│       ├── run.py                   # V0 mission → PDR → CDR using supplied tools
-│       └── project_description.txt  # 10,000 ft +/- 2,000 ft, airbrakes, 3U/2 kg payload
-│
 └── tests/
     ├── runtime_support.py           # Shared, labelled reasoning and Jev test doubles
     ├── test_tools.py                # Contracts and Python/MCP result equivalence
@@ -69,13 +63,18 @@ my_project/
 ├── run.py                           # Imports and explicitly registers chosen tools
 ├── engineering_tools.py             # Needed only for user-defined code/integration
 ├── inputs/                          # Original project documents and experimental data
-└── workspace/                       # Runtime outputs, outside the core package
-    ├── project.sqlite3              # State, messages, requests, rationales, activity log
-    ├── artifacts/                   # Versioned design, software, build and run outputs
-    └── reviews/                     # PDR/CDR manifests and compiled packages
+├── workspace/                       # Runtime state, outside the core package
+│   ├── project.sqlite3              # State, messages, requests, rationales, activity log
+│   └── runtime.lock                 # One active Project per workspace
+└── results/                         # Project(..., sandbox=Path("results"))
+    ├── artifacts/                   # Versioned source/design/software/run snapshots
+    ├── reviews/                     # PDR/CDR manifests and compiled packages
+    └── ...                          # Tool-created CAD, software, PCB and other files
 
 An already annotated function can be registered directly from run.py. No separate
 tool file, solver-family adapter, role definition, or skill file is mandatory.
+The shared agent sandbox is persisted with the project and provided to every
+agent. Without an explicit sandbox, outputs remain under the workspace directory.
 
 CORE CONTRACTS
 
@@ -290,8 +289,8 @@ CHECKOUT BOUNDARY
   scaffolds, domain-specific adapters, bundled backends, and submodules are removed.
 - Tool packages own their domain schemas and dependencies and register directly.
   Local jobs use src/guacamole/tools/execution.py without adapter inheritance.
-- Project documents and experimental data are user inputs. The sounding-rocket
-  script accepts their paths through repeated --document arguments.
+- Project documents and experimental data are user inputs, supplied as paths
+  through ProjectRequest.documents in the user's script.
 - Core tests exercise the runtime without engineering backend dependencies.
   Real Jev and mission acceptance still require configured providers and tools.
 

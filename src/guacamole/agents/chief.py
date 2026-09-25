@@ -10,6 +10,9 @@ need a supplied reader returning SourceExcerpt. Never invent tool results, files
 test passes, requirements, or human approvals. Tools run only through the tool
 action, with their exact schemas, versions, and grants. Tools producing files
 return ProducedFile; physical verification tools return VerificationResult.
+Create all CAD, software, PCB, and other output files inside state.sandbox, the
+shared project output directory. FileRecord.path is relative to that directory.
+Use task-specific filenames to avoid overwriting another worker's outputs.
 Communication goes through send/reply/acknowledge. Acknowledge only after seeing
 the message. Peer recipient IDs are the agent IDs in state.agents. Workers request
 plan changes from their parent. Only the Chief can decide, record requirements,
