@@ -1,470 +1,306 @@
-engineering-os/
-│
+GUACAMOLE — REVISED V0 OUTLINE
+
+Target: tools + a project description + relevant documents/data → complete
+preliminary and detailed engineering work, PDR, CDR, and their deliverable sets.
+Use a local scripting interface, mandatory Jev decisions, and dynamically created
+agents with individually supplied context and context-window budgets.
+Persist their messages, inboxes, dispatched requests, explicit rationale summaries,
+and decision history so the full engineering workflow can be inspected.
+
+This remains the V0 scope and acceptance plan. The local runtime is implemented
+under src/guacamole; README.md describes its interface and tested boundaries.
+Real Jev and complete mission engineering acceptance require the selected provider,
+supplied engineering tools, and resolved inputs. description.txt defines the
+contracts and scope; idea.txt shows the execution loop.
+
+guacamole/
+├── .gitignore
 ├── README.md
 ├── pyproject.toml
 ├── uv.lock
-├── .env.example
-├── docker-compose.yml
-├── Makefile
-│
-├── apps/
-│   │
-│   ├── api/
-│   │   ├── main.py
-│   │   │
-│   │   ├── routes/
-│   │   │   ├── projects.py
-│   │   │   ├── requirements.py
-│   │   │   ├── designs.py
-│   │   │   ├── analyses.py
-│   │   │   ├── tasks.py
-│   │   │   ├── agents.py
-│   │   │   ├── artifacts.py
-│   │   │   ├── bom.py
-│   │   │   ├── sourcing.py
-│   │   │   └── reviews.py
-│   │   │
-│   │   ├── websocket/
-│   │   │   └── events.py
-│   │   │
-│   │   └── dependencies.py
-│   │
-│   ├── worker/
-│   │   ├── main.py
-│   │   ├── agent_worker.py
-│   │   ├── solver_worker.py
-│   │   ├── artifact_worker.py
-│   │   └── cad_worker.py
-│   │
-│   └── frontend/
-│       ├── src/
-│       │   ├── project/
-│       │   ├── requirements/
-│       │   ├── cad/
-│       │   ├── graph/
-│       │   ├── agents/
-│       │   ├── analyses/
-│       │   ├── bom/
-│       │   └── reviews/
-│       └── package.json
-│
+├── description.txt
+├── idea.txt
+├── outline.txt
 │
 ├── src/
-│   │
-│   ├── domain/
-│   │   │
-│   │   ├── ontology/
-│   │   │   ├── entities.py
-│   │   │   ├── relations.py
-│   │   │   ├── identifiers.py
-│   │   │   ├── schema.py
-│   │   │   └── validation.py
-│   │   │
-│   │   ├── projects/
-│   │   │   ├── project.py
-│   │   │   ├── state.py
-│   │   │   └── lifecycle.py
-│   │   │
-│   │   ├── requirements/
-│   │   │   ├── requirement.py
-│   │   │   ├── schema.py
-│   │   │   ├── allocation.py
-│   │   │   ├── verification.py
-│   │   │   └── baseline.py
-│   │   │
-│   │   ├── design/
-│   │   │   ├── design.py
-│   │   │   ├── revision.py
-│   │   │   ├── parameter.py
-│   │   │   ├── component.py
-│   │   │   ├── interface.py
-│   │   │   └── change.py
-│   │   │
-│   │   ├── analysis/
-│   │   │   ├── request.py
-│   │   │   ├── result.py
-│   │   │   ├── artifact.py
-│   │   │   └── fidelity.py
-│   │   │
-│   │   ├── verification/
-│   │   │   ├── evidence.py
-│   │   │   ├── status.py
-│   │   │   └── rules.py
-│   │   │
-│   │   ├── reviews/
-│   │   │   ├── srr.py
-│   │   │   ├── pdr.py
-│   │   │   ├── cdr.py
-│   │   │   └── readiness.py
-│   │   │
-│   │   ├── bom/
-│   │   │   ├── item.py
-│   │   │   ├── ebom.py
-│   │   │   ├── mbom.py
-│   │   │   └── costing.py
-│   │   │
-│   │   ├── sourcing/
-│   │   │   ├── component.py
-│   │   │   ├── supplier.py
-│   │   │   ├── quote.py
-│   │   │   └── lifecycle.py
-│   │   │
-│   │   └── common/
-│   │       ├── units.py
-│   │       ├── enums.py
-│   │       └── errors.py
-│   │
-│   │
-│   ├── orchestration/
-│   │   ├── orchestrator.py
-│   │   ├── project_loop.py
-│   │   ├── scheduler.py
-│   │   ├── task_planner.py
-│   │   ├── state_machine.py
-│   │   ├── workflow.py
-│   │   ├── recovery.py
-│   │   └── convergence.py
-│   │
-│   │
-│   ├── dependency/
-│   │   ├── graph.py
-│   │   ├── node.py
-│   │   ├── edge.py
-│   │   ├── compiler.py
-│   │   ├── contracts.py
-│   │   ├── traversal.py
-│   │   ├── invalidation.py
-│   │   ├── cycle_detection.py
-│   │   └── impact_analysis.py
-│   │
-│   │
-│   ├── events/
-│   │   ├── event.py
-│   │   ├── types.py
-│   │   ├── bus.py
-│   │   ├── subscriptions.py
-│   │   ├── handlers.py
-│   │   └── outbox.py
-│   │
-│   │
-│   ├── tasks/
-│   │   ├── task.py
-│   │   ├── status.py
-│   │   ├── queue.py
-│   │   ├── registry.py
-│   │   └── completion.py
-│   │
-│   │
-│   ├── agents/
-│   │   ├── runtime.py
-│   │   ├── registry.py
-│   │   ├── agent.py
-│   │   ├── permissions.py
-│   │   ├── mailbox.py
-│   │   ├── messages.py
-│   │   ├── response.py
-│   │   │
-│   │   ├── context/
-│   │   │   ├── builder.py
-│   │   │   ├── retrieval.py
-│   │   │   ├── policy.py
-│   │   │   ├── compression.py
-│   │   │   └── ranking.py
-│   │   │
-│   │   └── roles/
-│   │       ├── chief.yaml
-│   │       ├── systems.yaml
-│   │       ├── aero.yaml
-│   │       ├── structures.yaml
-│   │       ├── propulsion.yaml
-│   │       ├── cad.yaml
-│   │       ├── software.yaml
-│   │       ├── sourcing.yaml
-│   │       ├── bom.yaml
-│   │       └── verification.yaml
-│   │
-│   │
-│   ├── reasoning/
-│   │   ├── base.py
-│   │   ├── router.py
-│   │   ├── response_schema.py
-│   │   │
-│   │   └── providers/
-│   │       ├── openai.py
-│   │       ├── kimi.py
-│   │       ├── local.py
-│   │       └── proprietary.py
-│   │
-│   │
-│   ├── tools/
-│   │   ├── registry.py
-│   │   ├── definition.py
-│   │   ├── permissions.py
-│   │   │
-│   │   ├── project/
-│   │   │   ├── get_state.py
-│   │   │   ├── get_design.py
-│   │   │   ├── get_requirement.py
-│   │   │   └── publish_finding.py
-│   │   │
-│   │   ├── design/
-│   │   │   ├── propose_change.py
-│   │   │   ├── create_branch.py
-│   │   │   └── compare_designs.py
-│   │   │
-│   │   ├── engineering/
-│   │   │   ├── run_fea.py
-│   │   │   ├── run_cfd.py
-│   │   │   ├── run_topopt.py
-│   │   │   ├── run_trajectory.py
-│   │   │   ├── run_propulsion.py
-│   │   │   └── run_optimizer.py
-│   │   │
-│   │   ├── cad/
-│   │   │   ├── create_part.py
-│   │   │   ├── modify_parameter.py
-│   │   │   ├── create_assembly.py
-│   │   │   └── export_geometry.py
-│   │   │
-│   │   └── sourcing/
-│   │       ├── search_parts.py
-│   │       ├── get_quote.py
-│   │       └── find_alternates.py
-│   │
-│   │
-│   ├── solvers/
-│   │   ├── base.py
-│   │   ├── registry.py
-│   │   ├── job.py
-│   │   │
-│   │   ├── rocket/
-│   │   │   └── adapter.py
-│   │   │
-│   │   ├── structures/
-│   │   │   └── adapter.py
-│   │   │
-│   │   ├── topopt/
-│   │   │   └── adapter.py
-│   │   │
-│   │   ├── trajectory/
-│   │   │   └── adapter.py
-│   │   │
-│   │   ├── propulsion/
-│   │   │   └── adapter.py
-│   │   │
-│   │   └── cfd/
-│   │       └── adapter.py
-│   │
-│   │
-│   ├── optimization/
-│   │   ├── problem.py
-│   │   ├── objectives.py
-│   │   ├── constraints.py
-│   │   ├── design_space.py
-│   │   ├── result.py
-│   │   │
-│   │   └── algorithms/
-│   │       ├── genetic.py
-│   │       ├── nsga.py
-│   │       └── custom.py
-│   │
-│   │
-│   ├── cad/
-│   │   ├── service.py
-│   │   ├── semantic_api.py
-│   │   ├── geometry.py
-│   │   ├── assembly.py
-│   │   ├── revision.py
-│   │   │
-│   │   ├── backends/
-│   │   │   ├── occt.py
-│   │   │   └── picogk.py
-│   │   │
-│   │   └── conversion/
-│   │       ├── mesh.py
-│   │       ├── step.py
-│   │       └── analysis_geometry.py
-│   │
-│   │
-│   ├── sourcing/
-│   │   ├── service.py
-│   │   ├── normalization.py
-│   │   ├── validation.py
-│   │   ├── ranking.py
-│   │   │
-│   │   └── providers/
-│   │       ├── generic_web.py
-│   │       ├── digikey.py
-│   │       ├── mouser.py
-│   │       └── internal_catalog.py
-│   │
-│   │
-│   ├── bom/
-│   │   ├── service.py
-│   │   ├── builder.py
-│   │   ├── costing.py
-│   │   ├── alternates.py
-│   │   ├── supply_risk.py
-│   │   └── manufacturing.py
-│   │
-│   │
-│   ├── artifacts/
-│   │   ├── model.py
-│   │   ├── compiler.py
-│   │   ├── dependency.py
-│   │   │
-│   │   ├── reviews/
-│   │   │   ├── srr.py
-│   │   │   ├── pdr.py
-│   │   │   └── cdr.py
-│   │   │
-│   │   ├── technical/
-│   │   │   ├── icd.py
-│   │   │   ├── verification_matrix.py
-│   │   │   ├── traceability_matrix.py
-│   │   │   └── risk_register.py
-│   │   │
-│   │   ├── software/
-│   │   │   ├── github.py
-│   │   │   ├── api_docs.py
-│   │   │   └── release_notes.py
-│   │   │
-│   │   └── renderers/
-│   │       ├── pdf.py
-│   │       ├── docx.py
-│   │       ├── markdown.py
-│   │       └── html.py
-│   │
-│   │
-│   ├── validation/
-│   │   ├── engine.py
-│   │   ├── schema.py
-│   │   ├── units.py
-│   │   ├── provenance.py
-│   │   ├── permissions.py
-│   │   ├── solver_result.py
-│   │   └── revision.py
-│   │
-│   │
-│   ├── baselines/
-│   │   ├── manager.py
-│   │   ├── change_request.py
-│   │   ├── approval.py
-│   │   └── diff.py
-│   │
-│   │
-│   ├── provenance/
-│   │   ├── lineage.py
-│   │   ├── causality.py
-│   │   └── audit.py
-│   │
-│   │
-│   └── persistence/
-│       ├── database.py
-│       ├── transactions.py
+│   └── guacamole/
+│       ├── __init__.py              # Public scripting interface
+│       ├── py.typed                 # Installed package typing marker
+│       ├── contracts.py             # Strict shared runtime models and IDs
+│       ├── project.py               # Project scripting API, sources, artifacts, evidence
+│       ├── storage.py               # Shared SQLite revisions and atomic activity log
+│       ├── context.py               # Sources, inbox context, saved packets and budgets
+│       ├── activity.py              # Message routing, inbox/sent views, request traces
+│       ├── decision.py              # Mandatory typed Jev requests and decision gates
+│       ├── reviews.py               # Deliverable manifests, PDR/CDR packages and gates
 │       │
-│       ├── repositories/
-│       │   ├── projects.py
-│       │   ├── requirements.py
-│       │   ├── designs.py
-│       │   ├── tasks.py
-│       │   ├── messages.py
-│       │   ├── analyses.py
-│       │   ├── artifacts.py
-│       │   └── bom.py
+│       ├── tools/
+│       │   ├── registry.py          # Explicit typed callable registration
+│       │   ├── execution.py         # Validation, local jobs, results, provenance
+│       │   └── mcp.py               # Generated MCP exposure from that registry
 │       │
-│       ├── vector/
-│       │   └── pgvector.py
+│       ├── agents/
+│       │   ├── chief.py             # Only predefined role; planning and delegation
+│       │   └── runtime.py           # Spawner, context budgets, grants, provider boundary
 │       │
-│       ├── objects/
-│       │   └── s3.py
+│       ├── providers/
+│       │   └── astra.py             # Configured GPT-6 Astra reasoning integration
 │       │
-│       └── cache/
-│           └── redis.py
-│
-│
-├── schemas/
-│   ├── ontology/
-│   ├── requirements/
-│   ├── tools/
-│   ├── agents/
-│   ├── messages/
-│   └── artifacts/
-│
-│
-├── migrations/
-│   └── ...
-│
-│
-├── tests/
-│   ├── unit/
-│   │   ├── domain/
-│   │   ├── dependency/
-│   │   ├── agents/
-│   │   ├── orchestration/
-│   │   └── validation/
-│   │
-│   ├── integration/
-│   │   ├── solvers/
-│   │   ├── cad/
-│   │   ├── reasoning/
-│   │   └── persistence/
-│   │
-│   ├── scenarios/
-│   │   ├── sounding_rocket/
-│   │   ├── requirement_change/
-│   │   ├── structural_failure/
-│   │   └── bom_constraint/
-│   │
-│   └── evals/
-│       ├── chief_agent/
-│       ├── structures_agent/
-│       ├── tool_selection/
-│       ├── hallucination/
-│       └── design_quality/
-│
+│       └── websocket.py             # Optional local script control/events bridge
 │
 ├── examples/
+│   ├── cross_domain.py              # Early check: register unrelated engineering tools
 │   └── sounding_rocket/
-│       ├── project.yaml
-│       ├── requirements.yaml
-│       ├── initial_design.yaml
-│       └── run.py
+│       ├── run.py                   # V0 mission → PDR → CDR using supplied tools
+│       └── project_description.txt  # 10,000 ft +/- 2,000 ft, airbrakes, 3U/2 kg payload
 │
-│
-├── docs/
-│   ├── architecture/
-│   │   ├── overview.md
-│   │   ├── ontology.md
-│   │   ├── dependency_graph.md
-│   │   ├── agent_runtime.md
-│   │   ├── event_system.md
-│   │   └── review_gates.md
-│   │
-│   ├── api/
-│   ├── solvers/
-│   ├── agents/
-│   └── adr/
-│       ├── 0001-project-ontology.md
-│       ├── 0002-immutable-design-revisions.md
-│       ├── 0003-model-provider-abstraction.md
-│       └── 0004-event-driven-orchestration.md
-│
-│
-├── infra/
-│   ├── docker/
-│   │   ├── api.Dockerfile
-│   │   ├── worker.Dockerfile
-│   │   └── solver.Dockerfile
-│   │
-│   ├── terraform/
-│   ├── kubernetes/
-│   └── monitoring/
-│
-│
-└── scripts/
-    ├── seed_db.py
-    ├── run_worker.py
-    ├── rebuild_graph.py
-    ├── import_project.py
-    └── run_demo.py
+└── tests/
+    ├── runtime_support.py           # Shared, labelled reasoning and Jev test doubles
+    ├── test_tools.py                # Contracts and Python/MCP result equivalence
+    ├── test_runtime.py              # Jev, agents, context, inbox/dispatch/recovery, grants
+    └── test_project_workflow.py     # Source evidence, artifacts, PDR/CDR, invalidation
+
+USER PROJECTS AND TOOL PACKAGES
+
+Tool implementations, engineering schemas, optional documentation, and backend
+dependencies live in the user's project or separately installed packages.
+
+my_project/
+├── run.py                           # Imports and explicitly registers chosen tools
+├── engineering_tools.py             # Needed only for user-defined code/integration
+├── inputs/                          # Original project documents and experimental data
+└── workspace/                       # Runtime outputs, outside the core package
+    ├── project.sqlite3              # State, messages, requests, rationales, activity log
+    ├── artifacts/                   # Versioned design, software, build and run outputs
+    └── reviews/                     # PDR/CDR manifests and compiled packages
+
+An already annotated function can be registered directly from run.py. No separate
+tool file, solver-family adapter, role definition, or skill file is mandatory.
+
+CORE CONTRACTS
+
+Project request:
+    natural-language description + registered tools + supplied documents/data
+    context defaults/overrides + configured reasoning and mandatory Jev providers
+    target reviews + user constraints and execution limits
+
+Tool definition:
+    stable name + version + callable + description
+    generated input/output schemas
+    optional discovery tags and execution settings
+
+Agent specification:
+    objective + instructions + ContextSpec + governing Jev plan/decision
+    allowed tool IDs/versions + registered result schema
+    completion criteria + execution budget
+
+Context specification and delivered packet:
+    supplied instructions + selected/pinned source and evidence references
+    input-token budget + reserved output + retrieval/summarization rules
+    actual delivered material + versions/locators + token accounting
+    packet/invocation identity + included/deferred message IDs
+
+Message envelope and inbox entry:
+    stable message ID + runtime-established sender/recipient + typed payload
+    project/run + request/parent-request + reply-to message + timestamps
+    delivery/context inclusion + explicit acknowledgement + response obligation
+
+Request record:
+    requester/target + purpose/rationale + governing decision + linked task/job
+    queued/dispatched/running/terminal state + attempt history + deadlines
+    actual result/error + blocking, cancellation, or interrupted-state reasons
+
+Rationale and activity records:
+    author/invocation + ContextPacket + proposed action and explanation
+    assumptions/alternatives/evidence/uncertainty + superseded rationale
+    event ID/sequence + actor + causal parent + observed state transitions
+
+Source record:
+    original document/data identity + content hash + revision + extraction status
+    precise text/image/table/data locators + units and experimental metadata
+
+Jev decision:
+    question + valid candidates + criteria/constraints + current evidence
+    selected candidate or abstention/failure + traceable provider output
+    decision ID + exact input revisions + permitted resulting work
+    originating request/rationale/context + dispatch and validation events
+
+Job/evidence record:
+    task/tool/schema identity + exact input references
+    execution status + typed result or error + artifact references
+    timestamps + separately recorded physical acceptance
+
+Deliverable and review manifest:
+    required artifact types + producing tasks + acceptance criteria
+    exact artifact/evidence revisions + missing dependencies and open items
+    readiness checks + Jev decision + human review disposition
+    links from accepted choices to messages, rationales, requests, and evidence
+
+Keep core contracts generic. Domain-specific models belong to tool providers.
+Use the same validation path for direct Python, MCP, and WebSocket callers.
+
+COMMUNICATION BOUNDARY
+
+- Direct Python and local async tasks are the default.
+- Record all agent sends, replies, delegations, and runtime requests locally.
+  Inbox/sent views and request timelines share the same SQLite store.
+- Generate MCP exposure through the official SDK; stdio supports local clients
+  without opening a network listener.
+- WebSockets are the only optional application socket interface, enabled on
+  loopback for typed script commands and events.
+- MCP over WebSockets is a custom transport, outside the initial implementation.
+- No frontend, REST API, HTTP MCP service, network worker system, or broker.
+
+These restrictions apply to Guacamole. Flight software, ground-station interfaces,
+telemetry, and GSE communications are project deliverables where required.
+
+See description.txt for the MCP specification reference and transport distinction.
+
+IMPLEMENTATION ORDER
+
+1. Generic typed tools and local execution
+
+   Implement explicit callable registration, strict input/output validation, typed
+   handles/results, request/attempt tracking, and tool metadata. Reject incomplete
+   contracts. Start with a script calling one registered tool.
+
+   Keep backend-specific models and integration in supplied tool packages. The
+   core dependency list contains runtime needs only. Register solver functions
+   and numerical algorithms through the supplied tool boundary.
+
+2. Generated MCP exposure and extensibility check
+
+   Reuse the registry's schemas and executor in a single MCP bridge. Expose
+   structured results and enforce tool grants at invocation as well as discovery.
+   Exercise a real local stdio client against the generated server.
+
+   Check that a second, unrelated tool needs only registration outside the core.
+   Avoid schema duplication, generated source files, and a plugin discovery system.
+
+3. Project intake, persistence, context, and inbox
+
+   Accept the brief and original documents/data. Derive typed requirements,
+   assumptions, interfaces, and deliverables; assess available tool capabilities.
+   Persist source/revision records and extracted material in SQLite/local files.
+
+   Implement supplied context and per-agent overrides, explicit token budgets,
+   pinned material, retrieval, and traceable summaries. Check model capacity before
+   each call. Preserve original drawings/data and all source references. Save the
+   actual ContextPacket, including message IDs, before each provider invocation.
+
+   Add typed message routing, persistent inbox/sent views, request records, and an
+   append-only activity log in the same SQLite database. Record intent before
+   dispatch and commit local state transitions with audit events. Distinguish
+   delivery, inclusion in context, acknowledgement, and task/job completion.
+
+   Implement parent/reply links, deduplicated delivery, explicit retry attempts,
+   and recovery of interrupted/uncertain work. Inspecting or reopening a trace
+   must never replay side effects. Persist history after an agent terminates.
+
+   Keep requirement-specific numerical checks in supplied tools with typed
+   verification results and explicit evidence references.
+
+4. Mandatory Jev and the dynamic agent runtime
+
+   Require configured reasoning and Jev providers. Implement typed decision
+   requests/results and enforcement before an engineering choice is committed.
+   Validate candidates, constraints, evidence freshness, and the returned choice.
+   Jev failure/abstention blocks dependent work; there is no silent fallback.
+
+   Give the Chief discovery and spawning tools. Supply each generic worker with
+   its ContextPacket, tool grants, expected result schema, and bounded execution
+   within a Jev-approved plan. Only the Chief receives the spawner initially.
+
+   Record explicit rationale summaries with assumptions, alternatives, evidence,
+   and the originating context. Route permitted peer communication through the
+   inbox API. Tie every Jev choice to its request, rationales, result validation,
+   and resulting dispatches. Private model deliberation is not assumed available.
+
+   Use labelled test doubles for repeatable checks and a real Jev provider for
+   integration evidence. No discipline-specific agent roles or classes.
+
+5. Preliminary engineering and PDR
+
+   Derive and execute the multidisciplinary task graph from the project brief.
+   Use supplied tools for preliminary CAD, electronics, fluids/GSE, analysis,
+   control simulation, software architecture, budgets, and interface definitions.
+   Record trade studies, verification plans, risks, and Jev selections.
+   Link them to the communication and reasoning records that produced them.
+
+   Compile a PDR package from versioned artifacts and evidence. Apply completeness
+   criteria and Jev readiness selection, then record human review of that baseline.
+   Feedback produces traceable changes and updated tasks.
+
+6. Detailed engineering, software, integration, and CDR
+
+   Complete editable CAD/drawings, schematics/PCB/harnesses, required fluid and GSE
+   designs, BOM, manufacturing outputs, and supporting analyses/simulations.
+   Generate flight and ground-station source, configurations, reproducible builds,
+   tests, protocol/interface definitions, and integration/test procedures.
+
+   Check cross-discipline consistency and requirements against actual evidence.
+   Compile CDR with the exact deliverable and verification revisions. Obtain the
+   recorded review disposition; do not equate generated files with accepted work.
+   Track remaining physical tests according to the configured review criteria.
+
+   Invalidate dependent analyses, software configurations, and review evidence
+   when inputs change. Reopen interrupted work with an explicit status.
+
+7. Optional WebSocket access
+
+   Expose the existing typed commands/events to another local script. Keep the
+   runtime callable directly and bind no listener unless explicitly requested.
+   Exercise the same permissions and validation as the Python/MCP paths.
+   Stream persisted activity events with a sequence cursor for reconnects.
+
+SCRIPT INSPECTION
+
+Typed read-only views must expose each agent's inbox and sent messages, outstanding
+requests and attempt states, causal traces, saved context, and event history.
+Support filtering by agent/task/request/decision/time and JSONL or readable
+timeline export. Queries do not acknowledge messages or affect execution.
+The activity module uses the shared local store; no broker or new service is added.
+
+V0 COMPLETION CRITERIA
+
+- The supplied mission and project documents drive task creation without a manual
+  discipline roster. Requirements retain their original wording and source links.
+- Every agent receives the chosen context and enforced input/output token budgets.
+  Revisions, excerpts, summaries, and experimental metadata remain traceable.
+- The user can inspect who sent each request, who received it, when it entered
+  context, what was dispatched, and which replies, rationales, tools, and decisions
+  followed. Histories survive context compaction, termination, and restart.
+- Exercise a peer subrequest, failed attempt, explicit retry, duplicate message,
+  and interrupted dispatch. Preserve messages and causal links, deduplicate
+  delivery, and reconcile uncertain execution instead of blindly repeating it.
+- Engineering choices have validated Jev records, including plan and review
+  decisions. A failed/missing Jev integration cannot be bypassed by the Chief.
+- Required PDR/CDR artifacts cover CAD, electronics, analysis/simulation, flight
+  software, ground station, GSE, fluids, and system integration as applicable to
+  the selected design. Missing capabilities or evidence are explicit dependencies.
+- Review acceptance references actual editable files, successful builds/runs where
+  required, provenance, and human disposition. Physical tests remain distinguishable
+  from simulation and are never recorded as performed without measured evidence.
+- A second engineering domain still needs only supplied tools/types and project
+  inputs. Passing the early cross-domain example alone does not complete V0.
+
+CHECKOUT BOUNDARY
+
+- src/guacamole is the only core package. The unused application/reasoning
+  scaffolds, domain-specific adapters, bundled backends, and submodules are removed.
+- Tool packages own their domain schemas and dependencies and register directly.
+  Local jobs use src/guacamole/tools/execution.py without adapter inheritance.
+- Project documents and experimental data are user inputs. The sounding-rocket
+  script accepts their paths through repeated --document arguments.
+- Core tests exercise the runtime without engineering backend dependencies.
+  Real Jev and mission acceptance still require configured providers and tools.
+
+OUTSIDE THE PLATFORM SCOPE
+
+Browser UI, web API routes, hosted persistence, distributed scheduling, message
+brokers, infrastructure provisioning, fixed engineering role catalogues, and
+built-in services for each solver, CAD kernel, supplier, or engineering discipline.
+
+PDR, CDR, and the engineering/software deliverables are inside V0. Their capabilities
+enter through typed tools and generic tasks. Split another core module only when
+a working use case requires it.

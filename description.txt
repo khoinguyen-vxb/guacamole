@@ -1,0 +1,628 @@
+## Project summary
+
+Guacamole is a local Python runtime that takes supplied tools, a project
+description, and relevant project documentation through preliminary and detailed
+engineering design. V0 must produce PDR and CDR packages together with the CAD,
+electronics, analyses, simulations, software, and supporting systems they require.
+
+One Chief Engineer Agent coordinates the work and creates additional agents when
+needed. Jev is the mandatory decision engine. Each agent receives an explicitly
+constructed context window and access to the tools required for its task.
+
+The immediate priority is generalisability: a new engineering domain, solver, or
+optimizer should be added from a user script or tool package, without changing
+Guacamole's core or defining another permanent agent role.
+
+This document defines the target architecture. The local runtime, typed registry,
+MCP bridge, dynamic workers, persistent context/inboxes, and review gates now live
+in src/guacamole. README.md documents the executable interface and validation
+boundary: real Jev integration and mission engineering acceptance remain pending.
+outline.txt defines the repository layout and implementation order; idea.txt shows
+the flow.
+
+## V0 scope
+
+The user interface is Python scripts. Reasoning and Jev providers are configured
+once for the runtime. For a project, the user supplies tools, a natural-language
+description, available documents/data, and any context or execution limits.
+The runtime derives the engineering tasks, deliverables, and required evidence.
+
+V0 includes:
+
+- A typed tool catalogue with local execution and tracked jobs.
+- Automatic MCP exposure of registered tools.
+- One Chief Engineer and one reusable runtime for dynamically created agents.
+- Mandatory Jev decisions governing engineering choices and work plans.
+- User-supplied context and a configurable context-window budget for every agent.
+- Persistent agent inboxes, sent messages, request tracking, and reasoning/decision
+  traces that can be inspected from scripts.
+- Ingestion of previous designs, drawings, experimental data, and project records.
+- Typed project records, evidence, revisions, and dependency invalidation.
+- Complete PDR/CDR workflows and the engineering and software artifacts below.
+- Local storage using SQLite for records and ordinary files for artifacts.
+- An optional WebSocket connection for script control and progress events.
+
+Guacamole's frontend, REST API, network worker services, message brokers, Redis, hosted
+databases, vector stores, object storage services, and deployment infrastructure
+are outside this scope. Running a script must not require starting a web server.
+
+CAD, electronics, fluids, GSE, analysis, simulation, flight software, and ground
+station development are V0 work products delivered through supplied tools and
+dynamic tasks. They do not each require a hardcoded core module or agent role.
+The scripting-only restriction applies to Guacamole itself: a generated ground
+station can include a user interface and telemetry communications when the project
+requires them. Product deliverables are governed by their project requirements.
+
+## Project intake and supplied evidence
+
+The following must be a valid starting description:
+
+> I want to build a 10,000ft sounding rocket (+- 2000ft) with active airbrakes control whilst carrying a 3U 2kg payload.
+
+Store the original wording and derive typed requirements with source references:
+
+| User requirement | Initial structured interpretation |
+| --- | --- |
+| 10,000 ft (+/- 2,000 ft) | Target apogee 3,048 m; allowed interval 2,438.4–3,657.6 m |
+| Active airbrakes control | Design and integrate airbrake hardware, sensing, control software, and simulation |
+| 3U, 2 kg payload | Preserve the 3U designation and 2 kg mass as payload requirements |
+
+Altitude datum, the exact payload envelope/interfaces, launch environment, and
+other unspecified requirements remain explicit unknowns until supplied evidence or
+the user resolves them. Do not silently turn an assumption into a requirement.
+The Chief gathers missing information while advancing independent work.
+
+Project intake inventories tool capabilities against the work needed for the
+requested deliverables. Missing CAD, electronics, simulation, compiler, document
+reader, or other capabilities become explicit work dependencies. The runtime can
+request the missing tool or input and continue other work; it cannot substitute
+invented solver output or a prose description for an unavailable artifact.
+
+The user can attach previous designs, native CAD/ECAD files, drawings, reports,
+datasheets, source code, test logs, and experimental datasets. Preserve originals
+and create typed SourceRecord entries containing identity, revision, content hash,
+format, and origin. Extracted text, images, tables, and numerical data retain
+locators into the original: page/region, sheet, component, row, or time interval.
+Registered readers handle formats the runtime cannot read directly.
+
+Experimental evidence retains its test conditions, units, frames, calibration,
+uncertainty, and processing history where available. Missing metadata is recorded.
+Agents can use measured data for calibration and comparison, with its applicability
+to the current design and operating conditions recorded explicitly.
+
+Requirements, historical results, new measurements, derived results, and assumptions
+remain distinguishable. Conflicting documents are surfaced with their revisions
+and provenance. A prior design is evidence to assess, rather than an automatically
+accepted current baseline. Documents are source material, not runtime instructions.
+
+## Context supplied to every agent
+
+The user can supply initial context and context-window limits for the Chief and
+for any spawned agent. Project defaults apply unless a validated per-agent override
+is provided. The Chief builds each worker's ContextSpec from those settings and
+the task; workers do not automatically inherit the entire Chief conversation.
+
+```text
+ContextSpec
+    user/task instructions and supplied context
+    selected source, revision, artifact, and decision references
+    pinned requirements, constraints, and source references
+    maximum input tokens and reserved output tokens
+    retrieval and summarization rules
+
+ContextPacket
+    packet ID and agent invocation ID
+    material actually presented to the agent
+    included message IDs and any deferred inbox messages
+    source locators, versions, and hashes
+    included tool schemas and task/result contracts
+    measured token usage and any omissions/summaries
+```
+
+The context builder accounts for instructions, conversation, tool schemas,
+document excerpts, and tool responses within the input budget. Input plus reserved
+output must fit the configured provider's actual context capacity. An agent's
+budget can be smaller than that capacity; configuring a larger budget does not
+increase the model's capacity.
+
+Pinned requirements and decisions survive summarization. If they cannot fit, the
+runtime reports the conflict for a smaller task or revised budget instead of
+silently dropping them. Summaries retain links to their sources, and raw numerical
+datasets remain available through artifact-reading tools. Drawings and figures
+use image context when the provider supports it, or an explicitly recorded reader
+output; an unparsed drawing is not treated as understood.
+
+Agents can retrieve additional relevant context through granted tools. Local
+metadata and text search are sufficient initially; a hosted vector database is
+not required. Rebuild context when cited inputs change, record what each run saw,
+and preserve task state and evidence references across context compaction.
+
+An inbox message is only recorded as included when its content, or an identified
+summary of it, enters a saved ContextPacket. Messages that do not fit remain
+pending with an explicit reason. Persist the packet before the provider call and
+link the response and resulting actions to that packet. Context compaction creates
+a new packet and summary record while preserving the prior messages and packets.
+
+## Persistent agent inbox and reasoning trace
+
+V0 must make agent intercommunication and dispatched work directly inspectable.
+For any result or decision, the user must be able to determine who requested it,
+which agent received the request, what context was supplied, what explanation and
+evidence supported the response, which tools ran, and what happened next.
+
+Use the shared local SQLite store for messages, inbox delivery records, requests,
+rationales, and an append-only activity log. Large context snapshots and payloads
+can be referenced as local artifacts. Agent inboxes, sent views, and request
+timelines are queries over these records; no message broker or network service is
+required. Terminated agents' inboxes and histories remain inspectable.
+
+The trace records explicit agent-authored rationale summaries: objectives,
+assumptions, alternatives considered, evidence references, uncertainty, and why an
+action or recommendation was proposed. Preserve provider-supplied reasoning
+summaries when available and label their origin. These are recorded explanations;
+the system does not claim access to a model's private internal chain of thought or
+reconstruct missing deliberation. Tool outputs and Jev results provide independent
+evidence of what actually occurred.
+
+The common typed records are:
+
+| Record | Required content |
+| --- | --- |
+| MessageEnvelope | Message ID, project/run, sender and recipient IDs, message kind and typed payload, request/parent-request IDs, reply-to message, timestamp, and relevant context/artifact references |
+| InboxEntry | Recipient, message ID, delivery events, inclusion in context, explicit acknowledgement, and outstanding response obligation |
+| RequestRecord | Request ID, requester and target, typed arguments, purpose/rationale reference, governing decision, linked task/job/decision, current execution state, attempts, deadlines, and result/error references |
+| RationaleRecord | Author agent and invocation, ContextPacket ID, proposed action or recommendation, assumptions/alternatives/evidence, explanation, uncertainty, and any superseded rationale |
+| ActivityEvent | Stable event ID, ordered sequence, actor, event type, request/message/entity references, causal parent event, timestamp, and typed event details |
+
+An agent has a stable ID across context refreshes; each provider invocation has a
+separate ID. Spawn records retain the parent agent and governing task/plan. Sender
+identity and observed state transitions are supplied by the runtime, not inferred
+from an agent's narrative. Payloads use registered schemas and versions.
+
+All delegations, questions, peer messages, replies, findings, tool requests,
+decision requests, and cancellation requests pass through the recorded runtime
+operations. Capture their actual content and structured arguments/results.
+Workers may exchange evidence directly where their communication grants permit;
+changes to plans, tool grants, or engineering selections still follow the
+Chief/Jev path. Local function calls also produce these records.
+
+Message handling and work execution are distinct:
+
+| Observation | Meaning |
+| --- | --- |
+| Queued | A durable message or work request exists and awaits dispatch |
+| Dispatched | The runtime has initiated delivery or an execution attempt |
+| Delivered | The message is available in the recipient's persistent inbox |
+| Included in context | A saved packet records exactly what was presented to the agent |
+| Acknowledged | The recipient has explicitly acknowledged receipt; work may still be pending |
+| Running/completed/failed | The linked task or job records its observed execution outcome |
+
+These observations are not one mandatory linear state machine: messages and jobs
+have their own applicable transitions. Track blocked, expired, interrupted,
+undeliverable, and cancellation states with reasons. A cancellation request is
+distinct from confirmed cancellation. No reply, acknowledgement, or context
+inclusion is treated as proof that an agent understood or completed the task.
+
+Persist request intent before dispatch. Commit local state changes and their audit
+events together; if persistence fails, do not dispatch unrecorded work. Replies
+link back to their request and triggering message. A worker's subrequest links to
+its parent request, allowing the complete communication tree to be inspected.
+
+Deduplicate delivery by message ID. An explicit retry records a new attempt under
+the same logical request. After a crash, reconcile unfinished attempts with
+available run records; if an external side effect has an unknown outcome, retain
+that uncertainty and do not blindly repeat it. Reopening a trace or reconnecting
+a viewer never reruns tools or replays side effects.
+
+The runtime records proposed intent separately from dispatched and observed
+actions. Corrections and changed recommendations append records that supersede
+earlier ones. Store provider/model identifiers, configuration and schema versions,
+context references, and available provider request IDs. Credentials are excluded
+from logs; any redaction or omitted content is marked explicitly.
+
+For example, with A1 and A2 already spawned under an approved plan:
+
+```text
+Chief → A1 : request R1 to evaluate a candidate, with context C1 and rationale Q1
+A1 → A2    : request R2 for geometry evidence, parent request R1
+A2 → A1    : reply to R2 with artifact revision G7
+A1         : context C2 includes that reply; dispatch tool job J1 linked to R1
+A1 → Chief : response to R1 with result J1, evidence G7, and rationale Q2
+Chief → Jev: decision request D1 citing R1, Q2, and the candidate alternatives
+Jev        : decision result is recorded, validated, and linked to resulting work
+```
+
+The example is an illustrative trace, not an executed run. An agent's completion
+record closes only its own response obligation. Required child work must resolve
+before the parent task succeeds; other outstanding work remains visible until it
+is resolved or explicitly cancelled.
+
+### Inspection from scripts
+
+The scripting interface exposes typed, read-only views:
+
+```text
+project.inbox(agent_id)             incoming messages and delivery/response state
+project.sent(agent_id)              outgoing messages and their recipients
+project.requests(status=...)        queued, dispatched, running, and terminal work
+project.trace(request_id)           causal messages, rationales, jobs, and decisions
+project.context(packet_id)          exact recorded context and source references
+project.events(after=sequence)      activity records after a saved cursor
+```
+
+Inspecting these views does not acknowledge messages or change execution state.
+Allow filtering by agent, task, request, decision, and time, with export to JSONL
+or a readable timeline. The optional WebSocket bridge streams the persisted event
+sequence and resumes from a cursor; the database remains authoritative if a live
+notification is missed. Recorded order and causal references are both retained.
+
+## Repository boundary
+
+The runtime lives in src/guacamole. Runnable scripts live in examples and the core
+checks live in tests. The unused application/reasoning scaffolds, domain-specific
+solver adapters, numerical backends, and their submodules have been removed.
+
+Tool implementations, domain schemas, and numerical dependencies are supplied by
+user projects or separately installed packages. The core generates validation and
+MCP schemas from explicitly registered Python callables. It validates both inputs
+and results; annotations alone do not validate data from agents or external tools.
+
+Shared SQLite persistence is in storage.py. The configured Astra reasoning
+integration is in providers/astra.py; dynamic agent execution is in agents/runtime.py.
+outline.txt lists the current files and their responsibilities.
+
+## One Chief Engineer, agents defined by tasks
+
+The Chief Engineer is the only predefined role. It understands the overall goal,
+identifies missing evidence, selects tools, delegates bounded investigations, and
+integrates the results. It can also call tools directly when delegation adds no
+value.
+
+The Chief has access to tool discovery, agent spawning, task status/results, and
+project records. Additional agents are instances of the same runtime with a typed
+AgentSpec:
+
+```text
+AgentSpec
+    task ID and parent ID
+    objective and task-specific instructions
+    ContextSpec and input revision/artifact references
+    governing Jev decision/work-plan reference
+    allowed tool IDs and versions
+    expected result schema ID
+    completion criteria
+    step, tool-call, time, and resource limits
+```
+
+The result schema is selected from registered schemas; a generic TaskReport is
+available for investigations. A label such as "investigate thermal losses" is
+descriptive data. It does not select a Python class, YAML role, or prompt file.
+
+The runtime validates each spawn request, resolves the requested tool IDs, checks
+grants against the user's permissions and budget, and supplies the agent's tool
+definitions and ContextPacket automatically. Delegation must remain within the
+recorded Jev-approved plan; a new engineering choice returns to Jev.
+Only the Chief receives the spawner initially. Workers request additional work or
+tools through the Chief and finish when their completion criteria are met.
+
+Discovery uses registered descriptions, schemas, and optional tags. Tags are open
+metadata, so adding a discipline never requires extending a core enum. A worker
+receives the tools relevant to its task. The executor enforces these grants on
+every call; hiding a tool from the prompt is insufficient.
+
+## Tools supplied by the user
+
+A tool is a callable with a complete input/output contract. The user can register
+an existing annotated function, a bound method, or a small typed wrapper around a
+library or executable. Registration is explicit in the user script. The runtime
+does not scan a repository and expose every callable it finds.
+
+Each registration supplies:
+
+```text
+stable tool name and version
+callable with typed parameters and return value
+description, normally taken from its docstring
+optional tags and execution settings
+```
+
+The core derives the input and output schemas, stores the callable in the
+catalogue, and creates its MCP definition. Duplicate name/version pairs are
+rejected. Direct script calls and MCP calls use the same validation and execution
+path.
+
+There is no required solver subclass, per-solver core module, skill file, or
+handwritten MCP server. Schemas that describe a beam, chamber, circuit, or mesh
+belong alongside that tool in the user's project or installed package. Shared
+schemas can be supplied by those packages when several tools need to agree.
+
+Automatic exposure starts from a declared contract. It cannot recover units,
+coordinate conventions, side effects, or reliable output parsing from arbitrary
+untyped code. A legacy executable still needs a typed callable that prepares its
+input, runs it, and parses its output. That integration belongs to its provider.
+
+Backend dependencies also belong to the provider's environment. Importing the
+core must not import every installed solver or require RocketPy, OpenFOAM, or
+Hybrid. A provider that needs another interpreter can manage its own subprocess.
+
+## Typing is a runtime contract
+
+Use an established validation library and the MCP Python SDK to generate schemas
+from Python types. Do not build a second schema language or maintain separate
+handwritten schemas for Python, MCP, and WebSocket callers. The SDK supports
+deriving output schemas and structured results from annotated return types.
+[MCP Python SDK structured output](https://py.sdk.modelcontextprotocol.io/servers/structured-output/)
+
+V0 uses strict Pydantic models and supported, fully annotated Python values at
+public boundaries. Ordinary dataclasses may remain internal; exporting one
+requires the same schema and runtime validation as any other value.
+
+The following requirements apply to every tool:
+
+- Validate input before invoking the callable and output before publishing a
+  successful result. Reject missing annotations, unsupported opaque types,
+  unrestricted Any/object payloads, and undeclared fields at registration or call
+  time as appropriate. Coercion must not silently turn invalid input into data.
+- Require both input and output schemas, even where a protocol permits an output
+  schema to be omitted. Check schema serializability at registration and payload
+  serializability on every call.
+- Keep the input/output relationship in Python through generic Tool and Job
+  types. A dynamic name-based call is validated against the registered schema;
+  its payload does not become trusted merely because it is a dict.
+- Declare units, frames, array shapes, bounds, and finite-value requirements where
+  relevant. Tool-specific validators enforce physical assumptions and conversions.
+- Return a typed artifact reference for large arrays, meshes, or native files.
+  Store identity, content hash, media type, and relevant numerical metadata;
+  native solver objects stay inside their provider.
+- Record execution failure and physical acceptance separately. A successful exit
+  or schema-valid number does not establish convergence or requirement compliance.
+
+The common core types describe tools, jobs, agents, tasks, messages, requests,
+rationales, activity events, context, sources, artifacts, revisions, requirements,
+decisions, evidence, and review manifests.
+They do not enumerate engineering disciplines.
+
+## Proposed scripting interface
+
+The following uses the scripting API. Project is configured with the user's registered tools, reasoning
+provider, mandatory Jev provider, and local workspace. Public models use strict
+validation, forbid extra fields, and enforce declared numerical constraints.
+
+```python
+from pathlib import Path
+
+from guacamole import ContextSpec, Project, ProjectRequest, ProjectResult
+
+
+async def develop(project: Project) -> ProjectResult:
+    return await project.run(
+        ProjectRequest(
+            description=(
+                "I want to build a 10,000ft sounding rocket (+- 2000ft) "
+                "with active airbrakes control whilst carrying a 3U 2kg payload"
+            ),
+            documents=(
+                Path("inputs/previous_design.step"),
+                Path("inputs/drawings.pdf"),
+                Path("inputs/experimental_data.csv"),
+            ),
+            context=ContextSpec(
+                instructions="Use the supplied designs and test data as evidence.",
+                max_input_tokens=32_000,
+                reserved_output_tokens=4_000,
+            ),
+            target_reviews=("PDR", "CDR"),
+        )
+    )
+```
+
+The files and token budget above are illustrative and are validated at intake.
+The script can supply per-agent ContextSpec overrides at spawn time. During
+delegation, the Chief selects registered tools and the runtime supplies their
+generated MCP definitions to the worker. Direct tool calls from Python use the
+same function and schemas as agent calls.
+
+The minimum extension is registering another typed function. An optional Python
+package can export several registrations for reuse. Package discovery machinery,
+generated source files, and a plugin marketplace are unnecessary for V0.
+
+## MCP and communication
+
+MCP exposes tool descriptions, schemas, and invocation. It does not choose agent
+roles, infer engineering semantics, or decide which agent may use a tool. Those
+remain responsibilities of the Chief and the runtime.
+
+One reusable bridge generates MCP definitions from the catalogue. Each agent has
+an allowed view derived from its validated AgentSpec. Tool listing and invocation
+both use runtime-established permissions; an agent-supplied ID cannot grant access.
+There is no separate server implementation for each solver.
+
+Communication has three bounded uses:
+
+| Use | Mechanism |
+| --- | --- |
+| Script calls and work inside one runtime | Direct Python calls and local async tasks |
+| A local MCP client requiring a process boundary | Generated MCP server over stdio |
+| Optional scripting control and progress connection | WebSocket on loopback, explicitly enabled |
+
+Stdio communicates through local process pipes and opens no network listener.
+The MCP standard defines stdio and Streamable HTTP; WebSockets would be a custom
+MCP transport. V0 selects stdio for MCP and uses WebSockets only for optional
+application messages. It does not introduce an HTTP MCP service. An all-WebSocket
+MCP binding would need a separately tested transport on both ends.
+[MCP transport specification](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports)
+
+The WebSocket bridge carries typed commands and persisted activity events with
+request, project, task, and job identifiers. It routes through the same recorded
+runtime operations as the Python API and supports a cursor for missed events.
+It adds no REST routes, browser application, or distributed worker network.
+No socket listener is started by default.
+
+The user injects the reasoning provider and the mandatory Jev provider. Local
+providers and explicitly labelled test doubles allow offline development. Any
+external connection made by a configured provider or tool must be explicitly
+configured by the user. A Jev test double is not evidence of a real Jev decision.
+
+## Execution, project state, and evidence
+
+The shared executor validates a call, starts a local job, captures errors and
+artifacts, validates the result, and records its provenance. Blocking tools must
+not block the agent event loop. Each job records its tool/schema versions, input
+snapshot or artifact hashes, parent task/request, initiating agent invocation and
+ContextPacket, rationale, timestamps, and final state. Record dispatch, result,
+validation failure, and any retry/cancellation through the shared activity log.
+
+Timeout and cancellation support must reflect the actual execution mechanism.
+A running Python thread cannot be advertised as terminated merely because its
+caller stopped waiting. Tools needing hard termination run in managed processes.
+The provider declares whether retrying an operation is safe.
+
+Project state records requirements, revisions, tasks, decisions, evidence, and
+artifact references locally. Generic dependency edges link results to the exact
+inputs they used. Changing an input invalidates dependent evidence. Dependencies
+come from explicit recorded references; they cannot be inferred reliably from
+parameter names or agent conversation.
+
+Use SQLite and a local artifact directory. On restart, unfinished local work is
+marked interrupted and reconciled using the saved request/attempt history; it is
+not silently treated as completed or automatically replayed. Inbox messages,
+response obligations, and context references survive the restart. Human review is
+a typed script operation recorded against the exact revision being reviewed.
+
+## Mandatory Jev decision plane
+
+The existing separation of responsibilities remains useful:
+
+```text
+Chief Engineer formulates work and alternatives.
+Tools perform calculations and numerical search.
+Deterministic checks enforce requirements and execution limits.
+Jev makes the engineering selections from structured alternatives.
+Project state records evidence and invalidates stale results.
+Humans accept controlled baselines.
+```
+
+An autonomous project run requires a configured, usable Jev provider. There is no
+option to silently replace Jev with the Chief or deterministic scoring. The
+integration can execute locally or through the supplied provider; it does not
+require a new platform network service.
+
+Jev governs architecture and design selection, work-plan choices, trade studies,
+analysis-fidelity choices, controlled changes, and review-readiness recommendations.
+The runtime requires a recorded decision before committing the corresponding
+choice or dispatching work that depends on it. Workers propose alternatives and
+evidence; they cannot commit an independent choice around this path.
+
+```text
+DecisionRequest
+    question, valid candidate IDs, and criteria
+    constraints, assumptions, and evidence references
+    initiating request/message, agent rationale, and ContextPacket references
+    project/input revisions and consequences of each candidate
+
+DecisionResult
+    request ID and selected candidate, or abstention/failure
+    decision explanation and supporting evidence references
+    links to dispatch, provider response, and validation events
+    Jev provider/version, input snapshot, and timestamp
+```
+
+Deterministic checks reject invalid candidates and validate Jev's result against
+the request and current evidence. Jev cannot override hard constraints, accept
+stale inputs, or supply human approval. If Jev fails or abstains, dependent work
+waits with an explicit reason while independent work may continue.
+
+Arithmetic, requirement comparisons, and optimizer iterations remain ordinary
+software. They run within approved decisions and do not require a new Jev call
+for every calculation. Selecting among resulting engineering alternatives does.
+
+## Engineering deliverables required in V0
+
+The Chief derives a typed DeliverableSpec and task graph from the brief and
+available evidence. Cross-discipline interfaces share the same revisions: a
+geometry change can affect aerodynamic models, actuator loads, electronics,
+control software, flight simulation, and ground procedures.
+
+For the sounding-rocket project, coverage includes at least:
+
+| Work | Required artifacts and evidence |
+| --- | --- |
+| System engineering | Requirements/allocation, architecture, interfaces, budgets, trade studies, risks, verification plan, and Jev decisions |
+| Mechanical/CAD | Editable parts and assemblies, airbrake and payload integration, drawings, tolerances, material definitions, BOM, and manufacturing exports |
+| Electronics | Editable schematics and PCB layouts, power/sensor/actuator interfaces, wiring and harnesses, BOM, manufacturing files, and electrical checks |
+| Analysis/simulation | Mass properties, aerodynamic/structural/thermal and other required analyses, trajectory, airbrake control, coupled simulations, uncertainty/sensitivity results, and data comparisons |
+| Flight software | Source for required estimation/control, airbrakes, device interfaces, states, faults, telemetry/logging, configuration, reproducible builds, and tests |
+| Ground station | Source, builds, telemetry/command definitions compatible with the flight software, displays and controls required by the project, and integration tests |
+| GSE and fluids | Required ground hardware/CAD, electrical and fluid schematics, component selection, interfaces, instrumentation, operating/test procedures, and supporting analyses |
+| Integration/verification | Interface checks, system and software simulation, software/hardware-in-the-loop provisions, test procedures, and imported experimental evidence |
+
+The table defines deliverable coverage, not a fixed agent roster. The selected
+architecture determines which fluid, propulsion, recovery, and ground systems are
+needed. Their requirements and any justified exclusions are recorded explicitly.
+
+Deliverables are editable source artifacts, exported files, builds, and actual run
+records. Reports link to those artifacts and their verification evidence. A text
+claim that a board, simulation, or software build exists does not satisfy the task.
+
+## PDR and CDR workflow
+
+```text
+Tools + project description + supplied documents/data
+    → requirements, assumptions, capability assessment, and context preparation
+    → Jev-approved work plan and architecture/trade selections
+    → preliminary design and supporting analyses across required disciplines
+    → generated PDR package + readiness checks + human review
+    → accepted preliminary baseline
+    → detailed design, software implementation, and integration/verification
+    → generated CDR package + readiness checks + human review
+    → accepted detailed baseline and complete versioned deliverable set
+```
+
+The PDR package assembles the requirements and architecture, preliminary CAD and
+electrical/fluid designs, budgets, trade decisions, feasibility analyses/control
+simulations, software architecture, verification plan, risks, and open items.
+
+The CDR package assembles detailed CAD/drawings and electronics, interfaces, BOM,
+fluid/GSE designs and procedures, flight and ground-station source/builds, analyses,
+simulation/test evidence, requirement traceability, and the exact configurations
+used. Acceptance criteria define which evidence is due at each review and which
+physical tests, if any, are scheduled afterward.
+
+Review manifests list every required deliverable, its revision, evidence, status,
+and unresolved dependency. Deterministic completeness checks and Jev's readiness
+decision precede human acceptance of the reviewed baseline. Review feedback creates
+tracked changes and reruns affected work. Generated, ready, and accepted packages
+are distinct states; writing a report cannot advance the gate by itself.
+
+Each accepted engineering choice in a review links to its rationale, messages,
+dispatched requests, tool evidence, and Jev decision. A reviewer can trace an
+artifact back through agent communication to the originating brief and context.
+
+Hardware manufacture and physical testing are recorded external activities unless
+the supplied tools can perform them. The runtime can prepare procedures and ingest
+results. Simulated performance, compiled code, and measured hardware performance
+retain distinct evidence states; unperformed tests remain open.
+
+## V0 acceptance
+
+Given the example mission, sufficient supplied tools, configured reasoning/Jev,
+project documents, and resolved necessary inputs, the runtime must prepare and
+progress through PDR and CDR with all required design, software, and evidence
+artifacts. The mission trace must retain the altitude interval, active airbrakes,
+and 3U/2 kg payload requirements through design and verification.
+
+Acceptance checks cover mandatory Jev decisions without bypass, per-agent context
+delivery and budget enforcement, source provenance, tool grants, input/output
+validation, and stale-evidence invalidation. A persisted trace must show the sender,
+recipient, delivery/context inclusion, dispatched attempts, replies, rationales,
+and Jev decision for delegated work. Exercise a peer subrequest, a failed attempt,
+an explicit retry, and restart recovery with deduplicated delivery and no blind
+redispatch of attempts whose outcome is uncertain.
+Each accepted review must reference the actual artifacts, run records, and human
+disposition for its exact baseline.
+An integration run must exercise real Jev; mocked decisions only test plumbing.
+
+Adding tools from another domain must still require only a user registration or
+tool package. A beam/thermal demonstration is an early extensibility check, not
+completion of V0. Missing tools, unresolved inputs, failed analyses, or outstanding
+review evidence produce an explicit incomplete status with the work needed next.

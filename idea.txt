@@ -1,0 +1,164 @@
+GUACAMOLE — CORE IDEA
+
+V0 target: supplied tools, a project description, and project documentation drive
+complete engineering work through PDR and CDR. description.txt defines the contracts
+and deliverables; outline.txt defines the implementation order. This is the target
+architecture. The local runtime is now implemented in src/guacamole; README.md
+records the checks and the outstanding real Jev/mission acceptance boundary.
+Agent communication, rationale summaries, dispatched requests, and Jev decisions
+are persistent, inspectable project records throughout this flow.
+
+                           USER PYTHON SCRIPT
+                                   │
+              tools + project description + context settings
+              previous designs + drawings + experimental data
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │ PROJECT INTAKE AND CONTEXT   │
+                    │                              │
+                    │ Requirements and assumptions │
+                    │ Source/revision provenance   │
+                    │ Capability assessment        │
+                    │ Context packets and budgets  │
+                    └──────────────┬───────────────┘
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │ CHIEF ENGINEER AGENT         │
+                    │                              │
+                    │ Understand the complete goal │
+                    │ Plan tasks and deliverables  │
+                    │ Form alternatives + evidence │
+                    └──────────────┬───────────────┘
+                                   │
+                      typed DecisionRequest
+                 candidates + constraints + evidence
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │ JEV — MANDATORY              │
+                    │                              │
+                    │ Select engineering choices   │
+                    │ Select plans and trade-offs  │
+                    │ Record decision or abstain   │
+                    └──────────────┬───────────────┘
+                                   │
+                 validate decision against current evidence
+                   and deterministic constraints/permissions
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+                    │ LOCAL AGENT RUNTIME          │
+                    │                              │
+                    │ Chief works or spawns agents │
+                    │ AgentSpec + ContextPacket    │
+                    │ Tool grants + result schema  │
+                    │ Persistent inbox and context │
+                    └──────────────┬───────────────┘
+                                   │
+                                   ▼
+                    ┌──────────────────────────────┐
+USER TOOLS ────────► │ TYPED TOOL CATALOGUE         │
+                    │                              │
+Functions/libraries │ Input/output schemas         │
+wrapped as needed   │ Generated MCP exposure       │
+                    │ Validated local execution    │
+                    └──────────────┬───────────────┘
+                                   │
+                                   ▼
+                     ARTIFACTS + TYPED EVIDENCE
+                 designs / software / builds / analyses / tests
+                                   │
+                                   ▼
+                         LOCAL PROJECT STATE
+               revisions + dependencies + decision/source records
+               inboxes + requests + rationale and activity history
+                                   │
+                  update requirements and invalidate stale evidence
+                                   │
+                                   └────────────► Chief Engineer
+
+Review progression, using the artifacts produced by this loop:
+
+    Preliminary multidisciplinary design and analysis
+         → PDR package with preliminary artifacts, evidence, and open items
+         → deterministic readiness checks + mandatory Jev readiness decision
+         → human review and accepted preliminary baseline
+         → detailed design + software implementation + integration/verification
+         → CDR package with detailed artifacts, evidence, and configurations
+         → deterministic readiness checks + mandatory Jev readiness decision
+         → human review and accepted detailed baseline
+
+Review feedback returns to the engineering loop. Jev failure or abstention stops
+work dependent on that choice; no other agent silently substitutes a decision.
+Routine numerical calculations execute within the recorded approved plan.
+
+Inspectable communication and reasoning trace:
+
+    Chief dispatches request R1 → worker A1's persistent inbox
+         → context C1 records the message actually presented to A1
+         → A1 sends peer request R2, linked to parent R1
+         → peer reply supplies an evidence/artifact revision
+         → refreshed context C2 + A1's explicit rationale Q1
+         → dispatched tool request and execution attempt J1
+         → result/reply to R1 with evidence and rationale references
+         → Chief's request to Jev → validated decision D1
+         → resulting work and PDR/CDR artifact references
+
+This is an example trace, not an executed run. Every request/message has stable
+identity, sender/recipient, parent/reply links, typed content, and timestamps.
+Delivery, inclusion in context, acknowledgement, and task completion are distinct
+observations. The runtime records actual state changes and failures.
+
+    SQLite project store
+         ├── agent inboxes and sent messages
+         ├── queued/dispatched/running/terminal requests and attempts
+         ├── context snapshots and explicit rationale summaries
+         ├── tool results, Jev decisions, and evidence references
+         └── append-only activity events and causal links
+
+Scripts inspect inbox/sent views, pending work, request traces, and exact context,
+or export a timeline. The optional WebSocket feed streams the same saved events
+and resumes from a sequence cursor. Viewing history never reruns work.
+
+Rationales record goals, assumptions, alternatives, evidence, uncertainty, and
+declared reasons for a proposal. They do not claim to expose private internal
+model reasoning. Corrections append new records. Messages and prior context stay
+available after summarization, agent termination, or restart; uncertain execution
+is reconciled before any retry. No message broker is required.
+
+Example user description:
+
+    "I want to build a 10,000ft sounding rocket (+- 2000ft) with active airbrakes
+     control whilst carrying a 3U 2kg payload"
+
+V0 work includes CAD/drawings, electronics, required fluids and GSE, analysis and
+simulation, flight software, ground-station software, interfaces, builds, tests,
+and PDR/CDR packages. Actual artifacts and evidence determine completion.
+Unresolved inputs, missing tools, and outstanding physical tests remain explicit.
+
+Every agent, including the Chief, receives user-supplied or task-selected context
+and an enforced context-window budget. Source locators and revisions survive
+summarization. Drawings and experimental data stay accessible through granted
+reading tools; the runtime records the material actually presented to each agent,
+including inbox message IDs. Deferred messages remain pending explicitly.
+
+Communication:
+
+    Inside Guacamole        Direct Python / local async tasks
+    Local MCP integration   Automatically exposed tools over stdio
+    Optional script access  WebSocket control and events on loopback
+
+Guacamole has no frontend or platform network service. A generated ground station
+can have its own UI and telemetry as required by the project. These are engineering
+deliverables. The optional WebSocket bridge is separate from standard local MCP;
+no HTTP MCP service is part of the platform scope.
+
+The Chief is the only predefined role. Worker specialization comes from the task,
+context, and granted tools. Domain schemas and backend integration belong to the
+supplied tools. Untyped code may need a small provider-owned wrapper; adding a tool
+never requires a core solver module or a discipline-specific agent skill file.
+
+A second domain must work by changing the supplied tools and project inputs.
+That extensibility check is an early checkpoint; PDR/CDR delivery is part of V0.

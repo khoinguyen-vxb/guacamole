@@ -1,7 +1,29 @@
 [project]
-name = "agentic-engineering-test"
+name = "guacamole-engineering"
 version = "0.1.0"
-description = "Add your description here"
+description = "Local typed tools and traceable engineering agent workflows"
 readme = "README.md"
 requires-python = ">=3.13.3"
-dependencies = []
+dependencies = ["pydantic>=2.12,<3", "mcp>=2.2,<3"]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project.optional-dependencies]
+websocket = ["websockets>=15,<17"]
+
+[dependency-groups]
+dev = ["ruff>=0.16", "ty>=0.0.84"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/guacamole"]
+
+[tool.ruff]
+target-version = "py313"
+
+[tool.ty.environment]
+python-version = "3.13"
+
+[tool.ty.src]
+include = ["src/guacamole"]
