@@ -81,6 +81,7 @@ class ToolDefinition(Model):
     input_schema: JSON
     output_schema: JSON
     retry_safe: bool
+    requires_plan: bool = True
 
 
 @dataclasses.dataclass(frozen=True)
@@ -124,6 +125,7 @@ class ToolRegistry:
         description: str | None = None,
         tags: tuple[str, ...] = (),
         retry_safe: bool = False,
+        requires_plan: bool = True,
     ) -> Tool[P, R]: ...
 
     @overload
@@ -136,6 +138,7 @@ class ToolRegistry:
         description: str | None = None,
         tags: tuple[str, ...] = (),
         retry_safe: bool = False,
+        requires_plan: bool = True,
     ) -> Tool[P, R]: ...
 
     def register[**P, R](
@@ -147,6 +150,7 @@ class ToolRegistry:
         description: str | None = None,
         tags: tuple[str, ...] = (),
         retry_safe: bool = False,
+        requires_plan: bool = True,
     ) -> Tool[P, R]:
         name = name or getattr(function, "__name__", type(function).__name__)
         if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_.-]*", name):
@@ -189,6 +193,7 @@ class ToolRegistry:
             input_schema=inputs.model_json_schema(),
             output_schema=output.json_schema(),
             retry_safe=retry_safe,
+            requires_plan=requires_plan,
         )
         encode(definition.model_dump(mode="json"))
         tool = Tool[P, R](definition, function, inputs, output)

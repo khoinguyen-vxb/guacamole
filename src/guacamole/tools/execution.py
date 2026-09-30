@@ -105,9 +105,10 @@ class Executor:
         if grants is not None and tool.definition.grant not in grants:
             raise PermissionError(f"Tool not granted: {tool.key}")
         if actor != "script":
-            if decision_id is None:
-                raise PermissionError("Agent tools require a governing Jev decision")
-            self.project.decisions.plan(decision_id)
+            if decision_id is not None:
+                self.project.decisions.plan(decision_id)
+            elif tool.definition.requires_plan:
+                raise PermissionError("Agent tools require a validated work plan")
         for ref in inputs:
             self.project.store.resolve(ref, current=True)
         call_args = tool.arguments(arguments)
@@ -141,7 +142,14 @@ class Executor:
             record.id,
             {"tool": tool.definition.model_dump(mode="json"), "arguments": arguments},
             actor=actor,
-            dependencies=inputs,
+            dependencies=(
+                *inputs,
+                *(
+                    (self.project.store.get("decision", decision_id).ref,)
+                    if decision_id
+                    else ()
+                ),
+            ),
             request_id=record.id,
         )
         # Persist all intent before scheduling. No work runs if either write fails.
@@ -171,6 +179,17 @@ class Executor:
                 reason="Cancelled before dispatch",
             )
             raise asyncio.CancelledError
+        try:
+            for ref in store.get("job_inputs", record.id).dependencies:
+                store.resolve(ref, current=True)
+        except ValueError:
+            activity.transition(
+                record.id,
+                "cancelled",
+                actor="runtime",
+                reason="Inputs superseded before tool dispatch",
+            )
+            raise
         activity.transition(record.id, "dispatched", actor="runtime")
         activity.transition(record.id, "running", actor="runtime")
         try:
@@ -192,6 +211,7 @@ class Executor:
                     actor="runtime",
                     dependencies=(*inputs, store.get("job_inputs", record.id).ref),
                     request_id=record.id,
+                    allow_stale_dependencies=True,
                 )
                 activity.transition(
                     record.id, "completed", actor="runtime", result=payload

@@ -4,14 +4,14 @@ import asyncio
 import time
 from pathlib import Path
 
-from pydantic import Field
-
-from ..context import ContextOverflow, ReasoningProvider
+from ..context import ContextOverflow, ProviderError, ReasoningProvider
 from ..contracts import (
     JSON,
     Acknowledge,
     AgentSpec,
+    AgentState,
     AgentTurn,
+    AskHuman,
     Compact,
     ContextPacket,
     Decide,
@@ -21,7 +21,6 @@ from ..contracts import (
     Finish,
     InboxEntry,
     MessageEnvelope,
-    Model,
     Note,
     OpenItem,
     ProjectRequest,
@@ -46,15 +45,6 @@ from ..decision import DecisionBlocked
 from ..project import Project
 from ..tools.registry import encode
 from .chief import CHIEF, COMMON
-
-
-class AgentState(Model):
-    request_id: str
-    status: str = "active"
-    steps: int = 0
-    tool_calls: int = 0
-    elapsed_s: float = 0.0
-    observation: JSON = Field(default_factory=dict)
 
 
 class Runtime:
@@ -93,10 +83,19 @@ class Runtime:
         )
 
     def _wake(self, agent: AgentSpec, state: AgentState, reason: str) -> None:
+        if self._awaiting_human(agent.id):
+            return
         record = self.project.activity.get(state.request_id)
         if record.status == "blocked":
             self.project.activity.retry(record.id, actor="runtime", reason=reason)
         self._save_state(agent, state.model_copy(update={"status": "active"}))
+
+    def _awaiting_human(self, agent_id: str) -> bool:
+        return any(
+            entry.message.sender == agent_id
+            and self.project.activity.get(entry.message.request_id or "").required
+            for entry in self.project.human.inbox(run_id=self.run_id)
+        )
 
     def _add_agent(self, agent: AgentSpec, *, parent_request: str | None) -> None:
         store = self.project.store
@@ -200,6 +199,10 @@ class Runtime:
             self.chief_id = str(run["chief_id"])
             for agent in self._agents():
                 state = store.model("agent_state", agent.id, AgentState)
+                if state.status == "superseded":
+                    continue
+                if self._awaiting_human(agent.id):
+                    continue
                 record = self.project.activity.get(state.request_id)
                 if record.status in {"interrupted", "blocked"}:
                     self.project.activity.retry(
@@ -246,6 +249,14 @@ class Runtime:
         awaiting = any(
             store.get("review", r.id).data["status"] == "ready" for r in reviews
         )
+        human_requests = self.project.human.inbox(run_id=self.run_id)
+        awaiting_human = any(
+            (
+                record := self.project.activity.get(entry.message.request_id or "")
+            ).required
+            and "review" not in record.arguments
+            for entry in human_requests
+        )
         open_items = [
             str(s.data["description"])
             for s in store.list("open_item")
@@ -253,7 +264,7 @@ class Runtime:
         ]
         for agent in self._agents():
             state = store.model("agent_state", agent.id, AgentState)
-            if state.status not in {"completed"}:
+            if state.status not in {"completed", "superseded"}:
                 open_items.append(
                     f"{agent.task_id}: {state.status}: {encode(state.observation)}"
                 )
@@ -266,15 +277,16 @@ class Runtime:
                 for r in self.project.requests()
                 if r.run_id == self.run_id and r.required
             )
+            else "awaiting_human"
+            if awaiting_human
             else "awaiting_review"
             if awaiting
             else "incomplete",
             reviews=reviews,
-            open_items=tuple(open_items),
-            test_only=bool(
-                self.project.decisions.provider
-                and self.project.decisions.provider.is_test_double
+            human_requests=tuple(
+                entry.message.request_id or "" for entry in human_requests
             ),
+            open_items=tuple(open_items),
         )
         store.put(
             "run",
@@ -352,6 +364,8 @@ class Runtime:
 
     async def step(self, agent: AgentSpec, state: AgentState) -> None:
         activity, store = self.project.activity, self.project.store
+        agent = store.model("agent", agent.id, AgentSpec)
+        human_version = self.project.human.version(self.run_id)
         record = activity.get(state.request_id)
         if (
             state.steps >= agent.budget.max_steps
@@ -381,9 +395,21 @@ class Runtime:
         phase = "context"
         changed = state.model_copy(update={"steps": state.steps + 1})
         self._save_state(agent, changed)
+        pending_reads = (
+            {"selected": state.observation["selected"]}
+            if state.observation.get("selected")
+            else {}
+        )
         try:
-            # Pin current requirements on every invocation; previous snapshots remain saved.
-            pins = tuple(s.ref for s in store.list("requirement"))
+            # Explicit reads must arrive next turn or block, never be silently deferred.
+            requested = Read.model_validate_json(
+                encode({"refs": state.observation.get("selected", [])})
+            ).refs
+            pins = (
+                *tuple(s.ref for s in store.list("requirement") if not s.stale),
+                *self.project.human.references(self.run_id),
+                *requested,
+            )
             actual = agent.model_copy(
                 update={
                     "context": agent.context.model_copy(
@@ -408,6 +434,8 @@ class Runtime:
                     instructions=CHIEF if agent.id == self.chief_id else COMMON,
                     state=self._context_state(agent, state),
                 )
+                if self.project.human.version(self.run_id) != human_version:
+                    return
                 store.event(
                     agent.id,
                     "provider.dispatched",
@@ -429,7 +457,18 @@ class Runtime:
                     dependencies=(store.get("context", packet.id).ref,),
                     request_id=state.request_id,
                     event="provider.responded",
+                    allow_stale_dependencies=True,
                 )
+                if self.project.human.version(self.run_id) != human_version:
+                    store.event(
+                        "runtime",
+                        "agent.turn_superseded",
+                        packet.invocation_id,
+                        {"reason": "Human input arrived during this invocation"},
+                        request_id=state.request_id,
+                    )
+                    return
+                phase = "rationale"
                 rationale = RationaleRecord(
                     author=agent.id,
                     invocation_id=packet.invocation_id,
@@ -471,6 +510,8 @@ class Runtime:
                 observation, status = await self.act(
                     agent, changed, turn, packet, rationale.id
                 )
+                if self.project.human.version(self.run_id) != human_version:
+                    return
                 changed = changed.model_copy(
                     update={"observation": observation, "status": status}
                 )
@@ -482,18 +523,26 @@ class Runtime:
                         reason=str(observation.get("reason", "Awaiting human review")),
                     )
         except TimeoutError:
+            if self.project.human.version(self.run_id) != human_version:
+                return
             reason = "Invocation timed out; dispatched tools may still be running"
             changed = changed.model_copy(
-                update={"status": "blocked", "observation": {"reason": reason}}
+                update={
+                    "status": "blocked",
+                    "observation": pending_reads | {"reason": reason},
+                }
             )
             activity.transition(
                 state.request_id, "blocked", actor="runtime", reason=reason
             )
         except (ContextOverflow, DecisionBlocked) as exc:
+            if self.project.human.version(self.run_id) != human_version:
+                return
             changed = changed.model_copy(
                 update={
                     "status": "blocked",
-                    "observation": {"reason": str(exc) or type(exc).__name__},
+                    "observation": pending_reads
+                    | {"reason": str(exc) or type(exc).__name__},
                 }
             )
             activity.transition(
@@ -503,23 +552,38 @@ class Runtime:
                 reason=str(exc) or type(exc).__name__,
             )
         except Exception as exc:  # noqa: BLE001 -- persist provider/tool failures for correction
+            if self.project.human.version(self.run_id) != human_version:
+                return
+            invalid_rationale = phase == "rationale" and isinstance(exc, ValueError)
+            detail = (
+                "Rationale evidence contains an unknown, mismatched, or stale reference. "
+                "Copy exact current Ref objects from the context and retry; no action executed."
+                if invalid_rationale
+                else (
+                    str(exc)
+                    if isinstance(exc, ProviderError)
+                    and phase in {"context", "provider"}
+                    else "Action rejected; inspect request records. Exception text omitted."
+                )
+            )
             # The next turn can correct a rejected proposal; failed tool work stays visible.
             changed = changed.model_copy(
                 update={
-                    "observation": {
+                    "observation": pending_reads
+                    | {
                         "error_type": type(exc).__name__,
                         "phase": phase,
-                        "detail": "Action rejected; inspect request records. Exception text omitted.",
+                        "detail": detail,
                     }
                 }
             )
-            if phase != "action":
+            if phase != "action" and not invalid_rationale:
                 changed = changed.model_copy(update={"status": "blocked"})
                 activity.transition(
                     state.request_id,
                     "blocked",
                     actor="runtime",
-                    reason=f"{phase} failed: {type(exc).__name__}; detail omitted",
+                    reason=f"{phase} failed: {type(exc).__name__}; {detail}",
                 )
             store.event(
                 "runtime",
@@ -529,6 +593,10 @@ class Runtime:
                 request_id=state.request_id,
             )
         finally:
+            if self.project.human.version(self.run_id) != human_version:
+                # Human input already replaced/superseded this agent's request and context.
+                changed = store.model("agent_state", agent.id, AgentState)
+                state = changed
             changed = changed.model_copy(
                 update={"elapsed_s": state.elapsed_s + time.monotonic() - started}
             )
@@ -548,6 +616,20 @@ class Runtime:
         if isinstance(action, (Decide, Spawn, Record, Review)) and not is_chief:
             raise PermissionError("Only the Chief has this operation")
         match action:
+            case AskHuman():
+                request_id = project.human.ask(
+                    action,
+                    run_id=self.run_id,
+                    sender=agent.id,
+                    parent_id=state.request_id,
+                    decision_id=agent.decision_id,
+                    packet_id=packet.id,
+                    rationale_id=rationale_id,
+                )
+                return {
+                    "request_id": request_id,
+                    "reason": action.question,
+                }, "waiting" if action.blocking else "active"
             case Retry():
                 if state.tool_calls > agent.budget.max_tool_calls:
                     raise PermissionError("Tool budget exhausted")
@@ -557,11 +639,8 @@ class Runtime:
                 await job.collect()
                 return {"request_id": job.id, "result": job.record.result}, "active"
             case ToolCall():
-                if (
-                    state.tool_calls > agent.budget.max_tool_calls
-                    or agent.decision_id is None
-                ):
-                    raise PermissionError("Tool budget or approved plan is missing")
+                if state.tool_calls > agent.budget.max_tool_calls:
+                    raise PermissionError("Tool budget exhausted")
                 job = project.executor.submit(
                     project.tools.get(action.tool),
                     action.arguments,
@@ -583,6 +662,8 @@ class Runtime:
             case Decide():
                 decision = await project.decisions.choose(
                     action.request,
+                    selected=action.selected,
+                    explanation=turn.rationale.explanation,
                     actor=agent.id,
                     run_id=self.run_id,
                     parent_id=state.request_id,
@@ -781,11 +862,11 @@ class Runtime:
                 return {"ref": ref.model_dump(mode="json")}, "active"
             case Read():
                 refs = (*action.refs, *project.contexts.search(action.search))
-                # Selection goes through next packet's budget; never smuggle raw data into state.
+                # Keep recent reads ahead of older optional material on later turns too.
                 context = agent.context.model_copy(
                     update={
                         "selected": tuple(
-                            dict.fromkeys((*agent.context.selected, *refs))
+                            dict.fromkeys((*refs, *agent.context.selected))
                         )
                     }
                 )
@@ -883,6 +964,10 @@ class Runtime:
                     if e.response_required
                     and e.response_message_id is None
                     and e.message.kind != "delegation"
+                    and (
+                        not e.message.request_id
+                        or activity.get(e.message.request_id).status != "cancelled"
+                    )
                 ]
                 if obligations:
                     raise ValueError("Outstanding inbox response obligations")

@@ -6,7 +6,8 @@ engineering design. V0 must produce PDR and CDR packages together with the CAD,
 electronics, analyses, simulations, software, and supporting systems they require.
 
 One Chief Engineer Agent coordinates the work and creates additional agents when
-needed. Jev is the mandatory decision engine. Each agent receives an explicitly
+needed. The Chief selects engineering choices, which the runtime validates and
+records. Each agent receives an explicitly
 constructed context window and access to the tools required for its task.
 
 The immediate priority is generalisability: a new engineering domain, solver, or
@@ -16,14 +17,14 @@ Guacamole's core or defining another permanent agent role.
 This document defines the target architecture. The local runtime, typed registry,
 MCP bridge, dynamic workers, persistent context/inboxes, and review gates now live
 in src/guacamole. README.md documents the executable interface and validation
-boundary: real Jev integration and mission engineering acceptance remain pending.
+boundary: mission engineering acceptance remains pending.
 outline.txt defines the repository layout and implementation order; idea.txt shows
 the flow.
 
 ## V0 scope
 
-The user interface is Python scripts. Reasoning and Jev providers are configured
-once for the runtime. For a project, the user supplies tools, a natural-language
+The user interface is Python scripts. A reasoning provider is configured
+for the runtime. For a project, the user supplies tools, a natural-language
 description, available documents/data, and any context or execution limits.
 The runtime derives the engineering tasks, deliverables, and required evidence.
 
@@ -32,10 +33,12 @@ V0 includes:
 - A typed tool catalogue with local execution and tracked jobs.
 - Automatic MCP exposure of registered tools.
 - One Chief Engineer and one reusable runtime for dynamically created agents.
-- Mandatory Jev decisions governing engineering choices and work plans.
+- Typed, validated Chief decisions governing engineering choices and work plans.
 - User-supplied context and a configurable context-window budget for every agent.
 - Persistent agent inboxes, sent messages, request tracking, and reasoning/decision
   traces that can be inspected from scripts.
+- Human corrections throughout the lifecycle, with agent-initiated questions,
+  persistent human inboxes, and review notifications.
 - Ingestion of previous designs, drawings, experimental data, and project records.
 - Typed project records, evidence, revisions, and dependency invalidation.
 - Complete PDR/CDR workflows and the engineering and software artifacts below.
@@ -94,6 +97,34 @@ Requirements, historical results, new measurements, derived results, and assumpt
 remain distinguishable. Conflicting documents are surfaced with their revisions
 and provenance. A prior design is evidence to assess, rather than an automatically
 accepted current baseline. Documents are source material, not runtime instructions.
+
+## Continuous human participation
+
+Humans can interject, amend requirements, or correct assumptions at any stage,
+including while work is running and during PDR/CDR review. Python methods accept
+the author, text, run, and relevant record references. The optional authenticated
+WebSocket interface exposes the same controls to host scripts.
+
+Every agent can issue AskHuman with a question, choices, relevant references, and
+a blocking flag. The human inbox and human.requested event identify the originating
+agent, request, context, and rationale. Blocking questions pause that agent;
+independent agents can continue. Questions survive restarts, and answers link back
+to the original request. Notifications use local persistence and the existing
+WebSocket event feed.
+
+Replies and unsolicited corrections become versioned source records pinned in
+agent context and included in recorded decision inputs. The Chief receives the new input,
+amends structured requirements with source citations, and obtains a new plan.
+Current plans and dependent evidence are invalidated; unfinished workers are
+superseded. Prior messages, requirement wording, decisions, and results remain
+inspectable. Old provider responses cannot commit choices after new human input.
+Running tools retain their actual execution status; superseded results are saved
+as stale. Oversized human context blocks execution instead of being omitted.
+
+PDR/CDR readiness automatically requests human review. Acceptance requires an
+explicit disposition against the exact ready baseline. A conversational answer
+cannot accept a review. Rejection records the disposition and returns its
+corrections to the Chief for revision and renewed review.
 
 ## Context supplied to every agent
 
@@ -161,8 +192,8 @@ assumptions, alternatives considered, evidence references, uncertainty, and why 
 action or recommendation was proposed. Preserve provider-supplied reasoning
 summaries when available and label their origin. These are recorded explanations;
 the system does not claim access to a model's private internal chain of thought or
-reconstruct missing deliberation. Tool outputs and Jev results provide independent
-evidence of what actually occurred.
+reconstruct missing deliberation. Tool outputs and recorded validation results
+provide evidence of what actually occurred.
 
 The common typed records are:
 
@@ -184,7 +215,7 @@ decision requests, and cancellation requests pass through the recorded runtime
 operations. Capture their actual content and structured arguments/results.
 Workers may exchange evidence directly where their communication grants permit;
 changes to plans, tool grants, or engineering selections still follow the
-Chief/Jev path. Local function calls also produce these records.
+Chief and local validation path. Local function calls also produce these records.
 
 Message handling and work execution are distinct:
 
@@ -228,8 +259,8 @@ A1 → A2    : request R2 for geometry evidence, parent request R1
 A2 → A1    : reply to R2 with artifact revision G7
 A1         : context C2 includes that reply; dispatch tool job J1 linked to R1
 A1 → Chief : response to R1 with result J1, evidence G7, and rationale Q2
-Chief → Jev: decision request D1 citing R1, Q2, and the candidate alternatives
-Jev        : decision result is recorded, validated, and linked to resulting work
+Chief      : selects a candidate and records rationale, citing R1, Q2, and alternatives
+Runtime    : validates and records decision D1, linked to the resulting work
 ```
 
 The example is an illustrative trace, not an executed run. An agent's completion
@@ -287,7 +318,7 @@ AgentSpec
     task ID and parent ID
     objective and task-specific instructions
     ContextSpec and input revision/artifact references
-    governing Jev decision/work-plan reference
+    governing validated decision/work-plan reference
     allowed tool IDs and versions
     expected result schema ID
     completion criteria
@@ -301,7 +332,7 @@ descriptive data. It does not select a Python class, YAML role, or prompt file.
 The runtime validates each spawn request, resolves the requested tool IDs, checks
 grants against the user's permissions and budget, and supplies the agent's tool
 definitions and ContextPacket automatically. Delegation must remain within the
-recorded Jev-approved plan; a new engineering choice returns to Jev.
+recorded validated plan; a new engineering choice returns to the Chief.
 Only the Chief receives the spawner initially. Workers request additional work or
 tools through the Chief and finish when their completion criteria are met.
 
@@ -385,7 +416,7 @@ They do not enumerate engineering disciplines.
 ## Proposed scripting interface
 
 The following uses the scripting API. Project is configured with the user's registered tools, reasoning
-provider, mandatory Jev provider, local workspace, and optional sandbox directory.
+provider, local workspace, and optional sandbox directory.
 Public models use strict validation, forbid extra fields, and enforce declared
 numerical constraints.
 
@@ -459,10 +490,11 @@ runtime operations as the Python API and supports a cursor for missed events.
 It adds no REST routes, browser application, or distributed worker network.
 No socket listener is started by default.
 
-The user injects the reasoning provider and the mandatory Jev provider. Local
-providers and explicitly labelled test doubles allow offline development. Any
-external connection made by a configured provider or tool must be explicitly
-configured by the user. A Jev test double is not evidence of a real Jev decision.
+The user injects the reasoning provider. Local providers and explicitly labelled
+reasoning fixtures allow offline development. External connections made by a
+configured provider or tool are configured by the user. Scripted fixture results
+provide orchestration checks; actual engineering validation requires real tools
+and evidence.
 
 ## Execution, project state, and evidence
 
@@ -500,29 +532,25 @@ not silently treated as completed or automatically replayed. Inbox messages,
 response obligations, and context references survive the restart. Human review is
 a typed script operation recorded against the exact revision being reviewed.
 
-## Mandatory Jev decision plane
+## Engineering decisions and validation
 
 The existing separation of responsibilities remains useful:
 
 ```text
-Chief Engineer formulates work and alternatives.
+Chief Engineer formulates work and alternatives, selects a candidate, and explains why.
 Tools perform calculations and numerical search.
 Deterministic checks enforce requirements and execution limits.
-Jev makes the engineering selections from structured alternatives.
 Project state records evidence and invalidates stale results.
 Humans accept controlled baselines.
 ```
 
-An autonomous project run requires a configured, usable Jev provider. There is no
-option to silently replace Jev with the Chief or deterministic scoring. The
-integration can execute locally or through the supplied provider; it does not
-require a new platform network service.
-
-Jev governs architecture and design selection, work-plan choices, trade studies,
-analysis-fidelity choices, controlled changes, and review-readiness recommendations.
-The runtime requires a recorded decision before committing the corresponding
-choice or dispatching work that depends on it. Workers propose alternatives and
-evidence; they cannot commit an independent choice around this path.
+The Chief governs architecture and design selection, work-plan choices, trade
+studies, analysis-fidelity choices, and controlled changes. Its typed decide action
+contains a DecisionRequest and an explicit selected candidate ID; the enclosing
+rationale supplies the explanation. The runtime validates the choice and captures
+its input revisions locally before dispatching dependent work. Workers propose
+alternatives and evidence to the Chief. Host scripts may record explicit choices
+through the same validation API.
 
 ```text
 DecisionRequest
@@ -532,20 +560,21 @@ DecisionRequest
     project/input revisions and consequences of each candidate
 
 DecisionResult
-    request ID and selected candidate, or abstention/failure
+    request ID and selected candidate
     decision explanation and supporting evidence references
-    links to dispatch, provider response, and validation events
-    Jev provider/version, input snapshot, and timestamp
+    links to author, originating context, input snapshot, and validation events
 ```
 
-Deterministic checks reject invalid candidates and validate Jev's result against
-the request and current evidence. Jev cannot override hard constraints, accept
-stale inputs, or supply human approval. If Jev fails or abstains, dependent work
-waits with an explicit reason while independent work may continue.
+Deterministic checks validate constraints, requirement coverage, task dependencies,
+tool grants, and current evidence. Unknown or ineligible selections block the
+dependent work. The runtime never substitutes a different candidate. The Chief
+can revise its proposal or ask the human for missing inputs while independent
+work continues. Review readiness follows completeness and evidence checks;
+humans explicitly accept the exact ready baseline.
 
 Arithmetic, requirement comparisons, and optimizer iterations remain ordinary
-software. They run within approved decisions and do not require a new Jev call
-for every calculation. Selecting among resulting engineering alternatives does.
+software. They run within validated work plans. Selecting among resulting
+engineering alternatives requires a recorded Chief choice.
 
 ## Engineering deliverables required in V0
 
@@ -558,7 +587,7 @@ For the sounding-rocket project, coverage includes at least:
 
 | Work | Required artifacts and evidence |
 | --- | --- |
-| System engineering | Requirements/allocation, architecture, interfaces, budgets, trade studies, risks, verification plan, and Jev decisions |
+| System engineering | Requirements/allocation, architecture, interfaces, budgets, trade studies, risks, verification plan, and recorded decisions |
 | Mechanical/CAD | Editable parts and assemblies, airbrake and payload integration, drawings, tolerances, material definitions, BOM, and manufacturing exports |
 | Electronics | Editable schematics and PCB layouts, power/sensor/actuator interfaces, wiring and harnesses, BOM, manufacturing files, and electrical checks |
 | Analysis/simulation | Mass properties, aerodynamic/structural/thermal and other required analyses, trajectory, airbrake control, coupled simulations, uncertainty/sensitivity results, and data comparisons |
@@ -580,7 +609,7 @@ claim that a board, simulation, or software build exists does not satisfy the ta
 ```text
 Tools + project description + supplied documents/data
     → requirements, assumptions, capability assessment, and context preparation
-    → Jev-approved work plan and architecture/trade selections
+    → validated work plan and recorded architecture/trade selections
     → preliminary design and supporting analyses across required disciplines
     → generated PDR package + readiness checks + human review
     → accepted preliminary baseline
@@ -600,13 +629,13 @@ used. Acceptance criteria define which evidence is due at each review and which
 physical tests, if any, are scheduled afterward.
 
 Review manifests list every required deliverable, its revision, evidence, status,
-and unresolved dependency. Deterministic completeness checks and Jev's readiness
-decision precede human acceptance of the reviewed baseline. Review feedback creates
+and unresolved dependency. Deterministic completeness and evidence checks
+precede human acceptance of the reviewed baseline. Review feedback creates
 tracked changes and reruns affected work. Generated, ready, and accepted packages
 are distinct states; writing a report cannot advance the gate by itself.
 
 Each accepted engineering choice in a review links to its rationale, messages,
-dispatched requests, tool evidence, and Jev decision. A reviewer can trace an
+dispatched requests, tool evidence, and recorded decision. A reviewer can trace an
 artifact back through agent communication to the originating brief and context.
 
 Hardware manufacture and physical testing are recorded external activities unless
@@ -616,22 +645,23 @@ retain distinct evidence states; unperformed tests remain open.
 
 ## V0 acceptance
 
-Given the example mission, sufficient supplied tools, configured reasoning/Jev,
+Given the example mission, sufficient supplied tools, configured reasoning,
 project documents, and resolved necessary inputs, the runtime must prepare and
 progress through PDR and CDR with all required design, software, and evidence
 artifacts. The mission trace must retain the altitude interval, active airbrakes,
 and 3U/2 kg payload requirements through design and verification.
 
-Acceptance checks cover mandatory Jev decisions without bypass, per-agent context
+Acceptance checks cover explicit selections and deterministic validation, per-agent context
 delivery and budget enforcement, source provenance, tool grants, input/output
 validation, and stale-evidence invalidation. A persisted trace must show the sender,
 recipient, delivery/context inclusion, dispatched attempts, replies, rationales,
-and Jev decision for delegated work. Exercise a peer subrequest, a failed attempt,
+and governing decision for delegated work. Exercise a peer subrequest, a failed attempt,
 an explicit retry, and restart recovery with deduplicated delivery and no blind
 redispatch of attempts whose outcome is uncertain.
 Each accepted review must reference the actual artifacts, run records, and human
 disposition for its exact baseline.
-An integration run must exercise real Jev; mocked decisions only test plumbing.
+An engineering integration run must exercise real supplied tools and evidence;
+scripted reasoning fixtures only test orchestration.
 
 Adding tools from another domain must still require only a user registration or
 tool package. A beam/thermal demonstration is an early extensibility check, not

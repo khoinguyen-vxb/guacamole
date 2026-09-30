@@ -4,9 +4,11 @@ V0 target: supplied tools, a project description, and project documentation driv
 complete engineering work through PDR and CDR. description.txt defines the contracts
 and deliverables; outline.txt defines the implementation order. This is the target
 architecture. The local runtime is now implemented in src/guacamole; README.md
-records the checks and the outstanding real Jev/mission acceptance boundary.
-Agent communication, rationale summaries, dispatched requests, and Jev decisions
+records the checks and the outstanding mission acceptance boundary.
+Agent communication, rationale summaries, dispatched requests, and design decisions
 are persistent, inspectable project records throughout this flow.
+Human participation continues throughout the lifecycle: agents can ask questions,
+and humans can correct requirements or decisions at any time.
 
                            USER PYTHON SCRIPT
                                    │
@@ -30,22 +32,12 @@ are persistent, inspectable project records throughout this flow.
                     │ Understand the complete goal │
                     │ Plan tasks and deliverables  │
                     │ Form alternatives + evidence │
+                    │ Select and explain a choice  │
                     └──────────────┬───────────────┘
                                    │
-                      typed DecisionRequest
-                 candidates + constraints + evidence
-                                   │
-                                   ▼
-                    ┌──────────────────────────────┐
-                    │ JEV — MANDATORY              │
-                    │                              │
-                    │ Select engineering choices   │
-                    │ Select plans and trade-offs  │
-                    │ Record decision or abstain   │
-                    └──────────────┬───────────────┘
-                                   │
-                 validate decision against current evidence
-                   and deterministic constraints/permissions
+               typed alternatives + selected ID + rationale
+                 validate constraints and current evidence
+                      record choice and input revisions
                                    │
                                    ▼
                     ┌──────────────────────────────┐
@@ -83,16 +75,33 @@ Review progression, using the artifacts produced by this loop:
 
     Preliminary multidisciplinary design and analysis
          → PDR package with preliminary artifacts, evidence, and open items
-         → deterministic readiness checks + mandatory Jev readiness decision
+         → deterministic completeness and readiness checks
          → human review and accepted preliminary baseline
          → detailed design + software implementation + integration/verification
          → CDR package with detailed artifacts, evidence, and configurations
-         → deterministic readiness checks + mandatory Jev readiness decision
+         → deterministic completeness and readiness checks
          → human review and accepted detailed baseline
 
-Review feedback returns to the engineering loop. Jev failure or abstention stops
-work dependent on that choice; no other agent silently substitutes a decision.
+Review feedback returns to the engineering loop. Invalid selections or stale
+evidence stop dependent work until the Chief revises the plan or inputs.
 Routine numerical calculations execute within the recorded approved plan.
+
+Human interaction throughout the loop:
+
+    Chief or worker issues AskHuman
+         → persistent human inbox + human.requested event
+         → human reply from a script or optional WebSocket connection
+         → saved source + Chief context + recorded decision inputs
+         → amended requirements and a new approved work plan
+
+    Human interjects a correction without waiting for a question
+         → supersede current plans and unfinished workers
+         → retain previous decisions, messages, and actual tool outcomes
+         → discard old in-flight proposals and replan from the correction
+
+Required questions wait for a human; independent work can continue. PDR/CDR
+readiness also pings the human. Acceptance is an explicit review disposition;
+rejection returns corrections to the Chief. Questions and answers survive restart.
 
 Inspectable communication and reasoning trace:
 
@@ -103,7 +112,7 @@ Inspectable communication and reasoning trace:
          → refreshed context C2 + A1's explicit rationale Q1
          → dispatched tool request and execution attempt J1
          → result/reply to R1 with evidence and rationale references
-         → Chief's request to Jev → validated decision D1
+         → Chief's explicit selection → validated decision D1
          → resulting work and PDR/CDR artifact references
 
 This is an example trace, not an executed run. Every request/message has stable
@@ -112,10 +121,10 @@ Delivery, inclusion in context, acknowledgement, and task completion are distinc
 observations. The runtime records actual state changes and failures.
 
     SQLite project store
-         ├── agent inboxes and sent messages
+         ├── agent/human inboxes, replies, corrections and sent messages
          ├── queued/dispatched/running/terminal requests and attempts
          ├── context snapshots and explicit rationale summaries
-         ├── tool results, Jev decisions, and evidence references
+         ├── tool results, design decisions, and evidence references
          └── append-only activity events and causal links
 
 Scripts inspect inbox/sent views, pending work, request traces, and exact context,

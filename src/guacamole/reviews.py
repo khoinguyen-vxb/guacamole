@@ -1,4 +1,4 @@
-"""Versioned deliverables, deterministic readiness, Jev, then human disposition."""
+"""Versioned deliverables, deterministic readiness, then human disposition."""
 
 import shutil
 from pathlib import Path
@@ -6,8 +6,7 @@ from typing import TYPE_CHECKING
 
 from .contracts import (
     ArtifactRecord,
-    Candidate,
-    DecisionRequest,
+    AskHuman,
     Deliverable,
     Evidence,
     OpenItem,
@@ -117,7 +116,11 @@ class Reviews:
             ):
                 issues.append(f"{item.id}: {item.description}")
         for request in self.project.activity.requests(decision=plan_decision):
-            if request.required and request.status not in {"completed", "cancelled"}:
+            if (
+                request.required
+                and request.status not in {"completed", "cancelled"}
+                and not (request.kind == "human" and "review" in request.arguments)
+            ):
                 issues.append(f"Request {request.id}: {request.status}")
         unique = tuple({(r.kind, r.id, r.revision): r for r in baseline}.values())
         return tuple(deliverables), unique, tuple(issues)
@@ -141,7 +144,6 @@ class Reviews:
             baseline=baseline,
             deliverables=deliverables,
             open_items=issues,
-            test_only=self.project.decisions.record(plan_decision).is_test_double,
         )
         ref = store.put(
             "review",
@@ -154,42 +156,28 @@ class Reviews:
         self._export(manifest)
         if issues:
             return ref
-        decision_id = await self.project.decisions.choose(
-            DecisionRequest(
-                question=f"Is this exact {plan.stage} baseline ready for human review?",
-                kind="review",
-                candidates=(
-                    Candidate(
-                        id="ready",
-                        description="Recommend the recorded baseline for human review",
-                        evidence=baseline,
-                    ),
-                ),
-                evidence=baseline,
-                criteria=tuple(
-                    c for d in plan.deliverables for c in d.acceptance_criteria
-                ),
-            ),
-            actor=actor,
-            run_id=run_id,
-            parent_id=parent_id,
-            rationale_id=rationale_id,
-            packet_id=packet_id,
-        )
-        # Recheck after provider latency; a decision cannot legitimize stale evidence.
-        _, current, issues = self.checks(plan_decision)
-        if issues or current != baseline:
-            raise ValueError("Baseline changed during readiness evaluation")
-        manifest = manifest.model_copy(
-            update={"status": "ready", "readiness_decision": decision_id}
-        )
+        manifest = manifest.model_copy(update={"status": "ready"})
         ref = store.put(
             "review",
             manifest.id,
             manifest,
             actor="runtime",
-            dependencies=(*baseline, store.get("decision", decision_id).ref),
+            dependencies=baseline,
             event="review.ready",
+        )
+        self.project.human.ask(
+            AskHuman(
+                question=f"Review the {plan.stage} package and accept it or request changes.",
+                choices=("Accept", "Request changes"),
+                references=(ref,),
+            ),
+            run_id=run_id,
+            sender=actor,
+            parent_id=parent_id,
+            decision_id=plan_decision,
+            packet_id=packet_id,
+            rationale_id=rationale_id,
+            review=ref,
         )
         self._export(manifest)
         return ref
@@ -204,9 +192,8 @@ class Reviews:
         store = self.project.store
         snapshot = store.resolve(ref, current=True)
         manifest = ReviewManifest.model_validate_json(encode(snapshot.data))
-        if manifest.status != "ready" or manifest.readiness_decision is None:
+        if manifest.status != "ready":
             raise ValueError("Only a ready baseline can receive human disposition")
-        self.project.decisions.record(manifest.readiness_decision)
         _, baseline, issues = self.checks(manifest.plan_decision)
         if issues or baseline != manifest.baseline:
             raise ValueError("Review baseline is no longer current or complete")
@@ -217,6 +204,7 @@ class Reviews:
                 "disposition": disposition,
             }
         )
+        original = ref
         ref = store.put(
             "review",
             manifest.id,
@@ -225,7 +213,15 @@ class Reviews:
             dependencies=snapshot.dependencies,
             event=f"review.{changed.status}",
         )
+        self.project.human.review_answered(
+            original, author=reviewer, disposition=disposition
+        )
         self._export(changed)
+        if not accepted:
+            run_id = self.project.activity.get(manifest.plan_decision).run_id
+            self.project.human.interject(
+                disposition, author=reviewer, run_id=run_id, references=(ref,)
+            )
         return ref
 
     def _export(self, manifest: ReviewManifest) -> Path:
@@ -280,9 +276,5 @@ class Reviews:
             for r in self.project.requests(decision=manifest.plan_decision)
         }
         traces[manifest.plan_decision] = self.project.trace(manifest.plan_decision)
-        if manifest.readiness_decision:
-            traces[manifest.readiness_decision] = self.project.trace(
-                manifest.readiness_decision
-            )
         output(package / "traces.json").write_text(encode(traces), encoding="utf-8")
         return path

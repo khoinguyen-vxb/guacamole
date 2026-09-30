@@ -4,6 +4,7 @@ from .contracts import (
     AgentSpec,
     AgentTurn,
     ArtifactRecord,
+    AskHuman,
     Budget,
     Candidate,
     Constraint,
@@ -14,6 +15,7 @@ from .contracts import (
     Deliverable,
     DeliverableSpec,
     Evidence,
+    HumanInput,
     Model,
     Note,
     OpenItem,
@@ -30,7 +32,7 @@ from .contracts import (
     VerificationResult,
     WorkPlan,
 )
-from .decision import DecisionBlocked, JevProvider
+from .decision import DecisionBlocked
 from .project import Project
 from .tools.execution import Job
 from .tools.registry import Tool, ToolRegistry
@@ -39,6 +41,7 @@ __all__ = [
     "AgentSpec",
     "AgentTurn",
     "ArtifactRecord",
+    "AskHuman",
     "Budget",
     "Candidate",
     "Constraint",
@@ -50,7 +53,7 @@ __all__ = [
     "Deliverable",
     "DeliverableSpec",
     "Evidence",
-    "JevProvider",
+    "HumanInput",
     "Job",
     "Model",
     "Note",

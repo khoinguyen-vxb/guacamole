@@ -5,11 +5,12 @@ import hmac
 import ipaddress
 import secrets
 from contextlib import asynccontextmanager
+from http import HTTPStatus
 from typing import Annotated, Literal
 
 from pydantic import Field
 
-from .contracts import JSON, Model, uid
+from .contracts import JSON, Model, Ref, uid
 from .tools.mcp import ToolSession
 from .tools.registry import encode
 
@@ -35,10 +36,47 @@ class Inspect(Model):
     entity_id: str = ""
 
 
+class HumanInbox(Model):
+    kind: Literal["human_inbox"]
+    run_id: str | None = None
+    pending_only: bool = True
+
+
+class Interject(Model):
+    kind: Literal["interject"]
+    run_id: str | None = None
+    text: str = Field(pattern=r"\S")
+    author: str = Field(pattern=r"\S")
+    references: tuple[Ref, ...] = ()
+
+
+class HumanReply(Model):
+    kind: Literal["reply_human"]
+    request_id: str
+    text: str = Field(pattern=r"\S")
+    author: str = Field(pattern=r"\S")
+
+
+class ReviewDisposition(Model):
+    kind: Literal["review_disposition"]
+    review: Ref
+    reviewer: str = Field(pattern=r"\S")
+    disposition: str = Field(pattern=r"\S")
+    accepted: bool = True
+
+
 class Command(Model):
     id: str = Field(default_factory=uid)
     command: Annotated[
-        Call | JobCommand | Events | Inspect, Field(discriminator="kind")
+        Call
+        | JobCommand
+        | Events
+        | Inspect
+        | HumanInbox
+        | Interject
+        | HumanReply
+        | ReviewDisposition,
+        Field(discriminator="kind"),
     ]
 
 
@@ -50,6 +88,10 @@ class WebSocketBridge:
     def execute(self, command: Command) -> JSON:
         project = self.session.project
         operation = command.command
+        if self.session.agent_id and isinstance(
+            operation, (HumanInbox, Interject, HumanReply, ReviewDisposition)
+        ):
+            raise PermissionError("Human controls require a host scripting session")
         key = f"{self.session.agent_id or 'script'}:{command.id}"
         existing = project.store.maybe("control", key)
         if existing:
@@ -62,6 +104,37 @@ class WebSocketBridge:
         with project.store.atomic():
             result: JSON
             match operation:
+                case HumanInbox():
+                    result = {
+                        "inbox": [
+                            entry.model_dump(mode="json")
+                            for entry in project.human.inbox(
+                                run_id=operation.run_id,
+                                pending_only=operation.pending_only,
+                            )
+                        ]
+                    }
+                case Interject():
+                    ref = project.human.interject(
+                        operation.text,
+                        author=operation.author,
+                        run_id=operation.run_id,
+                        references=operation.references,
+                    )
+                    result = {"ref": ref.model_dump(mode="json")}
+                case HumanReply():
+                    ref = project.human.reply(
+                        operation.request_id, operation.text, author=operation.author
+                    )
+                    result = {"ref": ref.model_dump(mode="json")}
+                case ReviewDisposition():
+                    ref = project.reviews.accept(
+                        operation.review,
+                        reviewer=operation.reviewer,
+                        disposition=operation.disposition,
+                        accepted=operation.accepted,
+                    )
+                    result = {"ref": ref.model_dump(mode="json")}
                 case Call():
                     job = self.session.submit(operation.tool, operation.arguments)
                     result = {"job_id": job.id}
@@ -117,7 +190,7 @@ class WebSocketBridge:
                     raise ValueError("Unknown command")
             # Only mutations need deduplication. Inspection never writes or acknowledges.
             if (
-                isinstance(operation, Call)
+                isinstance(operation, (Call, Interject, HumanReply, ReviewDisposition))
                 or isinstance(operation, JobCommand)
                 and operation.kind == "cancel"
             ):
@@ -181,8 +254,30 @@ class WebSocketBridge:
 
         if not ipaddress.ip_address(host).is_loopback:
             raise ValueError("Guacamole WebSocket control must bind to loopback")
+
+        def process_request(connection, request):
+            upgrades = request.headers.get_all("Upgrade")
+            connections = request.headers.get_all("Connection")
+            if "websocket" not in [value.lower() for value in upgrades] or not any(
+                token.strip().lower() == "upgrade"
+                for value in connections
+                for token in value.split(",")
+            ):
+                response = connection.respond(
+                    HTTPStatus.UPGRADE_REQUIRED,
+                    "This is Guacamole's WebSocket control endpoint, not a web page.\n"
+                    "Use a WebSocket client with the printed Authorization header.\n",
+                )
+                response.headers["Upgrade"] = "websocket"
+                return response
+
         # No browser origins; this is a script interface, and authentication is required.
         async with serve(
-            self.handle, host, port, origins=[None], max_size=1_048_576
+            self.handle,
+            host,
+            port,
+            origins=[None],
+            max_size=1_048_576,
+            process_request=process_request,
         ) as server:
             yield server

@@ -135,6 +135,7 @@ class ContextPacket(Model):
     model: str
     prompt: str
     input_tokens: int = Field(ge=0)
+    token_count_method: Literal["exact", "utf8_upper_bound"] = "exact"
     reserved_output_tokens: int = Field(gt=0)
     sources: tuple[Ref, ...] = ()
     message_ids: tuple[str, ...] = ()
@@ -245,7 +246,7 @@ class ReferencedData(Model):
 
 class DecisionRequest(Model):
     question: str
-    kind: Literal["work_plan", "engineering", "review"]
+    kind: Literal["work_plan", "engineering"]
     candidates: tuple[Candidate, ...] = Field(min_length=1)
     constraints: tuple[Constraint, ...] = ()
     criteria: tuple[str, ...] = Field(min_length=1)
@@ -256,19 +257,15 @@ class DecisionRequest(Model):
 
 class DecisionResult(Model):
     request_id: str
-    selected: str | None
+    selected: str
     explanation: str = Field(min_length=1)
     evidence: tuple[Ref, ...] = ()
-    provider_request_id: str | None = None
 
 
 class DecisionRecord(Model):
     request: DecisionRequest
     result: DecisionResult
-    provider: str
-    version: str
-    is_test_double: bool
-    accepted: bool
+    author: str
 
 
 class Rationale(Model):
@@ -304,7 +301,7 @@ class RequestRecord(Model):
     run_id: str
     requester: str
     target: str
-    kind: Literal["tool", "agent", "peer", "decision", "review"]
+    kind: Literal["tool", "agent", "peer", "decision", "review", "human"]
     arguments: JSON
     purpose: str
     status: Status = "queued"
@@ -383,6 +380,29 @@ class AgentSpec(Model):
     budget: Budget = Field(default_factory=Budget)
 
 
+class AgentState(Model):
+    request_id: str
+    status: str = "active"
+    steps: int = 0
+    tool_calls: int = 0
+    elapsed_s: float = 0.0
+    observation: JSON = Field(default_factory=dict)
+
+
+class HumanInput(Model):
+    id: str = Field(default_factory=uid)
+    run_id: str
+    author: str = Field(pattern=r"\S")
+    text: str = Field(pattern=r"\S")
+    references: tuple[Ref, ...] = ()
+    reply_to: str | None = None
+    created_at: str = Field(default_factory=now)
+
+
+class HumanInputs(Model):
+    sources: tuple[Ref, ...] = ()
+
+
 class TaskReport(Model):
     summary: str
     evidence: tuple[Ref, ...] = ()
@@ -428,10 +448,8 @@ class ReviewManifest(Model):
     deliverables: tuple[Deliverable, ...]
     open_items: tuple[str, ...]
     status: Literal["generated", "ready", "accepted", "rejected"] = "generated"
-    readiness_decision: str | None = None
     human: str | None = None
     disposition: str | None = None
-    test_only: bool = False
 
 
 class ProjectRequest(Model):
@@ -446,10 +464,10 @@ class ProjectRequest(Model):
 
 class ProjectResult(Model):
     run_id: str
-    status: Literal["incomplete", "awaiting_review", "complete"]
+    status: Literal["incomplete", "awaiting_human", "awaiting_review", "complete"]
     reviews: tuple[Ref, ...] = ()
+    human_requests: tuple[str, ...] = ()
     open_items: tuple[str, ...] = ()
-    test_only: bool = False
 
 
 class ToolCall(Model):
@@ -479,9 +497,18 @@ class Acknowledge(Model):
     message_id: str
 
 
+class AskHuman(Model):
+    kind: Literal["ask_human"] = "ask_human"
+    question: str = Field(pattern=r"\S")
+    choices: tuple[str, ...] = ()
+    references: tuple[Ref, ...] = ()
+    blocking: bool = True
+
+
 class Decide(Model):
     kind: Literal["decide"] = "decide"
     request: DecisionRequest
+    selected: str = Field(min_length=1)
 
 
 class Spawn(Model):
@@ -559,6 +586,7 @@ type Action = Annotated[
     ToolCall
     | Send
     | Acknowledge
+    | AskHuman
     | Decide
     | Spawn
     | Record

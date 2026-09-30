@@ -1,30 +1,11 @@
-"""Explicit test doubles. They provide no evidence of real Jev/engineering performance."""
+"""Labelled reasoning fixtures; they provide no engineering performance evidence."""
 
 from guacamole import (
     Candidate,
     DecisionRequest,
-    DecisionResult,
     DeliverableSpec,
     WorkPlan,
 )
-
-
-class TestJev:
-    name = "test-double-jev"
-    version = "1"
-    is_test_double = True
-
-    def __init__(self):
-        self.calls = []
-        self.abstain = False
-
-    async def decide(self, request_id, request):
-        self.calls.append(request)
-        return DecisionResult(
-            request_id=request_id,
-            selected=None if self.abstain else request.candidates[0].id,
-            explanation="TEST DOUBLE: first eligible fixture candidate",
-        )
 
 
 class TestReasoning:

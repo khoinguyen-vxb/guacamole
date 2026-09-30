@@ -7,11 +7,12 @@ https://developers.openai.com/api/docs/models/gpt-6-astra
 import asyncio
 import json
 import os
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 from pydantic import BaseModel, ConfigDict
 
+from ..context import ProviderError
 from ..contracts import JSON, AgentTurn, ContextPacket
 from ..tools.registry import encode
 
@@ -34,6 +35,7 @@ class _Response(BaseModel):
     id: str
     status: str
     output: list[_Output]
+    incomplete_details: JSON | None = None
 
 
 class AstraReasoning:
@@ -50,7 +52,7 @@ class AstraReasoning:
     def _post(self, path: str, data: JSON) -> JSON:
         key = os.environ.get(self._api_key_env)
         if not key:
-            raise RuntimeError(f"Set {self._api_key_env} to use GPT-6 Astra")
+            raise ProviderError(f"Set {self._api_key_env} to use GPT-6 Astra")
         request = Request(
             f"https://api.openai.com/v1/responses{path}",
             data=encode(data).encode(),
@@ -65,7 +67,39 @@ class AstraReasoning:
                 return json.load(response)
         except HTTPError as exc:
             # Do not persist server echoes of prompts or authentication headers.
-            raise RuntimeError(f"OpenAI request failed with HTTP {exc.code}") from None
+            detail = {
+                400: "Check the model and request parameters.",
+                401: "Check the configured API key.",
+                403: "Check the API key's project and model permissions.",
+                404: "Check the configured model and access to it.",
+                429: "Check API rate limits and billing quota before retrying.",
+            }.get(exc.code, "Check the API service status before retrying.")
+            try:
+                body = json.loads(exc.read(65_536))
+            except (ValueError, OSError):
+                body = None
+            finally:
+                exc.close()
+            error = body.get("error") if isinstance(body, dict) else None
+            if isinstance(error, dict):
+                if (
+                    error.get("code")
+                    in (
+                        "credit_balance_exhausted",
+                        "insufficient_quota",
+                    )
+                    or error.get("type") == "insufficient_quota"
+                ):
+                    detail = "API credits or quota exhausted; add credits or use a funded API key."
+                elif error.get("code") == "rate_limit_exceeded":
+                    detail = "API rate limit exceeded; wait or reduce request frequency/size."
+            raise ProviderError(
+                f"OpenAI request failed with HTTP {exc.code}. {detail}"
+            ) from None
+        except URLError:
+            raise ProviderError(
+                "OpenAI connection failed; check network and proxy settings."
+            ) from None
 
     async def count_tokens(self, prompt: str) -> int:
         response = await asyncio.to_thread(
@@ -98,9 +132,15 @@ class AstraReasoning:
         )
         response = _Response.model_validate(raw)
         if response.status != "completed":
-            raise RuntimeError(
-                "OpenAI returned an incomplete response; no action executed"
-            )
+            reason = (response.incomplete_details or {}).get("reason")
+            detail = "OpenAI did not complete the response; no action executed."
+            if reason == "max_output_tokens":
+                detail += (
+                    " Increase reserved_output_tokens to cover reasoning and output."
+                )
+            elif reason == "content_filter":
+                detail += " The response was stopped by the content filter."
+            raise ProviderError(detail)
         texts, summaries = [], []
         for item in response.output:
             if item.type == "message":

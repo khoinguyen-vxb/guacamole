@@ -1,8 +1,7 @@
-"""Mandatory Jev boundary with deterministic eligibility and freshness gates."""
+"""Validate and record explicit engineering choices and their input revisions."""
 
-import asyncio
 from graphlib import TopologicalSorter
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING
 
 from .contracts import (
     Candidate,
@@ -19,23 +18,13 @@ if TYPE_CHECKING:
     from .project import Project
 
 
-class JevProvider(Protocol):
-    name: str
-    version: str
-    is_test_double: bool
-
-    async def decide(
-        self, request_id: str, request: DecisionRequest
-    ) -> DecisionResult: ...
-
-
 class DecisionBlocked(RuntimeError):
     pass
 
 
 class Decisions:
-    def __init__(self, project: "Project", provider: JevProvider | None) -> None:
-        self.project, self.provider = project, provider
+    def __init__(self, project: "Project") -> None:
+        self.project = project
 
     def validate_plan(self, plan: WorkPlan) -> None:
         tasks = {t.id: t for t in plan.tasks}
@@ -106,6 +95,8 @@ class Decisions:
         self,
         request: DecisionRequest,
         *,
+        selected: str,
+        explanation: str,
         actor: str = "script",
         run_id: str = "script",
         parent_id: str | None = None,
@@ -121,8 +112,12 @@ class Decisions:
                 kind="decision",
                 run_id=run_id,
                 requester=actor,
-                target="Jev",
-                arguments=request.model_dump(mode="json"),
+                target="runtime",
+                arguments={
+                    "request": request.model_dump(mode="json"),
+                    "selected": selected,
+                    "explanation": explanation,
+                },
                 purpose=request.question,
                 parent_id=parent_id,
                 rationale_id=rationale_id,
@@ -130,15 +125,7 @@ class Decisions:
                 required=False,
             )
         )
-        if self.provider is None:
-            activity.transition(
-                record.id,
-                "blocked",
-                actor="runtime",
-                reason="A configured Jev provider is mandatory",
-            )
-            raise DecisionBlocked("A configured Jev provider is mandatory")
-        candidates, references = [], []
+        candidates, references = [], list(self.project.human.references(run_id))
         for candidate in request.candidates:
             try:
                 references.extend(self._eligible(candidate, request))
@@ -151,113 +138,69 @@ class Decisions:
                     {"reason": str(exc)},
                     request_id=record.id,
                 )
-        if not candidates:
+        if selected not in {candidate.id for candidate in candidates}:
             activity.transition(
                 record.id,
                 "blocked",
                 actor="runtime",
-                reason="No deterministically eligible candidates",
+                reason="Selected candidate is unknown or ineligible",
             )
-            raise DecisionBlocked("No deterministically eligible candidates")
-        snapshots: dict[Ref, ReferencedData] = {}
-        pending = list(references)
-        while pending:
-            ref = pending.pop()
-            if ref not in snapshots:
-                snapshot = store.resolve(ref, current=True)
-                snapshots[ref] = ReferencedData(ref=ref, content=snapshot.data)
-                pending.extend(snapshot.dependencies)
-        eligible = request.model_copy(
-            update={
-                "candidates": tuple(candidates),
-                "context": tuple(snapshots.values()),
-            }
-        )
-        store.put(
-            "decision_input",
-            record.id,
-            eligible,
-            actor=actor,
-            dependencies=tuple(references),
-            request_id=record.id,
-        )
-        activity.transition(record.id, "dispatched", actor="runtime")
-        activity.transition(record.id, "running", actor="runtime")
+            raise DecisionBlocked("Selected candidate is unknown or ineligible")
         try:
-            result = DecisionResult.model_validate(
-                await self.provider.decide(
-                    record.id,
-                    DecisionRequest.model_validate_json(eligible.model_dump_json()),
-                )
-            )
-            store.put(
-                "decision_response",
-                record.id,
-                result,
-                actor="Jev",
-                request_id=record.id,
-                event="decision.responded",
-            )
-            valid = result.request_id == record.id and result.selected in {
-                c.id for c in candidates
-            }
-            for ref in (*references, *result.evidence):
-                store.resolve(ref, current=True)
-            decision = DecisionRecord(
-                request=eligible,
-                result=result,
-                provider=self.provider.name,
-                version=self.provider.version,
-                is_test_double=self.provider.is_test_double,
-                accepted=valid,
-            )
+            # No external invocation: validation and recording have no async gap.
             with store.atomic():
+                snapshots: dict[Ref, ReferencedData] = {}
+                pending = list(references)
+                while pending:
+                    ref = pending.pop()
+                    if ref not in snapshots:
+                        snapshot = store.resolve(ref, current=True)
+                        snapshots[ref] = ReferencedData(ref=ref, content=snapshot.data)
+                        pending.extend(snapshot.dependencies)
+                result = DecisionResult(
+                    request_id=record.id,
+                    selected=selected,
+                    explanation=explanation,
+                    evidence=tuple(dict.fromkeys(references)),
+                )
+                decision = DecisionRecord(
+                    request=request.model_copy(
+                        update={
+                            "candidates": tuple(candidates),
+                            "context": tuple(snapshots.values()),
+                        }
+                    ),
+                    result=result,
+                    author=actor,
+                )
                 store.put(
                     "decision",
                     record.id,
                     decision,
-                    actor="Jev",
-                    dependencies=(*references, *result.evidence),
+                    actor=actor,
+                    dependencies=result.evidence,
                     request_id=record.id,
                 )
                 activity.transition(
                     record.id,
-                    "completed" if valid else "blocked",
+                    "completed",
                     actor="runtime",
                     result=result.model_dump(mode="json"),
-                    reason=None
-                    if valid
-                    else "Jev abstained or returned an invalid selection",
                 )
-            if not valid:
-                raise DecisionBlocked("Jev abstained or returned an invalid selection")
             return record.id
-        except DecisionBlocked:
-            raise
-        except asyncio.CancelledError:
+        except (ValueError, KeyError) as exc:
             activity.transition(
                 record.id,
-                "uncertain",
+                "blocked",
                 actor="runtime",
-                reason="Jev invocation interrupted before a recorded outcome",
+                reason="Invalid choice or stale decision inputs",
             )
-            raise
-        except Exception as exc:
-            activity.transition(
-                record.id,
-                "failed",
-                actor="runtime",
-                reason=f"{type(exc).__name__}; Jev result unavailable or invalid; error detail omitted",
-            )
-            raise DecisionBlocked("Jev failed; dependent work is blocked") from exc
+            raise DecisionBlocked("Invalid choice or stale decision inputs") from exc
 
     def record(self, id: str) -> DecisionRecord:
         snapshot = self.project.store.get("decision", id)
         self.project.store.resolve(snapshot.ref, current=True)
-        decision = self.project.store.model("decision", id, DecisionRecord)
-        if not decision.accepted:
-            raise DecisionBlocked("Decision does not authorize execution")
-        return decision
+        return self.project.store.model("decision", id, DecisionRecord)
 
     def plan(self, id: str) -> WorkPlan:
         decision = self.record(id)

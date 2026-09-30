@@ -306,6 +306,18 @@ with Project(Path(sys.argv[1]), sandbox=Path(sys.argv[2]), tools=tools) as proje
             async with bridge.serve() as server:
                 port = server.sockets[0].getsockname()[1]
                 uri = f"ws://127.0.0.1:{port}"
+                with self.assertNoLogs("websockets.server", level="ERROR"):
+                    reader, writer = await asyncio.open_connection("127.0.0.1", port)
+                    writer.write(
+                        b"GET / HTTP/1.1\r\nHost: localhost\r\nConnection: keep-alive\r\n\r\n"
+                    )
+                    await writer.drain()
+                    response = await asyncio.wait_for(reader.read(), 2)
+                    writer.close()
+                    await writer.wait_closed()
+                    self.assertIn(b"426 Upgrade Required", response)
+                    self.assertIn(b"WebSocket client", response)
+                    self.assertNotIn(bridge.token.encode(), response)
                 command = json.dumps(
                     {
                         "id": "one",

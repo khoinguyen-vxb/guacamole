@@ -140,13 +140,20 @@ class Store:
         dependencies: tuple[Ref, ...] = (),
         request_id: str | None = None,
         event: str | None = None,
+        allow_stale_dependencies: bool = False,
     ) -> Ref:
         payload = data.model_dump(mode="json") if isinstance(data, Model) else data
         serialized = encode(payload)
         digest = hashlib.sha256(serialized.encode()).hexdigest()
         with self.atomic():
-            for ref in dependencies:
-                self.resolve(ref, current=True)
+            stale = False
+            for dependency in dependencies:
+                snapshot = self.resolve(
+                    dependency, current=not allow_stale_dependencies
+                )
+                stale |= snapshot.stale or self.get(
+                    dependency.kind, dependency.id
+                ).ref != dependency.model_copy(update={"locator": ""})
             previous = self.maybe(kind, id)
             revision = previous.ref.revision + 1 if previous else 1
             self.db.execute(
@@ -176,7 +183,28 @@ class Store:
                 "review",
             }:
                 self._invalidate(previous.ref, actor)
+            if stale:
+                self.invalidate(
+                    ref, actor=actor, reason="Input changed while work was running"
+                )
         return ref
+
+    def invalidate(self, ref: Ref, *, actor: str, reason: str) -> None:
+        """Retain the record and invalidate its dependent work."""
+        with self.atomic():
+            if self.resolve(ref).stale:
+                return
+            self.db.execute(
+                "INSERT INTO invalidations VALUES (?,?,?,?)",
+                (ref.kind, ref.id, ref.revision, reason),
+            )
+            self.event(
+                actor,
+                "dependency.stale",
+                ref.id,
+                {"ref": ref.model_dump(mode="json"), "reason": reason},
+            )
+            self._invalidate(ref, actor)
 
     def _invalidate(self, changed: Ref, actor: str) -> None:
         # ponytail: scan local metadata; index dependency edges if projects outgrow it.

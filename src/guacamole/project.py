@@ -13,6 +13,7 @@ from .contracts import (
     JSON,
     ActivityEvent,
     ArtifactRecord,
+    AskHuman,
     ContextPacket,
     Deliverable,
     Evidence,
@@ -34,7 +35,8 @@ from .contracts import (
     VerificationResult,
     uid,
 )
-from .decision import Decisions, JevProvider
+from .decision import Decisions
+from .human import Humans
 from .reviews import Reviews
 from .storage import Store
 from .tools.execution import Executor, Job
@@ -52,7 +54,6 @@ class Project:
         sandbox: Path | None = None,
         tools: ToolRegistry | None = None,
         reasoning: ReasoningProvider | None = None,
-        jev: JevProvider | None = None,
         read_only: bool = False,
     ) -> None:
         workspace = workspace.expanduser().resolve()
@@ -96,13 +97,18 @@ class Project:
                     (str(self._sandbox),),
                 )
             self.tools = tools if tools is not None else ToolRegistry()
-            for name, annotation in (("TaskReport@1", TaskReport), ("Note@1", Note)):
+            for name, annotation in (
+                ("TaskReport@1", TaskReport),
+                ("Note@1", Note),
+                ("AskHuman@1", AskHuman),
+            ):
                 if name not in self.tools.schemas:
                     self.tools.schema(name, annotation)
             self.reasoning = reasoning
             self.activity = Activity(self.store, self.tools)
+            self.human = Humans(self)
             self.contexts = ContextBuilder(self.store, self.activity, self.tools)
-            self.decisions = Decisions(self, jev)
+            self.decisions = Decisions(self)
             self.reviews = Reviews(self)
             self.executor = Executor(self)
             self.runtime: Runtime | None = None
@@ -422,17 +428,14 @@ class Project:
     ) -> ProjectResult:
         from .agents.runtime import Runtime
 
-        if self.reasoning is None or self.decisions.provider is None:
-            missing = "reasoning" if self.reasoning is None else "Jev"
+        if self.reasoning is None:
             self.store.event(
                 "runtime",
                 "run.blocked",
                 resume or "intake",
-                {"reason": f"Missing mandatory {missing} provider"},
+                {"reason": "Missing reasoning provider"},
             )
-            raise RuntimeError(
-                f"Configure the mandatory {missing} provider before autonomous work"
-            )
+            raise RuntimeError("Configure a reasoning provider before autonomous work")
         if self.runtime is not None:
             raise RuntimeError("A project run is already active")
         self.runtime = Runtime(self, self.reasoning)

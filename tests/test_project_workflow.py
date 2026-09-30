@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from runtime_support import TestJev, TestReasoning, plan_request
+from runtime_support import TestReasoning, plan_request
 
 from guacamole import (
     AgentTurn,
@@ -68,12 +68,18 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                     decisions = [
                         s
                         for s in store.list("decision")
-                        if s.data["request"]["kind"] == "work_plan"
+                        if not s.stale
+                        and s.data["request"]["kind"] == "work_plan"
                         and s.data["request"]["candidates"][0]["plan"]["stage"] == stage
                     ]
                     artifact = store.maybe("artifact", stage + "-artifact")
                     evidence = store.maybe("evidence", stage + "-evidence")
                     deliverable = store.maybe("deliverable", stage + "-design")
+                    artifact = artifact if artifact and not artifact.stale else None
+                    evidence = evidence if evidence and not evidence.stale else None
+                    deliverable = (
+                        deliverable if deliverable and not deliverable.stale else None
+                    )
                     if project.reviews.accepted("CDR"):
                         action = Finish(
                             result=TaskReport(
@@ -92,9 +98,10 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                         )
                     elif not decisions:
                         action = Decide(
+                            selected="fixture",
                             request=plan_request(
                                 requirement.ref, stage=stage, tools=grants
-                            )
+                            ),
                         )
                     else:
                         decision = decisions[0].ref.id
@@ -166,7 +173,6 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                 sandbox=sandbox,
                 tools=tools,
                 reasoning=Workflow(),
-                jev=TestJev(),
             ) as project:
                 result = await project.run(
                     ProjectRequest(
@@ -185,16 +191,46 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                         for ref in result.reviews
                         if project.store.resolve(ref).data["stage"] == stage
                     )
-                    self.assertTrue(project.store.resolve(ready).data["test_only"])
                     self.assertTrue(
                         (sandbox / "reviews" / ready.id / "v2/review.md").is_file()
                     )
+                    (notice,) = project.human.inbox(run_id=result.run_id)
+                    self.assertIn(notice.message.request_id, result.human_requests)
+                    with self.assertRaisesRegex(ValueError, "reviews.accept"):
+                        project.human.reply(
+                            notice.message.request_id, "yes", author="fixture human"
+                        )
+                    rejected = project.reviews.accept(
+                        ready,
+                        reviewer="fixture human",
+                        accepted=False,
+                        disposition=f"Revise the {stage} fixture and resubmit.",
+                    )
+                    self.assertEqual(
+                        project.store.resolve(rejected).data["status"], "rejected"
+                    )
+                    self.assertFalse(project.human.inbox())
+                    with self.assertRaises(ValueError):
+                        project.reviews.accept(
+                            ready, reviewer="fixture human", disposition="stale"
+                        )
+                    if stage == "CDR":
+                        self.assertTrue(project.reviews.accepted("PDR"))
+                    result = await project.run(resume=result.run_id)
+                    self.assertEqual(
+                        result.status, "awaiting_review", result.model_dump()
+                    )
+                    ready = next(
+                        ref
+                        for ref in result.reviews
+                        if project.store.resolve(ref).data["stage"] == stage
+                    )
+                    self.assertNotEqual(ready.id, rejected.id)
                     project.reviews.accept(
                         ready, reviewer="fixture user", disposition="Fixture acceptance"
                     )
                     result = await project.run(resume=result.run_id)
                 self.assertEqual(result.status, "complete")
-                self.assertTrue(result.test_only)
                 self.assertEqual(len(project.store.list("agent")), 1)
                 self.assertTrue((sandbox / "work").is_dir())
                 self.assertFalse((root / "state/reviews").exists())
@@ -222,7 +258,7 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
             generate = tools.register(design)
             verify = tools.register(check)
             grants = (generate.definition.grant, verify.definition.grant)
-            with Project(root, tools=tools, jev=TestJev()) as project:
+            with Project(root, tools=tools) as project:
                 brief = root / "brief.txt"
                 brief.write_text(
                     "10,000ft (+- 2000ft) with active airbrakes and a 3U 2kg payload"
@@ -246,12 +282,16 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                 req_ref = project.record_requirement(requirement)
                 with self.assertRaises(DecisionBlocked):
                     await project.decisions.choose(
-                        plan_request(req_ref, stage="CDR", tools=grants)
+                        plan_request(req_ref, stage="CDR", tools=grants),
+                        selected="fixture",
+                        explanation="Test fixture selection",
                     )
                 accepted_pdr = None
                 for stage in ("PDR", "CDR"):
                     decision = await project.decisions.choose(
-                        plan_request(req_ref, stage=stage, tools=grants)
+                        plan_request(req_ref, stage=stage, tools=grants),
+                        selected="fixture",
+                        explanation="Test fixture selection",
                     )
                     incomplete = await project.reviews.generate(decision)
                     self.assertEqual(

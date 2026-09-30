@@ -12,6 +12,12 @@ build-backend = "hatchling.build"
 
 [project.optional-dependencies]
 websocket = ["websockets>=15,<17"]
+sounding-rocket = [
+    "websockets>=15,<17",
+    "pypdf>=6,<7",
+    "openpyxl>=3.1,<4",
+    "python-pptx>=1,<2",
+]
 
 [dependency-groups]
 dev = ["ruff>=0.16", "ty>=0.0.84"]

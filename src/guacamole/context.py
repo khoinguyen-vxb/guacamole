@@ -1,4 +1,4 @@
-"""Source-preserving context selection and exact provider token accounting."""
+"""Source-preserving context selection and provider-specific token accounting."""
 
 from typing import Protocol
 
@@ -27,6 +27,10 @@ class ReasoningProvider(Protocol):
 
 class ContextOverflow(ValueError):
     pass
+
+
+class ProviderError(RuntimeError):
+    """A locally constructed provider diagnostic safe to persist without secrets."""
 
 
 class ContextBuilder:
@@ -103,7 +107,11 @@ class ContextBuilder:
         # New messages first. Inclusion is never acknowledgement.
         entries = sorted(
             self.activity.inbox(agent.id),
-            key=lambda e: (bool(e.included_packets), e.message.created_at),
+            key=lambda e: (
+                not e.message.sender.startswith("human:"),
+                bool(e.included_packets),
+                e.message.created_at,
+            ),
         )
         for entry in entries:
             if entry.delivered_at is None or entry.acknowledged_at is not None:
@@ -115,6 +123,10 @@ class ContextBuilder:
                 messages.append(entry.message.id)
             else:
                 payload["messages"].pop()
+                if entry.message.sender.startswith("human:"):
+                    raise ContextOverflow(
+                        "Human input exceeds the context budget; increase the budget before continuing"
+                    )
                 omissions.append(
                     Omission(
                         item=entry.message.id,
@@ -153,6 +165,7 @@ class ContextBuilder:
             model=provider.model,
             prompt=encode(payload),
             input_tokens=count,
+            token_count_method=getattr(provider, "token_count_method", "exact"),
             reserved_output_tokens=spec.reserved_output_tokens,
             sources=tuple(refs),
             message_ids=tuple(messages),

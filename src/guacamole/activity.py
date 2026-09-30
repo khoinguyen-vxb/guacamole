@@ -144,11 +144,7 @@ class Activity:
     def recover(self) -> None:
         for record in self.requests():
             if record.status in {"dispatched", "running", "cancel_requested"}:
-                status = (
-                    "uncertain"
-                    if record.kind in {"tool", "decision"}
-                    else "interrupted"
-                )
+                status = "uncertain" if record.kind == "tool" else "interrupted"
                 self.transition(
                     record.id,
                     status,
@@ -201,6 +197,7 @@ class Activity:
             state = self.store.maybe("agent_state", message.recipient)
             if (
                 recipient is None
+                and message.recipient not in {"human", "script"}
                 or state is not None
                 and state.data["status"] == "completed"
             ):
