@@ -93,6 +93,9 @@ before planning; these readers do not require a work plan. Validate a work plan
 before writing files or running capability checks and engineering tools. Treat
 repository availability, installed dependencies, successful execution and physical
 validation separately.
+list_files with an empty path lists the supplied input/output directories. Reader
+paths may be absolute, relative to this example, or relative to the output directory
+(including FileRecord.path values such as artifacts/<hash>/<filename>).
 Read binary sources in bounded excerpts with read_document, supplying their Ref
 also in the tool action's inputs. Use extract to register the SourceExcerpt.
 Cite source pages/slides/cell addresses. Text extraction does not inspect figures;
@@ -235,25 +238,31 @@ def register_tools(project: Project) -> None:
     )
 
     def input_path(path: str) -> Path:
-        resolved = (ROOT / path).resolve()
-        if not any(
-            resolved == root or resolved.is_relative_to(root) for root in readable
-        ):
-            raise ValueError("Read path is outside supplied inputs and project outputs")
-        return resolved
+        for base in (ROOT, project.sandbox):
+            resolved = (base / path).resolve()
+            if any(
+                resolved == root or resolved.is_relative_to(root) for root in readable
+            ):
+                return resolved
+        raise ValueError("Read path is outside supplied inputs and project outputs")
 
     async def list_files(
-        path: str, offset: Offset = 0, limit: Count = 50
+        path: str = "", offset: Offset = 0, limit: Count = 50
     ) -> tuple[str, ...]:
-        """List one supplied/output directory; paginate with offset. No recursive scan."""
+        """List a supplied/output directory; empty path lists allowed roots. Paginate with offset."""
+        entries = (
+            (p for p in ROOT.iterdir() if p.resolve() in readable)
+            if (ROOT / path).resolve() == ROOT
+            else input_path(path).iterdir()
+        )
+        visible = sorted(p for p in entries if not p.name.startswith("."))
         return tuple(
             str(p) + ("/" if p.is_dir() else "")
-            for p in sorted(input_path(path).iterdir())[offset : offset + limit]
-            if not p.name.startswith(".")
+            for p in visible[offset : offset + limit]
         )
 
     async def read_text(path: str, offset: Offset = 0) -> str:
-        """Read up to 16000 UTF-8 characters at a character offset from a supplied/output file."""
+        """Read up to 16000 UTF-8 characters; paths can be absolute, example-relative or output-relative."""
         with input_path(path).open(encoding="utf-8") as stream:
             stream.read(offset)
             return stream.read(16_000)

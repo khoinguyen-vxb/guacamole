@@ -1,0 +1,1290 @@
+{
+  "purpose": "Inspection of numerical screening, not verification or procurement acceptance",
+  "attempted": 4248,
+  "nominal_feasible": 283,
+  "comparisons": [
+    {
+      "motor": "DYS_D4215-650",
+      "propeller": "APC_19x8E",
+      "battery": "assumed_4S_3000",
+      "mass_kg": 1.4362,
+      "estimated_cost_aud": 450,
+      "mission_wh": 16.445855546166364,
+      "energy_margin_wh": 10.482144453833637,
+      "reserve_motor_current_a": 23.86017100459967,
+      "sensitivity_cases": 18,
+      "sensitivity_feasible": 6,
+      "minimum_energy_margin_wh": 2.578588216533795,
+      "failed_cases": [
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.95,
+            0.85
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.95,
+            0.85
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.95,
+            0.85
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        }
+      ]
+    },
+    {
+      "motor": "Team_Hunter_RC_Squid_4008M-KV390",
+      "propeller": "APC_20x8E",
+      "battery": "assumed_4S_3000",
+      "mass_kg": 1.46,
+      "estimated_cost_aud": 450,
+      "mission_wh": 16.66018733254252,
+      "energy_margin_wh": 10.26781266745748,
+      "reserve_motor_current_a": 15.411407011665993,
+      "sensitivity_cases": 18,
+      "sensitivity_feasible": 14,
+      "minimum_energy_margin_wh": 2.4877391360638192,
+      "failed_cases": [
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        }
+      ]
+    },
+    {
+      "motor": "Team_Hunter_RC_Squid_4008M-KV390",
+      "propeller": "APC_20x10E",
+      "battery": "assumed_4S_3000",
+      "mass_kg": 1.46,
+      "estimated_cost_aud": 450,
+      "mission_wh": 16.88625526847993,
+      "energy_margin_wh": 10.041744731520073,
+      "reserve_motor_current_a": 16.659964540333114,
+      "sensitivity_cases": 18,
+      "sensitivity_feasible": 9,
+      "minimum_energy_margin_wh": 1.9867325553701285,
+      "failed_cases": [
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.95,
+            0.85
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        }
+      ]
+    },
+    {
+      "motor": "Team_Hunter_RC_Squid_4008M-KV390",
+      "propeller": "APC_20x11E",
+      "battery": "assumed_4S_3000",
+      "mass_kg": 1.46,
+      "estimated_cost_aud": 450,
+      "mission_wh": 17.09208272795593,
+      "energy_margin_wh": 9.835917272044071,
+      "reserve_motor_current_a": 17.263997326197135,
+      "sensitivity_cases": 18,
+      "sensitivity_feasible": 9,
+      "minimum_energy_margin_wh": 1.6168331644526646,
+      "failed_cases": [
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.95,
+            0.85
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        }
+      ]
+    },
+    {
+      "motor": "DYS_D4215-650",
+      "propeller": "APC_18x8E",
+      "battery": "assumed_4S_3000",
+      "mass_kg": 1.4362,
+      "estimated_cost_aud": 450,
+      "mission_wh": 17.11336638413438,
+      "energy_margin_wh": 9.81463361586562,
+      "reserve_motor_current_a": 23.14384132225763,
+      "sensitivity_cases": 18,
+      "sensitivity_feasible": 9,
+      "minimum_energy_margin_wh": 1.5762344312559193,
+      "failed_cases": [
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.95,
+            0.85
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        }
+      ]
+    },
+    {
+      "motor": "NeuMotors_4606MC-598",
+      "propeller": "APC_20x8E",
+      "battery": "assumed_4S_3000",
+      "mass_kg": 1.456,
+      "estimated_cost_aud": 450,
+      "mission_wh": 17.1185047098612,
+      "energy_margin_wh": 9.809495290138802,
+      "reserve_motor_current_a": 22.57648141282276,
+      "sensitivity_cases": 18,
+      "sensitivity_feasible": 9,
+      "minimum_energy_margin_wh": 1.1372194392763575,
+      "failed_cases": [
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.95,
+            0.85
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        }
+      ]
+    },
+    {
+      "motor": "Team_Hunter_RC_Squid_4008M-KV390",
+      "propeller": "APC_19x8E",
+      "battery": "assumed_4S_3000",
+      "mass_kg": 1.46,
+      "estimated_cost_aud": 450,
+      "mission_wh": 17.24612893390598,
+      "energy_margin_wh": 9.681871066094022,
+      "reserve_motor_current_a": 14.917757408058728,
+      "sensitivity_cases": 18,
+      "sensitivity_feasible": 14,
+      "minimum_energy_margin_wh": 1.7265393529910682,
+      "failed_cases": [
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        }
+      ]
+    },
+    {
+      "motor": "Team_Hunter_RC_Squid_4008M-KV390",
+      "propeller": "APC_19x10E",
+      "battery": "assumed_4S_3000",
+      "mass_kg": 1.46,
+      "estimated_cost_aud": 450,
+      "mission_wh": 17.529028037196674,
+      "energy_margin_wh": 9.398971962803326,
+      "reserve_motor_current_a": 16.184314232282894,
+      "sensitivity_cases": 18,
+      "sensitivity_feasible": 9,
+      "minimum_energy_margin_wh": 1.1045504670545974,
+      "failed_cases": [
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.95,
+            0.85
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        }
+      ]
+    },
+    {
+      "motor": "NeuMotors_4606MC-598",
+      "propeller": "APC_19x8E",
+      "battery": "assumed_4S_3000",
+      "mass_kg": 1.456,
+      "estimated_cost_aud": 450,
+      "mission_wh": 17.542275650014282,
+      "energy_margin_wh": 9.385724349985718,
+      "reserve_motor_current_a": 21.82009970694579,
+      "sensitivity_cases": 18,
+      "sensitivity_feasible": 12,
+      "minimum_energy_margin_wh": 0.6283159889053245,
+      "failed_cases": [
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.95,
+            0.85
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        }
+      ]
+    },
+    {
+      "motor": "DYS_D4215-650",
+      "propeller": "APC_17x7E",
+      "battery": "assumed_4S_3000",
+      "mass_kg": 1.4362,
+      "estimated_cost_aud": 450,
+      "mission_wh": 17.789142328254652,
+      "energy_margin_wh": 9.138857671745349,
+      "reserve_motor_current_a": 21.394225257406166,
+      "sensitivity_cases": 18,
+      "sensitivity_feasible": 14,
+      "minimum_energy_margin_wh": 0.6162438356307973,
+      "failed_cases": [
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.0,
+            1.0
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.15,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.85,
+            0.65
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        },
+        {
+          "thrust_factors": [
+            0.9,
+            0.75
+          ],
+          "torque_factors": [
+            1.05,
+            1.15
+          ],
+          "added_mass_kg": 0.3,
+          "failed_checks": [
+            "simultaneous_tilt_thrust_reserve"
+          ],
+          "rejection": null
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Prices and battery/ESC envelopes are assumptions, not quotations.",
+    "Matched CW/CCW availability and performance are unverified.",
+    "Catalogue maximum ratings and derating do not establish continuous thermal capability.",
+    "Static energy envelope is not a mission simulation.",
+    "Coaxial sensitivity factors are not measured bounds.",
+    "Search is bounded; no global optimum or hardware acceptance claimed."
+  ]
+}

@@ -1,0 +1,4872 @@
+[
+  {
+    "id": "APC_10x10E",
+    "usable_static": true,
+    "rejected_rows": []
+  },
+  {
+    "id": "APC_10x12WE",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 361,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "71.0301856",
+          "advance_ratio": "1.3982",
+          "efficiency": "-0.0059",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0121",
+          "power_w": "125.806",
+          "torque_nm": "0.1",
+          "thrust_n": "-0.01",
+          "thrust_per_power_n_w": "-7.948746482679681e-05",
+          "mach": "0.52",
+          "reynolds": "187918.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 391,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "76.9445248",
+          "advance_ratio": "1.3981",
+          "efficiency": "-0.0062",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0117",
+          "power_w": "154.256",
+          "torque_nm": "0.113",
+          "thrust_n": "-0.013",
+          "thrust_per_power_n_w": "-8.427549009438855e-05",
+          "mach": "0.56",
+          "reynolds": "203577.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 451,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "88.7553216",
+          "advance_ratio": "1.3977",
+          "efficiency": "-0.0071",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.011",
+          "power_w": "221.864",
+          "torque_nm": "0.141",
+          "thrust_n": "-0.018",
+          "thrust_per_power_n_w": "-8.11307828219089e-05",
+          "mach": "0.65",
+          "reynolds": "234877.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_10x5E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 179,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "16.2856672",
+          "advance_ratio": "0.6412",
+          "efficiency": "-0.0066",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0102",
+          "power_w": "13.182",
+          "torque_nm": "0.021",
+          "thrust_n": "-0.005",
+          "thrust_per_power_n_w": "-0.0003793051130329237",
+          "mach": "0.24",
+          "reynolds": "72533.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 269,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "24.47544",
+          "advance_ratio": "0.6424",
+          "efficiency": "-0.0137",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0084",
+          "power_w": "36.73",
+          "torque_nm": "0.039",
+          "thrust_n": "-0.021",
+          "thrust_per_power_n_w": "-0.0005717397222978493",
+          "mach": "0.36",
+          "reynolds": "108812.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 387,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "35.325100799999994",
+          "advance_ratio": "0.6419",
+          "efficiency": "-0.0055",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0071",
+          "power_w": "94.115",
+          "torque_nm": "0.069",
+          "thrust_n": "-0.015",
+          "thrust_per_power_n_w": "-0.00015937948254794666",
+          "mach": "0.53",
+          "reynolds": "157163.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 417,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "38.038633600000004",
+          "advance_ratio": "0.6418",
+          "efficiency": "-0.0075",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0069",
+          "power_w": "113.374",
+          "torque_nm": "0.077",
+          "thrust_n": "-0.022",
+          "thrust_per_power_n_w": "-0.0001940480180641064",
+          "mach": "0.57",
+          "reynolds": "169250.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 447,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "40.7521664",
+          "advance_ratio": "0.6418",
+          "efficiency": "-0.0098",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0067",
+          "power_w": "134.767",
+          "torque_nm": "0.086",
+          "thrust_n": "-0.032",
+          "thrust_per_power_n_w": "-0.0002374468527161694",
+          "mach": "0.61",
+          "reynolds": "181337.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 477,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "16000.0",
+          "speed_mps": "43.4612288",
+          "advance_ratio": "0.6416",
+          "efficiency": "-0.0128",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0064",
+          "power_w": "158.272",
+          "torque_nm": "0.094",
+          "thrust_n": "-0.047",
+          "thrust_per_power_n_w": "-0.0002969571370804691",
+          "mach": "0.65",
+          "reynolds": "193422.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 507,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "17000.0",
+          "speed_mps": "46.1702912",
+          "advance_ratio": "0.6416",
+          "efficiency": "-0.0185",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0062",
+          "power_w": "183.933",
+          "torque_nm": "0.103",
+          "thrust_n": "-0.074",
+          "thrust_per_power_n_w": "-0.00040232041014934787",
+          "mach": "0.69",
+          "reynolds": "205508.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 566,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "19000.0",
+          "speed_mps": "51.499008",
+          "advance_ratio": "0.6403",
+          "efficiency": "-0.0097",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0064",
+          "power_w": "265.472",
+          "torque_nm": "0.133",
+          "thrust_n": "-0.05",
+          "thrust_per_power_n_w": "-0.00018834378013500485",
+          "mach": "0.77",
+          "reynolds": "229658.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_10x6E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 330,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "34.8512384",
+          "advance_ratio": "0.7484",
+          "efficiency": "-0.0065",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.008",
+          "power_w": "63.622",
+          "torque_nm": "0.055",
+          "thrust_n": "-0.012",
+          "thrust_per_power_n_w": "-0.00018861400144604067",
+          "mach": "0.45",
+          "reynolds": "134025.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 389,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "41.1813248",
+          "advance_ratio": "0.7483",
+          "efficiency": "-0.0056",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0074",
+          "power_w": "97.293",
+          "torque_nm": "0.071",
+          "thrust_n": "-0.013",
+          "thrust_per_power_n_w": "-0.00013361701252916446",
+          "mach": "0.53",
+          "reynolds": "158390.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_10x7E",
+    "usable_static": true,
+    "rejected_rows": []
+  },
+  {
+    "id": "APC_10x8E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 631,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "21000.0",
+          "speed_mps": "84.9554816",
+          "advance_ratio": "0.9556",
+          "efficiency": "-0.0077",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0114",
+          "power_w": "634.33",
+          "torque_nm": "0.288",
+          "thrust_n": "-0.057",
+          "thrust_per_power_n_w": "-8.985859095423518e-05",
+          "mach": "0.87",
+          "reynolds": "262969.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_11x10E",
+    "usable_static": true,
+    "rejected_rows": []
+  },
+  {
+    "id": "APC_11x12E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 391,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "77.4765024",
+          "advance_ratio": "1.2798",
+          "efficiency": "-0.0069",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0094",
+          "power_w": "198.861",
+          "torque_nm": "0.146",
+          "thrust_n": "-0.018",
+          "thrust_per_power_n_w": "-9.05154856910103e-05",
+          "mach": "0.61",
+          "reynolds": "225838.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_11x5.5E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "2.9504639999999998",
+          "advance_ratio": "0.6338",
+          "efficiency": "-0.0021",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0206",
+          "power_w": "0.199",
+          "torque_nm": "0.002",
+          "thrust_n": "0.0",
+          "thrust_per_power_n_w": "0.0",
+          "mach": "0.04",
+          "reynolds": "13721.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 210,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "20.975116800000002",
+          "advance_ratio": "0.6434",
+          "efficiency": "-0.0068",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0084",
+          "power_w": "27.792",
+          "torque_nm": "0.038",
+          "thrust_n": "-0.009",
+          "thrust_per_power_n_w": "-0.00032383419689119167",
+          "mach": "0.31",
+          "reynolds": "96139.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 328,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "32.9647296",
+          "advance_ratio": "0.6436",
+          "efficiency": "-0.0056",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0068",
+          "power_w": "87.695",
+          "torque_nm": "0.076",
+          "thrust_n": "-0.015",
+          "thrust_per_power_n_w": "-0.00017104738012429444",
+          "mach": "0.49",
+          "reynolds": "151077.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 358,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "35.964368",
+          "advance_ratio": "0.6436",
+          "efficiency": "-0.0077",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0065",
+          "power_w": "109.15",
+          "torque_nm": "0.087",
+          "thrust_n": "-0.023",
+          "thrust_per_power_n_w": "-0.00021071919377004122",
+          "mach": "0.53",
+          "reynolds": "164810.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 388,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "38.959536",
+          "advance_ratio": "0.6435",
+          "efficiency": "-0.011",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0063",
+          "power_w": "133.31",
+          "torque_nm": "0.098",
+          "thrust_n": "-0.038",
+          "thrust_per_power_n_w": "-0.00028504988372965266",
+          "mach": "0.58",
+          "reynolds": "178542.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 447,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "44.9006976",
+          "advance_ratio": "0.6428",
+          "efficiency": "-0.0083",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0059",
+          "power_w": "192.011",
+          "torque_nm": "0.122",
+          "thrust_n": "-0.035",
+          "thrust_per_power_n_w": "-0.00018228122347157196",
+          "mach": "0.67",
+          "reynolds": "205995.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 535,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "18000.0",
+          "speed_mps": "53.7699712",
+          "advance_ratio": "0.6415",
+          "efficiency": "-0.0138",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0065",
+          "power_w": "364.476",
+          "torque_nm": "0.193",
+          "thrust_n": "-0.094",
+          "thrust_per_power_n_w": "-0.0002579044985129336",
+          "mach": "0.8",
+          "reynolds": "247158.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_11x7E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 209,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "25.6064512",
+          "advance_ratio": "0.7856",
+          "efficiency": "-0.0067",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0089",
+          "power_w": "29.441",
+          "torque_nm": "0.04",
+          "thrust_n": "-0.008",
+          "thrust_per_power_n_w": "-0.00027172990047892397",
+          "mach": "0.31",
+          "reynolds": "97850.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 565,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "19000.0",
+          "speed_mps": "69.27331840000001",
+          "advance_ratio": "0.783",
+          "efficiency": "-0.0044",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0089",
+          "power_w": "589.403",
+          "torque_nm": "0.296",
+          "thrust_n": "-0.038",
+          "thrust_per_power_n_w": "-6.447201659984764e-05",
+          "mach": "0.85",
+          "reynolds": "265504.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_11x8.5E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 391,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "56.2778656",
+          "advance_ratio": "0.9296",
+          "efficiency": "-0.0066",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0071",
+          "power_w": "151.087",
+          "torque_nm": "0.111",
+          "thrust_n": "-0.018",
+          "thrust_per_power_n_w": "-0.00011913665636355212",
+          "mach": "0.59",
+          "reynolds": "185116.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 421,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "60.5873312",
+          "advance_ratio": "0.9294",
+          "efficiency": "-0.0071",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0069",
+          "power_w": "182.18",
+          "torque_nm": "0.124",
+          "thrust_n": "-0.021",
+          "thrust_per_power_n_w": "-0.00011527061148314854",
+          "mach": "0.64",
+          "reynolds": "199348.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 451,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "64.8923264",
+          "advance_ratio": "0.929",
+          "efficiency": "-0.0075",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0067",
+          "power_w": "217.112",
+          "torque_nm": "0.138",
+          "thrust_n": "-0.025",
+          "thrust_per_power_n_w": "-0.00011514794207597923",
+          "mach": "0.68",
+          "reynolds": "213577.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 481,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "16000.0",
+          "speed_mps": "69.17944",
+          "advance_ratio": "0.9285",
+          "efficiency": "-0.0077",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0066",
+          "power_w": "260.377",
+          "torque_nm": "0.155",
+          "thrust_n": "-0.029",
+          "thrust_per_power_n_w": "-0.00011137696493929955",
+          "mach": "0.73",
+          "reynolds": "227799.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 511,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "17000.0",
+          "speed_mps": "73.4442016",
+          "advance_ratio": "0.9277",
+          "efficiency": "-0.0072",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0069",
+          "power_w": "327.296",
+          "torque_nm": "0.184",
+          "thrust_n": "-0.032",
+          "thrust_per_power_n_w": "-9.777082518576458e-05",
+          "mach": "0.77",
+          "reynolds": "242010.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 541,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "18000.0",
+          "speed_mps": "77.6776704",
+          "advance_ratio": "0.9267",
+          "efficiency": "-0.0069",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.008",
+          "power_w": "448.381",
+          "torque_nm": "0.238",
+          "thrust_n": "-0.04",
+          "thrust_per_power_n_w": "-8.920984609071304e-05",
+          "mach": "0.82",
+          "reynolds": "256210.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_11x8E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 570,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "19000.0",
+          "speed_mps": "77.293216",
+          "advance_ratio": "0.8736",
+          "efficiency": "-0.0049",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0097",
+          "power_w": "645.717",
+          "torque_nm": "0.325",
+          "thrust_n": "-0.041",
+          "thrust_per_power_n_w": "-6.349530831618186e-05",
+          "mach": "0.86",
+          "reynolds": "268665.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_12x10E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 541,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "18000.0",
+          "speed_mps": "90.6105376",
+          "advance_ratio": "0.9909",
+          "efficiency": "-0.0054",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0122",
+          "power_w": "1065.137",
+          "torque_nm": "0.565",
+          "thrust_n": "-0.063",
+          "thrust_per_power_n_w": "-5.914732095495697e-05",
+          "mach": "0.9",
+          "reynolds": "290808.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_12x12E",
+    "usable_static": true,
+    "rejected_rows": []
+  },
+  {
+    "id": "APC_12x6E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 268,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "29.424172799999997",
+          "advance_ratio": "0.6436",
+          "efficiency": "-0.0058",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0067",
+          "power_w": "72.805",
+          "torque_nm": "0.077",
+          "thrust_n": "-0.014",
+          "thrust_per_power_n_w": "-0.00019229448526886887",
+          "mach": "0.44",
+          "reynolds": "138966.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 298,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "32.700976000000004",
+          "advance_ratio": "0.6437",
+          "efficiency": "-0.0092",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0064",
+          "power_w": "94.85",
+          "torque_nm": "0.091",
+          "thrust_n": "-0.027",
+          "thrust_per_power_n_w": "-0.00028465998945703745",
+          "mach": "0.49",
+          "reynolds": "154408.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 357,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "39.214348799999996",
+          "advance_ratio": "0.6433",
+          "efficiency": "-0.008",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0058",
+          "power_w": "150.756",
+          "torque_nm": "0.12",
+          "thrust_n": "-0.031",
+          "thrust_per_power_n_w": "-0.00020563029000504127",
+          "mach": "0.58",
+          "reynolds": "185281.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_12x8E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 388,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "53.948787200000005",
+          "advance_ratio": "0.8169",
+          "efficiency": "-0.0069",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0061",
+          "power_w": "198.595",
+          "torque_nm": "0.146",
+          "thrust_n": "-0.025",
+          "thrust_per_power_n_w": "-0.0001258843374707319",
+          "mach": "0.64",
+          "reynolds": "204986.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 418,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "58.0749664",
+          "advance_ratio": "0.8166",
+          "efficiency": "-0.0074",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0059",
+          "power_w": "239.948",
+          "torque_nm": "0.164",
+          "thrust_n": "-0.03",
+          "thrust_per_power_n_w": "-0.00012502708920266058",
+          "mach": "0.69",
+          "reynolds": "220744.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 448,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "62.183263999999994",
+          "advance_ratio": "0.816",
+          "efficiency": "-0.0075",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0058",
+          "power_w": "293.677",
+          "torque_nm": "0.187",
+          "thrust_n": "-0.035",
+          "thrust_per_power_n_w": "-0.0001191785533085669",
+          "mach": "0.74",
+          "reynolds": "236495.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 478,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "16000.0",
+          "speed_mps": "66.26026879999999",
+          "advance_ratio": "0.8152",
+          "efficiency": "-0.0067",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0063",
+          "power_w": "384.301",
+          "torque_nm": "0.229",
+          "thrust_n": "-0.039",
+          "thrust_per_power_n_w": "-0.00010148295216509975",
+          "mach": "0.79",
+          "reynolds": "252235.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 508,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "17000.0",
+          "speed_mps": "70.3372736",
+          "advance_ratio": "0.8145",
+          "efficiency": "-0.0062",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0076",
+          "power_w": "558.778",
+          "torque_nm": "0.314",
+          "thrust_n": "-0.049",
+          "thrust_per_power_n_w": "-8.769135506408627e-05",
+          "mach": "0.84",
+          "reynolds": "267976.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_13x10E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "5.0247296",
+          "advance_ratio": "0.9169",
+          "efficiency": "-0.0044",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0188",
+          "power_w": "0.412",
+          "torque_nm": "0.004",
+          "thrust_n": "0.0",
+          "thrust_per_power_n_w": "0.0",
+          "mach": "0.05",
+          "reynolds": "17943.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 511,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "17000.0",
+          "speed_mps": "86.4485952",
+          "advance_ratio": "0.9276",
+          "efficiency": "-0.0053",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0121",
+          "power_w": "1303.541",
+          "torque_nm": "0.732",
+          "thrust_n": "-0.081",
+          "thrust_per_power_n_w": "-6.213843676570204e-05",
+          "mach": "0.91",
+          "reynolds": "305492.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_13x4E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "2.4184864",
+          "advance_ratio": "0.4414",
+          "efficiency": "-0.0036",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0159",
+          "power_w": "0.347",
+          "torque_nm": "0.003",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.0028818443804034585",
+          "mach": "0.05",
+          "reynolds": "17024.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 354,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "29.3437056",
+          "advance_ratio": "0.4461",
+          "efficiency": "-0.0099",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.005",
+          "power_w": "188.811",
+          "torque_nm": "0.15",
+          "thrust_n": "-0.064",
+          "thrust_per_power_n_w": "-0.0003389633019262649",
+          "mach": "0.62",
+          "reynolds": "204326.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 501,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "17000.0",
+          "speed_mps": "41.5166048",
+          "advance_ratio": "0.4455",
+          "efficiency": "-0.0126",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.008",
+          "power_w": "859.999",
+          "torque_nm": "0.483",
+          "thrust_n": "-0.262",
+          "thrust_per_power_n_w": "-0.00030465151703664773",
+          "mach": "0.88",
+          "reynolds": "289452.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 559,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "19000.0",
+          "speed_mps": "47.533763199999996",
+          "advance_ratio": "0.4564",
+          "efficiency": "-0.0086",
+          "thrust_coeff": "-0.0003",
+          "power_coeff": "0.0159",
+          "power_w": "2377.916",
+          "torque_nm": "1.195",
+          "thrust_n": "-0.428",
+          "thrust_per_power_n_w": "-0.0001799895370568178",
+          "mach": "0.99",
+          "reynolds": "323892.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_13x5.5E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "3.0622239999999996",
+          "advance_ratio": "0.5588",
+          "efficiency": "-0.0068",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0169",
+          "power_w": "0.369",
+          "torque_nm": "0.004",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.0027100271002710027",
+          "mach": "0.05",
+          "reynolds": "18374.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 181,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "18.5834528",
+          "advance_ratio": "0.565",
+          "efficiency": "-0.0053",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0074",
+          "power_w": "34.978",
+          "torque_nm": "0.056",
+          "thrust_n": "-0.01",
+          "thrust_per_power_n_w": "-0.0002858939905083195",
+          "mach": "0.31",
+          "reynolds": "110305.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 299,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "30.9843424",
+          "advance_ratio": "0.5652",
+          "efficiency": "-0.0081",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0058",
+          "power_w": "127.707",
+          "torque_nm": "0.122",
+          "thrust_n": "-0.033",
+          "thrust_per_power_n_w": "-0.0002584040029129179",
+          "mach": "0.52",
+          "reynolds": "183839.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 329,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "34.0778592",
+          "advance_ratio": "0.5651",
+          "efficiency": "-0.0111",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0056",
+          "power_w": "162.193",
+          "torque_nm": "0.141",
+          "thrust_n": "-0.053",
+          "thrust_per_power_n_w": "-0.0003267711923449224",
+          "mach": "0.57",
+          "reynolds": "202220.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 359,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "37.171376",
+          "advance_ratio": "0.565",
+          "efficiency": "-0.0172",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0053",
+          "power_w": "201.114",
+          "torque_nm": "0.16",
+          "thrust_n": "-0.093",
+          "thrust_per_power_n_w": "-0.0004624242966675617",
+          "mach": "0.63",
+          "reynolds": "220599.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 418,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "43.282412799999996",
+          "advance_ratio": "0.5639",
+          "efficiency": "-0.0118",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0051",
+          "power_w": "305.018",
+          "torque_nm": "0.208",
+          "thrust_n": "-0.083",
+          "thrust_per_power_n_w": "-0.0002721150882898715",
+          "mach": "0.73",
+          "reynolds": "257340.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_13x6.5E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 210,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "24.743664",
+          "advance_ratio": "0.6448",
+          "efficiency": "-0.0054",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0069",
+          "power_w": "51.524",
+          "torque_nm": "0.07",
+          "thrust_n": "-0.011",
+          "thrust_per_power_n_w": "-0.00021349274124679758",
+          "mach": "0.37",
+          "reynolds": "121403.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 240,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "28.3021024",
+          "advance_ratio": "0.6453",
+          "efficiency": "-0.0128",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0064",
+          "power_w": "71.881",
+          "torque_nm": "0.086",
+          "thrust_n": "-0.032",
+          "thrust_per_power_n_w": "-0.0004451802284331047",
+          "mach": "0.42",
+          "reynolds": "138752.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 299,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "35.3653344",
+          "advance_ratio": "0.6451",
+          "efficiency": "-0.0129",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0058",
+          "power_w": "126.641",
+          "torque_nm": "0.121",
+          "thrust_n": "-0.046",
+          "thrust_per_power_n_w": "-0.0003632314969085841",
+          "mach": "0.52",
+          "reynolds": "173435.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 509,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "17000.0",
+          "speed_mps": "59.961475199999995",
+          "advance_ratio": "0.6434",
+          "efficiency": "-0.0055",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0092",
+          "power_w": "988.536",
+          "torque_nm": "0.555",
+          "thrust_n": "-0.091",
+          "thrust_per_power_n_w": "-9.205532221385969e-05",
+          "mach": "0.89",
+          "reynolds": "294790.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_13x8E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 360,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "50.381408",
+          "advance_ratio": "0.7659",
+          "efficiency": "-0.0072",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0056",
+          "power_w": "211.92",
+          "torque_nm": "0.169",
+          "thrust_n": "-0.03",
+          "thrust_per_power_n_w": "-0.00014156285390713478",
+          "mach": "0.63",
+          "reynolds": "211040.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 390,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "54.5522912",
+          "advance_ratio": "0.7655",
+          "efficiency": "-0.0077",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0054",
+          "power_w": "259.808",
+          "torque_nm": "0.191",
+          "thrust_n": "-0.037",
+          "thrust_per_power_n_w": "-0.00014241285872644414",
+          "mach": "0.69",
+          "reynolds": "228616.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 420,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "58.709763200000005",
+          "advance_ratio": "0.7649",
+          "efficiency": "-0.0079",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0054",
+          "power_w": "322.849",
+          "torque_nm": "0.22",
+          "thrust_n": "-0.044",
+          "thrust_per_power_n_w": "-0.0001362866231581947",
+          "mach": "0.74",
+          "reynolds": "246185.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 450,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "62.827001599999996",
+          "advance_ratio": "0.7641",
+          "efficiency": "-0.007",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0059",
+          "power_w": "435.014",
+          "torque_nm": "0.277",
+          "thrust_n": "-0.049",
+          "thrust_per_power_n_w": "-0.00011264005296381266",
+          "mach": "0.79",
+          "reynolds": "263742.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 480,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "16000.0",
+          "speed_mps": "66.9755328",
+          "advance_ratio": "0.7636",
+          "efficiency": "-0.0068",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0074",
+          "power_w": "662.589",
+          "torque_nm": "0.395",
+          "thrust_n": "-0.067",
+          "thrust_per_power_n_w": "-0.00010111849125174127",
+          "mach": "0.85",
+          "reynolds": "281309.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_14x10E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "5.082844799999999",
+          "advance_ratio": "0.8578",
+          "efficiency": "-0.0082",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0165",
+          "power_w": "0.533",
+          "torque_nm": "0.005",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.001876172607879925",
+          "mach": "0.06",
+          "reynolds": "19537.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 330,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "56.546089599999995",
+          "advance_ratio": "0.8674",
+          "efficiency": "-0.0091",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0055",
+          "power_w": "237.045",
+          "torque_nm": "0.206",
+          "thrust_n": "-0.038",
+          "thrust_per_power_n_w": "-0.00016030711468286612",
+          "mach": "0.63",
+          "reynolds": "215175.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_14x12E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "5.9635136",
+          "advance_ratio": "1.0063",
+          "efficiency": "-0.0034",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0178",
+          "power_w": "0.575",
+          "torque_nm": "0.005",
+          "thrust_n": "0.0",
+          "thrust_per_power_n_w": "0.0",
+          "mach": "0.06",
+          "reynolds": "19956.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 151,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "30.170729599999998",
+          "advance_ratio": "1.0182",
+          "efficiency": "-0.0086",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0086",
+          "power_w": "34.571",
+          "torque_nm": "0.066",
+          "thrust_n": "-0.01",
+          "thrust_per_power_n_w": "-0.000289259784212201",
+          "mach": "0.29",
+          "reynolds": "99961.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_14x14E",
+    "usable_static": true,
+    "rejected_rows": []
+  },
+  {
+    "id": "APC_14x6E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 151,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "16.87576",
+          "advance_ratio": "0.5695",
+          "efficiency": "-0.0081",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.007",
+          "power_w": "28.358",
+          "torque_nm": "0.054",
+          "thrust_n": "-0.014",
+          "thrust_per_power_n_w": "-0.0004936878482262501",
+          "mach": "0.28",
+          "reynolds": "94469.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 241,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "27.0101568",
+          "advance_ratio": "0.5696",
+          "efficiency": "-0.0066",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0057",
+          "power_w": "93.692",
+          "torque_nm": "0.112",
+          "thrust_n": "-0.023",
+          "thrust_per_power_n_w": "-0.00024548520684796994",
+          "mach": "0.45",
+          "reynolds": "151151.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 271,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "30.3897792",
+          "advance_ratio": "0.5698",
+          "efficiency": "-0.0114",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0053",
+          "power_w": "125.818",
+          "torque_nm": "0.133",
+          "thrust_n": "-0.047",
+          "thrust_per_power_n_w": "-0.00037355545311481663",
+          "mach": "0.51",
+          "reynolds": "170045.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 330,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "37.10432",
+          "advance_ratio": "0.5692",
+          "efficiency": "-0.0104",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0049",
+          "power_w": "209.397",
+          "torque_nm": "0.182",
+          "thrust_n": "-0.059",
+          "thrust_per_power_n_w": "-0.00028176143879807253",
+          "mach": "0.62",
+          "reynolds": "207819.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 477,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "16000.0",
+          "speed_mps": "53.9398464",
+          "advance_ratio": "0.5688",
+          "efficiency": "-0.005",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0091",
+          "power_w": "1206.74",
+          "torque_nm": "0.72",
+          "thrust_n": "-0.112",
+          "thrust_per_power_n_w": "-9.281203904735071e-05",
+          "mach": "0.9",
+          "reynolds": "302283.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_14x7E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "3.7730175999999997",
+          "advance_ratio": "0.6368",
+          "efficiency": "-0.0086",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0151",
+          "power_w": "0.488",
+          "torque_nm": "0.005",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.0020491803278688526",
+          "mach": "0.06",
+          "reynolds": "19023.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 210,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "26.701699199999997",
+          "advance_ratio": "0.6436",
+          "efficiency": "-0.0059",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0062",
+          "power_w": "68.571",
+          "torque_nm": "0.094",
+          "thrust_n": "-0.015",
+          "thrust_per_power_n_w": "-0.00021875136719604497",
+          "mach": "0.4",
+          "reynolds": "133253.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 450,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "56.979718399999996",
+          "advance_ratio": "0.641",
+          "efficiency": "-0.0055",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0068",
+          "power_w": "736.856",
+          "torque_nm": "0.469",
+          "thrust_n": "-0.072",
+          "thrust_per_power_n_w": "-9.771244313678656e-05",
+          "mach": "0.85",
+          "reynolds": "285462.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 480,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "16000.0",
+          "speed_mps": "60.998608",
+          "advance_ratio": "0.6432",
+          "efficiency": "-0.0102",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0096",
+          "power_w": "1273.619",
+          "torque_nm": "0.76",
+          "thrust_n": "-0.213",
+          "thrust_per_power_n_w": "-0.00016723996736857727",
+          "mach": "0.91",
+          "reynolds": "304568.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_14x8.5E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "4.448048",
+          "advance_ratio": "0.7503",
+          "efficiency": "-0.0078",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0155",
+          "power_w": "0.501",
+          "torque_nm": "0.005",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.001996007984031936",
+          "mach": "0.06",
+          "reynolds": "19010.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 241,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "35.942016",
+          "advance_ratio": "0.7581",
+          "efficiency": "-0.0068",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.006",
+          "power_w": "99.156",
+          "torque_nm": "0.118",
+          "thrust_n": "-0.019",
+          "thrust_per_power_n_w": "-0.00019161724958651014",
+          "mach": "0.46",
+          "reynolds": "152216.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 271,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "40.430297599999996",
+          "advance_ratio": "0.758",
+          "efficiency": "-0.0082",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0057",
+          "power_w": "133.553",
+          "torque_nm": "0.142",
+          "thrust_n": "-0.027",
+          "thrust_per_power_n_w": "-0.00020216692998285325",
+          "mach": "0.51",
+          "reynolds": "171241.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 301,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "44.9141088",
+          "advance_ratio": "0.7578",
+          "efficiency": "-0.0095",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0054",
+          "power_w": "174.254",
+          "torque_nm": "0.166",
+          "thrust_n": "-0.037",
+          "thrust_per_power_n_w": "-0.00021233371974244494",
+          "mach": "0.57",
+          "reynolds": "190263.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 331,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "49.3800384",
+          "advance_ratio": "0.7575",
+          "efficiency": "-0.0105",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0052",
+          "power_w": "221.613",
+          "torque_nm": "0.192",
+          "thrust_n": "-0.047",
+          "thrust_per_power_n_w": "-0.0002120814212162644",
+          "mach": "0.63",
+          "reynolds": "209280.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 361,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "53.8370272",
+          "advance_ratio": "0.757",
+          "efficiency": "-0.0114",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.005",
+          "power_w": "276.412",
+          "torque_nm": "0.22",
+          "thrust_n": "-0.059",
+          "thrust_per_power_n_w": "-0.00021344948844478532",
+          "mach": "0.69",
+          "reynolds": "228293.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 391,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "58.271663999999994",
+          "advance_ratio": "0.7563",
+          "efficiency": "-0.0114",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0049",
+          "power_w": "350.541",
+          "torque_nm": "0.257",
+          "thrust_n": "-0.069",
+          "thrust_per_power_n_w": "-0.00019683860090545757",
+          "mach": "0.74",
+          "reynolds": "247298.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 421,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "62.6660672",
+          "advance_ratio": "0.7553",
+          "efficiency": "-0.0098",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0056",
+          "power_w": "492.118",
+          "torque_nm": "0.336",
+          "thrust_n": "-0.077",
+          "thrust_per_power_n_w": "-0.00015646653851312083",
+          "mach": "0.8",
+          "reynolds": "266289.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_15x10E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "5.1364896",
+          "advance_ratio": "0.8091",
+          "efficiency": "-0.0093",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.015",
+          "power_w": "0.685",
+          "torque_nm": "0.007",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.00145985401459854",
+          "mach": "0.06",
+          "reynolds": "22302.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 121,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "4000.0",
+          "speed_mps": "20.733715200000002",
+          "advance_ratio": "0.8164",
+          "efficiency": "-0.0051",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.008",
+          "power_w": "23.286",
+          "torque_nm": "0.056",
+          "thrust_n": "-0.006",
+          "thrust_per_power_n_w": "-0.0002576655501159495",
+          "mach": "0.25",
+          "reynolds": "89290.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 211,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "36.344352",
+          "advance_ratio": "0.8176",
+          "efficiency": "-0.0076",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0062",
+          "power_w": "96.269",
+          "torque_nm": "0.131",
+          "thrust_n": "-0.02",
+          "thrust_per_power_n_w": "-0.00020775119716627367",
+          "mach": "0.43",
+          "reynolds": "156281.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 301,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "51.887932799999994",
+          "advance_ratio": "0.8171",
+          "efficiency": "-0.008",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0052",
+          "power_w": "237.616",
+          "torque_nm": "0.227",
+          "thrust_n": "-0.036",
+          "thrust_per_power_n_w": "-0.0001515049491616726",
+          "mach": "0.61",
+          "reynolds": "223242.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 331,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "57.055715199999995",
+          "advance_ratio": "0.8168",
+          "efficiency": "-0.0131",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.005",
+          "power_w": "301.149",
+          "torque_nm": "0.261",
+          "thrust_n": "-0.069",
+          "thrust_per_power_n_w": "-0.0002291224609744678",
+          "mach": "0.68",
+          "reynolds": "245557.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 451,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "77.8386048",
+          "advance_ratio": "0.8172",
+          "efficiency": "-0.0057",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0114",
+          "power_w": "1746.879",
+          "torque_nm": "1.112",
+          "thrust_n": "-0.128",
+          "thrust_per_power_n_w": "-7.327353525916792e-05",
+          "mach": "0.92",
+          "reynolds": "334874.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_15x12E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "6.012688",
+          "advance_ratio": "0.947",
+          "efficiency": "-0.0039",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0161",
+          "power_w": "0.735",
+          "torque_nm": "0.007",
+          "thrust_n": "0.0",
+          "thrust_per_power_n_w": "0.0",
+          "mach": "0.06",
+          "reynolds": "22709.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 420,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "84.8839552",
+          "advance_ratio": "0.9548",
+          "efficiency": "-0.0101",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0088",
+          "power_w": "1096.505",
+          "torque_nm": "0.748",
+          "thrust_n": "-0.13",
+          "thrust_per_power_n_w": "-0.00011855851090510303",
+          "mach": "0.87",
+          "reynolds": "318286.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_15x4E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "2.5391871999999998",
+          "advance_ratio": "0.3997",
+          "efficiency": "-0.003",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0132",
+          "power_w": "0.6",
+          "torque_nm": "0.006",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.0016666666666666668",
+          "mach": "0.06",
+          "reynolds": "21370.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 119,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "4000.0",
+          "speed_mps": "10.255097600000001",
+          "advance_ratio": "0.4038",
+          "efficiency": "-0.0093",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0069",
+          "power_w": "20.022",
+          "torque_nm": "0.048",
+          "thrust_n": "-0.018",
+          "thrust_per_power_n_w": "-0.0008990110878034162",
+          "mach": "0.24",
+          "reynolds": "85496.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 207,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "17.9441856",
+          "advance_ratio": "0.4037",
+          "efficiency": "-0.0075",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0053",
+          "power_w": "82.904",
+          "torque_nm": "0.113",
+          "thrust_n": "-0.035",
+          "thrust_per_power_n_w": "-0.00042217504583614787",
+          "mach": "0.42",
+          "reynolds": "149611.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 266,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "23.040441599999998",
+          "advance_ratio": "0.4031",
+          "efficiency": "-0.0066",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0047",
+          "power_w": "156.875",
+          "torque_nm": "0.166",
+          "thrust_n": "-0.045",
+          "thrust_per_power_n_w": "-0.00028685258964143424",
+          "mach": "0.54",
+          "reynolds": "192347.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 325,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "28.123286399999998",
+          "advance_ratio": "0.4026",
+          "efficiency": "-0.0123",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "259.39",
+          "torque_nm": "0.225",
+          "thrust_n": "-0.113",
+          "thrust_per_power_n_w": "-0.0004356374571109141",
+          "mach": "0.66",
+          "reynolds": "235069.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_15x6E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 238,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "27.4437856",
+          "advance_ratio": "0.5402",
+          "efficiency": "-0.0104",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0052",
+          "power_w": "120.599",
+          "torque_nm": "0.144",
+          "thrust_n": "-0.046",
+          "thrust_per_power_n_w": "-0.000381429365085946",
+          "mach": "0.48",
+          "reynolds": "172894.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 268,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "30.890463999999998",
+          "advance_ratio": "0.5405",
+          "efficiency": "-0.0221",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0048",
+          "power_w": "160.906",
+          "torque_nm": "0.171",
+          "thrust_n": "-0.115",
+          "thrust_per_power_n_w": "-0.0007147029942948057",
+          "mach": "0.54",
+          "reynolds": "194505.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 327,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "37.6810016",
+          "advance_ratio": "0.5394",
+          "efficiency": "-0.0156",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0044",
+          "power_w": "268.808",
+          "torque_nm": "0.233",
+          "thrust_n": "-0.111",
+          "thrust_per_power_n_w": "-0.00041293413886491474",
+          "mach": "0.66",
+          "reynolds": "237706.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 445,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "51.3783072",
+          "advance_ratio": "0.5394",
+          "efficiency": "-0.0057",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0089",
+          "power_w": "1370.218",
+          "torque_nm": "0.872",
+          "thrust_n": "-0.151",
+          "thrust_per_power_n_w": "-0.00011020144239821692",
+          "mach": "0.91",
+          "reynolds": "324161.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_15x7E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "3.8311328000000002",
+          "advance_ratio": "0.6031",
+          "efficiency": "-0.008",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0139",
+          "power_w": "0.633",
+          "torque_nm": "0.006",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.001579778830963665",
+          "mach": "0.06",
+          "reynolds": "21745.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 91,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "3000.0",
+          "speed_mps": "11.569395199999999",
+          "advance_ratio": "0.6074",
+          "efficiency": "-0.0046",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0084",
+          "power_w": "10.295",
+          "torque_nm": "0.033",
+          "thrust_n": "-0.004",
+          "thrust_per_power_n_w": "-0.00038853812530354544",
+          "mach": "0.18",
+          "reynolds": "65262.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 151,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "19.325539199999998",
+          "advance_ratio": "0.6087",
+          "efficiency": "-0.0056",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0066",
+          "power_w": "37.617",
+          "torque_nm": "0.072",
+          "thrust_n": "-0.011",
+          "thrust_per_power_n_w": "-0.00029242097987611986",
+          "mach": "0.3",
+          "reynolds": "108782.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 210,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "27.0816832",
+          "advance_ratio": "0.6092",
+          "efficiency": "-0.0112",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0056",
+          "power_w": "87.94",
+          "torque_nm": "0.12",
+          "thrust_n": "-0.036",
+          "thrust_per_power_n_w": "-0.00040937002501705705",
+          "mach": "0.42",
+          "reynolds": "152300.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 360,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "46.2865216",
+          "advance_ratio": "0.6074",
+          "efficiency": "-0.0073",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0045",
+          "power_w": "352.043",
+          "torque_nm": "0.28",
+          "thrust_n": "-0.056",
+          "thrust_per_power_n_w": "-0.0001590714770638814",
+          "mach": "0.73",
+          "reynolds": "261035.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 390,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "50.0774208",
+          "advance_ratio": "0.6066",
+          "efficiency": "-0.0069",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0049",
+          "power_w": "487.199",
+          "torque_nm": "0.358",
+          "thrust_n": "-0.067",
+          "thrust_per_power_n_w": "-0.00013752080771922768",
+          "mach": "0.79",
+          "reynolds": "282766.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 420,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "53.8951424",
+          "advance_ratio": "0.6062",
+          "efficiency": "-0.0061",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0064",
+          "power_w": "794.114",
+          "torque_nm": "0.542",
+          "thrust_n": "-0.09",
+          "thrust_per_power_n_w": "-0.0001133338538295509",
+          "mach": "0.85",
+          "reynolds": "304508.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 450,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "57.940854400000006",
+          "advance_ratio": "0.6083",
+          "efficiency": "-0.0055",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0094",
+          "power_w": "1442.222",
+          "torque_nm": "0.918",
+          "thrust_n": "-0.137",
+          "thrust_per_power_n_w": "-9.499231047647312e-05",
+          "mach": "0.91",
+          "reynolds": "326332.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_15x8E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "4.260291199999999",
+          "advance_ratio": "0.6712",
+          "efficiency": "-0.0047",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0143",
+          "power_w": "0.65",
+          "torque_nm": "0.006",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.0015384615384615385",
+          "mach": "0.06",
+          "reynolds": "21902.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 239,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "34.4533728",
+          "advance_ratio": "0.6782",
+          "efficiency": "-0.0064",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0055",
+          "power_w": "127.162",
+          "torque_nm": "0.152",
+          "thrust_n": "-0.024",
+          "thrust_per_power_n_w": "-0.00018873562856828297",
+          "mach": "0.49",
+          "reynolds": "175347.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 269,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "38.753897599999995",
+          "advance_ratio": "0.6781",
+          "efficiency": "-0.0077",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0052",
+          "power_w": "171.183",
+          "torque_nm": "0.182",
+          "thrust_n": "-0.034",
+          "thrust_per_power_n_w": "-0.0001986178534083408",
+          "mach": "0.55",
+          "reynolds": "197262.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 299,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "43.0410112",
+          "advance_ratio": "0.6778",
+          "efficiency": "-0.0088",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0049",
+          "power_w": "223.271",
+          "torque_nm": "0.213",
+          "thrust_n": "-0.046",
+          "thrust_per_power_n_w": "-0.00020602765249405432",
+          "mach": "0.61",
+          "reynolds": "219172.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 329,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "47.319184",
+          "advance_ratio": "0.6774",
+          "efficiency": "-0.0098",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0047",
+          "power_w": "283.93",
+          "torque_nm": "0.246",
+          "thrust_n": "-0.059",
+          "thrust_per_power_n_w": "-0.00020779769661536293",
+          "mach": "0.67",
+          "reynolds": "241078.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 359,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "51.5794752",
+          "advance_ratio": "0.6769",
+          "efficiency": "-0.0103",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0046",
+          "power_w": "361.515",
+          "torque_nm": "0.288",
+          "thrust_n": "-0.072",
+          "thrust_per_power_n_w": "-0.00019916186050371353",
+          "mach": "0.73",
+          "reynolds": "262978.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 389,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "55.799532799999994",
+          "advance_ratio": "0.676",
+          "efficiency": "-0.0091",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0051",
+          "power_w": "506.023",
+          "torque_nm": "0.372",
+          "thrust_n": "-0.083",
+          "thrust_per_power_n_w": "-0.00016402416490950017",
+          "mach": "0.79",
+          "reynolds": "284865.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 419,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "60.068764800000004",
+          "advance_ratio": "0.6757",
+          "efficiency": "-0.0097",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0067",
+          "power_w": "834.039",
+          "torque_nm": "0.569",
+          "thrust_n": "-0.135",
+          "thrust_per_power_n_w": "-0.00016186293446709328",
+          "mach": "0.85",
+          "reynolds": "306770.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_16x10E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "5.1990752",
+          "advance_ratio": "0.7675",
+          "efficiency": "-0.0092",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0138",
+          "power_w": "0.869",
+          "torque_nm": "0.008",
+          "thrust_n": "-0.002",
+          "thrust_per_power_n_w": "-0.0023014959723820483",
+          "mach": "0.07",
+          "reynolds": "25185.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 121,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "4000.0",
+          "speed_mps": "20.9706464",
+          "advance_ratio": "0.7741",
+          "efficiency": "-0.0098",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0073",
+          "power_w": "29.272",
+          "torque_nm": "0.07",
+          "thrust_n": "-0.014",
+          "thrust_per_power_n_w": "-0.00047827275211806506",
+          "mach": "0.26",
+          "reynolds": "100820.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 151,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "26.2233664",
+          "advance_ratio": "0.7744",
+          "efficiency": "-0.0063",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0066",
+          "power_w": "51.726",
+          "torque_nm": "0.099",
+          "thrust_n": "-0.013",
+          "thrust_per_power_n_w": "-0.0002513242856590496",
+          "mach": "0.33",
+          "reynolds": "126029.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 211,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "36.7332768",
+          "advance_ratio": "0.7748",
+          "efficiency": "-0.0109",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0056",
+          "power_w": "120.94",
+          "torque_nm": "0.165",
+          "thrust_n": "-0.036",
+          "thrust_per_power_n_w": "-0.00029766826525549857",
+          "mach": "0.46",
+          "reynolds": "176449.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 301,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "52.410969599999994",
+          "advance_ratio": "0.7738",
+          "efficiency": "-0.0091",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0047",
+          "power_w": "298.625",
+          "torque_nm": "0.285",
+          "thrust_n": "-0.052",
+          "thrust_per_power_n_w": "-0.00017413143574717454",
+          "mach": "0.65",
+          "reynolds": "252036.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 360,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "62.764416000000004",
+          "advance_ratio": "0.7722",
+          "efficiency": "-0.0108",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.005",
+          "power_w": "544.783",
+          "torque_nm": "0.434",
+          "thrust_n": "-0.094",
+          "thrust_per_power_n_w": "-0.00017254576592881936",
+          "mach": "0.78",
+          "reynolds": "302385.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 420,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "73.359264",
+          "advance_ratio": "0.7736",
+          "efficiency": "-0.0048",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0105",
+          "power_w": "1810.906",
+          "torque_nm": "1.235",
+          "thrust_n": "-0.119",
+          "thrust_per_power_n_w": "-6.571296356630327e-05",
+          "mach": "0.92",
+          "reynolds": "352851.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_16x12E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 390,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "79.47477119999999",
+          "advance_ratio": "0.9026",
+          "efficiency": "-0.0063",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0076",
+          "power_w": "1047.073",
+          "torque_nm": "0.769",
+          "thrust_n": "-0.083",
+          "thrust_per_power_n_w": "-7.926858967808357e-05",
+          "mach": "0.86",
+          "reynolds": "332728.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 450,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "15000.0",
+          "speed_mps": "93.0200832",
+          "advance_ratio": "0.9155",
+          "efficiency": "-0.0086",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0183",
+          "power_w": "3887.141",
+          "torque_nm": "2.475",
+          "thrust_n": "-0.361",
+          "thrust_per_power_n_w": "-9.287031265395313e-05",
+          "mach": "0.99",
+          "reynolds": "384681.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_16x4E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "2.5973024",
+          "advance_ratio": "0.3833",
+          "efficiency": "-0.0032",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0123",
+          "power_w": "0.773",
+          "torque_nm": "0.007",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.0012936610608020697",
+          "mach": "0.06",
+          "reynolds": "24336.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 91,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "3000.0",
+          "speed_mps": "7.8544928",
+          "advance_ratio": "0.3864",
+          "efficiency": "-0.0073",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0073",
+          "power_w": "12.44",
+          "torque_nm": "0.04",
+          "thrust_n": "-0.012",
+          "thrust_per_power_n_w": "-0.0009646302250803859",
+          "mach": "0.19",
+          "reynolds": "73017.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 150,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "13.1116832",
+          "advance_ratio": "0.3871",
+          "efficiency": "-0.0113",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0058",
+          "power_w": "45.258",
+          "torque_nm": "0.086",
+          "thrust_n": "-0.039",
+          "thrust_per_power_n_w": "-0.0008617261036722789",
+          "mach": "0.32",
+          "reynolds": "121692.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 180,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "15.713455999999999",
+          "advance_ratio": "0.3867",
+          "efficiency": "-0.0066",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0053",
+          "power_w": "72.123",
+          "torque_nm": "0.115",
+          "thrust_n": "-0.03",
+          "thrust_per_power_n_w": "-0.0004159560750384759",
+          "mach": "0.38",
+          "reynolds": "146028.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 268,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "23.523244799999997",
+          "advance_ratio": "0.3859",
+          "efficiency": "-0.0065",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0044",
+          "power_w": "201.422",
+          "torque_nm": "0.214",
+          "thrust_n": "-0.056",
+          "thrust_per_power_n_w": "-0.0002780232546593719",
+          "mach": "0.58",
+          "reynolds": "219022.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_16x6E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 91,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "3000.0",
+          "speed_mps": "10.4473248",
+          "advance_ratio": "0.5142",
+          "efficiency": "-0.005",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0076",
+          "power_w": "12.877",
+          "torque_nm": "0.041",
+          "thrust_n": "-0.006",
+          "thrust_per_power_n_w": "-0.0004659470373534208",
+          "mach": "0.19",
+          "reynolds": "73555.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 239,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "27.917648",
+          "advance_ratio": "0.5152",
+          "efficiency": "-0.0158",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0048",
+          "power_w": "153.334",
+          "torque_nm": "0.183",
+          "thrust_n": "-0.087",
+          "thrust_per_power_n_w": "-0.0005673888374398371",
+          "mach": "0.51",
+          "reynolds": "196150.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 298,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "34.8378272",
+          "advance_ratio": "0.5143",
+          "efficiency": "-0.0146",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "269.84",
+          "torque_nm": "0.258",
+          "thrust_n": "-0.113",
+          "thrust_per_power_n_w": "-0.00041876667654906617",
+          "mach": "0.64",
+          "reynolds": "245166.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_16x7E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "3.8981888000000002",
+          "advance_ratio": "0.5753",
+          "efficiency": "-0.0067",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0131",
+          "power_w": "0.822",
+          "torque_nm": "0.008",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.0012165450121654502",
+          "mach": "0.06",
+          "reynolds": "25162.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 150,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "19.6608192",
+          "advance_ratio": "0.5805",
+          "efficiency": "-0.0108",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0062",
+          "power_w": "48.407",
+          "torque_nm": "0.092",
+          "thrust_n": "-0.027",
+          "thrust_per_power_n_w": "-0.0005577705703720537",
+          "mach": "0.32",
+          "reynolds": "125866.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 297,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "39.2322304",
+          "advance_ratio": "0.5792",
+          "efficiency": "-0.007",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0045",
+          "power_w": "280.936",
+          "torque_nm": "0.268",
+          "thrust_n": "-0.05",
+          "thrust_per_power_n_w": "-0.00017797647862858446",
+          "mach": "0.65",
+          "reynolds": "251695.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 327,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "43.117008",
+          "advance_ratio": "0.5787",
+          "efficiency": "-0.0083",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "360.511",
+          "torque_nm": "0.313",
+          "thrust_n": "-0.069",
+          "thrust_per_power_n_w": "-0.00019139499210842387",
+          "mach": "0.71",
+          "reynolds": "276848.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 357,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "46.9660224",
+          "advance_ratio": "0.5778",
+          "efficiency": "-0.0081",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0046",
+          "power_w": "499.592",
+          "torque_nm": "0.398",
+          "thrust_n": "-0.087",
+          "thrust_per_power_n_w": "-0.0001741420999535621",
+          "mach": "0.77",
+          "reynolds": "301993.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 387,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "50.8150368",
+          "advance_ratio": "0.5771",
+          "efficiency": "-0.0066",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0061",
+          "power_w": "840.755",
+          "torque_nm": "0.618",
+          "thrust_n": "-0.109",
+          "thrust_per_power_n_w": "-0.0001296453782612057",
+          "mach": "0.84",
+          "reynolds": "327141.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 417,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "14000.0",
+          "speed_mps": "54.896512",
+          "advance_ratio": "0.5789",
+          "efficiency": "-0.0039",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0094",
+          "power_w": "1623.465",
+          "torque_nm": "1.107",
+          "thrust_n": "-0.114",
+          "thrust_per_power_n_w": "-7.02201772135525e-05",
+          "mach": "0.9",
+          "reynolds": "352376.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_16x8E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "4.3273472",
+          "advance_ratio": "0.6387",
+          "efficiency": "-0.0083",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0132",
+          "power_w": "0.828",
+          "torque_nm": "0.008",
+          "thrust_n": "-0.002",
+          "thrust_per_power_n_w": "-0.002415458937198068",
+          "mach": "0.06",
+          "reynolds": "24816.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 209,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "30.5462432",
+          "advance_ratio": "0.6442",
+          "efficiency": "-0.0068",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0053",
+          "power_w": "115.113",
+          "torque_nm": "0.157",
+          "thrust_n": "-0.026",
+          "thrust_per_power_n_w": "-0.00022586501958944688",
+          "mach": "0.45",
+          "reynolds": "173806.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 239,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "34.9048832",
+          "advance_ratio": "0.6441",
+          "efficiency": "-0.0085",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.005",
+          "power_w": "161.197",
+          "torque_nm": "0.192",
+          "thrust_n": "-0.039",
+          "thrust_per_power_n_w": "-0.00024193998647617512",
+          "mach": "0.52",
+          "reynolds": "198632.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 269,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "39.250112",
+          "advance_ratio": "0.6439",
+          "efficiency": "-0.0099",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0047",
+          "power_w": "216.875",
+          "torque_nm": "0.23",
+          "thrust_n": "-0.055",
+          "thrust_per_power_n_w": "-0.00025360230547550434",
+          "mach": "0.58",
+          "reynolds": "223454.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 299,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "43.5864",
+          "advance_ratio": "0.6435",
+          "efficiency": "-0.0112",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0045",
+          "power_w": "282.666",
+          "torque_nm": "0.27",
+          "thrust_n": "-0.073",
+          "thrust_per_power_n_w": "-0.00025825532607388224",
+          "mach": "0.65",
+          "reynolds": "248270.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 329,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "47.900336",
+          "advance_ratio": "0.6429",
+          "efficiency": "-0.0122",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "363.079",
+          "torque_nm": "0.315",
+          "thrust_n": "-0.092",
+          "thrust_per_power_n_w": "-0.00025338838104104063",
+          "mach": "0.71",
+          "reynolds": "273081.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 359,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "52.187449599999994",
+          "advance_ratio": "0.6421",
+          "efficiency": "-0.0113",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0046",
+          "power_w": "503.435",
+          "torque_nm": "0.401",
+          "thrust_n": "-0.109",
+          "thrust_per_power_n_w": "-0.00021651255872158273",
+          "mach": "0.78",
+          "reynolds": "297880.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 389,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "56.4790336",
+          "advance_ratio": "0.6414",
+          "efficiency": "-0.0104",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0061",
+          "power_w": "841.27",
+          "torque_nm": "0.618",
+          "thrust_n": "-0.155",
+          "thrust_per_power_n_w": "-0.00018424524825561353",
+          "mach": "0.84",
+          "reynolds": "322684.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_17x10E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "5.270601599999999",
+          "advance_ratio": "0.7343",
+          "efficiency": "-0.0075",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0129",
+          "power_w": "1.081",
+          "torque_nm": "0.01",
+          "thrust_n": "-0.002",
+          "thrust_per_power_n_w": "-0.0018501387604070306",
+          "mach": "0.07",
+          "reynolds": "28180.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 150,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "26.5497056",
+          "advance_ratio": "0.74",
+          "efficiency": "-0.0061",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0061",
+          "power_w": "64.234",
+          "torque_nm": "0.123",
+          "thrust_n": "-0.015",
+          "thrust_per_power_n_w": "-0.00023352118815580535",
+          "mach": "0.35",
+          "reynolds": "140993.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 299,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "53.0055328",
+          "advance_ratio": "0.7387",
+          "efficiency": "-0.0103",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0044",
+          "power_w": "371.154",
+          "torque_nm": "0.354",
+          "thrust_n": "-0.072",
+          "thrust_per_power_n_w": "-0.00019398955689552044",
+          "mach": "0.69",
+          "reynolds": "281937.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_17x10WE",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "5.2482496",
+          "advance_ratio": "0.7317",
+          "efficiency": "-0.0096",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0143",
+          "power_w": "1.199",
+          "torque_nm": "0.011",
+          "thrust_n": "-0.002",
+          "thrust_per_power_n_w": "-0.0016680567139282735",
+          "mach": "0.07",
+          "reynolds": "35282.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 91,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "3000.0",
+          "speed_mps": "15.843097599999998",
+          "advance_ratio": "0.736",
+          "efficiency": "-0.0061",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0086",
+          "power_w": "19.565",
+          "torque_nm": "0.062",
+          "thrust_n": "-0.008",
+          "thrust_per_power_n_w": "-0.0004088934321492461",
+          "mach": "0.21",
+          "reynolds": "105895.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 150,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "26.446886399999997",
+          "advance_ratio": "0.7371",
+          "efficiency": "-0.0098",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0068",
+          "power_w": "71.433",
+          "torque_nm": "0.136",
+          "thrust_n": "-0.026",
+          "thrust_per_power_n_w": "-0.0003639774333991292",
+          "mach": "0.35",
+          "reynolds": "176509.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 180,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "31.7308992",
+          "advance_ratio": "0.7371",
+          "efficiency": "-0.0078",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0063",
+          "power_w": "113.722",
+          "torque_nm": "0.181",
+          "thrust_n": "-0.028",
+          "thrust_per_power_n_w": "-0.0002462144527883787",
+          "mach": "0.41",
+          "reynolds": "211808.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 269,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "47.5516448",
+          "advance_ratio": "0.7363",
+          "efficiency": "-0.014",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0052",
+          "power_w": "316.18",
+          "torque_nm": "0.335",
+          "thrust_n": "-0.093",
+          "thrust_per_power_n_w": "-0.0002941362515023088",
+          "mach": "0.62",
+          "reynolds": "317674.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 299,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "52.7998944",
+          "advance_ratio": "0.7358",
+          "efficiency": "-0.02",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0049",
+          "power_w": "411.657",
+          "torque_nm": "0.393",
+          "thrust_n": "-0.156",
+          "thrust_per_power_n_w": "-0.00037895626698926534",
+          "mach": "0.69",
+          "reynolds": "352947.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_17x12E",
+    "usable_static": true,
+    "rejected_rows": []
+  },
+  {
+    "id": "APC_17x6E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "3.531616",
+          "advance_ratio": "0.4919",
+          "efficiency": "-0.0024",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.012",
+          "power_w": "1.004",
+          "torque_nm": "0.01",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.00099601593625498",
+          "mach": "0.07",
+          "reynolds": "27506.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 209,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "24.9090688",
+          "advance_ratio": "0.4959",
+          "efficiency": "-0.0128",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0048",
+          "power_w": "137.903",
+          "torque_nm": "0.188",
+          "thrust_n": "-0.071",
+          "thrust_per_power_n_w": "-0.000514854644206435",
+          "mach": "0.48",
+          "reynolds": "192581.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 268,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "31.9723008",
+          "advance_ratio": "0.4951",
+          "efficiency": "-0.0133",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "260.332",
+          "torque_nm": "0.276",
+          "thrust_n": "-0.108",
+          "thrust_per_power_n_w": "-0.0004148548776178111",
+          "mach": "0.61",
+          "reynolds": "247582.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_17x7E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "3.9607743999999996",
+          "advance_ratio": "0.5522",
+          "efficiency": "-0.0046",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0121",
+          "power_w": "1.019",
+          "torque_nm": "0.01",
+          "thrust_n": "-0.001",
+          "thrust_per_power_n_w": "-0.0009813542688910698",
+          "mach": "0.07",
+          "reynolds": "27650.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 179,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "23.970284799999998",
+          "advance_ratio": "0.5568",
+          "efficiency": "-0.0125",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0052",
+          "power_w": "95.015",
+          "torque_nm": "0.151",
+          "thrust_n": "-0.05",
+          "thrust_per_power_n_w": "-0.0005262327000999842",
+          "mach": "0.41",
+          "reynolds": "165957.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 269,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "35.87496",
+          "advance_ratio": "0.5555",
+          "efficiency": "-0.0067",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0044",
+          "power_w": "266.554",
+          "torque_nm": "0.283",
+          "thrust_n": "-0.05",
+          "thrust_per_power_n_w": "-0.00018757925223406892",
+          "mach": "0.61",
+          "reynolds": "248904.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 299,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "39.8223232",
+          "advance_ratio": "0.555",
+          "efficiency": "-0.0089",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0041",
+          "power_w": "347.616",
+          "torque_nm": "0.332",
+          "thrust_n": "-0.078",
+          "thrust_per_power_n_w": "-0.00022438552885943112",
+          "mach": "0.68",
+          "reynolds": "276545.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 329,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "43.7473344",
+          "advance_ratio": "0.5542",
+          "efficiency": "-0.0098",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0042",
+          "power_w": "466.48",
+          "torque_nm": "0.405",
+          "thrust_n": "-0.105",
+          "thrust_per_power_n_w": "-0.00022509003601440573",
+          "mach": "0.75",
+          "reynolds": "304178.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 359,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "47.632112",
+          "advance_ratio": "0.5532",
+          "efficiency": "-0.0078",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0052",
+          "power_w": "748.803",
+          "torque_nm": "0.596",
+          "thrust_n": "-0.123",
+          "thrust_per_power_n_w": "-0.0001642621624112083",
+          "mach": "0.82",
+          "reynolds": "331804.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 389,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "51.722528",
+          "advance_ratio": "0.5545",
+          "efficiency": "-0.0101",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0079",
+          "power_w": "1448.427",
+          "torque_nm": "1.064",
+          "thrust_n": "-0.282",
+          "thrust_per_power_n_w": "-0.00019469396800805288",
+          "mach": "0.89",
+          "reynolds": "359502.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_17x8E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "4.3988736",
+          "advance_ratio": "0.613",
+          "efficiency": "-0.0088",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0123",
+          "power_w": "1.035",
+          "torque_nm": "0.01",
+          "thrust_n": "-0.002",
+          "thrust_per_power_n_w": "-0.0019323671497584543",
+          "mach": "0.07",
+          "reynolds": "27812.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 181,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "26.5809984",
+          "advance_ratio": "0.6174",
+          "efficiency": "-0.0067",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0054",
+          "power_w": "97.407",
+          "torque_nm": "0.155",
+          "thrust_n": "-0.025",
+          "thrust_per_power_n_w": "-0.0002566550658576899",
+          "mach": "0.41",
+          "reynolds": "166934.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 211,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "31.0066944",
+          "advance_ratio": "0.6173",
+          "efficiency": "-0.0088",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.005",
+          "power_w": "143.707",
+          "torque_nm": "0.196",
+          "thrust_n": "-0.041",
+          "thrust_per_power_n_w": "-0.00028530273403522445",
+          "mach": "0.48",
+          "reynolds": "194754.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 241,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "35.4234496",
+          "advance_ratio": "0.6171",
+          "efficiency": "-0.0107",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0047",
+          "power_w": "201.161",
+          "torque_nm": "0.24",
+          "thrust_n": "-0.061",
+          "thrust_per_power_n_w": "-0.0003032396935787752",
+          "mach": "0.55",
+          "reynolds": "222569.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 271,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "39.8267936",
+          "advance_ratio": "0.6167",
+          "efficiency": "-0.0124",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0044",
+          "power_w": "270.519",
+          "torque_nm": "0.287",
+          "thrust_n": "-0.084",
+          "thrust_per_power_n_w": "-0.00031051423375067926",
+          "mach": "0.62",
+          "reynolds": "250378.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 301,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "44.212256000000004",
+          "advance_ratio": "0.6161",
+          "efficiency": "-0.0139",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0042",
+          "power_w": "353.149",
+          "torque_nm": "0.337",
+          "thrust_n": "-0.111",
+          "thrust_per_power_n_w": "-0.0003143149208974116",
+          "mach": "0.69",
+          "reynolds": "278181.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 331,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "48.5664256",
+          "advance_ratio": "0.6153",
+          "efficiency": "-0.0138",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "476.901",
+          "torque_nm": "0.414",
+          "thrust_n": "-0.136",
+          "thrust_per_power_n_w": "-0.00028517449114176736",
+          "mach": "0.75",
+          "reynolds": "305974.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 361,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "52.884831999999996",
+          "advance_ratio": "0.6142",
+          "efficiency": "-0.0111",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0053",
+          "power_w": "775.427",
+          "torque_nm": "0.617",
+          "thrust_n": "-0.162",
+          "thrust_per_power_n_w": "-0.0002089171514533283",
+          "mach": "0.82",
+          "reynolds": "333757.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 391,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "57.3909952",
+          "advance_ratio": "0.6152",
+          "efficiency": "-0.0074",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0082",
+          "power_w": "1518.293",
+          "torque_nm": "1.115",
+          "thrust_n": "-0.197",
+          "thrust_per_power_n_w": "-0.00012975097691947471",
+          "mach": "0.89",
+          "reynolds": "361616.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_18x10E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "5.3242464",
+          "advance_ratio": "0.6985",
+          "efficiency": "-0.0064",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.012",
+          "power_w": "1.357",
+          "torque_nm": "0.013",
+          "thrust_n": "-0.002",
+          "thrust_per_power_n_w": "-0.0014738393515106854",
+          "mach": "0.07",
+          "reynolds": "31344.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 91,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "3000.0",
+          "speed_mps": "16.066617599999997",
+          "advance_ratio": "0.7028",
+          "efficiency": "-0.0051",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0072",
+          "power_w": "22.048",
+          "torque_nm": "0.07",
+          "thrust_n": "-0.007",
+          "thrust_per_power_n_w": "-0.000317489114658926",
+          "mach": "0.22",
+          "reynolds": "94076.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 269,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "48.1819712",
+          "advance_ratio": "0.7026",
+          "efficiency": "-0.0093",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "355.756",
+          "torque_nm": "0.377",
+          "thrust_n": "-0.069",
+          "thrust_per_power_n_w": "-0.0001939531589066664",
+          "mach": "0.66",
+          "reynolds": "282214.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 299,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "53.4838656",
+          "advance_ratio": "0.7019",
+          "efficiency": "-0.0121",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0042",
+          "power_w": "475.964",
+          "torque_nm": "0.455",
+          "thrust_n": "-0.108",
+          "thrust_per_power_n_w": "-0.00022690791740551805",
+          "mach": "0.73",
+          "reynolds": "313546.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 388,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "13000.0",
+          "speed_mps": "70.0198752",
+          "advance_ratio": "0.7069",
+          "efficiency": "-0.0121",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0127",
+          "power_w": "3156.111",
+          "torque_nm": "2.318",
+          "thrust_n": "-0.545",
+          "thrust_per_power_n_w": "-0.00017268087212395257",
+          "mach": "0.95",
+          "reynolds": "407870.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_18x12E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 211,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "43.7383936",
+          "advance_ratio": "0.82",
+          "efficiency": "-0.0104",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0051",
+          "power_w": "197.547",
+          "torque_nm": "0.269",
+          "thrust_n": "-0.047",
+          "thrust_per_power_n_w": "-0.00023791806506805977",
+          "mach": "0.52",
+          "reynolds": "222641.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 361,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "74.7182656",
+          "advance_ratio": "0.8171",
+          "efficiency": "-0.0069",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0085",
+          "power_w": "1658.616",
+          "torque_nm": "1.32",
+          "thrust_n": "-0.154",
+          "thrust_per_power_n_w": "-9.284849537204513e-05",
+          "mach": "0.89",
+          "reynolds": "381532.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_18x12WE",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 211,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "43.7473344",
+          "advance_ratio": "0.8202",
+          "efficiency": "-0.0111",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0053",
+          "power_w": "207.058",
+          "torque_nm": "0.282",
+          "thrust_n": "-0.053",
+          "thrust_per_power_n_w": "-0.0002559669271411875",
+          "mach": "0.52",
+          "reynolds": "243179.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 361,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "74.71379519999999",
+          "advance_ratio": "0.8171",
+          "efficiency": "-0.007",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0091",
+          "power_w": "1785.979",
+          "torque_nm": "1.421",
+          "thrust_n": "-0.167",
+          "thrust_per_power_n_w": "-9.350613865000652e-05",
+          "mach": "0.89",
+          "reynolds": "416718.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_18x8E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "4.452518400000001",
+          "advance_ratio": "0.5846",
+          "efficiency": "-0.0092",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0115",
+          "power_w": "1.302",
+          "torque_nm": "0.012",
+          "thrust_n": "-0.003",
+          "thrust_per_power_n_w": "-0.002304147465437788",
+          "mach": "0.07",
+          "reynolds": "30973.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 61,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "2000.0",
+          "speed_mps": "8.9408",
+          "advance_ratio": "0.5866",
+          "efficiency": "-0.0042",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0083",
+          "power_w": "7.573",
+          "torque_nm": "0.036",
+          "thrust_n": "-0.004",
+          "thrust_per_power_n_w": "-0.0005281922619833619",
+          "mach": "0.15",
+          "reynolds": "61957.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 151,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "22.4145856",
+          "advance_ratio": "0.5883",
+          "efficiency": "-0.0065",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0054",
+          "power_w": "77.238",
+          "torque_nm": "0.148",
+          "thrust_n": "-0.022",
+          "thrust_per_power_n_w": "-0.0002848338900541184",
+          "mach": "0.36",
+          "reynolds": "154912.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 181,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "26.9028672",
+          "advance_ratio": "0.5884",
+          "efficiency": "-0.0092",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.005",
+          "power_w": "122.342",
+          "torque_nm": "0.195",
+          "thrust_n": "-0.042",
+          "thrust_per_power_n_w": "-0.0003432999297052525",
+          "mach": "0.44",
+          "reynolds": "185894.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 211,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "31.3777376",
+          "advance_ratio": "0.5883",
+          "efficiency": "-0.0119",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0046",
+          "power_w": "180.38",
+          "torque_nm": "0.246",
+          "thrust_n": "-0.068",
+          "thrust_per_power_n_w": "-0.0003769819270429094",
+          "mach": "0.51",
+          "reynolds": "216870.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 241,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "35.8391968",
+          "advance_ratio": "0.5879",
+          "efficiency": "-0.0143",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "252.335",
+          "torque_nm": "0.301",
+          "thrust_n": "-0.101",
+          "thrust_per_power_n_w": "-0.00040026155705708683",
+          "mach": "0.58",
+          "reynolds": "247842.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 271,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "40.2872448",
+          "advance_ratio": "0.5875",
+          "efficiency": "-0.0166",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0041",
+          "power_w": "339.095",
+          "torque_nm": "0.36",
+          "thrust_n": "-0.14",
+          "thrust_per_power_n_w": "-0.000412863651779",
+          "mach": "0.65",
+          "reynolds": "278806.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 301,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "44.7084704",
+          "advance_ratio": "0.5867",
+          "efficiency": "-0.0177",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.004",
+          "power_w": "451.605",
+          "torque_nm": "0.431",
+          "thrust_n": "-0.179",
+          "thrust_per_power_n_w": "-0.0003963640792285293",
+          "mach": "0.73",
+          "reynolds": "309762.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 331,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "49.084992",
+          "advance_ratio": "0.5856",
+          "efficiency": "-0.0144",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0046",
+          "power_w": "693.204",
+          "torque_nm": "0.602",
+          "thrust_n": "-0.204",
+          "thrust_per_power_n_w": "-0.0002942856648259387",
+          "mach": "0.8",
+          "reynolds": "340705.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 361,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "12000.0",
+          "speed_mps": "53.5375104",
+          "advance_ratio": "0.5855",
+          "efficiency": "-0.0058",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0069",
+          "power_w": "1355.335",
+          "torque_nm": "1.079",
+          "thrust_n": "-0.146",
+          "thrust_per_power_n_w": "-0.0001077224450043716",
+          "mach": "0.87",
+          "reynolds": "371687.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_19x10E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "5.3778912",
+          "advance_ratio": "0.6687",
+          "efficiency": "-0.006",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0113",
+          "power_w": "1.673",
+          "torque_nm": "0.016",
+          "thrust_n": "-0.002",
+          "thrust_per_power_n_w": "-0.001195457262402869",
+          "mach": "0.08",
+          "reynolds": "34779.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 91,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "3000.0",
+          "speed_mps": "16.2320224",
+          "advance_ratio": "0.6728",
+          "efficiency": "-0.0085",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0068",
+          "power_w": "27.082",
+          "torque_nm": "0.086",
+          "thrust_n": "-0.014",
+          "thrust_per_power_n_w": "-0.0005169485266966989",
+          "mach": "0.23",
+          "reynolds": "104379.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 269,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "48.6334816",
+          "advance_ratio": "0.6718",
+          "efficiency": "-0.011",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0041",
+          "power_w": "439.002",
+          "torque_nm": "0.466",
+          "thrust_n": "-0.099",
+          "thrust_per_power_n_w": "-0.00022551150108655543",
+          "mach": "0.69",
+          "reynolds": "313094.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 299,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "53.9621984",
+          "advance_ratio": "0.6709",
+          "efficiency": "-0.0137",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "632.533",
+          "torque_nm": "0.604",
+          "thrust_n": "-0.16",
+          "thrust_per_power_n_w": "-0.00025295122942202224",
+          "mach": "0.77",
+          "reynolds": "347848.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_19x12E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 211,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "44.1094368",
+          "advance_ratio": "0.7834",
+          "efficiency": "-0.0199",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0047",
+          "power_w": "240.132",
+          "torque_nm": "0.328",
+          "thrust_n": "-0.108",
+          "thrust_per_power_n_w": "-0.00044975263605017237",
+          "mach": "0.54",
+          "reynolds": "246707.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 331,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "68.9827424",
+          "advance_ratio": "0.7797",
+          "efficiency": "-0.0061",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0066",
+          "power_w": "1310.889",
+          "torque_nm": "1.138",
+          "thrust_n": "-0.116",
+          "thrust_per_power_n_w": "-8.848956700376616e-05",
+          "mach": "0.85",
+          "reynolds": "387509.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_19x12WE",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 211,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "44.118377599999995",
+          "advance_ratio": "0.7836",
+          "efficiency": "-0.0223",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0049",
+          "power_w": "251.328",
+          "torque_nm": "0.343",
+          "thrust_n": "-0.127",
+          "thrust_per_power_n_w": "-0.0005053157626687038",
+          "mach": "0.54",
+          "reynolds": "269902.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 331,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "68.9827424",
+          "advance_ratio": "0.7797",
+          "efficiency": "-0.0061",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0071",
+          "power_w": "1402.097",
+          "torque_nm": "1.217",
+          "thrust_n": "-0.125",
+          "thrust_per_power_n_w": "-8.915217706050295e-05",
+          "mach": "0.85",
+          "reynolds": "423933.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_19x8E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "4.5106336",
+          "advance_ratio": "0.561",
+          "efficiency": "-0.0086",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0108",
+          "power_w": "1.61",
+          "torque_nm": "0.015",
+          "thrust_n": "-0.003",
+          "thrust_per_power_n_w": "-0.0018633540372670807",
+          "mach": "0.08",
+          "reynolds": "34403.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 149,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "22.696220800000003",
+          "advance_ratio": "0.5644",
+          "efficiency": "-0.0093",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0051",
+          "power_w": "95.211",
+          "torque_nm": "0.182",
+          "thrust_n": "-0.039",
+          "thrust_per_power_n_w": "-0.0004096165359044648",
+          "mach": "0.38",
+          "reynolds": "172055.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 179,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "27.2336768",
+          "advance_ratio": "0.5644",
+          "efficiency": "-0.0127",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0047",
+          "power_w": "150.714",
+          "torque_nm": "0.24",
+          "thrust_n": "-0.07",
+          "thrust_per_power_n_w": "-0.00046445585678835414",
+          "mach": "0.46",
+          "reynolds": "206463.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 209,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "31.762192",
+          "advance_ratio": "0.5641",
+          "efficiency": "-0.0163",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0044",
+          "power_w": "221.996",
+          "torque_nm": "0.303",
+          "thrust_n": "-0.114",
+          "thrust_per_power_n_w": "-0.0005135227661759672",
+          "mach": "0.54",
+          "reynolds": "240864.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 239,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "36.2728256",
+          "advance_ratio": "0.5637",
+          "efficiency": "-0.0197",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0041",
+          "power_w": "310.25",
+          "torque_nm": "0.37",
+          "thrust_n": "-0.168",
+          "thrust_per_power_n_w": "-0.0005414987912973409",
+          "mach": "0.61",
+          "reynolds": "275259.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 269,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "40.7655776",
+          "advance_ratio": "0.5631",
+          "efficiency": "-0.0222",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0039",
+          "power_w": "417.781",
+          "torque_nm": "0.443",
+          "thrust_n": "-0.228",
+          "thrust_per_power_n_w": "-0.0005457404716825323",
+          "mach": "0.69",
+          "reynolds": "309645.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 299,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "45.218096",
+          "advance_ratio": "0.5622",
+          "efficiency": "-0.0208",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.004",
+          "power_w": "595.388",
+          "torque_nm": "0.569",
+          "thrust_n": "-0.274",
+          "thrust_per_power_n_w": "-0.00046020410219890225",
+          "mach": "0.77",
+          "reynolds": "344021.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_20x10E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 61,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "2000.0",
+          "speed_mps": "10.948009599999999",
+          "advance_ratio": "0.6467",
+          "efficiency": "-0.005",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0076",
+          "power_w": "11.605",
+          "torque_nm": "0.055",
+          "thrust_n": "-0.005",
+          "thrust_per_power_n_w": "-0.00043084877208099956",
+          "mach": "0.16",
+          "reynolds": "76409.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 180,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "32.911084800000005",
+          "advance_ratio": "0.6479",
+          "efficiency": "-0.0096",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0045",
+          "power_w": "186.891",
+          "torque_nm": "0.297",
+          "thrust_n": "-0.054",
+          "thrust_per_power_n_w": "-0.0002889384721575678",
+          "mach": "0.49",
+          "reynolds": "229247.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 240,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "43.8009792",
+          "advance_ratio": "0.6467",
+          "efficiency": "-0.0085",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0039",
+          "power_w": "386.793",
+          "torque_nm": "0.462",
+          "thrust_n": "-0.075",
+          "thrust_per_power_n_w": "-0.00019390216472376696",
+          "mach": "0.65",
+          "reynolds": "305622.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 270,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "49.2146336",
+          "advance_ratio": "0.6459",
+          "efficiency": "-0.0121",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0038",
+          "power_w": "533.339",
+          "torque_nm": "0.566",
+          "thrust_n": "-0.132",
+          "thrust_per_power_n_w": "-0.0002474973703404401",
+          "mach": "0.73",
+          "reynolds": "343794.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 300,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "54.5746432",
+          "advance_ratio": "0.6446",
+          "efficiency": "-0.014",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0047",
+          "power_w": "899.185",
+          "torque_nm": "0.859",
+          "thrust_n": "-0.23",
+          "thrust_per_power_n_w": "-0.0002557871850620284",
+          "mach": "0.81",
+          "reynolds": "381946.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_20x11E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "5.8919872",
+          "advance_ratio": "0.6961",
+          "efficiency": "-0.009",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0106",
+          "power_w": "2.036",
+          "torque_nm": "0.019",
+          "thrust_n": "-0.003",
+          "thrust_per_power_n_w": "-0.0014734774066797642",
+          "mach": "0.08",
+          "reynolds": "38409.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 61,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "2000.0",
+          "speed_mps": "11.8286784",
+          "advance_ratio": "0.6984",
+          "efficiency": "-0.0049",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0077",
+          "power_w": "11.822",
+          "torque_nm": "0.056",
+          "thrust_n": "-0.005",
+          "thrust_per_power_n_w": "-0.0004229402808323465",
+          "mach": "0.16",
+          "reynolds": "76836.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 91,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "3000.0",
+          "speed_mps": "17.76984",
+          "advance_ratio": "0.6996",
+          "efficiency": "-0.0068",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0064",
+          "power_w": "32.976",
+          "torque_nm": "0.105",
+          "thrust_n": "-0.013",
+          "thrust_per_power_n_w": "-0.00039422610383309074",
+          "mach": "0.24",
+          "reynolds": "115268.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 210,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "41.4450784",
+          "advance_ratio": "0.6993",
+          "efficiency": "-0.0084",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "281.409",
+          "torque_nm": "0.384",
+          "thrust_n": "-0.057",
+          "thrust_per_power_n_w": "-0.00020255215718047398",
+          "mach": "0.57",
+          "reynolds": "268944.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 240,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "47.3325952",
+          "advance_ratio": "0.6988",
+          "efficiency": "-0.0131",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.004",
+          "power_w": "392.429",
+          "torque_nm": "0.468",
+          "thrust_n": "-0.109",
+          "thrust_per_power_n_w": "-0.0002777572503561154",
+          "mach": "0.65",
+          "reynolds": "307344.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 329,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "64.9280896",
+          "advance_ratio": "0.6971",
+          "efficiency": "-0.0051",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0083",
+          "power_w": "2120.902",
+          "torque_nm": "1.841",
+          "thrust_n": "-0.166",
+          "thrust_per_power_n_w": "-7.826858572437577e-05",
+          "mach": "0.89",
+          "reynolds": "422533.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_20x12WE",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "6.3300864",
+          "advance_ratio": "0.7478",
+          "efficiency": "-0.0051",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0113",
+          "power_w": "2.178",
+          "torque_nm": "0.021",
+          "thrust_n": "-0.002",
+          "thrust_per_power_n_w": "-0.0009182736455463729",
+          "mach": "0.08",
+          "reynolds": "42130.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 61,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "2000.0",
+          "speed_mps": "12.7093472",
+          "advance_ratio": "0.7506",
+          "efficiency": "-0.0046",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0082",
+          "power_w": "12.616",
+          "torque_nm": "0.06",
+          "thrust_n": "-0.005",
+          "thrust_per_power_n_w": "-0.0003963221306277743",
+          "mach": "0.16",
+          "reynolds": "84287.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 181,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "38.204038399999995",
+          "advance_ratio": "0.7521",
+          "efficiency": "-0.0083",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0049",
+          "power_w": "203.559",
+          "torque_nm": "0.324",
+          "thrust_n": "-0.044",
+          "thrust_per_power_n_w": "-0.0002161535476201003",
+          "mach": "0.49",
+          "reynolds": "252897.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 329,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "69.7918848",
+          "advance_ratio": "0.7494",
+          "efficiency": "-0.008",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0093",
+          "power_w": "2384.227",
+          "torque_nm": "2.07",
+          "thrust_n": "-0.275",
+          "thrust_per_power_n_w": "-0.00011534136640512838",
+          "mach": "0.9",
+          "reynolds": "463505.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_20x13E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "6.7726560000000005",
+          "advance_ratio": "0.7997",
+          "efficiency": "-0.0079",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.011",
+          "power_w": "2.121",
+          "torque_nm": "0.02",
+          "thrust_n": "-0.002",
+          "thrust_per_power_n_w": "-0.000942951438000943",
+          "mach": "0.08",
+          "reynolds": "38880.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_20x15E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 151,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "38.2353312",
+          "advance_ratio": "0.9032",
+          "efficiency": "-0.0087",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0056",
+          "power_w": "133.474",
+          "torque_nm": "0.255",
+          "thrust_n": "-0.03",
+          "thrust_per_power_n_w": "-0.00022476287516669913",
+          "mach": "0.41",
+          "reynolds": "197024.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 181,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "45.8841856",
+          "advance_ratio": "0.9032",
+          "efficiency": "-0.0136",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0051",
+          "power_w": "211.077",
+          "torque_nm": "0.336",
+          "thrust_n": "-0.062",
+          "thrust_per_power_n_w": "-0.00029373167138058625",
+          "mach": "0.5",
+          "reynolds": "236428.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 240,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "61.1193088",
+          "advance_ratio": "0.9023",
+          "efficiency": "-0.0204",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0044",
+          "power_w": "434.589",
+          "torque_nm": "0.519",
+          "thrust_n": "-0.145",
+          "thrust_per_power_n_w": "-0.000333648573709873",
+          "mach": "0.66",
+          "reynolds": "315193.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 330,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "83.9138784",
+          "advance_ratio": "0.901",
+          "efficiency": "-0.0059",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0101",
+          "power_w": "2571.742",
+          "torque_nm": "2.233",
+          "thrust_n": "-0.181",
+          "thrust_per_power_n_w": "-7.03803103110654e-05",
+          "mach": "0.91",
+          "reynolds": "433332.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  },
+  {
+    "id": "APC_20x8E",
+    "usable_static": true,
+    "rejected_rows": [
+      {
+        "csv_line": 31,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "1000.0",
+          "speed_mps": "4.58216",
+          "advance_ratio": "0.5409",
+          "efficiency": "-0.0072",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0101",
+          "power_w": "1.947",
+          "torque_nm": "0.019",
+          "thrust_n": "-0.003",
+          "thrust_per_power_n_w": "-0.0015408320493066256",
+          "mach": "0.08",
+          "reynolds": "37952.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 121,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "4000.0",
+          "speed_mps": "18.418048000000002",
+          "advance_ratio": "0.5439",
+          "efficiency": "-0.0083",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0053",
+          "power_w": "65.057",
+          "torque_nm": "0.155",
+          "thrust_n": "-0.029",
+          "thrust_per_power_n_w": "-0.00044576294633936396",
+          "mach": "0.32",
+          "reynolds": "151837.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 151,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "5000.0",
+          "speed_mps": "23.0315008",
+          "advance_ratio": "0.544",
+          "efficiency": "-0.0132",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0047",
+          "power_w": "114.013",
+          "torque_nm": "0.218",
+          "thrust_n": "-0.065",
+          "thrust_per_power_n_w": "-0.0005701104260040522",
+          "mach": "0.4",
+          "reynolds": "189794.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 181,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "6000.0",
+          "speed_mps": "27.6315424",
+          "advance_ratio": "0.544",
+          "efficiency": "-0.0185",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0043",
+          "power_w": "180.031",
+          "torque_nm": "0.287",
+          "thrust_n": "-0.121",
+          "thrust_per_power_n_w": "-0.0006721064705522937",
+          "mach": "0.48",
+          "reynolds": "227745.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 211,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "7000.0",
+          "speed_mps": "32.2181728",
+          "advance_ratio": "0.5436",
+          "efficiency": "-0.0238",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.004",
+          "power_w": "264.573",
+          "torque_nm": "0.361",
+          "thrust_n": "-0.196",
+          "thrust_per_power_n_w": "-0.0007408163342442351",
+          "mach": "0.56",
+          "reynolds": "265688.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 241,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "8000.0",
+          "speed_mps": "36.7824512",
+          "advance_ratio": "0.5431",
+          "efficiency": "-0.0281",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0038",
+          "power_w": "369.151",
+          "torque_nm": "0.441",
+          "thrust_n": "-0.282",
+          "thrust_per_power_n_w": "-0.0007639150374778884",
+          "mach": "0.64",
+          "reynolds": "303619.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 271,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "9000.0",
+          "speed_mps": "41.3154368",
+          "advance_ratio": "0.5422",
+          "efficiency": "-0.0294",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0036",
+          "power_w": "507.263",
+          "torque_nm": "0.538",
+          "thrust_n": "-0.36",
+          "thrust_per_power_n_w": "-0.0007096910281254497",
+          "mach": "0.72",
+          "reynolds": "341541.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 301,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "10000.0",
+          "speed_mps": "45.7903072",
+          "advance_ratio": "0.5408",
+          "efficiency": "-0.0213",
+          "thrust_coeff": "-0.0002",
+          "power_coeff": "0.0044",
+          "power_w": "840.914",
+          "torque_nm": "0.803",
+          "thrust_n": "-0.391",
+          "thrust_per_power_n_w": "-0.0004649702585520042",
+          "mach": "0.81",
+          "reynolds": "379461.0",
+          "figure_of_merit": "0.0"
+        }
+      },
+      {
+        "csv_line": 331,
+        "reason": "out_of_range",
+        "row": {
+          "rpm": "11000.0",
+          "speed_mps": "50.3948192",
+          "advance_ratio": "0.5411",
+          "efficiency": "-0.0052",
+          "thrust_coeff": "-0.0001",
+          "power_coeff": "0.0073",
+          "power_w": "1870.694",
+          "torque_nm": "1.624",
+          "thrust_n": "-0.192",
+          "thrust_per_power_n_w": "-0.00010263570632075583",
+          "mach": "0.89",
+          "reynolds": "417449.0",
+          "figure_of_merit": "0.0"
+        }
+      }
+    ]
+  }
+]

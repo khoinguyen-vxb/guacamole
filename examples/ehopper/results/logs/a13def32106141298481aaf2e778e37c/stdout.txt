@@ -1,0 +1,1 @@
+{"cases": 54, "conditional_passes": 2, "output": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/analysis/chief_documented_candidate_screening.json", "physical_acceptance": "unperformed"}

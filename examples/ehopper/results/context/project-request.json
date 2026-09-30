@@ -1,0 +1,46 @@
+{
+  "description": "Project Electronic Hopper: build a self-landing rocket-shaped\nhopper using electric motors and counter-rotating coaxial propellers.\nReach approximately 5 m above takeoff level, sustain hover there for 5 minutes,\nthen land under control. There is no specified propeller diameter limit.\nKeep the complete vehicle hardware budget below 500; provisionally use AUD,\nwith currency and inclusion of shipping/tax still to be confirmed.\n\nScope: select the motors, coaxial propellers, ESCs and battery; design the\neditable vehicle CAD using the supplied FreeCAD MCP; diagnose, fix, improve\nand integrate PID control into the supplied tooling/6dof_hopper simulator.\nDeliver the propulsion trade study and priced BOM, native FCStd assembly and\nSTEP/drawings, mass/CG/inertia data, runnable corrected simulator and PID code,\ngain configuration, repeatable verification scripts, logs and test procedures.\nPrepare scoped PDR/CDR packages for these deliverables. Mass, payload, operating\nconditions, landing tolerances and controller hardware remain open requirements.\nUse context/brief.md as the current project brief. Ask focused questions where\nmissing requirements block selection; keep provisional assumptions explicit.\n",
+  "documents": [
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/context/brief.md",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/README.md",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/pyproject.toml",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/README.md",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/pyproject.toml",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/PendulumControlProject/README.md",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/freecad-mcp/README.md",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/freecad-mcp/pyproject.toml",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/freecad-mcp/docs/configuration.md",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/freecad-mcp/docs/examples.md",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/freecad-mcp/docs/execution.md",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/freecad-mcp/docs/installation.md",
+    "/home/ngvnngkhoi/guacamole/examples/ehopper/freecad-mcp/docs/tools.md"
+  ],
+  "context": {
+    "instructions": "Start by inspecting the supplied inventory, tool documentation,\nand the hopper brief. Use list_files, read_text and read_document\nbefore planning; these readers do not require a work plan. Validate a work plan\nbefore writing files or running capability checks and engineering tools. Treat\nrepository availability, installed dependencies, successful execution and physical\nvalidation separately.\nRead binary sources in bounded excerpts with read_document, supplying their Ref\nalso in the tool action's inputs. Use extract to register the SourceExcerpt.\nCite source pages/slides/cell addresses. Text extraction does not inspect figures;\nrequest missing drawing/image interpretation or other capabilities from the human.\nResolve reader open items only after reviewing the relevant content.\n\nUse write_text for new source/configuration files under the sandbox. execute runs\nan argv list without a shell, with cwd inside the sandbox; use command[0]='python'\nand repository=<inventory name> to select that backend's interpreter/import root.\nInspect backend setup and entry points first. Copy required data/templates into\nthe sandbox when a backend assumes cwd-relative inputs. Keep supplied source\nrepositories and original documents unchanged. Request missing installations\nthrough ask_human; source checkout presence is not proof of a usable backend.\nDeclare generated files in outputs so they are snapshotted and publishable.\nFull stdout/stderr logs are also returned as ProducedFile records.\n\nSize propulsion from a complete mass and energy budget, including the battery\nand climb/landing energy beyond the 300-second hover. Use traceable vendor data\nand dated prices; if current product data cannot be obtained, request it from\nthe human and leave the selection provisional. Include coaxial interference,\ncounter-rotation torque, thrust reserve, current/voltage/thermal limits and usable\nbattery energy. Do not double isolated-rotor thrust without evidence. Retain\ncalibration parameters for coaxial loss and motor/ESC response.\n\nUse freecad_status to inspect the GUI addon, and freecad_run to execute a saved\nsandbox Python script through the supplied FreeCAD MCP. Headless execution is\nthe default and does not require the GUI addon. Declare all CAD exports in outputs.\nSave parametric FCStd and STEP files; verify actual solids, rotor/structure\nclearances, mounting interfaces and mass/CG/inertia with material densities.\nFreeCAD lengths are mm; simulator quantities are SI. Record the CAD-to-body frame\ntransform. A CAD process succeeding does not establish geometry acceptance.\n\nAudit the actual 6DOF plant and report each root cause before changing it.\nRead every caller of affected functions. Repair state-vector handling, imports,\nquaternion/frame conventions, integrator return values and propulsion interfaces\nbefore tuning control. The supplied propeller class is incomplete, and the\npendulum project is reference material, not an already-integrated hopper PID.\nSelect a physically realizable pitch/roll actuator arrangement: a coaxial pair\nalone does not provide arbitrary three-axis moments. Model motor lag, actuator\nsaturation, differential reaction torque and the selected tilt/control mechanism.\nUpdate PID at a fixed control cadence, holding commands between samples; do not\nmutate PID integrals inside adaptive solve_ivp RHS evaluations. Include anti-windup,\nfiltered derivative feedback, explicit units and configurable gains/limits.\nVerify hover trim, quaternion norm, attitude recovery, altitude tracking,\ndisturbances, saturation recovery and takeoff/300-second hover/landing. Propose\nnumeric acceptance tolerances for human agreement and record measured errors,\ntouchdown rates, thrust/current/energy and budget margins. Preserve original\nsource checkouts; publish a runnable modified copy/patch under results/software.\nStay within propulsion, CAD and simulated PID integration; the pendulum reference\ndoes not add Gazebo, ROS, MPC or machine-learning work to this project.\n\nVerification programs must compute checks from the actual artifact inputs and\nprint only a VerificationResult JSON object to stdout; use verify_command and\ninclude every tested artifact Ref in tool inputs. Never infer a passing physical\ncheck from process exit status. Use stderr for diagnostic output. Develop and\nretain the check program itself as an editable artifact. The Chief selects and\nrecords engineering choices using the evidence, including numerical search results.\n\nAskHuman and PDR/CDR readiness notifications reach the host console and WebSocket\ninbox. Wait for explicit human review dispositions. Preserve all corrections,\nassumptions, source provenance and evidence limitations in the review packages.\n",
+    "selected": [],
+    "pinned": [
+      {
+        "kind": "source",
+        "id": "inventory",
+        "revision": 2,
+        "sha256": "03cefe48c17e575a05741c129088e47593658342f2eb829518254de81d14f389",
+        "locator": ""
+      }
+    ],
+    "max_input_tokens": 1030000,
+    "reserved_output_tokens": 20000,
+    "search": "",
+    "max_search_results": 8,
+    "summaries": []
+  },
+  "target_reviews": [
+    "PDR",
+    "CDR"
+  ],
+  "budget": {
+    "max_steps": 20000,
+    "max_tool_calls": 15000,
+    "max_seconds": 720000.0,
+    "max_agents": 24
+  }
+}

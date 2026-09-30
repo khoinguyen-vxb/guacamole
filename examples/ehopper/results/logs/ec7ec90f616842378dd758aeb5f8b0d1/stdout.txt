@@ -1,0 +1,1 @@
+{"scope": "Preliminary sensitivity only; not VerificationResult", "calculated_load_cases": 486, "moving_mass_kg": 0.376100989025, "output": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/analysis/chief_actuator_13inch_trade_results.json", "physical_validation": "unperformed"}

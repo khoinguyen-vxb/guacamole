@@ -1,0 +1,93 @@
+{
+  "status": "Preliminary calculation only; Chief mechanism selection pending",
+  "input_sha256": "3fc6517131472d97474a5414fb8be380baa4616eae14b81a8abe13e40557cc04",
+  "assumptions": {
+    "pivot_to_vehicle_cg_m_cases": [
+      0.15,
+      0.25,
+      0.35
+    ],
+    "total_vector_tilt_limit_deg": 12,
+    "moving_assembly_mass_kg": 0.35,
+    "moving_cg_offset_from_pivot_m": 0.03,
+    "thrust_line_offset_from_pivot_m": 0.005,
+    "moving_transverse_inertia_kg_m2": 0.006,
+    "tilt_acceleration_rad_s2": 8.0,
+    "tilt_rate_rad_s": 1.0,
+    "friction_torque_nm": 0.05,
+    "rotor_radius_m": 0.254,
+    "each_propeller_mass_kg": 0.03,
+    "linkage_output_angle_per_servo_angle": 0.5,
+    "linkage_efficiency": 0.7,
+    "actuator_torque_margin_factor": 2.0,
+    "gravity_m_s2": 9.80665,
+    "servo_lag_s_cases": [
+      0.05,
+      0.1,
+      0.2
+    ]
+  },
+  "gimbal_cases": [
+    {
+      "phase": "hover",
+      "total_thrust_n": 14.317708999999995,
+      "transverse_force_n": 2.9768190868266493,
+      "vertical_force_at_limit_n": 14.004832706354811,
+      "vehicle_moment_nm_by_arm": {
+        "0.15": 0.4465228630239974,
+        "0.25": 0.7442047717066623,
+        "0.35": 1.0418866803893272
+      },
+      "pivot_load_terms_nm": {
+        "thrust_offset": 0.07158854499999998,
+        "gravity": 0.10296982499999999,
+        "acceleration": 0.048,
+        "friction": 0.05,
+        "gyroscopic_envelope": 0.9382495118512779
+      },
+      "required_servo_torque_nm_with_margin": 1.7297255455018257,
+      "required_servo_speed_rad_s": 2.0,
+      "required_servo_travel_each_side_deg": 24.0
+    },
+    {
+      "phase": "reserve",
+      "total_thrust_n": 21.956362704245457,
+      "transverse_force_n": 4.564984494047664,
+      "vertical_force_at_limit_n": 21.476563499998907,
+      "vehicle_moment_nm_by_arm": {
+        "0.15": 0.6847476741071495,
+        "0.25": 1.141246123511916,
+        "0.35": 1.5977445729166824
+      },
+      "pivot_load_terms_nm": {
+        "thrust_offset": 0.10978181352122729,
+        "gravity": 0.10296982499999999,
+        "acceleration": 0.048,
+        "friction": 0.05,
+        "gyroscopic_envelope": 1.1600553319422409
+      },
+      "required_servo_torque_nm_with_margin": 2.101152814947812,
+      "required_servo_speed_rad_s": 2.0,
+      "required_servo_travel_each_side_deg": 24.0
+    }
+  ],
+  "alternatives": [
+    {
+      "mechanism": "Two-axis gimbal carrying both coaxial rotors",
+      "assessment": "Direct transverse thrust authority; requires nonzero pivot-to-CG arm, bearings, two servos and full-travel clearance checks."
+    },
+    {
+      "mechanism": "Fixed coaxial rotors with slipstream vanes",
+      "assessment": "Potentially lower moving inertia, but vane force, drag, stall and wake distribution lack data; authority cannot presently be quantified."
+    }
+  ],
+  "limitations": [
+    "Loads are conservative preliminary envelopes, not multibody dynamics or structural verification.",
+    "Rotor gyroscopic estimate omits motor rotating inertia and aerodynamic tilt moments.",
+    "Servo stall torque is not continuous torque; no commercial servo selected.",
+    "Total tilt cone is 12 degrees, not independent simultaneous 12-degree axis limits.",
+    "Differential reaction torque must supply axial attitude control; its available authority still needs a constrained numerical allocation study.",
+    "Mass, power and cost allowances must be reconciled after mechanism selection.",
+    "No physical tests performed."
+  ]
+}

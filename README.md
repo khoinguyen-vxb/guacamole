@@ -108,7 +108,9 @@ an ephemeral local `codex exec -m gpt-6-astra` process for each turn using your
 existing ChatGPT login (`codex login`). It requires no API key; model inference
 is hosted and uses your Codex account limits. It runs in a temporary read-only
 working directory, skips user configuration, and disables shell, apps, plugins,
-web search, and delegation so Guacamole executes the returned typed actions.
+web search, and delegation by default so Guacamole executes the returned typed
+actions. Pass `CodexReasoning(web_search=True)` to enable built-in live web
+research; the Electronic Hopper launcher enables it for component sourcing.
 Timeouts and cancellation stop the child process group.
 
 Codex input budgeting uses a conservative UTF-8 byte upper bound, recorded as

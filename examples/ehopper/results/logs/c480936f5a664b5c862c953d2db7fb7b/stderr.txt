@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    import json, sys, pytest; from importlib.metadata import version; v = version('pytest'); sufficient = int(v.split('.')[0]) >= 7; print(json.dumps({'interpreter': sys.executable, 'pytest_version': v, 'pytest_module': pytest.__file__, 'pytest_ge_7': sufficient, 'scope': 'dependency import/version check only; no simulator or physical validation'})); sys.exit(0 if sufficient else 1)
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'pytest'

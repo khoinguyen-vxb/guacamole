@@ -1,0 +1,188 @@
+{
+  "matching_motor_count": 11,
+  "motor_entries": [
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/DYS_D4215-650.json",
+      "data": {
+        "id": "DYS_D4215-650",
+        "name": "D4215-650",
+        "manufacturer": "DYS",
+        "kv": 650.0,
+        "resistance": 0.011,
+        "io": 0.7,
+        "max_current": 39.0,
+        "weight_g": 83.1,
+        "max_power": 865.0,
+        "io_voltage": 14.8
+      }
+    },
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/DYS_MR2304-2150.json",
+      "data": {
+        "id": "DYS_MR2304-2150",
+        "name": "MR2304-2150",
+        "manufacturer": "DYS",
+        "kv": 2150.0,
+        "resistance": 0.11,
+        "io": 0.6,
+        "max_current": 19.0,
+        "weight_g": 28.9,
+        "max_power": 275.0,
+        "io_voltage": 11.1
+      }
+    },
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/SunnySky_A2814_KV1100_2-4S.json",
+      "data": {
+        "id": "SunnySky_A2814_KV1100_2-4S",
+        "name": "A2814 KV1100 2-4S",
+        "manufacturer": "SunnySky",
+        "kv": 1100.0,
+        "resistance": 0.051,
+        "io": 1.5,
+        "max_current": 40.0,
+        "weight_g": 98.1,
+        "max_power": 520.0,
+        "io_voltage": 10.0
+      }
+    },
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/SunnySky_A2814_KV900_2-4S.json",
+      "data": {
+        "id": "SunnySky_A2814_KV900_2-4S",
+        "name": "A2814 KV900 2-4S",
+        "manufacturer": "SunnySky",
+        "kv": 900.0,
+        "resistance": 0.08,
+        "io": 0.6,
+        "max_current": 29.0,
+        "weight_g": 98.1,
+        "max_power": 335.0,
+        "io_voltage": 10.0
+      }
+    },
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/SunnySky_X2814_KV1000_3-4S.json",
+      "data": {
+        "id": "SunnySky_X2814_KV1000_3-4S",
+        "name": "X2814 KV1000 3-4S",
+        "manufacturer": "SunnySky",
+        "kv": 1000.0,
+        "resistance": 0.032,
+        "io": 1.5,
+        "max_current": 40.0,
+        "weight_g": 108.0,
+        "max_power": 600.0,
+        "io_voltage": 10.0
+      }
+    },
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/SunnySky_X2814_KV1000_V3_3-4S.json",
+      "data": {
+        "id": "SunnySky_X2814_KV1000_V3_3-4S",
+        "name": "X2814 KV1000 V3 3-4S",
+        "manufacturer": "SunnySky",
+        "kv": 1000.0,
+        "resistance": 0.0355,
+        "io": 1.3,
+        "max_current": 55.0,
+        "weight_g": 113.1,
+        "max_power": 750.0,
+        "io_voltage": 10.0
+      }
+    },
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/SunnySky_X2814_KV1250_3-4S.json",
+      "data": {
+        "id": "SunnySky_X2814_KV1250_3-4S",
+        "name": "X2814 KV1250 3-4S",
+        "manufacturer": "SunnySky",
+        "kv": 1250.0,
+        "resistance": 0.025,
+        "io": 2.1,
+        "max_current": 55.0,
+        "weight_g": 108.0,
+        "max_power": 880.0,
+        "io_voltage": 10.0
+      }
+    },
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/SunnySky_X2814_KV1250_V3_3-4S.json",
+      "data": {
+        "id": "SunnySky_X2814_KV1250_V3_3-4S",
+        "name": "X2814 KV1250 V3 3-4S",
+        "manufacturer": "SunnySky",
+        "kv": 1250.0,
+        "resistance": 0.0253,
+        "io": 1.7,
+        "max_current": 55.0,
+        "weight_g": 110.0,
+        "max_power": 815.0,
+        "io_voltage": 10.0
+      }
+    },
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/SunnySky_X2814_KV1400_V3_3-4S.json",
+      "data": {
+        "id": "SunnySky_X2814_KV1400_V3_3-4S",
+        "name": "X2814 KV1400 V3 3-4S",
+        "manufacturer": "SunnySky",
+        "kv": 1400.0,
+        "resistance": 0.0159,
+        "io": 2.3,
+        "max_current": 80.0,
+        "weight_g": 109.1,
+        "max_power": 1180.0,
+        "io_voltage": 10.0
+      }
+    },
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/SunnySky_X2814_KV900_3-4S.json",
+      "data": {
+        "id": "SunnySky_X2814_KV900_3-4S",
+        "name": "X2814 KV900 3-4S",
+        "manufacturer": "SunnySky",
+        "kv": 900.0,
+        "resistance": 0.052,
+        "io": 0.7,
+        "max_current": 40.0,
+        "weight_g": 108.0,
+        "max_power": 570.0,
+        "io_voltage": 10.0
+      }
+    },
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/motors/SunnySky_X2814_KV900_V3_3-4S.json",
+      "data": {
+        "id": "SunnySky_X2814_KV900_V3_3-4S",
+        "name": "X2814 KV900 V3 3-4S",
+        "manufacturer": "SunnySky",
+        "kv": 900.0,
+        "resistance": 0.0336,
+        "io": 1.2,
+        "max_current": 50.0,
+        "weight_g": 108.0,
+        "max_power": 680.0,
+        "io_voltage": 10.0
+      }
+    }
+  ],
+  "truncated": false
+}
+{
+  "propeller_entries": [
+    {
+      "path": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_13x6.5E.json",
+      "metadata": {
+        "id": "APC_13x6.5E",
+        "manufacturer": "APC",
+        "model": "13x6.5E",
+        "diameter_in": 13.0,
+        "pitch_in": 6.5,
+        "blade_count": 2,
+        "data_csv": "APC_13x6.5E.csv"
+      }
+    }
+  ],
+  "scope": "Read-only catalogue inspection; no performance or physical acceptance check."
+}

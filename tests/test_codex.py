@@ -94,6 +94,8 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn('forced_login_method="chatgpt"', argv)
         self.assertIn("--ignore-user-config", argv)
         self.assertIn("--ephemeral", argv)
+        self.assertIn('web_search="disabled"', argv)
+        self.assertIn("Do not execute tools yourself.", capture["instructions"])
         self.assertFalse(Path(capture["cwd"]).exists())
         self.assertEqual(await self.provider.count_tokens("π"), 2)
         with Project(self.root / "state", reasoning=self.provider) as project:
@@ -106,6 +108,26 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(packet["provider"], "codex-cli")
             self.assertEqual(packet["token_count_method"], "utf8_upper_bound")
             self.assertEqual(packet["input_tokens"], len(packet["prompt"].encode()))
+
+    async def test_live_web_search_keeps_engineering_tools_in_runtime(self):
+        provider = CodexReasoning(executable=str(self.executable), web_search=True)
+        result = await provider.respond(self.packet)
+        self.assertEqual(result.action, Wait(reason="fixture"))
+        capture = json.loads(self.capture.read_text())
+        self.assertIn('web_search="live"', capture["argv"])
+        self.assertNotIn('web_search="disabled"', capture["argv"])
+        disabled = [
+            capture["argv"][i + 1]
+            for i, value in enumerate(capture["argv"])
+            if value == "--disable"
+        ]
+        self.assertEqual(disabled, ["shell_tool", "apps", "plugins", "multi_agent"])
+        self.assertIn("You may use built-in web search", capture["instructions"])
+        self.assertIn("source URLs, access dates", capture["instructions"])
+        self.assertIn(
+            "Do not execute Guacamole engineering tools yourself.",
+            capture["instructions"],
+        )
 
     async def test_cli_failure_and_invalid_output_never_return_an_action(self):
         for mode, message, attempts in (

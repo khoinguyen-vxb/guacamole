@@ -1,0 +1,1 @@
+{"scope": "Preliminary alternative analysis; not VerificationResult or Chief selection", "cases": 54, "conditional_passes": 0, "electrical_energy_only_passes": 20, "output": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/analysis/chief_50a_esc_candidate_screening.json", "physical_acceptance": "unperformed"}

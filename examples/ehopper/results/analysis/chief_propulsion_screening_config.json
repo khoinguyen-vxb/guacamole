@@ -1,0 +1,98 @@
+{
+  "schema": "hopper_preliminary_screening_v1",
+  "status": "Provisional analysis assumptions; not procurement selection or physical acceptance",
+  "date": "2026-09-30",
+  "currency": "AUD",
+  "cost_ceiling_exclusive": 500,
+  "cost_scope": "All purchased vehicle hardware/materials; excludes tax and shipping",
+  "payload_kg": 0,
+  "gravity_m_s2": 9.80665,
+  "density_kg_m3": 1.225,
+  "mission": {
+    "height_m": 5,
+    "hover_s": 300,
+    "climb_s": 15,
+    "landing_s": 25,
+    "climb_thrust_weight_ratio": 1.15,
+    "landing_power_hover_multiplier": 1.10,
+    "auxiliary_power_w": 8,
+    "additional_energy_allowance_fraction": 0.10,
+    "note": "Preliminary energy envelope, not a dynamically consistent trajectory. Include climb gravitational potential energy divided by assumed 0.60 incremental efficiency in addition to powered phase estimates; do not claim descent energy recovery."
+  },
+  "screening_limits": {
+    "minimum_thrust_weight_ratio": 1.5,
+    "maximum_hover_duty": 0.80,
+    "motor_catalogue_current_derating": 0.80,
+    "motor_catalogue_power_derating": 0.80,
+    "esc_continuous_current_a_assumed": 30,
+    "esc_current_derating": 0.80,
+    "esc_maximum_voltage_v_assumed": 25.2,
+    "battery_current_derating": 0.70,
+    "maximum_tilt_deg": 12,
+    "note": "Engineering screening targets only; catalogue maxima are not proof of continuous thermal capability. Check worst-case simultaneous tilt and thrust demand."
+  },
+  "coaxial": {
+    "per_rotor_thrust_factors": [[0.85, 0.65], [0.90, 0.75], [0.95, 0.85]],
+    "per_rotor_torque_factors": [[1.0, 1.0], [1.05, 1.15]],
+    "reaction_torque_signs": [1, -1],
+    "trim": "Solve equal opposing reaction torque and required total vertical thrust; do not assume equal RPM when torque factors differ.",
+    "status": "Uncalibrated sensitivity cases, not measured loss bounds",
+    "calibration_required": ["Rotor spacing and thrust interference", "Torque interference and yaw authority", "CW/CCW performance matching", "Motor/ESC command-to-RPM response"]
+  },
+  "electrical": {
+    "per_branch_esc_wire_resistance_ohm": 0.02,
+    "esc_efficiency": 0.95,
+    "motor_lag_s": 0.10,
+    "motor_lag_sweep_s": [0.05, 0.10, 0.20],
+    "note": "Solve shared battery sag from both branch input currents plus auxiliaries; distinguish motor current from pack current. Preserve motor calibration parameters."
+  },
+  "battery_alternatives": [
+    {"id": "assumed_4S_3000", "cells_series": 4, "capacity_ah": 3.0, "mass_kg": 0.34, "cost_aud": 55, "pack_resistance_ohm": 0.045, "continuous_current_a": 45},
+    {"id": "assumed_4S_4000", "cells_series": 4, "capacity_ah": 4.0, "mass_kg": 0.44, "cost_aud": 65, "pack_resistance_ohm": 0.035, "continuous_current_a": 60},
+    {"id": "assumed_6S_3000", "cells_series": 6, "capacity_ah": 3.0, "mass_kg": 0.50, "cost_aud": 80, "pack_resistance_ohm": 0.065, "continuous_current_a": 45}
+  ],
+  "battery_common": {
+    "nominal_cell_voltage_v": 3.7,
+    "full_cell_voltage_v": 4.2,
+    "end_of_mission_ocv_cell_v": 3.65,
+    "minimum_loaded_cell_voltage_v": 3.3,
+    "usable_capacity_fraction": 0.80,
+    "required_unused_fraction_of_usable_energy": 0.15,
+    "note": "All battery alternatives are hypothetical procurement envelopes. PyThrust synthetic example cell is excluded as product evidence. Conservatively estimate delivered usable energy using loaded voltage, not nominal energy alone."
+  },
+  "vehicle_allowances": [
+    {"item": "ESCs", "quantity": 2, "unit_mass_kg": 0.035, "unit_cost_aud": 22},
+    {"item": "Matched CW/CCW propellers", "quantity": 2, "unit_mass_kg": 0.030, "unit_cost_aud": 15},
+    {"item": "Primary structure and propulsion supports", "quantity": 1, "unit_mass_kg": 0.220, "unit_cost_aud": 35},
+    {"item": "Two-axis tilt bearings and linkage", "quantity": 1, "unit_mass_kg": 0.100, "unit_cost_aud": 20},
+    {"item": "Tilt servos", "quantity": 2, "unit_mass_kg": 0.055, "unit_cost_aud": 18},
+    {"item": "Landing legs and feet", "quantity": 1, "unit_mass_kg": 0.120, "unit_cost_aud": 15},
+    {"item": "Controller and IMU", "quantity": 1, "unit_mass_kg": 0.035, "unit_cost_aud": 30},
+    {"item": "Altitude and local position sensing allowance", "quantity": 1, "unit_mass_kg": 0.035, "unit_cost_aud": 35},
+    {"item": "Power regulation and distribution", "quantity": 1, "unit_mass_kg": 0.040, "unit_cost_aud": 15},
+    {"item": "Wiring connectors and disconnect", "quantity": 1, "unit_mass_kg": 0.060, "unit_cost_aud": 15},
+    {"item": "Fasteners mounts and battery retention", "quantity": 1, "unit_mass_kg": 0.065, "unit_cost_aud": 15},
+    {"item": "Remote inhibit receiver allowance", "quantity": 1, "unit_mass_kg": 0.015, "unit_cost_aud": 15}
+  ],
+  "motor_allowance": {"quantity": 2, "unit_cost_aud": 35, "mass_source": "Actual catalogue entry weight_g, converted to kg"},
+  "uncertainty": {"additional_structure_mass_kg_cases": [0, 0.15, 0.30], "additional_cost_aud": 20},
+  "catalogue_policy": {
+    "motor_kv_range_rpm_per_v": [300, 1200],
+    "motor_mass_range_g": [50, 250],
+    "propeller_diameter_search_range_in": [10, 20],
+    "note": "Search bounds are computational choices, not requirements or a diameter limit. Expand if results justify it.",
+    "reject_unknown_current_or_power_limits": true,
+    "reject_rpm_extrapolation": true,
+    "require_valid_static_rows_in_all_used_rpm_bands": true,
+    "retain_rejected_row_audit": true,
+    "handedness": "Unverified; no candidate is procurement-ready without matched CW/CCW evidence"
+  },
+  "required_followup": [
+    "Obtain dated supplier prices, availability, dimensions and continuous ratings",
+    "Select realizable transverse-control mechanism by recorded engineering decision",
+    "Check servo torque, speed, supply current and full-travel clearances",
+    "Measure complete assembly mass, CG and inertia",
+    "Calibrate coaxial thrust/torque and motor/ESC dynamics on a guarded test stand",
+    "Agree numerical simulation acceptance tolerances with the human"
+  ]
+}

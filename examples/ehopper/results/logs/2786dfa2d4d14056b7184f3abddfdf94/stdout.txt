@@ -1,0 +1,3355 @@
+{
+  "purpose": "catalogue inspection only, not engineering acceptance",
+  "motor_count": 7880,
+  "motor_manufacturers": {
+    "4-Max": 92,
+    "ALZRC": 4,
+    "ARC": 21,
+    "AXI motors": 192,
+    "Above All": 1,
+    "Actro": 8,
+    "Aeolian": 43,
+    "Airtek": 19,
+    "Align": 2,
+    "Apex": 15,
+    "Astro Flight": 26,
+    "Aveox": 23,
+    "Avionic": 38,
+    "Avroto": 4,
+    "AxisFlying": 11,
+    "BadAss": 62,
+    "BlackMagic": 16,
+    "Black Widow": 32,
+    "Brother Hobby": 117,
+    "Castle C.": 5,
+    "Cheetah": 35,
+    "Cobra": 134,
+    "Cyclon": 8,
+    "D-Power": 26,
+    "DYS": 91,
+    "DarwinFPV": 9,
+    "Detrum": 15,
+    "Dualsky": 343,
+    "Dymond": 41,
+    "E-Power Hobby": 5,
+    "E-flite": 34,
+    "EMAX": 71,
+    "EMP": 188,
+    "EP Product": 48,
+    "Eachine": 12,
+    "ElectriFly": 30,
+    "Esprit": 26,
+    "Exceed RC": 121,
+    "Extron": 24,
+    "FMS": 30,
+    "Feigao": 238,
+    "Flash Hobby": 42,
+    "Flyware": 24,
+    "Flywoo": 18,
+    "Foxy": 37,
+    "GEPRC": 20,
+    "GS-Models": 179,
+    "Gartt": 20,
+    "Graupner": 11,
+    "HET": 81,
+    "HGLRC": 26,
+    "Hacker": 199,
+    "HangLi": 27,
+    "HiTec": 10,
+    "Himax": 45,
+    "HobbyStar": 28,
+    "HobbyWing": 42,
+    "Hyperion": 58,
+    "Infinite": 8,
+    "Jamara": 13,
+    "Jeti": 12,
+    "KDA": 3,
+    "KDEDirect": 36,
+    "KEDA": 52,
+    "Karearea": 17,
+    "Kavan": 30,
+    "KingVal": 17,
+    "Kontronik": 10,
+    "Kyosho": 6,
+    "LDPower": 11,
+    "Lehner": 22,
+    "Leomotion": 281,
+    "Leopard": 85,
+    "LiPolice": 44,
+    "Lumenier": 15,
+    "MAD Comp.": 184,
+    "MEPS": 43,
+    "MP Jet": 3,
+    "Mamba": 35,
+    "MayTech": 17,
+    "Mega": 98,
+    "MicroDan": 4,
+    "Mini AC": 3,
+    "MotrolFly": 21,
+    "MultiStar": 26,
+    "Multiplex": 9,
+    "NeuMotors": 1566,
+    "O.S. Motor": 19,
+    "Pichler": 26,
+    "Planet-Hobby": 48,
+    "Plettenberg": 35,
+    "Poly-Tec": 25,
+    "PowerHD": 19,
+    "Pro-Tronik": 51,
+    "Pulso": 11,
+    "Quantum": 8,
+    "RCTimer": 29,
+    "RCinPower": 92,
+    "ROXXY": 68,
+    "RedRock": 41,
+    "Ripmax": 8,
+    "Robbe": 32,
+    "Scorpion": 125,
+    "Spektrum": 14,
+    "Spitz": 39,
+    "SunnySky": 210,
+    "Suppo": 33,
+    "Surpass": 64,
+    "T-Hobby": 38,
+    "T-Motor": 237,
+    "TFL Hobby": 86,
+    "TP Power": 133,
+    "Tacon": 8,
+    "Team Hunter RC": 19,
+    "Tempest": 69,
+    "Tenshock": 66,
+    "Thunder Tiger": 20,
+    "TomCat": 23,
+    "Torcman": 65,
+    "Torcster": 14,
+    "Turnigy": 19,
+    "Uberall": 5,
+    "VCI": 7,
+    "X-Team": 19,
+    "XPower": 36,
+    "Xnova": 102,
+    "Xoar": 34,
+    "iFlight": 77,
+    "iPower": 8
+  },
+  "filtered_motor_count": 1863,
+  "lightest_40_filtered_motors": [
+    {
+      "id": "4-Max_PPO-2827-1000",
+      "name": "PPO-2827-1000",
+      "manufacturer": "4-Max",
+      "kv": 1000.0,
+      "resistance": 0.262,
+      "io": 0.5,
+      "max_current": 14.0,
+      "weight_g": 50.2,
+      "max_power": 140.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "Avionic_C2826-15_930KV",
+      "name": "C2826-15 930KV",
+      "manufacturer": "Avionic",
+      "kv": 930.0,
+      "resistance": 0.139,
+      "io": 0.5,
+      "max_current": 12.0,
+      "weight_g": 50.2,
+      "max_power": 130.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "Avionic_C2826-18_1000KV",
+      "name": "C2826-18 1000KV",
+      "manufacturer": "Avionic",
+      "kv": 1000.0,
+      "resistance": 0.252,
+      "io": 0.5,
+      "max_current": 15.0,
+      "weight_g": 50.2,
+      "max_power": 190.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "Dualsky_ECO_2212X-980",
+      "name": "ECO 2212X-980",
+      "manufacturer": "Dualsky",
+      "kv": 980.0,
+      "resistance": 0.14,
+      "io": 0.4,
+      "max_current": 12.0,
+      "weight_g": 50.2,
+      "max_power": 128.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "EMP_C2826-18_KV1000",
+      "name": "C2826-18 KV1000",
+      "manufacturer": "EMP",
+      "kv": 1000.0,
+      "resistance": 0.262,
+      "io": 0.5,
+      "max_current": 0.0,
+      "weight_g": 50.2,
+      "max_power": 220.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "Exceed_RC_Alpha_370-1080",
+      "name": "Alpha 370-1080",
+      "manufacturer": "Exceed RC",
+      "kv": 1080.0,
+      "resistance": 0.19,
+      "io": 0.7,
+      "max_current": 11.0,
+      "weight_g": 50.2,
+      "max_power": 110.0,
+      "io_voltage": 8.0
+    },
+    {
+      "id": "Exceed_RC_Alpha_370-1200",
+      "name": "Alpha 370-1200",
+      "manufacturer": "Exceed RC",
+      "kv": 1200.0,
+      "resistance": 0.18,
+      "io": 0.6,
+      "max_current": 12.0,
+      "weight_g": 50.2,
+      "max_power": 140.0,
+      "io_voltage": 8.0
+    },
+    {
+      "id": "Exceed_RC_Rocket_2210-1080",
+      "name": "Rocket 2210-1080",
+      "manufacturer": "Exceed RC",
+      "kv": 1080.0,
+      "resistance": 0.21,
+      "io": 0.4,
+      "max_current": 20.0,
+      "weight_g": 50.2,
+      "max_power": 150.0,
+      "io_voltage": 8.0
+    },
+    {
+      "id": "Exceed_RC_Rocket_2210-1100",
+      "name": "Rocket 2210-1100",
+      "manufacturer": "Exceed RC",
+      "kv": 1100.0,
+      "resistance": 0.21,
+      "io": 0.5,
+      "max_current": 25.0,
+      "weight_g": 50.2,
+      "max_power": 150.0,
+      "io_voltage": 8.0
+    },
+    {
+      "id": "Exceed_RC_Rocket_2210-1200",
+      "name": "Rocket 2210-1200",
+      "manufacturer": "Exceed RC",
+      "kv": 1200.0,
+      "resistance": 0.14,
+      "io": 0.5,
+      "max_current": 25.0,
+      "weight_g": 50.2,
+      "max_power": 160.0,
+      "io_voltage": 8.0
+    },
+    {
+      "id": "Kavan_2826_KV1000",
+      "name": "2826 KV1000",
+      "manufacturer": "Kavan",
+      "kv": 1000.0,
+      "resistance": 0.163,
+      "io": 0.55,
+      "max_current": 14.0,
+      "weight_g": 50.2,
+      "max_power": 200.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "SunnySky_A2212_KV800_2-3S",
+      "name": "A2212 KV800 2-3S",
+      "manufacturer": "SunnySky",
+      "kv": 800.0,
+      "resistance": 0.158,
+      "io": 0.3,
+      "max_current": 10.5,
+      "weight_g": 50.2,
+      "max_power": 115.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "SunnySky_A2212_KV980_2-3S",
+      "name": "A2212 KV980 2-3S",
+      "manufacturer": "SunnySky",
+      "kv": 980.0,
+      "resistance": 0.123,
+      "io": 0.5,
+      "max_current": 14.5,
+      "weight_g": 50.2,
+      "max_power": 160.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "TomCat_Park370_2808-KV1070",
+      "name": "Park370 2808-KV1070",
+      "manufacturer": "TomCat",
+      "kv": 1070.0,
+      "resistance": 0.192,
+      "io": 0.7,
+      "max_current": 11.0,
+      "weight_g": 50.2,
+      "max_power": 120.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "4-Max_PPPO-2827-1000",
+      "name": "PPPO-2827-1000",
+      "manufacturer": "4-Max",
+      "kv": 1000.0,
+      "resistance": 0.25,
+      "io": 0.5,
+      "max_current": 17.0,
+      "weight_g": 51.0,
+      "max_power": 160.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "EMP_N2826-17_KV1000",
+      "name": "N2826-17 KV1000",
+      "manufacturer": "EMP",
+      "kv": 1000.0,
+      "resistance": 0.25,
+      "io": 0.5,
+      "max_current": 0.0,
+      "weight_g": 51.0,
+      "max_power": 150.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "EMP_SK2826-11_KV1000",
+      "name": "SK2826-11 KV1000",
+      "manufacturer": "EMP",
+      "kv": 1000.0,
+      "resistance": 0.13,
+      "io": 0.4,
+      "max_current": 0.0,
+      "weight_g": 51.0,
+      "max_power": 260.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "EMP_SK2826-17_KV750",
+      "name": "SK2826-17 KV750",
+      "manufacturer": "EMP",
+      "kv": 750.0,
+      "resistance": 0.25,
+      "io": 0.5,
+      "max_current": 0.0,
+      "weight_g": 51.0,
+      "max_power": 240.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "RedRock_2208_13_1200",
+      "name": "2208/13 1200",
+      "manufacturer": "RedRock",
+      "kv": 1200.0,
+      "resistance": 0.198,
+      "io": 0.6,
+      "max_current": 15.0,
+      "weight_g": 51.0,
+      "max_power": 235.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "RedRock_2208_17_1000",
+      "name": "2208/17 1000",
+      "manufacturer": "RedRock",
+      "kv": 1000.0,
+      "resistance": 0.25,
+      "io": 0.5,
+      "max_current": 15.0,
+      "weight_g": 51.0,
+      "max_power": 240.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "SunnySky_V4004_KV300_4-6S",
+      "name": "V4004 KV300 4-6S",
+      "manufacturer": "SunnySky",
+      "kv": 300.0,
+      "resistance": 0.448,
+      "io": 0.2,
+      "max_current": 10.0,
+      "weight_g": 51.0,
+      "max_power": 250.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "SunnySky_V4004_KV400_4-6S",
+      "name": "V4004 KV400 4-6S",
+      "manufacturer": "SunnySky",
+      "kv": 400.0,
+      "resistance": 0.4,
+      "io": 0.3,
+      "max_current": 13.0,
+      "weight_g": 51.0,
+      "max_power": 310.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "X-Team_XTO4004_300KV",
+      "name": "XTO4004 300KV",
+      "manufacturer": "X-Team",
+      "kv": 300.0,
+      "resistance": 0.448,
+      "io": 0.2,
+      "max_current": 10.0,
+      "weight_g": 51.0,
+      "max_power": 250.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "X-Team_XTO4004_400KV",
+      "name": "XTO4004 400KV",
+      "manufacturer": "X-Team",
+      "kv": 400.0,
+      "resistance": 0.288,
+      "io": 0.3,
+      "max_current": 11.0,
+      "weight_g": 51.0,
+      "max_power": 310.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "Himax_HC2808-0860",
+      "name": "HC2808-0860",
+      "manufacturer": "Himax",
+      "kv": 860.0,
+      "resistance": 0.255,
+      "io": 0.36,
+      "max_current": 11.0,
+      "weight_g": 51.9,
+      "max_power": 156.0,
+      "io_voltage": 8.0
+    },
+    {
+      "id": "Himax_HC2808-0980",
+      "name": "HC2808-0980",
+      "manufacturer": "Himax",
+      "kv": 980.0,
+      "resistance": 0.22,
+      "io": 0.4,
+      "max_current": 12.0,
+      "weight_g": 51.9,
+      "max_power": 156.0,
+      "io_voltage": 8.0
+    },
+    {
+      "id": "Himax_HC2808-1160",
+      "name": "HC2808-1160",
+      "manufacturer": "Himax",
+      "kv": 1160.0,
+      "resistance": 0.15,
+      "io": 0.6,
+      "max_current": 15.0,
+      "weight_g": 51.9,
+      "max_power": 156.0,
+      "io_voltage": 8.0
+    },
+    {
+      "id": "Avionic_C2830-14_850KV",
+      "name": "C2830-14 850KV",
+      "manufacturer": "Avionic",
+      "kv": 850.0,
+      "resistance": 0.272,
+      "io": 0.6,
+      "max_current": 0.0,
+      "weight_g": 52.2,
+      "max_power": 250.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "Cheetah_A2212-13_1000KV",
+      "name": "A2212-13 1000KV",
+      "manufacturer": "Cheetah",
+      "kv": 1000.0,
+      "resistance": 0.09,
+      "io": 0.5,
+      "max_current": 12.0,
+      "weight_g": 52.2,
+      "max_power": 130.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "Cheetah_A2212-15_930KV",
+      "name": "A2212-15 930KV",
+      "manufacturer": "Cheetah",
+      "kv": 930.0,
+      "resistance": 0.105,
+      "io": 0.4,
+      "max_current": 12.0,
+      "weight_g": 52.2,
+      "max_power": 130.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "GS-Models_A28-30-1100KV",
+      "name": "A28-30-1100KV",
+      "manufacturer": "GS-Models",
+      "kv": 1100.0,
+      "resistance": 0.1351,
+      "io": 0.9,
+      "max_current": 22.0,
+      "weight_g": 52.2,
+      "max_power": 220.0,
+      "io_voltage": 7.4
+    },
+    {
+      "id": "GS-Models_A28-30-910KV",
+      "name": "A28-30-910KV",
+      "manufacturer": "GS-Models",
+      "kv": 910.0,
+      "resistance": 0.1679,
+      "io": 0.8,
+      "max_current": 20.0,
+      "weight_g": 52.2,
+      "max_power": 260.0,
+      "io_voltage": 7.4
+    },
+    {
+      "id": "HobbyStar_2212-12_980KV",
+      "name": "2212-12 980KV",
+      "manufacturer": "HobbyStar",
+      "kv": 980.0,
+      "resistance": 0.152,
+      "io": 0.9,
+      "max_current": 21.0,
+      "weight_g": 52.2,
+      "max_power": 260.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "Xoar_Titan_T4004_300KV",
+      "name": "Titan T4004 300KV",
+      "manufacturer": "Xoar",
+      "kv": 300.0,
+      "resistance": 0.455,
+      "io": 0.15,
+      "max_current": 9.0,
+      "weight_g": 52.2,
+      "max_power": 204.0,
+      "io_voltage": 10.0
+    },
+    {
+      "id": "HangLi_W28-30_KV1000",
+      "name": "W28-30 KV1000",
+      "manufacturer": "HangLi",
+      "kv": 1000.0,
+      "resistance": 0.1146,
+      "io": 0.6,
+      "max_current": 20.0,
+      "weight_g": 53.0,
+      "max_power": 220.0,
+      "io_voltage": 7.4
+    },
+    {
+      "id": "Hyperion_Z-2213-20",
+      "name": "Z-2213-20",
+      "manufacturer": "Hyperion",
+      "kv": 1010.0,
+      "resistance": 0.15,
+      "io": 0.65,
+      "max_current": 14.0,
+      "weight_g": 53.0,
+      "max_power": 159.0,
+      "io_voltage": 8.0
+    },
+    {
+      "id": "Hyperion_Z-2213-24",
+      "name": "Z-2213-24",
+      "manufacturer": "Hyperion",
+      "kv": 850.0,
+      "resistance": 0.175,
+      "io": 0.6,
+      "max_current": 12.0,
+      "weight_g": 53.0,
+      "max_power": 159.0,
+      "io_voltage": 8.0
+    },
+    {
+      "id": "T-Motor_MN4004_KV300",
+      "name": "MN4004 KV300",
+      "manufacturer": "T-Motor",
+      "kv": 300.0,
+      "resistance": 0.452,
+      "io": 0.2,
+      "max_current": 9.0,
+      "weight_g": 53.0,
+      "max_power": 216.0,
+      "io_voltage": 22.0
+    },
+    {
+      "id": "T-Motor_MN4004_KV400",
+      "name": "MN4004 KV400",
+      "manufacturer": "T-Motor",
+      "kv": 400.0,
+      "resistance": 0.359,
+      "io": 0.2,
+      "max_current": 12.0,
+      "weight_g": 53.0,
+      "max_power": 300.0,
+      "io_voltage": 22.0
+    },
+    {
+      "id": "HiTec_2212_20_1000KV",
+      "name": "2212/20 1000KV",
+      "manufacturer": "HiTec",
+      "kv": 1000.0,
+      "resistance": 0.119,
+      "io": 0.44,
+      "max_current": 30.0,
+      "weight_g": 53.6,
+      "max_power": 320.0,
+      "io_voltage": 8.0
+    }
+  ],
+  "propeller_count": 441,
+  "filtered_propeller_count": 59,
+  "filtered_propeller_audit": [
+    {
+      "id": "APC_10x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_10x10E.csv",
+      "rows": 570,
+      "rejected_counts": {},
+      "rejected_static_rows": 0,
+      "examples": [],
+      "rpm_min": 1000.0,
+      "rpm_max": 19000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_10x12WE",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_10x12WE.csv",
+      "rows": 600,
+      "rejected_counts": {
+        "out_of_range": 3
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 361,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "12000.0",
+            "speed_mps": "71.0301856",
+            "advance_ratio": "1.3982",
+            "efficiency": "-0.0059",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0121",
+            "power_w": "125.806",
+            "torque_nm": "0.1",
+            "thrust_n": "-0.01",
+            "thrust_per_power_n_w": "-7.948746482679681e-05",
+            "mach": "0.52",
+            "reynolds": "187918.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 391,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "13000.0",
+            "speed_mps": "76.9445248",
+            "advance_ratio": "1.3981",
+            "efficiency": "-0.0062",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0117",
+            "power_w": "154.256",
+            "torque_nm": "0.113",
+            "thrust_n": "-0.013",
+            "thrust_per_power_n_w": "-8.427549009438855e-05",
+            "mach": "0.56",
+            "reynolds": "203577.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 20000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_10x5E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_10x5E.csv",
+      "rows": 623,
+      "rejected_counts": {
+        "out_of_range": 8
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 179,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "6000.0",
+            "speed_mps": "16.2856672",
+            "advance_ratio": "0.6412",
+            "efficiency": "-0.0066",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0102",
+            "power_w": "13.182",
+            "torque_nm": "0.021",
+            "thrust_n": "-0.005",
+            "thrust_per_power_n_w": "-0.0003793051130329237",
+            "mach": "0.24",
+            "reynolds": "72533.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 269,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "9000.0",
+            "speed_mps": "24.47544",
+            "advance_ratio": "0.6424",
+            "efficiency": "-0.0137",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0084",
+            "power_w": "36.73",
+            "torque_nm": "0.039",
+            "thrust_n": "-0.021",
+            "thrust_per_power_n_w": "-0.0005717397222978493",
+            "mach": "0.36",
+            "reynolds": "108812.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 21000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_10x6E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_10x6E.csv",
+      "rows": 628,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 330,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "11000.0",
+            "speed_mps": "34.8512384",
+            "advance_ratio": "0.7484",
+            "efficiency": "-0.0065",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.008",
+            "power_w": "63.622",
+            "torque_nm": "0.055",
+            "thrust_n": "-0.012",
+            "thrust_per_power_n_w": "-0.00018861400144604067",
+            "mach": "0.45",
+            "reynolds": "134025.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 389,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "13000.0",
+            "speed_mps": "41.1813248",
+            "advance_ratio": "0.7483",
+            "efficiency": "-0.0056",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0074",
+            "power_w": "97.293",
+            "torque_nm": "0.071",
+            "thrust_n": "-0.013",
+            "thrust_per_power_n_w": "-0.00013361701252916446",
+            "mach": "0.53",
+            "reynolds": "158390.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 21000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_10x7E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_10x7E.csv",
+      "rows": 629,
+      "rejected_counts": {},
+      "rejected_static_rows": 0,
+      "examples": [],
+      "rpm_min": 1000.0,
+      "rpm_max": 21000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_10x8E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_10x8E.csv",
+      "rows": 630,
+      "rejected_counts": {
+        "out_of_range": 1
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 631,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "21000.0",
+            "speed_mps": "84.9554816",
+            "advance_ratio": "0.9556",
+            "efficiency": "-0.0077",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0114",
+            "power_w": "634.33",
+            "torque_nm": "0.288",
+            "thrust_n": "-0.057",
+            "thrust_per_power_n_w": "-8.985859095423518e-05",
+            "mach": "0.87",
+            "reynolds": "262969.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 21000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_11x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_11x10E.csv",
+      "rows": 540,
+      "rejected_counts": {},
+      "rejected_static_rows": 0,
+      "examples": [],
+      "rpm_min": 1000.0,
+      "rpm_max": 18000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_11x12E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_11x12E.csv",
+      "rows": 540,
+      "rejected_counts": {
+        "out_of_range": 1
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 391,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "13000.0",
+            "speed_mps": "77.4765024",
+            "advance_ratio": "1.2798",
+            "efficiency": "-0.0069",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0094",
+            "power_w": "198.861",
+            "torque_nm": "0.146",
+            "thrust_n": "-0.018",
+            "thrust_per_power_n_w": "-9.05154856910103e-05",
+            "mach": "0.61",
+            "reynolds": "225838.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 18000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_11x5.5E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_11x5.5E.csv",
+      "rows": 594,
+      "rejected_counts": {
+        "out_of_range": 7
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "2.9504639999999998",
+            "advance_ratio": "0.6338",
+            "efficiency": "-0.0021",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0206",
+            "power_w": "0.199",
+            "torque_nm": "0.002",
+            "thrust_n": "0.0",
+            "thrust_per_power_n_w": "0.0",
+            "mach": "0.04",
+            "reynolds": "13721.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 210,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "7000.0",
+            "speed_mps": "20.975116800000002",
+            "advance_ratio": "0.6434",
+            "efficiency": "-0.0068",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0084",
+            "power_w": "27.792",
+            "torque_nm": "0.038",
+            "thrust_n": "-0.009",
+            "thrust_per_power_n_w": "-0.00032383419689119167",
+            "mach": "0.31",
+            "reynolds": "96139.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 20000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_11x7E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_11x7E.csv",
+      "rows": 564,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 209,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "7000.0",
+            "speed_mps": "25.6064512",
+            "advance_ratio": "0.7856",
+            "efficiency": "-0.0067",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0089",
+            "power_w": "29.441",
+            "torque_nm": "0.04",
+            "thrust_n": "-0.008",
+            "thrust_per_power_n_w": "-0.00027172990047892397",
+            "mach": "0.31",
+            "reynolds": "97850.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 565,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "19000.0",
+            "speed_mps": "69.27331840000001",
+            "advance_ratio": "0.783",
+            "efficiency": "-0.0044",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0089",
+            "power_w": "589.403",
+            "torque_nm": "0.296",
+            "thrust_n": "-0.038",
+            "thrust_per_power_n_w": "-6.447201659984764e-05",
+            "mach": "0.85",
+            "reynolds": "265504.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 19000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_11x8.5E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_11x8.5E.csv",
+      "rows": 630,
+      "rejected_counts": {
+        "out_of_range": 6
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 391,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "13000.0",
+            "speed_mps": "56.2778656",
+            "advance_ratio": "0.9296",
+            "efficiency": "-0.0066",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0071",
+            "power_w": "151.087",
+            "torque_nm": "0.111",
+            "thrust_n": "-0.018",
+            "thrust_per_power_n_w": "-0.00011913665636355212",
+            "mach": "0.59",
+            "reynolds": "185116.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 421,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "14000.0",
+            "speed_mps": "60.5873312",
+            "advance_ratio": "0.9294",
+            "efficiency": "-0.0071",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0069",
+            "power_w": "182.18",
+            "torque_nm": "0.124",
+            "thrust_n": "-0.021",
+            "thrust_per_power_n_w": "-0.00011527061148314854",
+            "mach": "0.64",
+            "reynolds": "199348.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 21000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_11x8E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_11x8E.csv",
+      "rows": 569,
+      "rejected_counts": {
+        "out_of_range": 1
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 570,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "19000.0",
+            "speed_mps": "77.293216",
+            "advance_ratio": "0.8736",
+            "efficiency": "-0.0049",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0097",
+            "power_w": "645.717",
+            "torque_nm": "0.325",
+            "thrust_n": "-0.041",
+            "thrust_per_power_n_w": "-6.349530831618186e-05",
+            "mach": "0.86",
+            "reynolds": "268665.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 19000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_12x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_12x10E.csv",
+      "rows": 540,
+      "rejected_counts": {
+        "out_of_range": 1
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 541,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "18000.0",
+            "speed_mps": "90.6105376",
+            "advance_ratio": "0.9909",
+            "efficiency": "-0.0054",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0122",
+            "power_w": "1065.137",
+            "torque_nm": "0.565",
+            "thrust_n": "-0.063",
+            "thrust_per_power_n_w": "-5.914732095495697e-05",
+            "mach": "0.9",
+            "reynolds": "290808.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 18000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_12x12E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_12x12E.csv",
+      "rows": 539,
+      "rejected_counts": {},
+      "rejected_static_rows": 0,
+      "examples": [],
+      "rpm_min": 1000.0,
+      "rpm_max": 18000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_12x6E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_12x6E.csv",
+      "rows": 532,
+      "rejected_counts": {
+        "out_of_range": 3
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 268,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "9000.0",
+            "speed_mps": "29.424172799999997",
+            "advance_ratio": "0.6436",
+            "efficiency": "-0.0058",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0067",
+            "power_w": "72.805",
+            "torque_nm": "0.077",
+            "thrust_n": "-0.014",
+            "thrust_per_power_n_w": "-0.00019229448526886887",
+            "mach": "0.44",
+            "reynolds": "138966.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 298,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "10000.0",
+            "speed_mps": "32.700976000000004",
+            "advance_ratio": "0.6437",
+            "efficiency": "-0.0092",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0064",
+            "power_w": "94.85",
+            "torque_nm": "0.091",
+            "thrust_n": "-0.027",
+            "thrust_per_power_n_w": "-0.00028465998945703745",
+            "mach": "0.49",
+            "reynolds": "154408.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 18000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_12x8E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_12x8E.csv",
+      "rows": 537,
+      "rejected_counts": {
+        "out_of_range": 5
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 388,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "13000.0",
+            "speed_mps": "53.948787200000005",
+            "advance_ratio": "0.8169",
+            "efficiency": "-0.0069",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0061",
+            "power_w": "198.595",
+            "torque_nm": "0.146",
+            "thrust_n": "-0.025",
+            "thrust_per_power_n_w": "-0.0001258843374707319",
+            "mach": "0.64",
+            "reynolds": "204986.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 418,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "14000.0",
+            "speed_mps": "58.0749664",
+            "advance_ratio": "0.8166",
+            "efficiency": "-0.0074",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0059",
+            "power_w": "239.948",
+            "torque_nm": "0.164",
+            "thrust_n": "-0.03",
+            "thrust_per_power_n_w": "-0.00012502708920266058",
+            "mach": "0.69",
+            "reynolds": "220744.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 18000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_13x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_13x10E.csv",
+      "rows": 539,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "5.0247296",
+            "advance_ratio": "0.9169",
+            "efficiency": "-0.0044",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0188",
+            "power_w": "0.412",
+            "torque_nm": "0.004",
+            "thrust_n": "0.0",
+            "thrust_per_power_n_w": "0.0",
+            "mach": "0.05",
+            "reynolds": "17943.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 511,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "17000.0",
+            "speed_mps": "86.4485952",
+            "advance_ratio": "0.9276",
+            "efficiency": "-0.0053",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0121",
+            "power_w": "1303.541",
+            "torque_nm": "0.732",
+            "thrust_n": "-0.081",
+            "thrust_per_power_n_w": "-6.213843676570204e-05",
+            "mach": "0.91",
+            "reynolds": "305492.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 18000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_13x4E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_13x4E.csv",
+      "rows": 558,
+      "rejected_counts": {
+        "out_of_range": 4
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "2.4184864",
+            "advance_ratio": "0.4414",
+            "efficiency": "-0.0036",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0159",
+            "power_w": "0.347",
+            "torque_nm": "0.003",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.0028818443804034585",
+            "mach": "0.05",
+            "reynolds": "17024.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 354,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "12000.0",
+            "speed_mps": "29.3437056",
+            "advance_ratio": "0.4461",
+            "efficiency": "-0.0099",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.005",
+            "power_w": "188.811",
+            "torque_nm": "0.15",
+            "thrust_n": "-0.064",
+            "thrust_per_power_n_w": "-0.0003389633019262649",
+            "mach": "0.62",
+            "reynolds": "204326.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 19000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_13x5.5E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_13x5.5E.csv",
+      "rows": 534,
+      "rejected_counts": {
+        "out_of_range": 6
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "3.0622239999999996",
+            "advance_ratio": "0.5588",
+            "efficiency": "-0.0068",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0169",
+            "power_w": "0.369",
+            "torque_nm": "0.004",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.0027100271002710027",
+            "mach": "0.05",
+            "reynolds": "18374.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 181,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "6000.0",
+            "speed_mps": "18.5834528",
+            "advance_ratio": "0.565",
+            "efficiency": "-0.0053",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0074",
+            "power_w": "34.978",
+            "torque_nm": "0.056",
+            "thrust_n": "-0.01",
+            "thrust_per_power_n_w": "-0.0002858939905083195",
+            "mach": "0.31",
+            "reynolds": "110305.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 18000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_13x6.5E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_13x6.5E.csv",
+      "rows": 537,
+      "rejected_counts": {
+        "out_of_range": 4
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 210,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "7000.0",
+            "speed_mps": "24.743664",
+            "advance_ratio": "0.6448",
+            "efficiency": "-0.0054",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0069",
+            "power_w": "51.524",
+            "torque_nm": "0.07",
+            "thrust_n": "-0.011",
+            "thrust_per_power_n_w": "-0.00021349274124679758",
+            "mach": "0.37",
+            "reynolds": "121403.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 240,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "8000.0",
+            "speed_mps": "28.3021024",
+            "advance_ratio": "0.6453",
+            "efficiency": "-0.0128",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0064",
+            "power_w": "71.881",
+            "torque_nm": "0.086",
+            "thrust_n": "-0.032",
+            "thrust_per_power_n_w": "-0.0004451802284331047",
+            "mach": "0.42",
+            "reynolds": "138752.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 18000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_13x8E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_13x8E.csv",
+      "rows": 539,
+      "rejected_counts": {
+        "out_of_range": 5
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 360,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "12000.0",
+            "speed_mps": "50.381408",
+            "advance_ratio": "0.7659",
+            "efficiency": "-0.0072",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0056",
+            "power_w": "211.92",
+            "torque_nm": "0.169",
+            "thrust_n": "-0.03",
+            "thrust_per_power_n_w": "-0.00014156285390713478",
+            "mach": "0.63",
+            "reynolds": "211040.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 390,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "13000.0",
+            "speed_mps": "54.5522912",
+            "advance_ratio": "0.7655",
+            "efficiency": "-0.0077",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0054",
+            "power_w": "259.808",
+            "torque_nm": "0.191",
+            "thrust_n": "-0.037",
+            "thrust_per_power_n_w": "-0.00014241285872644414",
+            "mach": "0.69",
+            "reynolds": "228616.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 18000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_14x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_14x10E.csv",
+      "rows": 449,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "5.082844799999999",
+            "advance_ratio": "0.8578",
+            "efficiency": "-0.0082",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0165",
+            "power_w": "0.533",
+            "torque_nm": "0.005",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.001876172607879925",
+            "mach": "0.06",
+            "reynolds": "19537.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 330,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "11000.0",
+            "speed_mps": "56.546089599999995",
+            "advance_ratio": "0.8674",
+            "efficiency": "-0.0091",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0055",
+            "power_w": "237.045",
+            "torque_nm": "0.206",
+            "thrust_n": "-0.038",
+            "thrust_per_power_n_w": "-0.00016030711468286612",
+            "mach": "0.63",
+            "reynolds": "215175.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 15000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_14x12E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_14x12E.csv",
+      "rows": 420,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "5.9635136",
+            "advance_ratio": "1.0063",
+            "efficiency": "-0.0034",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0178",
+            "power_w": "0.575",
+            "torque_nm": "0.005",
+            "thrust_n": "0.0",
+            "thrust_per_power_n_w": "0.0",
+            "mach": "0.06",
+            "reynolds": "19956.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 151,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "5000.0",
+            "speed_mps": "30.170729599999998",
+            "advance_ratio": "1.0182",
+            "efficiency": "-0.0086",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0086",
+            "power_w": "34.571",
+            "torque_nm": "0.066",
+            "thrust_n": "-0.01",
+            "thrust_per_power_n_w": "-0.000289259784212201",
+            "mach": "0.29",
+            "reynolds": "99961.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 14000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_14x14E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_14x14E.csv",
+      "rows": 448,
+      "rejected_counts": {},
+      "rejected_static_rows": 0,
+      "examples": [],
+      "rpm_min": 1000.0,
+      "rpm_max": 15000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_14x6E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_14x6E.csv",
+      "rows": 476,
+      "rejected_counts": {
+        "out_of_range": 5
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 151,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "5000.0",
+            "speed_mps": "16.87576",
+            "advance_ratio": "0.5695",
+            "efficiency": "-0.0081",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.007",
+            "power_w": "28.358",
+            "torque_nm": "0.054",
+            "thrust_n": "-0.014",
+            "thrust_per_power_n_w": "-0.0004936878482262501",
+            "mach": "0.28",
+            "reynolds": "94469.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 241,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "8000.0",
+            "speed_mps": "27.0101568",
+            "advance_ratio": "0.5696",
+            "efficiency": "-0.0066",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0057",
+            "power_w": "93.692",
+            "torque_nm": "0.112",
+            "thrust_n": "-0.023",
+            "thrust_per_power_n_w": "-0.00024548520684796994",
+            "mach": "0.45",
+            "reynolds": "151151.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 16000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_14x7E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_14x7E.csv",
+      "rows": 479,
+      "rejected_counts": {
+        "out_of_range": 4
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "3.7730175999999997",
+            "advance_ratio": "0.6368",
+            "efficiency": "-0.0086",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0151",
+            "power_w": "0.488",
+            "torque_nm": "0.005",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.0020491803278688526",
+            "mach": "0.06",
+            "reynolds": "19023.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 210,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "7000.0",
+            "speed_mps": "26.701699199999997",
+            "advance_ratio": "0.6436",
+            "efficiency": "-0.0059",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0062",
+            "power_w": "68.571",
+            "torque_nm": "0.094",
+            "thrust_n": "-0.015",
+            "thrust_per_power_n_w": "-0.00021875136719604497",
+            "mach": "0.4",
+            "reynolds": "133253.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 16000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_14x8.5E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_14x8.5E.csv",
+      "rows": 478,
+      "rejected_counts": {
+        "out_of_range": 8
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "4.448048",
+            "advance_ratio": "0.7503",
+            "efficiency": "-0.0078",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0155",
+            "power_w": "0.501",
+            "torque_nm": "0.005",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.001996007984031936",
+            "mach": "0.06",
+            "reynolds": "19010.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 241,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "8000.0",
+            "speed_mps": "35.942016",
+            "advance_ratio": "0.7581",
+            "efficiency": "-0.0068",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.006",
+            "power_w": "99.156",
+            "torque_nm": "0.118",
+            "thrust_n": "-0.019",
+            "thrust_per_power_n_w": "-0.00019161724958651014",
+            "mach": "0.46",
+            "reynolds": "152216.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 16000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_15x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_15x10E.csv",
+      "rows": 479,
+      "rejected_counts": {
+        "out_of_range": 6
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "5.1364896",
+            "advance_ratio": "0.8091",
+            "efficiency": "-0.0093",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.015",
+            "power_w": "0.685",
+            "torque_nm": "0.007",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.00145985401459854",
+            "mach": "0.06",
+            "reynolds": "22302.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 121,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "4000.0",
+            "speed_mps": "20.733715200000002",
+            "advance_ratio": "0.8164",
+            "efficiency": "-0.0051",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.008",
+            "power_w": "23.286",
+            "torque_nm": "0.056",
+            "thrust_n": "-0.006",
+            "thrust_per_power_n_w": "-0.0002576655501159495",
+            "mach": "0.25",
+            "reynolds": "89290.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 16000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_15x12E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_15x12E.csv",
+      "rows": 449,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "6.012688",
+            "advance_ratio": "0.947",
+            "efficiency": "-0.0039",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0161",
+            "power_w": "0.735",
+            "torque_nm": "0.007",
+            "thrust_n": "0.0",
+            "thrust_per_power_n_w": "0.0",
+            "mach": "0.06",
+            "reynolds": "22709.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 420,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "14000.0",
+            "speed_mps": "84.8839552",
+            "advance_ratio": "0.9548",
+            "efficiency": "-0.0101",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0088",
+            "power_w": "1096.505",
+            "torque_nm": "0.748",
+            "thrust_n": "-0.13",
+            "thrust_per_power_n_w": "-0.00011855851090510303",
+            "mach": "0.87",
+            "reynolds": "318286.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 15000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_15x4E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_15x4E.csv",
+      "rows": 469,
+      "rejected_counts": {
+        "out_of_range": 5
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "2.5391871999999998",
+            "advance_ratio": "0.3997",
+            "efficiency": "-0.003",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0132",
+            "power_w": "0.6",
+            "torque_nm": "0.006",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.0016666666666666668",
+            "mach": "0.06",
+            "reynolds": "21370.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 119,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "4000.0",
+            "speed_mps": "10.255097600000001",
+            "advance_ratio": "0.4038",
+            "efficiency": "-0.0093",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0069",
+            "power_w": "20.022",
+            "torque_nm": "0.048",
+            "thrust_n": "-0.018",
+            "thrust_per_power_n_w": "-0.0008990110878034162",
+            "mach": "0.24",
+            "reynolds": "85496.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 16000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_15x6E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_15x6E.csv",
+      "rows": 473,
+      "rejected_counts": {
+        "out_of_range": 4
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 238,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "8000.0",
+            "speed_mps": "27.4437856",
+            "advance_ratio": "0.5402",
+            "efficiency": "-0.0104",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0052",
+            "power_w": "120.599",
+            "torque_nm": "0.144",
+            "thrust_n": "-0.046",
+            "thrust_per_power_n_w": "-0.000381429365085946",
+            "mach": "0.48",
+            "reynolds": "172894.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 268,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "9000.0",
+            "speed_mps": "30.890463999999998",
+            "advance_ratio": "0.5405",
+            "efficiency": "-0.0221",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0048",
+            "power_w": "160.906",
+            "torque_nm": "0.171",
+            "thrust_n": "-0.115",
+            "thrust_per_power_n_w": "-0.0007147029942948057",
+            "mach": "0.54",
+            "reynolds": "194505.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 16000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_15x7E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_15x7E.csv",
+      "rows": 478,
+      "rejected_counts": {
+        "out_of_range": 8
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "3.8311328000000002",
+            "advance_ratio": "0.6031",
+            "efficiency": "-0.008",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0139",
+            "power_w": "0.633",
+            "torque_nm": "0.006",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.001579778830963665",
+            "mach": "0.06",
+            "reynolds": "21745.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 91,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "3000.0",
+            "speed_mps": "11.569395199999999",
+            "advance_ratio": "0.6074",
+            "efficiency": "-0.0046",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0084",
+            "power_w": "10.295",
+            "torque_nm": "0.033",
+            "thrust_n": "-0.004",
+            "thrust_per_power_n_w": "-0.00038853812530354544",
+            "mach": "0.18",
+            "reynolds": "65262.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 16000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_15x8E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_15x8E.csv",
+      "rows": 477,
+      "rejected_counts": {
+        "out_of_range": 8
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "4.260291199999999",
+            "advance_ratio": "0.6712",
+            "efficiency": "-0.0047",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0143",
+            "power_w": "0.65",
+            "torque_nm": "0.006",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.0015384615384615385",
+            "mach": "0.06",
+            "reynolds": "21902.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 239,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "8000.0",
+            "speed_mps": "34.4533728",
+            "advance_ratio": "0.6782",
+            "efficiency": "-0.0064",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0055",
+            "power_w": "127.162",
+            "torque_nm": "0.152",
+            "thrust_n": "-0.024",
+            "thrust_per_power_n_w": "-0.00018873562856828297",
+            "mach": "0.49",
+            "reynolds": "175347.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 16000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_16x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_16x10E.csv",
+      "rows": 448,
+      "rejected_counts": {
+        "out_of_range": 7
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "5.1990752",
+            "advance_ratio": "0.7675",
+            "efficiency": "-0.0092",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0138",
+            "power_w": "0.869",
+            "torque_nm": "0.008",
+            "thrust_n": "-0.002",
+            "thrust_per_power_n_w": "-0.0023014959723820483",
+            "mach": "0.07",
+            "reynolds": "25185.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 121,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "4000.0",
+            "speed_mps": "20.9706464",
+            "advance_ratio": "0.7741",
+            "efficiency": "-0.0098",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0073",
+            "power_w": "29.272",
+            "torque_nm": "0.07",
+            "thrust_n": "-0.014",
+            "thrust_per_power_n_w": "-0.00047827275211806506",
+            "mach": "0.26",
+            "reynolds": "100820.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 15000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_16x12E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_16x12E.csv",
+      "rows": 449,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 390,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "13000.0",
+            "speed_mps": "79.47477119999999",
+            "advance_ratio": "0.9026",
+            "efficiency": "-0.0063",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0076",
+            "power_w": "1047.073",
+            "torque_nm": "0.769",
+            "thrust_n": "-0.083",
+            "thrust_per_power_n_w": "-7.926858967808357e-05",
+            "mach": "0.86",
+            "reynolds": "332728.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 450,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "15000.0",
+            "speed_mps": "93.0200832",
+            "advance_ratio": "0.9155",
+            "efficiency": "-0.0086",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0183",
+            "power_w": "3887.141",
+            "torque_nm": "2.475",
+            "thrust_n": "-0.361",
+            "thrust_per_power_n_w": "-9.287031265395313e-05",
+            "mach": "0.99",
+            "reynolds": "384681.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 15000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_16x4E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_16x4E.csv",
+      "rows": 441,
+      "rejected_counts": {
+        "out_of_range": 5
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "2.5973024",
+            "advance_ratio": "0.3833",
+            "efficiency": "-0.0032",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0123",
+            "power_w": "0.773",
+            "torque_nm": "0.007",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.0012936610608020697",
+            "mach": "0.06",
+            "reynolds": "24336.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 91,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "3000.0",
+            "speed_mps": "7.8544928",
+            "advance_ratio": "0.3864",
+            "efficiency": "-0.0073",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0073",
+            "power_w": "12.44",
+            "torque_nm": "0.04",
+            "thrust_n": "-0.012",
+            "thrust_per_power_n_w": "-0.0009646302250803859",
+            "mach": "0.19",
+            "reynolds": "73017.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 15000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_16x6E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_16x6E.csv",
+      "rows": 443,
+      "rejected_counts": {
+        "out_of_range": 3
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 91,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "3000.0",
+            "speed_mps": "10.4473248",
+            "advance_ratio": "0.5142",
+            "efficiency": "-0.005",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0076",
+            "power_w": "12.877",
+            "torque_nm": "0.041",
+            "thrust_n": "-0.006",
+            "thrust_per_power_n_w": "-0.0004659470373534208",
+            "mach": "0.19",
+            "reynolds": "73555.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 239,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "8000.0",
+            "speed_mps": "27.917648",
+            "advance_ratio": "0.5152",
+            "efficiency": "-0.0158",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0048",
+            "power_w": "153.334",
+            "torque_nm": "0.183",
+            "thrust_n": "-0.087",
+            "thrust_per_power_n_w": "-0.0005673888374398371",
+            "mach": "0.51",
+            "reynolds": "196150.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 15000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_16x7E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_16x7E.csv",
+      "rows": 446,
+      "rejected_counts": {
+        "out_of_range": 7
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "3.8981888000000002",
+            "advance_ratio": "0.5753",
+            "efficiency": "-0.0067",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0131",
+            "power_w": "0.822",
+            "torque_nm": "0.008",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.0012165450121654502",
+            "mach": "0.06",
+            "reynolds": "25162.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 150,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "5000.0",
+            "speed_mps": "19.6608192",
+            "advance_ratio": "0.5805",
+            "efficiency": "-0.0108",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0062",
+            "power_w": "48.407",
+            "torque_nm": "0.092",
+            "thrust_n": "-0.027",
+            "thrust_per_power_n_w": "-0.0005577705703720537",
+            "mach": "0.32",
+            "reynolds": "125866.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 15000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_16x8E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_16x8E.csv",
+      "rows": 446,
+      "rejected_counts": {
+        "out_of_range": 8
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "4.3273472",
+            "advance_ratio": "0.6387",
+            "efficiency": "-0.0083",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0132",
+            "power_w": "0.828",
+            "torque_nm": "0.008",
+            "thrust_n": "-0.002",
+            "thrust_per_power_n_w": "-0.002415458937198068",
+            "mach": "0.06",
+            "reynolds": "24816.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 209,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "7000.0",
+            "speed_mps": "30.5462432",
+            "advance_ratio": "0.6442",
+            "efficiency": "-0.0068",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0053",
+            "power_w": "115.113",
+            "torque_nm": "0.157",
+            "thrust_n": "-0.026",
+            "thrust_per_power_n_w": "-0.00022586501958944688",
+            "mach": "0.45",
+            "reynolds": "173806.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 15000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_17x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_17x10E.csv",
+      "rows": 416,
+      "rejected_counts": {
+        "out_of_range": 3
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "5.270601599999999",
+            "advance_ratio": "0.7343",
+            "efficiency": "-0.0075",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0129",
+            "power_w": "1.081",
+            "torque_nm": "0.01",
+            "thrust_n": "-0.002",
+            "thrust_per_power_n_w": "-0.0018501387604070306",
+            "mach": "0.07",
+            "reynolds": "28180.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 150,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "5000.0",
+            "speed_mps": "26.5497056",
+            "advance_ratio": "0.74",
+            "efficiency": "-0.0061",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0061",
+            "power_w": "64.234",
+            "torque_nm": "0.123",
+            "thrust_n": "-0.015",
+            "thrust_per_power_n_w": "-0.00023352118815580535",
+            "mach": "0.35",
+            "reynolds": "140993.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 14000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_17x10WE",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_17x10WE.csv",
+      "rows": 415,
+      "rejected_counts": {
+        "out_of_range": 6
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "5.2482496",
+            "advance_ratio": "0.7317",
+            "efficiency": "-0.0096",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0143",
+            "power_w": "1.199",
+            "torque_nm": "0.011",
+            "thrust_n": "-0.002",
+            "thrust_per_power_n_w": "-0.0016680567139282735",
+            "mach": "0.07",
+            "reynolds": "35282.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 91,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "3000.0",
+            "speed_mps": "15.843097599999998",
+            "advance_ratio": "0.736",
+            "efficiency": "-0.0061",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0086",
+            "power_w": "19.565",
+            "torque_nm": "0.062",
+            "thrust_n": "-0.008",
+            "thrust_per_power_n_w": "-0.0004088934321492461",
+            "mach": "0.21",
+            "reynolds": "105895.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 14000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_17x12E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_17x12E.csv",
+      "rows": 419,
+      "rejected_counts": {},
+      "rejected_static_rows": 0,
+      "examples": [],
+      "rpm_min": 1000.0,
+      "rpm_max": 14000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_17x6E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_17x6E.csv",
+      "rows": 414,
+      "rejected_counts": {
+        "out_of_range": 3
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "3.531616",
+            "advance_ratio": "0.4919",
+            "efficiency": "-0.0024",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.012",
+            "power_w": "1.004",
+            "torque_nm": "0.01",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.00099601593625498",
+            "mach": "0.07",
+            "reynolds": "27506.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 209,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "7000.0",
+            "speed_mps": "24.9090688",
+            "advance_ratio": "0.4959",
+            "efficiency": "-0.0128",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0048",
+            "power_w": "137.903",
+            "torque_nm": "0.188",
+            "thrust_n": "-0.071",
+            "thrust_per_power_n_w": "-0.000514854644206435",
+            "mach": "0.48",
+            "reynolds": "192581.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 14000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_17x7E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_17x7E.csv",
+      "rows": 417,
+      "rejected_counts": {
+        "out_of_range": 7
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "3.9607743999999996",
+            "advance_ratio": "0.5522",
+            "efficiency": "-0.0046",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0121",
+            "power_w": "1.019",
+            "torque_nm": "0.01",
+            "thrust_n": "-0.001",
+            "thrust_per_power_n_w": "-0.0009813542688910698",
+            "mach": "0.07",
+            "reynolds": "27650.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 179,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "6000.0",
+            "speed_mps": "23.970284799999998",
+            "advance_ratio": "0.5568",
+            "efficiency": "-0.0125",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0052",
+            "power_w": "95.015",
+            "torque_nm": "0.151",
+            "thrust_n": "-0.05",
+            "thrust_per_power_n_w": "-0.0005262327000999842",
+            "mach": "0.41",
+            "reynolds": "165957.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 14000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_17x8E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_17x8E.csv",
+      "rows": 420,
+      "rejected_counts": {
+        "out_of_range": 9
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "4.3988736",
+            "advance_ratio": "0.613",
+            "efficiency": "-0.0088",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0123",
+            "power_w": "1.035",
+            "torque_nm": "0.01",
+            "thrust_n": "-0.002",
+            "thrust_per_power_n_w": "-0.0019323671497584543",
+            "mach": "0.07",
+            "reynolds": "27812.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 181,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "6000.0",
+            "speed_mps": "26.5809984",
+            "advance_ratio": "0.6174",
+            "efficiency": "-0.0067",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0054",
+            "power_w": "97.407",
+            "torque_nm": "0.155",
+            "thrust_n": "-0.025",
+            "thrust_per_power_n_w": "-0.0002566550658576899",
+            "mach": "0.41",
+            "reynolds": "166934.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 14000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_18x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_18x10E.csv",
+      "rows": 387,
+      "rejected_counts": {
+        "out_of_range": 5
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "5.3242464",
+            "advance_ratio": "0.6985",
+            "efficiency": "-0.0064",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.012",
+            "power_w": "1.357",
+            "torque_nm": "0.013",
+            "thrust_n": "-0.002",
+            "thrust_per_power_n_w": "-0.0014738393515106854",
+            "mach": "0.07",
+            "reynolds": "31344.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 91,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "3000.0",
+            "speed_mps": "16.066617599999997",
+            "advance_ratio": "0.7028",
+            "efficiency": "-0.0051",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0072",
+            "power_w": "22.048",
+            "torque_nm": "0.07",
+            "thrust_n": "-0.007",
+            "thrust_per_power_n_w": "-0.000317489114658926",
+            "mach": "0.22",
+            "reynolds": "94076.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 13000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_18x12E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_18x12E.csv",
+      "rows": 390,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 211,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "7000.0",
+            "speed_mps": "43.7383936",
+            "advance_ratio": "0.82",
+            "efficiency": "-0.0104",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0051",
+            "power_w": "197.547",
+            "torque_nm": "0.269",
+            "thrust_n": "-0.047",
+            "thrust_per_power_n_w": "-0.00023791806506805977",
+            "mach": "0.52",
+            "reynolds": "222641.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 361,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "12000.0",
+            "speed_mps": "74.7182656",
+            "advance_ratio": "0.8171",
+            "efficiency": "-0.0069",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0085",
+            "power_w": "1658.616",
+            "torque_nm": "1.32",
+            "thrust_n": "-0.154",
+            "thrust_per_power_n_w": "-9.284849537204513e-05",
+            "mach": "0.89",
+            "reynolds": "381532.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 13000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_18x12WE",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_18x12WE.csv",
+      "rows": 390,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 211,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "7000.0",
+            "speed_mps": "43.7473344",
+            "advance_ratio": "0.8202",
+            "efficiency": "-0.0111",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0053",
+            "power_w": "207.058",
+            "torque_nm": "0.282",
+            "thrust_n": "-0.053",
+            "thrust_per_power_n_w": "-0.0002559669271411875",
+            "mach": "0.52",
+            "reynolds": "243179.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 361,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "12000.0",
+            "speed_mps": "74.71379519999999",
+            "advance_ratio": "0.8171",
+            "efficiency": "-0.007",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0091",
+            "power_w": "1785.979",
+            "torque_nm": "1.421",
+            "thrust_n": "-0.167",
+            "thrust_per_power_n_w": "-9.350613865000652e-05",
+            "mach": "0.89",
+            "reynolds": "416718.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 13000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_18x8E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_18x8E.csv",
+      "rows": 390,
+      "rejected_counts": {
+        "out_of_range": 10
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "4.452518400000001",
+            "advance_ratio": "0.5846",
+            "efficiency": "-0.0092",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0115",
+            "power_w": "1.302",
+            "torque_nm": "0.012",
+            "thrust_n": "-0.003",
+            "thrust_per_power_n_w": "-0.002304147465437788",
+            "mach": "0.07",
+            "reynolds": "30973.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 61,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "2000.0",
+            "speed_mps": "8.9408",
+            "advance_ratio": "0.5866",
+            "efficiency": "-0.0042",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0083",
+            "power_w": "7.573",
+            "torque_nm": "0.036",
+            "thrust_n": "-0.004",
+            "thrust_per_power_n_w": "-0.0005281922619833619",
+            "mach": "0.15",
+            "reynolds": "61957.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 13000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_19x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_19x10E.csv",
+      "rows": 357,
+      "rejected_counts": {
+        "out_of_range": 4
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "5.3778912",
+            "advance_ratio": "0.6687",
+            "efficiency": "-0.006",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0113",
+            "power_w": "1.673",
+            "torque_nm": "0.016",
+            "thrust_n": "-0.002",
+            "thrust_per_power_n_w": "-0.001195457262402869",
+            "mach": "0.08",
+            "reynolds": "34779.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 91,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "3000.0",
+            "speed_mps": "16.2320224",
+            "advance_ratio": "0.6728",
+            "efficiency": "-0.0085",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0068",
+            "power_w": "27.082",
+            "torque_nm": "0.086",
+            "thrust_n": "-0.014",
+            "thrust_per_power_n_w": "-0.0005169485266966989",
+            "mach": "0.23",
+            "reynolds": "104379.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 12000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_19x12E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_19x12E.csv",
+      "rows": 359,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 211,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "7000.0",
+            "speed_mps": "44.1094368",
+            "advance_ratio": "0.7834",
+            "efficiency": "-0.0199",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0047",
+            "power_w": "240.132",
+            "torque_nm": "0.328",
+            "thrust_n": "-0.108",
+            "thrust_per_power_n_w": "-0.00044975263605017237",
+            "mach": "0.54",
+            "reynolds": "246707.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 331,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "11000.0",
+            "speed_mps": "68.9827424",
+            "advance_ratio": "0.7797",
+            "efficiency": "-0.0061",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0066",
+            "power_w": "1310.889",
+            "torque_nm": "1.138",
+            "thrust_n": "-0.116",
+            "thrust_per_power_n_w": "-8.848956700376616e-05",
+            "mach": "0.85",
+            "reynolds": "387509.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 12000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_19x12WE",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_19x12WE.csv",
+      "rows": 359,
+      "rejected_counts": {
+        "out_of_range": 2
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 211,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "7000.0",
+            "speed_mps": "44.118377599999995",
+            "advance_ratio": "0.7836",
+            "efficiency": "-0.0223",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0049",
+            "power_w": "251.328",
+            "torque_nm": "0.343",
+            "thrust_n": "-0.127",
+            "thrust_per_power_n_w": "-0.0005053157626687038",
+            "mach": "0.54",
+            "reynolds": "269902.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 331,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "11000.0",
+            "speed_mps": "68.9827424",
+            "advance_ratio": "0.7797",
+            "efficiency": "-0.0061",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0071",
+            "power_w": "1402.097",
+            "torque_nm": "1.217",
+            "thrust_n": "-0.125",
+            "thrust_per_power_n_w": "-8.915217706050295e-05",
+            "mach": "0.85",
+            "reynolds": "423933.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 12000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_19x8E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_19x8E.csv",
+      "rows": 358,
+      "rejected_counts": {
+        "out_of_range": 7
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "4.5106336",
+            "advance_ratio": "0.561",
+            "efficiency": "-0.0086",
+            "thrust_coeff": "-0.0002",
+            "power_coeff": "0.0108",
+            "power_w": "1.61",
+            "torque_nm": "0.015",
+            "thrust_n": "-0.003",
+            "thrust_per_power_n_w": "-0.0018633540372670807",
+            "mach": "0.08",
+            "reynolds": "34403.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 149,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "5000.0",
+            "speed_mps": "22.696220800000003",
+            "advance_ratio": "0.5644",
+            "efficiency": "-0.0093",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0051",
+            "power_w": "95.211",
+            "torque_nm": "0.182",
+            "thrust_n": "-0.039",
+            "thrust_per_power_n_w": "-0.0004096165359044648",
+            "mach": "0.38",
+            "reynolds": "172055.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 12000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_20x10E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_20x10E.csv",
+      "rows": 358,
+      "rejected_counts": {
+        "out_of_range": 5
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 61,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "2000.0",
+            "speed_mps": "10.948009599999999",
+            "advance_ratio": "0.6467",
+            "efficiency": "-0.005",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0076",
+            "power_w": "11.605",
+            "torque_nm": "0.055",
+            "thrust_n": "-0.005",
+            "thrust_per_power_n_w": "-0.00043084877208099956",
+            "mach": "0.16",
+            "reynolds": "76409.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 180,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "6000.0",
+            "speed_mps": "32.911084800000005",
+            "advance_ratio": "0.6479",
+            "efficiency": "-0.0096",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0045",
+            "power_w": "186.891",
+            "torque_nm": "0.297",
+            "thrust_n": "-0.054",
+            "thrust_per_power_n_w": "-0.0002889384721575678",
+            "mach": "0.49",
+            "reynolds": "229247.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 12000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_20x11E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_20x11E.csv",
+      "rows": 357,
+      "rejected_counts": {
+        "out_of_range": 6
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "5.8919872",
+            "advance_ratio": "0.6961",
+            "efficiency": "-0.009",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0106",
+            "power_w": "2.036",
+            "torque_nm": "0.019",
+            "thrust_n": "-0.003",
+            "thrust_per_power_n_w": "-0.0014734774066797642",
+            "mach": "0.08",
+            "reynolds": "38409.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 61,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "2000.0",
+            "speed_mps": "11.8286784",
+            "advance_ratio": "0.6984",
+            "efficiency": "-0.0049",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0077",
+            "power_w": "11.822",
+            "torque_nm": "0.056",
+            "thrust_n": "-0.005",
+            "thrust_per_power_n_w": "-0.0004229402808323465",
+            "mach": "0.16",
+            "reynolds": "76836.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 12000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_20x12WE",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_20x12WE.csv",
+      "rows": 358,
+      "rejected_counts": {
+        "out_of_range": 4
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "6.3300864",
+            "advance_ratio": "0.7478",
+            "efficiency": "-0.0051",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0113",
+            "power_w": "2.178",
+            "torque_nm": "0.021",
+            "thrust_n": "-0.002",
+            "thrust_per_power_n_w": "-0.0009182736455463729",
+            "mach": "0.08",
+            "reynolds": "42130.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 61,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "2000.0",
+            "speed_mps": "12.7093472",
+            "advance_ratio": "0.7506",
+            "efficiency": "-0.0046",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0082",
+            "power_w": "12.616",
+            "torque_nm": "0.06",
+            "thrust_n": "-0.005",
+            "thrust_per_power_n_w": "-0.0003963221306277743",
+            "mach": "0.16",
+            "reynolds": "84287.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 12000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_20x13E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_20x13E.csv",
+      "rows": 359,
+      "rejected_counts": {
+        "out_of_range": 1
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "6.7726560000000005",
+            "advance_ratio": "0.7997",
+            "efficiency": "-0.0079",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.011",
+            "power_w": "2.121",
+            "torque_nm": "0.02",
+            "thrust_n": "-0.002",
+            "thrust_per_power_n_w": "-0.000942951438000943",
+            "mach": "0.08",
+            "reynolds": "38880.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 12000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_20x15E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_20x15E.csv",
+      "rows": 358,
+      "rejected_counts": {
+        "out_of_range": 4
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 151,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "5000.0",
+            "speed_mps": "38.2353312",
+            "advance_ratio": "0.9032",
+            "efficiency": "-0.0087",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0056",
+            "power_w": "133.474",
+            "torque_nm": "0.255",
+            "thrust_n": "-0.03",
+            "thrust_per_power_n_w": "-0.00022476287516669913",
+            "mach": "0.41",
+            "reynolds": "197024.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 181,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "6000.0",
+            "speed_mps": "45.8841856",
+            "advance_ratio": "0.9032",
+            "efficiency": "-0.0136",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0051",
+            "power_w": "211.077",
+            "torque_nm": "0.336",
+            "thrust_n": "-0.062",
+            "thrust_per_power_n_w": "-0.00029373167138058625",
+            "mach": "0.5",
+            "reynolds": "236428.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 12000.0,
+      "all_loaded_bands_include_static": true
+    },
+    {
+      "id": "APC_20x8E",
+      "csv": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/data/propellers/apc_202602/APC_20x8E.csv",
+      "rows": 359,
+      "rejected_counts": {
+        "out_of_range": 9
+      },
+      "rejected_static_rows": 0,
+      "examples": [
+        {
+          "csv_line": 31,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "1000.0",
+            "speed_mps": "4.58216",
+            "advance_ratio": "0.5409",
+            "efficiency": "-0.0072",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0101",
+            "power_w": "1.947",
+            "torque_nm": "0.019",
+            "thrust_n": "-0.003",
+            "thrust_per_power_n_w": "-0.0015408320493066256",
+            "mach": "0.08",
+            "reynolds": "37952.0",
+            "figure_of_merit": "0.0"
+          }
+        },
+        {
+          "csv_line": 121,
+          "reason": "out_of_range",
+          "row": {
+            "rpm": "4000.0",
+            "speed_mps": "18.418048000000002",
+            "advance_ratio": "0.5439",
+            "efficiency": "-0.0083",
+            "thrust_coeff": "-0.0001",
+            "power_coeff": "0.0053",
+            "power_w": "65.057",
+            "torque_nm": "0.155",
+            "thrust_n": "-0.029",
+            "thrust_per_power_n_w": "-0.00044576294633936396",
+            "mach": "0.32",
+            "reynolds": "151837.0",
+            "figure_of_merit": "0.0"
+          }
+        }
+      ],
+      "rpm_min": 1000.0,
+      "rpm_max": 12000.0,
+      "all_loaded_bands_include_static": true
+    }
+  ],
+  "limitations": [
+    "Exploratory size and motor filters are not requirements or selections.",
+    "Permissive loader skips invalid rows; audit is limited to selected exploratory propeller family.",
+    "No prices, handedness, mounting interfaces or continuous thermal validation established.",
+    "Synthetic battery example is not a commercial product."
+  ]
+}

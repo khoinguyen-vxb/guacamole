@@ -1,0 +1,387 @@
+{
+  "status": "Inspection of preliminary screening, not verification or selection",
+  "cases": 54,
+  "conditional_passing_cases": [
+    {
+      "motor_id": "SunnySky_X2814_KV900_3-4S",
+      "propeller_id": "APC_13x6.5E",
+      "battery_id": "Graphene_9067000412_0_provisional",
+      "mass_kg": 1.565100989025,
+      "estimated_cost_aud": 460,
+      "cost_margin_aud": 40,
+      "added_mass_kg": 0.0,
+      "thrust_factors": [
+        0.95,
+        0.85
+      ],
+      "torque_factors": [
+        1.0,
+        1.0
+      ],
+      "hover": {
+        "rotors": [
+          {
+            "rpm": 4838.146291625133,
+            "thrust_n": 8.100543186394352,
+            "torque_nm": 0.15424755615827968,
+            "shaft_power_w": 78.1494464159292,
+            "motor_current_a": 15.237489677830913,
+            "motor_voltage_v": 6.168067565052911,
+            "motor_power_w": 93.98586585465739,
+            "branch_voltage_v": 6.472817358609529,
+            "branch_input_power_w": 103.82051335610258,
+            "duty": 0.44886047916545235,
+            "esc_input_current_a": 7.199480966389282
+          },
+          {
+            "rpm": 4838.146291625133,
+            "thrust_n": 7.247854429931789,
+            "torque_nm": 0.15424755615827968,
+            "shaft_power_w": 78.1494464159292,
+            "motor_current_a": 15.237489677830913,
+            "motor_voltage_v": 6.168067565052911,
+            "motor_power_w": 93.98586585465739,
+            "branch_voltage_v": 6.472817358609529,
+            "branch_input_power_w": 103.82051335610258,
+            "duty": 0.44886047916545235,
+            "esc_input_current_a": 7.199480966389282
+          }
+        ],
+        "vertical_thrust_n": 15.348397616326142,
+        "tilt_deg": 0,
+        "reaction_torque_nm": 0.0,
+        "battery_voltage_v": 14.420555292914559,
+        "battery_current_a": 14.953725590453434,
+        "delivered_power_w": 215.64102671220516,
+        "battery_internal_loss_w": 2.6833669084149827,
+        "assumed_envelope_checks": {
+          "duty_available": true,
+          "motor_current_envelope": true,
+          "motor_power_envelope": true,
+          "esc_current_envelope": true,
+          "esc_voltage_envelope": true,
+          "battery_current_envelope": true,
+          "battery_loaded_voltage": true
+        },
+        "within_assumed_envelope": true
+      },
+      "climb": {
+        "rotors": [
+          {
+            "rpm": 5185.335970324319,
+            "thrust_n": 9.315624662875052,
+            "torque_nm": 0.17630684785326234,
+            "shaft_power_w": 95.73587245943064,
+            "motor_current_a": 17.31652893980147,
+            "motor_voltage_v": 6.661943916341142,
+            "motor_power_w": 115.3617446226557,
+            "branch_voltage_v": 7.0082744951371705,
+            "branch_input_power_w": 127.74630327696353,
+            "duty": 0.4873585795028513,
+            "esc_input_current_a": 8.883535732654378
+          },
+          {
+            "rpm": 5185.335970324319,
+            "thrust_n": 8.33503259309873,
+            "torque_nm": 0.17630684785326234,
+            "shaft_power_w": 95.73587245943064,
+            "motor_current_a": 17.31652893980147,
+            "motor_voltage_v": 6.661943916341142,
+            "motor_power_w": 115.3617446226557,
+            "branch_voltage_v": 7.0082744951371705,
+            "branch_input_power_w": 127.74630327696353,
+            "duty": 0.4873585795028513,
+            "esc_input_current_a": 8.883535732654378
+          }
+        ],
+        "vertical_thrust_n": 17.650657255973783,
+        "tilt_deg": 0,
+        "reaction_torque_nm": 0.0,
+        "battery_voltage_v": 14.38011925897812,
+        "battery_current_a": 18.323395085156715,
+        "delivered_power_w": 263.4926065539271,
+        "battery_internal_loss_w": 4.028961689360943,
+        "assumed_envelope_checks": {
+          "duty_available": true,
+          "motor_current_envelope": true,
+          "motor_power_envelope": true,
+          "esc_current_envelope": true,
+          "esc_voltage_envelope": true,
+          "battery_current_envelope": true,
+          "battery_loaded_voltage": true
+        },
+        "within_assumed_envelope": true
+      },
+      "reserve": {
+        "rotors": [
+          {
+            "rpm": 5979.956133119207,
+            "thrust_n": 12.422271207860858,
+            "torque_nm": 0.23267076683813231,
+            "shaft_power_w": 145.70298101976772,
+            "motor_current_a": 22.628703154113403,
+            "motor_voltage_v": 7.821088267479682,
+            "motor_power_w": 176.98108474691682,
+            "branch_voltage_v": 8.273662330561951,
+            "branch_input_power_w": 197.07605144805945,
+            "duty": 0.5801347550063616,
+            "esc_input_current_a": 13.818628589919223
+          },
+          {
+            "rpm": 5979.956133119207,
+            "thrust_n": 11.114663712296558,
+            "torque_nm": 0.23267076683813231,
+            "shaft_power_w": 145.70298101976772,
+            "motor_current_a": 22.628703154113403,
+            "motor_voltage_v": 7.821088267479682,
+            "motor_power_w": 176.98108474691682,
+            "branch_voltage_v": 8.273662330561951,
+            "branch_input_power_w": 197.07605144805945,
+            "duty": 0.5801347550063616,
+            "esc_input_current_a": 13.818628589919223
+          }
+        ],
+        "vertical_thrust_n": 23.022596420779703,
+        "tilt_deg": 12,
+        "reaction_torque_nm": 0.0,
+        "battery_voltage_v": 14.261621561478805,
+        "battery_current_a": 28.198203210099713,
+        "delivered_power_w": 402.1521028961189,
+        "battery_internal_loss_w": 9.541663971336932,
+        "assumed_envelope_checks": {
+          "duty_available": true,
+          "motor_current_envelope": true,
+          "motor_power_envelope": true,
+          "esc_current_envelope": true,
+          "esc_voltage_envelope": true,
+          "battery_current_envelope": true,
+          "battery_loaded_voltage": true
+        },
+        "within_assumed_envelope": true
+      },
+      "phase_energy_wh": {
+        "hover": 17.97008555935043,
+        "climb": 1.1334145588219693,
+        "landing": 1.6472578429404563
+      },
+      "mission_energy_with_allowance_wh": 22.825833757224142,
+      "usable_energy_envelope_wh": 42.24,
+      "permitted_mission_energy_wh": 35.904,
+      "energy_margin_wh": 13.078166242775861,
+      "screening_checks": {
+        "cost_estimate_below_ceiling": true,
+        "hover_duty": true,
+        "hover_envelope": true,
+        "climb_envelope": true,
+        "simultaneous_tilt_thrust_reserve": true,
+        "energy_with_reserve": true
+      },
+      "procurement_ready": false,
+      "physical_validation": "unperformed",
+      "conditional_screening_feasible": true,
+      "cost_status": "Hypothetical allowances only; budget compliance unresolved",
+      "thermal_acceptance": "unperformed",
+      "yaw_authority_acceptance": "unperformed; equal-torque trim only",
+      "pack_resistance_ohm": 0.012,
+      "additional_mass_kg": 0.0
+    },
+    {
+      "motor_id": "SunnySky_X2814_KV900_3-4S",
+      "propeller_id": "APC_13x6.5E",
+      "battery_id": "Graphene_9067000412_0_provisional",
+      "mass_kg": 1.565100989025,
+      "estimated_cost_aud": 460,
+      "cost_margin_aud": 40,
+      "added_mass_kg": 0.0,
+      "thrust_factors": [
+        0.95,
+        0.85
+      ],
+      "torque_factors": [
+        1.0,
+        1.0
+      ],
+      "hover": {
+        "rotors": [
+          {
+            "rpm": 4838.146291625133,
+            "thrust_n": 8.100543186394352,
+            "torque_nm": 0.15424755615827968,
+            "shaft_power_w": 78.1494464159292,
+            "motor_current_a": 15.237489677830913,
+            "motor_voltage_v": 6.168067565052911,
+            "motor_power_w": 93.98586585465739,
+            "branch_voltage_v": 6.472817358609529,
+            "branch_input_power_w": 103.82051335610258,
+            "duty": 0.46026223473569605,
+            "esc_input_current_a": 7.382359000926903
+          },
+          {
+            "rpm": 4838.146291625133,
+            "thrust_n": 7.247854429931789,
+            "torque_nm": 0.15424755615827968,
+            "shaft_power_w": 78.1494464159292,
+            "motor_current_a": 15.237489677830913,
+            "motor_voltage_v": 6.168067565052911,
+            "motor_power_w": 93.98586585465739,
+            "branch_voltage_v": 6.472817358609529,
+            "branch_input_power_w": 103.82051335610258,
+            "duty": 0.46026223473569605,
+            "esc_input_current_a": 7.382359000926903
+          }
+        ],
+        "vertical_thrust_n": 15.348397616326142,
+        "tilt_deg": 0,
+        "reaction_torque_nm": 0.0,
+        "battery_voltage_v": 14.063324926770324,
+        "battery_current_a": 15.333573520847864,
+        "delivered_power_w": 215.64102671220516,
+        "battery_internal_loss_w": 8.229146692173638,
+        "assumed_envelope_checks": {
+          "duty_available": true,
+          "motor_current_envelope": true,
+          "motor_power_envelope": true,
+          "esc_current_envelope": true,
+          "esc_voltage_envelope": true,
+          "battery_current_envelope": true,
+          "battery_loaded_voltage": true
+        },
+        "within_assumed_envelope": true
+      },
+      "climb": {
+        "rotors": [
+          {
+            "rpm": 5185.335970324319,
+            "thrust_n": 9.315624662875052,
+            "torque_nm": 0.17630684785326234,
+            "shaft_power_w": 95.73587245943064,
+            "motor_current_a": 17.31652893980147,
+            "motor_voltage_v": 6.661943916341142,
+            "motor_power_w": 115.3617446226557,
+            "branch_voltage_v": 7.0082744951371705,
+            "branch_input_power_w": 127.74630327696353,
+            "duty": 0.5028049889744691,
+            "esc_input_current_a": 9.165091729108374
+          },
+          {
+            "rpm": 5185.335970324319,
+            "thrust_n": 8.33503259309873,
+            "torque_nm": 0.17630684785326234,
+            "shaft_power_w": 95.73587245943064,
+            "motor_current_a": 17.31652893980147,
+            "motor_voltage_v": 6.661943916341142,
+            "motor_power_w": 115.3617446226557,
+            "branch_voltage_v": 7.0082744951371705,
+            "branch_input_power_w": 127.74630327696353,
+            "duty": 0.5028049889744691,
+            "esc_input_current_a": 9.165091729108374
+          }
+        ],
+        "vertical_thrust_n": 17.650657255973783,
+        "tilt_deg": 0,
+        "reaction_torque_nm": 0.0,
+        "battery_voltage_v": 13.938355125376507,
+        "battery_current_a": 18.90413927495692,
+        "delivered_power_w": 263.4926065539271,
+        "battery_internal_loss_w": 12.507826860443906,
+        "assumed_envelope_checks": {
+          "duty_available": true,
+          "motor_current_envelope": true,
+          "motor_power_envelope": true,
+          "esc_current_envelope": true,
+          "esc_voltage_envelope": true,
+          "battery_current_envelope": true,
+          "battery_loaded_voltage": true
+        },
+        "within_assumed_envelope": true
+      },
+      "reserve": {
+        "rotors": [
+          {
+            "rpm": 5979.956133119207,
+            "thrust_n": 12.422271207860858,
+            "torque_nm": 0.23267076683813231,
+            "shaft_power_w": 145.70298101976772,
+            "motor_current_a": 22.628703154113403,
+            "motor_voltage_v": 7.821088267479682,
+            "motor_power_w": 176.98108474691682,
+            "branch_voltage_v": 8.273662330561951,
+            "branch_input_power_w": 197.07605144805945,
+            "duty": 0.6100548099070504,
+            "esc_input_current_a": 14.531314948553394
+          },
+          {
+            "rpm": 5979.956133119207,
+            "thrust_n": 11.114663712296558,
+            "torque_nm": 0.23267076683813231,
+            "shaft_power_w": 145.70298101976772,
+            "motor_current_a": 22.628703154113403,
+            "motor_voltage_v": 7.821088267479682,
+            "motor_power_w": 176.98108474691682,
+            "branch_voltage_v": 8.273662330561951,
+            "branch_input_power_w": 197.07605144805945,
+            "duty": 0.6100548099070504,
+            "esc_input_current_a": 14.531314948553394
+          }
+        ],
+        "vertical_thrust_n": 23.022596420779703,
+        "tilt_deg": 12,
+        "reaction_torque_nm": 0.0,
+        "battery_voltage_v": 13.562162278209966,
+        "battery_current_a": 29.6525063368581,
+        "delivered_power_w": 402.1521028961189,
+        "battery_internal_loss_w": 30.774489622009344,
+        "assumed_envelope_checks": {
+          "duty_available": true,
+          "motor_current_envelope": true,
+          "motor_power_envelope": true,
+          "esc_current_envelope": true,
+          "esc_voltage_envelope": true,
+          "battery_current_envelope": true,
+          "battery_loaded_voltage": true
+        },
+        "within_assumed_envelope": true
+      },
+      "phase_energy_wh": {
+        "hover": 17.97008555935043,
+        "climb": 1.1334145588219693,
+        "landing": 1.6472578429404563
+      },
+      "mission_energy_with_allowance_wh": 22.825833757224142,
+      "usable_energy_envelope_wh": 42.24,
+      "permitted_mission_energy_wh": 35.904,
+      "energy_margin_wh": 13.078166242775861,
+      "screening_checks": {
+        "cost_estimate_below_ceiling": true,
+        "hover_duty": true,
+        "hover_envelope": true,
+        "climb_envelope": true,
+        "simultaneous_tilt_thrust_reserve": true,
+        "energy_with_reserve": true
+      },
+      "procurement_ready": false,
+      "physical_validation": "unperformed",
+      "conditional_screening_feasible": true,
+      "cost_status": "Hypothetical allowances only; budget compliance unresolved",
+      "thermal_acceptance": "unperformed",
+      "yaw_authority_acceptance": "unperformed; equal-torque trim only",
+      "pack_resistance_ohm": 0.035,
+      "additional_mass_kg": 0.0
+    }
+  ],
+  "failed_constraint_counts": {
+    "simultaneous_tilt_thrust_reserve": 52,
+    "climb_envelope": 22,
+    "energy_with_reserve": 12,
+    "hover_envelope": 7
+  },
+  "rejection_counts": {},
+  "limitations": [
+    "Reverse propeller uses normal-rotation coefficient table provisionally; equivalence unmeasured.",
+    "Supplier motor 40 A rating is 30-second limited, not proven for 300-second hover.",
+    "ESC envelope, structure, servos, electronics and AUD prices remain hypothetical.",
+    "Resistance and coaxial sweeps are not validated uncertainty bounds.",
+    "Static mission energy envelope is not a flight trajectory simulation.",
+    "Differential yaw authority and installed thermal endurance remain unverified."
+  ]
+}

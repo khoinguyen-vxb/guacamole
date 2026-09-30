@@ -1,0 +1,15 @@
+Headless FreeCAD script finished (exit 0).
+Output:
+Recompute......
+[32;1m
+*******************************************************************
+******        Statistics on Transfer (Write)                 ******[0m
+[32;1m
+*******************************************************************
+******        Transfer Mode = 0  I.E.  As Is       ******[0m
+[32;1m******        Transferring Shape, ShapeType = 0                      ******[0m
+[32;1m** WorkSession : Sending all data[0m
+[32;1m Step File Name : /home/ngvnngkhoi/guacamole/examples/ehopper/results/cad/chief_freecad_smoke.step(170 ents)  Write  Done[0m
+Adding snap-specific PYTHONPATH to sys.path: /home/ngvnngkhoi/snap/freecad/common/.local/lib/python3.12/site-packages:/snap/freecad/2739/lib/python3.12/site-packages:/snap/freecad/2739/usr/lib/python3/dist-packages
+{"purpose": "FreeCAD capability probe only", "freecad_version": ["1", "1", "1", "44227 +647 (Git)", "Unknown", "2026/04/14 22:09:59", "tag: 1.1.1", "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"], "length_unit": "mm", "observed_solid_count": 1, "observed_volume_mm3": 24000.0, "observed_shape_valid": true, "vehicle_geometry_acceptance": "not assessed", "physical_validation": "unperformed"}
+If the script saved a document that is open in the GUI, call reload_document to see the result.

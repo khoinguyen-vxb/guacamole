@@ -4,7 +4,11 @@ version = "0.1.0"
 description = "Local typed tools and traceable engineering agent workflows"
 readme = "README.md"
 requires-python = ">=3.13.3"
-dependencies = ["pydantic>=2.12,<3", "mcp>=2.2,<3"]
+dependencies = [
+    "pydantic>=2.12,<3",
+    "mcp>=2.2,<3",
+    "pytest>=9.1.1",
+]
 
 [build-system]
 requires = ["hatchling>=1.27"]

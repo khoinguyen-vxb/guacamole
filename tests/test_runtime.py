@@ -44,6 +44,95 @@ from guacamole.providers.astra import AstraReasoning
 
 
 class RuntimeTests(unittest.IsolatedAsyncioTestCase):
+    async def test_invalid_reads_do_not_poison_context_and_can_be_corrected(self):
+        class Reader(TestReasoning):
+            def __init__(self, wanted, bad):
+                self.wanted, self.bad, self.packets = wanted, bad, []
+
+            async def respond(self, packet):
+                self.packets.append(packet)
+                return AgentTurn(
+                    rationale=Rationale(
+                        objective="Read current sources", explanation="Fixture"
+                    ),
+                    action=Read(refs=(self.wanted, self.bad))
+                    if len(self.packets) == 1
+                    else Read(refs=(self.wanted,))
+                    if len(self.packets) == 2
+                    else Wait(reason="Read finished"),
+                )
+
+        for failure in ("missing", "mismatched", "stale", "older"):
+            with (
+                self.subTest(failure=failure),
+                tempfile.TemporaryDirectory() as directory,
+            ):
+                root = Path(directory)
+                with Project(root / "state") as project:
+                    source = root / "source.txt"
+                    source.write_text("original")
+                    original = project.ingest(source)
+                    if failure == "stale":
+                        project.store.invalidate(
+                            original, actor="script", reason="Fixture invalidation"
+                        )
+                    elif failure == "older":
+                        source.write_text("updated")
+                        project.ingest(source, source_id=original.id)
+                    bad = (
+                        original.model_copy(update={"id": "missing-source"})
+                        if failure == "missing"
+                        else original.model_copy(update={"sha256": "0" * 64})
+                        if failure == "mismatched"
+                        else original
+                    )
+                    wanted_path = root / "wanted.txt"
+                    wanted_path.write_text("wanted")
+                    wanted = project.ingest(wanted_path)
+
+                    provider = Reader(wanted, bad)
+                    project.reasoning = provider
+                    await project.run(
+                        ProjectRequest(
+                            description="Invalid read recovery fixture",
+                            context=ContextSpec(selected=(bad,)),
+                        )
+                    )
+                    packets = provider.packets
+                    self.assertEqual(len(packets), 3)
+                    observation = json.loads(packets[1].prompt)["state"][
+                        "last_observation"
+                    ]
+                    self.assertEqual(observation["phase"], "action")
+                    self.assertIn("current Ref", observation["detail"])
+                    self.assertNotIn("selected", observation)
+                    self.assertNotIn(bad, packets[0].sources)
+                    self.assertNotIn(wanted, packets[1].sources)
+                    self.assertIn(wanted, packets[2].sources)
+                    self.assertIn(
+                        f"{bad.kind}:{bad.id}@{bad.revision}",
+                        {item.item for item in packets[0].deferred},
+                    )
+                    agent = project.store.model(
+                        "agent", project.store.list("agent")[0].ref.id, AgentSpec
+                    )
+                    self.assertEqual(len(project.store.history("agent", agent.id)), 2)
+                    pinned = agent.model_copy(
+                        update={
+                            "context": agent.context.model_copy(
+                                update={"pinned": (bad,)}
+                            )
+                        }
+                    )
+                    with self.assertRaises(ValueError):
+                        await project.contexts.build(
+                            pinned,
+                            "fixture",
+                            TestReasoning(),
+                            instructions="test",
+                            state={},
+                        )
+
     async def test_requested_records_take_priority_or_block_without_retrying(self):
         for size in (60_000, 180_000):
             with self.subTest(size=size), tempfile.TemporaryDirectory() as directory:

@@ -1,0 +1,9 @@
+{
+  "run_id": "0d3952dea3fd4803a63b63a01d64464c",
+  "status": "incomplete",
+  "reviews": [],
+  "human_requests": [],
+  "open_items": [
+    "chief: blocked: {\"detail\":\"Codex exited with status 1; run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}"
+  ]
+}

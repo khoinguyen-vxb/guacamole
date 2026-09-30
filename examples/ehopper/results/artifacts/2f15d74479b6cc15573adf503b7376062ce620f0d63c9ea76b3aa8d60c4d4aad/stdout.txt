@@ -1,0 +1,10 @@
+{
+  "purpose": "dependency/import smoke test only",
+  "python": "3.13.11 | packaged by Anaconda, Inc. | (main, Dec 10 2025, 21:29:12) [GCC 14.3.0]",
+  "numpy": "2.5.3",
+  "scipy": "1.18.1",
+  "pythrust_file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/pythrust/__init__.py",
+  "pythrust_version": "0.2.0",
+  "imports_succeeded": true,
+  "physical_validation": "not performed"
+}

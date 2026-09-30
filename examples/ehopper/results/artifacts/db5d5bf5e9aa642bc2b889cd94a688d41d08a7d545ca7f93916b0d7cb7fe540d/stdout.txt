@@ -1,0 +1,53 @@
+{
+  "python_version": "3.13.11 | packaged by Anaconda, Inc. | (main, Dec 10 2025, 21:29:12) [GCC 14.3.0]",
+  "executable": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/bin/python",
+  "python_meets_backend_requirement": true,
+  "imports": {
+    "numpy": {
+      "imported": true,
+      "version": "2.5.3",
+      "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/numpy/__init__.py"
+    },
+    "scipy": {
+      "imported": true,
+      "version": "1.18.1",
+      "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/scipy/__init__.py"
+    },
+    "matplotlib": {
+      "imported": true,
+      "version": "3.11.2",
+      "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/matplotlib/__init__.py"
+    },
+    "openmdao": {
+      "imported": false,
+      "error_type": "ModuleNotFoundError",
+      "error": "No module named 'openmdao'"
+    },
+    "pytest": {
+      "imported": false,
+      "error_type": "ModuleNotFoundError",
+      "error": "No module named 'pytest'"
+    },
+    "pythrust": {
+      "imported": true,
+      "version": "0.2.0",
+      "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/pythrust/__init__.py"
+    },
+    "pythrust.motors": {
+      "imported": true,
+      "version": "not exposed",
+      "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/pythrust/motors/__init__.py"
+    },
+    "pythrust.propellers": {
+      "imported": true,
+      "version": "not exposed",
+      "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/pythrust/propellers/__init__.py"
+    },
+    "pythrust.propulsion": {
+      "imported": true,
+      "version": "not exposed",
+      "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/PyThrust/pythrust/propulsion/__init__.py"
+    }
+  },
+  "physical_acceptance": "not_assessed"
+}

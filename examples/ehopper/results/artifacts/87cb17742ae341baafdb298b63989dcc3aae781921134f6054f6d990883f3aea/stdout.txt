@@ -1,0 +1,181 @@
+{
+  "purpose": "Read-only source and caller audit; no engineering acceptance",
+  "files": [
+    "aero/aero.py",
+    "chassis/hopper.py",
+    "helpers/constants.py",
+    "helpers/math.py",
+    "main.py",
+    "propulsion/propeller.py",
+    "propulsion/propulsion.py",
+    "scripts/ehopper.py",
+    "simulation/simulation.py",
+    "simulation/state.py",
+    "test/__init__.py",
+    "test/test_pythrust.py"
+  ],
+  "imports_and_affected_calls": [
+    {
+      "file": "aero/aero.py",
+      "line": 1,
+      "source": "import numpy as np"
+    },
+    {
+      "file": "chassis/hopper.py",
+      "line": 1,
+      "source": "from dataclasses import dataclass, field"
+    },
+    {
+      "file": "chassis/hopper.py",
+      "line": 2,
+      "source": "from typing import Optional"
+    },
+    {
+      "file": "chassis/hopper.py",
+      "line": 4,
+      "source": "import numpy as np"
+    },
+    {
+      "file": "chassis/hopper.py",
+      "line": 6,
+      "source": "from propulsion.propulsion import Propulsion"
+    },
+    {
+      "file": "chassis/hopper.py",
+      "line": 58,
+      "source": "return self.propulsion.get_thrust_and_moment(time)"
+    },
+    {
+      "file": "chassis/hopper.py",
+      "line": 46,
+      "source": "return self.mass_wo_propellant + self.propulsion.get_mass(time)"
+    },
+    {
+      "file": "helpers/math.py",
+      "line": 1,
+      "source": "from numpy.typing import NDArray"
+    },
+    {
+      "file": "helpers/math.py",
+      "line": 2,
+      "source": "import numpy as np"
+    },
+    {
+      "file": "propulsion/propeller.py",
+      "line": 1,
+      "source": "from propulsion.propulsion import Propulsion"
+    },
+    {
+      "file": "propulsion/propulsion.py",
+      "line": 1,
+      "source": "from enum import Enum, auto, unique"
+    },
+    {
+      "file": "propulsion/propulsion.py",
+      "line": 2,
+      "source": "from abc import ABC, abstractmethod"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 1,
+      "source": "import numpy as np"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 2,
+      "source": "from helpers.math import quarternion_to_dcm, euler_to_quaternion"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 3,
+      "source": "from helpers.constants import GRAVITY"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 4,
+      "source": "from state import State"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 5,
+      "source": "from scipy.integrate import solve_ivp"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 37,
+      "source": "TBL = quarternion_to_dcm(quaternion_unit)"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 91,
+      "source": "mass = self.hopper.mass(time)"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 96,
+      "source": "prop_force, prop_moment = self.hopper.get_thrust_and_moment(time)"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 98,
+      "source": "aero_force, aero_moment = self.aero.determine_at_point("
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 134,
+      "source": "q = euler_to_quaternion(init_roll, init_pitch, init_yaw)"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 142,
+      "source": "self.state = State(*initial_state)"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 17,
+      "source": "self.state.update_state(state)"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 92,
+      "source": "cg = np.asarray(self.hopper.CG(time))"
+    },
+    {
+      "file": "simulation/simulation.py",
+      "line": 93,
+      "source": "inertia = np.asarray(self.hopper.inertia(time))"
+    },
+    {
+      "file": "test/test_pythrust.py",
+      "line": 6,
+      "source": "import math"
+    },
+    {
+      "file": "test/test_pythrust.py",
+      "line": 7,
+      "source": "from pathlib import Path"
+    },
+    {
+      "file": "test/test_pythrust.py",
+      "line": 8,
+      "source": "import sys"
+    },
+    {
+      "file": "test/test_pythrust.py",
+      "line": 13,
+      "source": "from pythrust.battery import FixedVoltageBattery"
+    },
+    {
+      "file": "test/test_pythrust.py",
+      "line": 14,
+      "source": "from pythrust.propellers import PropellerDatabase"
+    },
+    {
+      "file": "test/test_pythrust.py",
+      "line": 15,
+      "source": "from pythrust.propulsion import MotorSpec, PropellerSpec, PropulsionSolver, SystemSpec"
+    }
+  ],
+  "parse_errors": [],
+  "limitation": "Static AST search cannot establish absence of dynamic dispatch."
+}

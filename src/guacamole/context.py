@@ -139,9 +139,19 @@ class ContextBuilder:
             *self.search(spec.search, spec.max_search_results),
         )
         for ref in selected:
-            if ref in refs:
+            # A current pinned revision supersedes an older selected version.
+            if any((r.kind, r.id) == (ref.kind, ref.id) for r in refs):
                 continue
-            snapshot = self.store.resolve(ref, current=True)
+            try:
+                snapshot = self.store.resolve(ref, current=True)
+            except ValueError:
+                omissions.append(
+                    Omission(
+                        item=f"{ref.kind}:{ref.id}@{ref.revision}",
+                        reason="Selected reference is unknown, mismatched, or stale",
+                    )
+                )
+                continue
             payload["sources"].append(
                 snapshot.model_dump(mode="json") | {"locator": ref.locator}
             )

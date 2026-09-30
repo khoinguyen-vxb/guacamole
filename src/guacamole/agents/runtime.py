@@ -555,8 +555,16 @@ class Runtime:
             if self.project.human.version(self.run_id) != human_version:
                 return
             invalid_rationale = phase == "rationale" and isinstance(exc, ValueError)
+            invalid_read = (
+                phase == "action"
+                and isinstance(turn.action, Read)
+                and isinstance(exc, ValueError)
+            )
             detail = (
-                "Rationale evidence contains an unknown, mismatched, or stale reference. "
+                "Read contains an unknown, mismatched, or stale reference. "
+                "Copy exact current Ref objects from the context and retry; no read queued."
+                if invalid_read
+                else "Rationale evidence contains an unknown, mismatched, or stale reference. "
                 "Copy exact current Ref objects from the context and retry; no action executed."
                 if invalid_rationale
                 else (
@@ -862,6 +870,8 @@ class Runtime:
                 return {"ref": ref.model_dump(mode="json")}, "active"
             case Read():
                 refs = (*action.refs, *project.contexts.search(action.search))
+                for ref in refs:
+                    store.resolve(ref, current=True)
                 # Keep recent reads ahead of older optional material on later turns too.
                 context = agent.context.model_copy(
                     update={

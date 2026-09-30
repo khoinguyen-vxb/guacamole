@@ -192,6 +192,44 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                 self.assertIn("30000", request.description.replace(",", ""))
                 self.assertEqual(request.context.max_input_tokens, 128_000)
                 self.assertEqual(len(project.tools.definitions()), 6)
+                listing = project.tools.get("list_files@1")
+                (root / ".env").write_text("private fixture")
+                expected_roots = tuple(
+                    str(p) + "/"
+                    for p in sorted((documents, repo.parent, project.sandbox))
+                )
+                for path in ("", ".", str(root)):
+                    self.assertEqual(
+                        await project.call(listing, {"path": path}), expected_roots
+                    )
+                self.assertEqual(await project.call(listing, {}), expected_roots)
+                self.assertEqual(
+                    await project.call(listing, {"offset": 1, "limit": 1}),
+                    expected_roots[1:2],
+                )
+                inventory = project.store.resolve(request.context.pinned[0]).data
+                self.assertTrue(await project.call(listing, {"path": "artifacts"}))
+                for path in (inventory["path"], "context/inventory.md"):
+                    self.assertIn(
+                        "## Reference documents",
+                        await project.call(
+                            project.tools.get("read_text@1"), {"path": path}
+                        ),
+                    )
+                (documents / ".hidden").write_text("Hidden listing fixture")
+                self.assertEqual(
+                    await project.call(
+                        listing, {"path": "technical_documents", "limit": 1}
+                    ),
+                    (str(documents / "brief.txt"),),
+                )
+                escape = project.sandbox / "escape"
+                escape.symlink_to(root / ".env")
+                for path in (str(root / ".env"), "../state/project.sqlite3", "escape"):
+                    with self.assertRaises(ValueError):
+                        await project.call(
+                            project.tools.get("read_text@1"), {"path": path}
+                        )
                 write = project.tools.get("write_text@1")
                 await project.call(
                     write,

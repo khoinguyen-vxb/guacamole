@@ -1,0 +1,1 @@
+{"scope": "Conditional preliminary analysis, not VerificationResult or Chief selection", "cases": 54, "conditional_passes": 20, "electrical_energy_only_passes": 20, "output": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/analysis/chief_40a_esc_candidate_screening.json", "physical_acceptance": "unperformed"}
