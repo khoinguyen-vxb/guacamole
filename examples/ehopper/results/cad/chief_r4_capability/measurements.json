@@ -1,0 +1,199 @@
+{
+  "schema": "chief_freecad_capability_measurements_v1",
+  "scope": "Synthetic backend probe only; no vehicle acceptance or physical validation.",
+  "started_utc": "2026-10-03T07:57:49.067905+00:00",
+  "execution_completed": true,
+  "configured_dimensions_mm": [
+    10.0,
+    20.0,
+    30.0
+  ],
+  "edit_test_length_mm": 11.0,
+  "units": {
+    "dimensions": "mm",
+    "volume": "mm^3"
+  },
+  "observations": {
+    "created": {
+      "parameters": {
+        "type_id": "Part::Box",
+        "dimensions_mm": [
+          10.0,
+          20.0,
+          30.0
+        ]
+      },
+      "geometry": {
+        "is_null": false,
+        "is_valid": true,
+        "solid_count": 1,
+        "volume_mm3": 6000.0,
+        "bounding_box_mm": {
+          "minimum": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "maximum": [
+            10.0,
+            20.0,
+            30.0
+          ],
+          "lengths": [
+            10.0,
+            20.0,
+            30.0
+          ]
+        }
+      }
+    },
+    "native_reopened": {
+      "parameters": {
+        "type_id": "Part::Box",
+        "dimensions_mm": [
+          10.0,
+          20.0,
+          30.0
+        ]
+      },
+      "geometry": {
+        "is_null": false,
+        "is_valid": true,
+        "solid_count": 1,
+        "volume_mm3": 6000.0,
+        "bounding_box_mm": {
+          "minimum": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "maximum": [
+            10.0,
+            20.0,
+            30.0
+          ],
+          "lengths": [
+            10.0,
+            20.0,
+            30.0
+          ]
+        }
+      }
+    },
+    "native_edited": {
+      "parameters": {
+        "type_id": "Part::Box",
+        "dimensions_mm": [
+          11.0,
+          20.0,
+          30.0
+        ]
+      },
+      "geometry": {
+        "is_null": false,
+        "is_valid": true,
+        "solid_count": 1,
+        "volume_mm3": 6600.0,
+        "bounding_box_mm": {
+          "minimum": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "maximum": [
+            11.0,
+            20.0,
+            30.0
+          ],
+          "lengths": [
+            11.0,
+            20.0,
+            30.0
+          ]
+        }
+      }
+    },
+    "native_restored": {
+      "parameters": {
+        "type_id": "Part::Box",
+        "dimensions_mm": [
+          10.0,
+          20.0,
+          30.0
+        ]
+      },
+      "geometry": {
+        "is_null": false,
+        "is_valid": true,
+        "solid_count": 1,
+        "volume_mm3": 6000.0,
+        "bounding_box_mm": {
+          "minimum": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "maximum": [
+            10.0,
+            20.0,
+            30.0
+          ],
+          "lengths": [
+            10.0,
+            20.0,
+            30.0
+          ]
+        }
+      }
+    },
+    "step_reopened": {
+      "is_null": false,
+      "is_valid": true,
+      "solid_count": 1,
+      "volume_mm3": 6000.0,
+      "bounding_box_mm": {
+        "minimum": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "maximum": [
+          10.0,
+          20.0,
+          30.0
+        ],
+        "lengths": [
+          10.0,
+          20.0,
+          30.0
+        ]
+      }
+    }
+  },
+  "artifacts": {
+    "native": {
+      "path": "cad/chief_r4_capability/probe.FCStd",
+      "size_bytes": 2501,
+      "sha256": "d79001e8b4e3357955d1d0d0b6f9f716fb377c33c4375d1c11d6f2d135cdc0a5"
+    },
+    "step": {
+      "path": "cad/chief_r4_capability/probe.step",
+      "size_bytes": 6854,
+      "sha256": "0d560fb63583d7794b5b37180c878d63ce766f547a7b55752ae4eebaa58f97df"
+    }
+  },
+  "freecad_version": [
+    "1",
+    "1",
+    "1",
+    "44227 +647 (Git)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "tag: 1.1.1",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "python_version": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+  "last_stage": "completed",
+  "finished_utc": "2026-10-03T07:57:49.772842+00:00",
+  "cleanup_errors": []
+}

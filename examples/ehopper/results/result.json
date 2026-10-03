@@ -4,6 +4,8 @@
   "reviews": [],
   "human_requests": [],
   "open_items": [
-    "chief: blocked: {\"detail\":\"Codex exited with status 1; run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}"
+    "chief: blocked: {\"detail\":\"Claude exited with status 1; run 'claude auth status' and check model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}",
+    "pdr_r5_propulsion_worker: blocked: {\"detail\":\"Claude exited with status 1; run 'claude auth status' and check model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}",
+    "pdr_r5_cad_worker: blocked: {\"reason\":\"Pinned context and contracts require 474893 input tokens; budget is 400000\"}"
   ]
 }

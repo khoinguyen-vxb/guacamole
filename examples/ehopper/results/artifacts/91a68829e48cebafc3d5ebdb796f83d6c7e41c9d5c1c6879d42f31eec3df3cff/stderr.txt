@@ -1,0 +1,28 @@
+R2 corrects the probe import-path filter; prior missing imports are not installation evidence.
+P00: returned
+P01: returned
+P02: returned
+P03: raised
+P04: raised
+P05: returned
+P06: raised
+P07: raised
+P08a: returned
+P08b: raised
+P08c: raised
+P08d: raised
+P08e: raised
+P09: returned
+P10: raised
+P11: raised
+P11b: raised
+P12: returned
+P13: returned
+P14: returned
+STATIC: returned
+P15: returned
+P16: returned
+P17: returned
+P18: returned
+Raw diagnostic artifacts saved; no integrated or physical acceptance asserted.
+Corrected raw diagnostics saved separately under results_core_r2; review individual outcomes.

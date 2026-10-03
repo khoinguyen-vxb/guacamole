@@ -1,0 +1,16 @@
+Headless FreeCAD script finished (exit 0).
+Output:
+Recompute......
+[32;1m
+*******************************************************************
+******        Statistics on Transfer (Write)                 ******[0m
+[32;1m
+*******************************************************************
+******        Transfer Mode = 0  I.E.  As Is       ******[0m
+[32;1m******        Transferring Shape, ShapeType = 0                      ******[0m
+[32;1m** WorkSession : Sending all data[0m
+[32;1m Step File Name : /home/ngvnngkhoi/guacamole/examples/ehopper/results/cad/chief_r4_capability/probe.step(170 ents)  Write  Done[0m
+Adding snap-specific PYTHONPATH to sys.path: /home/ngvnngkhoi/snap/freecad/common/.local/lib/python3.12/site-packages:/snap/freecad/2739/lib/python3.12/site-packages:/snap/freecad/2739/usr/lib/python3/dist-packages
+Recompute......
+Recompute......
+If the script saved a document that is open in the GUI, call reload_document to see the result.

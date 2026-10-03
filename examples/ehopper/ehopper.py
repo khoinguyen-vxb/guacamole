@@ -15,8 +15,8 @@ Or: uv sync --extra sounding-rocket
     .venv/bin/python -m examples.ehopper.ehopper
 
 Edit the configuration below; this script has no command-line arguments.
-Install Codex CLI and run codex login with your ChatGPT account before running.
-Reasoning uses a local codex exec process with GPT-6 Astra; no API key is needed.
+Install claude CLI and run claude login with your ChatGPT account before running.
+Reasoning uses a local claude exec process with GPT-6 Astra; no API key is needed.
 uv installs this script's document readers; backend installations are separate.
 See https://docs.astral.sh/uv/guides/scripts/ for inline dependency metadata.
 
@@ -59,7 +59,7 @@ from guacamole import (
     VerificationResult,
 )
 from guacamole.contracts import FileRecord
-from guacamole.providers.codex import CodexReasoning
+from guacamole.providers.claude import ClaudeReasoning
 from guacamole.tools.mcp import ToolSession
 from guacamole.websocket import WebSocketBridge
 
@@ -652,7 +652,7 @@ def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
     lines.extend(("", "## Executables visible to this host (presence only)"))
     for name in (
         "uv",
-        "codex",
+        "claude",
         "freecad",
         "freecadcmd",
         "FreeCADCmd",
@@ -692,9 +692,9 @@ async def notifications(project: Project) -> None:
 
 
 async def main() -> None:
-    if shutil.which("codex") is None:
+    if shutil.which("claude") is None:
         raise SystemExit(
-            "Install Codex CLI on PATH and run 'codex login' with your ChatGPT account."
+            "Install claude CLI on PATH and run 'claude login' with your ChatGPT account."
         )
     missing = [
         name
@@ -712,7 +712,7 @@ async def main() -> None:
         WORKSPACE,
         sandbox=SANDBOX,
         tools=ToolRegistry(),
-        reasoning=CodexReasoning(web_search=True),
+        reasoning=ClaudeReasoning(web_search=True),
     ) as project:
         register_tools(project)
         runs = project.store.list("run")

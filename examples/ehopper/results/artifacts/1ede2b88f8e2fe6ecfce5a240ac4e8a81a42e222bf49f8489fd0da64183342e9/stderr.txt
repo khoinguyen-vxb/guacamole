@@ -1,0 +1,7 @@
+P19_default_imports: diagnostics recorded; inspect the JSON artifact
+P19_explicit_checkout_imports: diagnostics recorded; inspect the JSON artifact
+P19_database: diagnostics recorded; inspect the JSON artifact
+P20: diagnostics recorded; inspect the JSON artifact
+P21: diagnostics recorded; inspect the JSON artifact
+M0: diagnostics recorded; inspect the JSON artifact
+No integrated or physical acceptance asserted.

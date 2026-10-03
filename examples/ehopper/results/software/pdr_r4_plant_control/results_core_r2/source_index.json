@@ -1,0 +1,7312 @@
+{
+  "method": "AST call-name and attribute-name index; conservative, not dynamic call-graph proof",
+  "modules": {
+    "PyThrust/examples/calibrate_system_resistance.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "MotorSpec",
+          "line": 30
+        },
+        {
+          "callee": "FixedVoltageBattery",
+          "line": 38
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 39
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 40
+        },
+        {
+          "callee": "PropellerDatabase",
+          "line": 43
+        },
+        {
+          "callee": "db.load",
+          "line": 44
+        },
+        {
+          "callee": "db.get",
+          "line": 45
+        },
+        {
+          "callee": "PropulsionCalibrator",
+          "line": 73
+        },
+        {
+          "callee": "calibrator.calibrate",
+          "line": 74
+        },
+        {
+          "callee": "print",
+          "line": 78
+        },
+        {
+          "callee": "print",
+          "line": 79
+        },
+        {
+          "callee": "print",
+          "line": 80
+        },
+        {
+          "callee": "print",
+          "line": 81
+        },
+        {
+          "callee": "print",
+          "line": 82
+        },
+        {
+          "callee": "print",
+          "line": 83
+        },
+        {
+          "callee": "print",
+          "line": 84
+        },
+        {
+          "callee": "print",
+          "line": 87
+        },
+        {
+          "callee": "result.to_system_spec",
+          "line": 90
+        },
+        {
+          "callee": "print",
+          "line": 94
+        },
+        {
+          "callee": "print",
+          "line": 95
+        },
+        {
+          "callee": "str",
+          "line": 17
+        },
+        {
+          "callee": "sys.path.insert",
+          "line": 18
+        },
+        {
+          "callee": "Path",
+          "line": 44
+        },
+        {
+          "callee": "SystemExit",
+          "line": 47
+        },
+        {
+          "callee": "ManufacturerTestPoint",
+          "line": 64
+        },
+        {
+          "callee": "print",
+          "line": 86
+        },
+        {
+          "callee": "prop_entry.get_coefficients",
+          "line": 98
+        },
+        {
+          "callee": "print",
+          "line": 110
+        },
+        {
+          "callee": "Path(__file__).resolve",
+          "line": 16
+        },
+        {
+          "callee": "str",
+          "line": 18
+        },
+        {
+          "callee": "len",
+          "line": 95
+        },
+        {
+          "callee": "Path",
+          "line": 16
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "bbbda8dfd8841a59c7b05bb0a0dbbe55357c21fbe4956fb68fb196b098b16ea9"
+    },
+    "PyThrust/examples/openmdao_hover_optimization.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "matplotlib.use",
+          "line": 20
+        },
+        {
+          "callee": "str",
+          "line": 15
+        },
+        {
+          "callee": "sys.path.insert",
+          "line": 16
+        },
+        {
+          "callee": "PropellerDatabase",
+          "line": 45
+        },
+        {
+          "callee": "db.load",
+          "line": 46
+        },
+        {
+          "callee": "db.get",
+          "line": 47
+        },
+        {
+          "callee": "om.Problem",
+          "line": 53
+        },
+        {
+          "callee": "PropulsionComponent",
+          "line": 56
+        },
+        {
+          "callee": "model.add_subsystem",
+          "line": 57
+        },
+        {
+          "callee": "model.add_design_var",
+          "line": 59
+        },
+        {
+          "callee": "model.add_design_var",
+          "line": 60
+        },
+        {
+          "callee": "model.add_design_var",
+          "line": 61
+        },
+        {
+          "callee": "model.add_constraint",
+          "line": 63
+        },
+        {
+          "callee": "model.add_constraint",
+          "line": 64
+        },
+        {
+          "callee": "model.add_objective",
+          "line": 65
+        },
+        {
+          "callee": "om.ScipyOptimizeDriver",
+          "line": 67
+        },
+        {
+          "callee": "prob.setup",
+          "line": 69
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 71
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 72
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 73
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 74
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 75
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 76
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 77
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 78
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 79
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 80
+        },
+        {
+          "callee": "print",
+          "line": 82
+        },
+        {
+          "callee": "prob.run_model",
+          "line": 83
+        },
+        {
+          "callee": "float",
+          "line": 84
+        },
+        {
+          "callee": "float",
+          "line": 86
+        },
+        {
+          "callee": "float",
+          "line": 88
+        },
+        {
+          "callee": "print",
+          "line": 89
+        },
+        {
+          "callee": "print",
+          "line": 90
+        },
+        {
+          "callee": "print",
+          "line": 91
+        },
+        {
+          "callee": "print",
+          "line": 92
+        },
+        {
+          "callee": "print",
+          "line": 93
+        },
+        {
+          "callee": "print",
+          "line": 95
+        },
+        {
+          "callee": "prob.run_driver",
+          "line": 96
+        },
+        {
+          "callee": "float",
+          "line": 97
+        },
+        {
+          "callee": "float",
+          "line": 99
+        },
+        {
+          "callee": "float",
+          "line": 101
+        },
+        {
+          "callee": "print",
+          "line": 102
+        },
+        {
+          "callee": "print",
+          "line": 103
+        },
+        {
+          "callee": "print",
+          "line": 104
+        },
+        {
+          "callee": "print",
+          "line": 105
+        },
+        {
+          "callee": "print",
+          "line": 106
+        },
+        {
+          "callee": "print",
+          "line": 107
+        },
+        {
+          "callee": "print",
+          "line": 110
+        },
+        {
+          "callee": "np.linspace",
+          "line": 111
+        },
+        {
+          "callee": "om.Problem",
+          "line": 117
+        },
+        {
+          "callee": "sweep_model.add_subsystem",
+          "line": 119
+        },
+        {
+          "callee": "sweep_model.add_design_var",
+          "line": 120
+        },
+        {
+          "callee": "sweep_model.add_design_var",
+          "line": 121
+        },
+        {
+          "callee": "sweep_model.add_constraint",
+          "line": 122
+        },
+        {
+          "callee": "sweep_model.add_objective",
+          "line": 123
+        },
+        {
+          "callee": "om.ScipyOptimizeDriver",
+          "line": 124
+        },
+        {
+          "callee": "sweep_prob.setup",
+          "line": 126
+        },
+        {
+          "callee": "sweep_prob.set_val",
+          "line": 128
+        },
+        {
+          "callee": "sweep_prob.set_val",
+          "line": 129
+        },
+        {
+          "callee": "sweep_prob.set_val",
+          "line": 130
+        },
+        {
+          "callee": "sweep_prob.set_val",
+          "line": 131
+        },
+        {
+          "callee": "sweep_prob.set_val",
+          "line": 132
+        },
+        {
+          "callee": "sweep_prob.set_val",
+          "line": 133
+        },
+        {
+          "callee": "sweep_prob.set_val",
+          "line": 134
+        },
+        {
+          "callee": "plt.rcParams.update",
+          "line": 153
+        },
+        {
+          "callee": "plt.subplots",
+          "line": 164
+        },
+        {
+          "callee": "ax1.grid",
+          "line": 167
+        },
+        {
+          "callee": "ax1.set_xlabel",
+          "line": 168
+        },
+        {
+          "callee": "ax1.set_ylabel",
+          "line": 169
+        },
+        {
+          "callee": "ax1.plot",
+          "line": 170
+        },
+        {
+          "callee": "ax1.tick_params",
+          "line": 171
+        },
+        {
+          "callee": "ax1.plot",
+          "line": 174
+        },
+        {
+          "callee": "ax1.twinx",
+          "line": 176
+        },
+        {
+          "callee": "ax2.set_ylabel",
+          "line": 177
+        },
+        {
+          "callee": "ax2.plot",
+          "line": 178
+        },
+        {
+          "callee": "ax2.tick_params",
+          "line": 179
+        },
+        {
+          "callee": "ax1.set_title",
+          "line": 181
+        },
+        {
+          "callee": "ax3.grid",
+          "line": 184
+        },
+        {
+          "callee": "ax3.set_xlabel",
+          "line": 185
+        },
+        {
+          "callee": "ax3.set_ylabel",
+          "line": 186
+        },
+        {
+          "callee": "ax3.plot",
+          "line": 187
+        },
+        {
+          "callee": "ax3.tick_params",
+          "line": 188
+        },
+        {
+          "callee": "ax3.twinx",
+          "line": 190
+        },
+        {
+          "callee": "ax4.set_ylabel",
+          "line": 191
+        },
+        {
+          "callee": "ax4.plot",
+          "line": 192
+        },
+        {
+          "callee": "ax4.tick_params",
+          "line": 193
+        },
+        {
+          "callee": "ax3.set_title",
+          "line": 195
+        },
+        {
+          "callee": "fig.suptitle",
+          "line": 197
+        },
+        {
+          "callee": "fig.text",
+          "line": 198
+        },
+        {
+          "callee": "fig.subplots_adjust",
+          "line": 206
+        },
+        {
+          "callee": "Path",
+          "line": 214
+        },
+        {
+          "callee": "plt.savefig",
+          "line": 215
+        },
+        {
+          "callee": "print",
+          "line": 216
+        },
+        {
+          "callee": "main",
+          "line": 219
+        },
+        {
+          "callee": "Path(__file__).resolve",
+          "line": 14
+        },
+        {
+          "callee": "str",
+          "line": 16
+        },
+        {
+          "callee": "Path",
+          "line": 46
+        },
+        {
+          "callee": "print",
+          "line": 49
+        },
+        {
+          "callee": "sys.exit",
+          "line": 50
+        },
+        {
+          "callee": "float",
+          "line": 85
+        },
+        {
+          "callee": "float",
+          "line": 87
+        },
+        {
+          "callee": "float",
+          "line": 98
+        },
+        {
+          "callee": "float",
+          "line": 100
+        },
+        {
+          "callee": "PropulsionComponent",
+          "line": 119
+        },
+        {
+          "callee": "sweep_prob.set_val",
+          "line": 137
+        },
+        {
+          "callee": "sweep_prob.set_val",
+          "line": 138
+        },
+        {
+          "callee": "sweep_prob.set_val",
+          "line": 139
+        },
+        {
+          "callee": "sweep_prob.run_driver",
+          "line": 140
+        },
+        {
+          "callee": "float",
+          "line": 142
+        },
+        {
+          "callee": "float",
+          "line": 145
+        },
+        {
+          "callee": "power_draws.append",
+          "line": 147
+        },
+        {
+          "callee": "optimal_diameters.append",
+          "line": 148
+        },
+        {
+          "callee": "optimal_throttles.append",
+          "line": 149
+        },
+        {
+          "callee": "optimal_rpms.append",
+          "line": 150
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 84
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 86
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 88
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 97
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 99
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 101
+        },
+        {
+          "callee": "float",
+          "line": 143
+        },
+        {
+          "callee": "float",
+          "line": 144
+        },
+        {
+          "callee": "Path",
+          "line": 14
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 85
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 87
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 98
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 100
+        },
+        {
+          "callee": "sweep_prob.get_val",
+          "line": 142
+        },
+        {
+          "callee": "sweep_prob.get_val",
+          "line": 145
+        },
+        {
+          "callee": "output_image.resolve",
+          "line": 216
+        },
+        {
+          "callee": "sweep_prob.get_val",
+          "line": 143
+        },
+        {
+          "callee": "sweep_prob.get_val",
+          "line": 144
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "dbd10e0958bae8555a9687ea08c91911eb3d2563ca78e1601365809333f48992"
+    },
+    "PyThrust/examples/rate_map_battery_mission.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "str",
+          "line": 16
+        },
+        {
+          "callee": "sys.path.insert",
+          "line": 17
+        },
+        {
+          "callee": "PropellerDatabase",
+          "line": 33
+        },
+        {
+          "callee": "db.load",
+          "line": 34
+        },
+        {
+          "callee": "db.get",
+          "line": 35
+        },
+        {
+          "callee": "Path",
+          "line": 42
+        },
+        {
+          "callee": "RateMapBattery.from_json",
+          "line": 43
+        },
+        {
+          "callee": "BatteryState",
+          "line": 44
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 46
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 52
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 53
+        },
+        {
+          "callee": "load_propeller",
+          "line": 54
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 55
+        },
+        {
+          "callee": "print",
+          "line": 60
+        },
+        {
+          "callee": "print",
+          "line": 61
+        },
+        {
+          "callee": "print",
+          "line": 62
+        },
+        {
+          "callee": "print",
+          "line": 63
+        },
+        {
+          "callee": "print",
+          "line": 66
+        },
+        {
+          "callee": "print",
+          "line": 67
+        },
+        {
+          "callee": "print",
+          "line": 106
+        },
+        {
+          "callee": "print",
+          "line": 107
+        },
+        {
+          "callee": "main",
+          "line": 111
+        },
+        {
+          "callee": "Path(__file__).resolve",
+          "line": 15
+        },
+        {
+          "callee": "str",
+          "line": 17
+        },
+        {
+          "callee": "Path",
+          "line": 34
+        },
+        {
+          "callee": "SystemExit",
+          "line": 37
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 70
+        },
+        {
+          "callee": "battery.integrate_current",
+          "line": 86
+        },
+        {
+          "callee": "print",
+          "line": 96
+        },
+        {
+          "callee": "len",
+          "line": 67
+        },
+        {
+          "callee": "SystemExit",
+          "line": 84
+        },
+        {
+          "callee": "Path",
+          "line": 15
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "f50afad15ba3ab830ec97149fb81593cc39c1feb5789f3657bab45f8ede1c842"
+    },
+    "PyThrust/examples/rate_map_battery_point_states.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "str",
+          "line": 16
+        },
+        {
+          "callee": "sys.path.insert",
+          "line": 17
+        },
+        {
+          "callee": "print",
+          "line": 25
+        },
+        {
+          "callee": "Path",
+          "line": 37
+        },
+        {
+          "callee": "RateMapBattery.from_json",
+          "line": 38
+        },
+        {
+          "callee": "BatteryState",
+          "line": 39
+        },
+        {
+          "callee": "print",
+          "line": 41
+        },
+        {
+          "callee": "print",
+          "line": 42
+        },
+        {
+          "callee": "print",
+          "line": 43
+        },
+        {
+          "callee": "print",
+          "line": 44
+        },
+        {
+          "callee": "print",
+          "line": 45
+        },
+        {
+          "callee": "print",
+          "line": 46
+        },
+        {
+          "callee": "print",
+          "line": 47
+        },
+        {
+          "callee": "print_point",
+          "line": 49
+        },
+        {
+          "callee": "print_point",
+          "line": 50
+        },
+        {
+          "callee": "print_point",
+          "line": 51
+        },
+        {
+          "callee": "print_point",
+          "line": 52
+        },
+        {
+          "callee": "print_point",
+          "line": 53
+        },
+        {
+          "callee": "print_point",
+          "line": 54
+        },
+        {
+          "callee": "print_point",
+          "line": 55
+        },
+        {
+          "callee": "battery.step_current",
+          "line": 57
+        },
+        {
+          "callee": "print",
+          "line": 58
+        },
+        {
+          "callee": "print",
+          "line": 59
+        },
+        {
+          "callee": "main",
+          "line": 63
+        },
+        {
+          "callee": "Path(__file__).resolve",
+          "line": 15
+        },
+        {
+          "callee": "str",
+          "line": 17
+        },
+        {
+          "callee": "battery.state_at_current",
+          "line": 49
+        },
+        {
+          "callee": "battery.state_at_c_rate",
+          "line": 50
+        },
+        {
+          "callee": "battery.state_at_voltage",
+          "line": 51
+        },
+        {
+          "callee": "battery.state_at_power",
+          "line": 52
+        },
+        {
+          "callee": "battery.state_at_load_resistance",
+          "line": 53
+        },
+        {
+          "callee": "battery.state_at_power_loss",
+          "line": 54
+        },
+        {
+          "callee": "battery.state_at_power",
+          "line": 55
+        },
+        {
+          "callee": "Path",
+          "line": 15
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "001af20c1efcc0e5f08bfc5a9881b2db627d411ac4c0906a2e067a5aaa6b1005"
+    },
+    "PyThrust/examples/select_motor_from_database.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "str",
+          "line": 15
+        },
+        {
+          "callee": "sys.path.insert",
+          "line": 16
+        },
+        {
+          "callee": "PropellerDatabase",
+          "line": 27
+        },
+        {
+          "callee": "db.load",
+          "line": 28
+        },
+        {
+          "callee": "db.get",
+          "line": 29
+        },
+        {
+          "callee": "print",
+          "line": 35
+        },
+        {
+          "callee": "om.Problem",
+          "line": 36
+        },
+        {
+          "callee": "model.add_subsystem",
+          "line": 38
+        },
+        {
+          "callee": "model.add_design_var",
+          "line": 40
+        },
+        {
+          "callee": "model.add_design_var",
+          "line": 41
+        },
+        {
+          "callee": "model.add_design_var",
+          "line": 42
+        },
+        {
+          "callee": "model.add_constraint",
+          "line": 44
+        },
+        {
+          "callee": "model.add_constraint",
+          "line": 45
+        },
+        {
+          "callee": "model.add_objective",
+          "line": 46
+        },
+        {
+          "callee": "om.ScipyOptimizeDriver",
+          "line": 48
+        },
+        {
+          "callee": "prob.setup",
+          "line": 50
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 52
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 53
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 54
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 55
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 56
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 57
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 58
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 59
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 60
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 61
+        },
+        {
+          "callee": "prob.run_driver",
+          "line": 63
+        },
+        {
+          "callee": "float",
+          "line": 65
+        },
+        {
+          "callee": "float",
+          "line": 67
+        },
+        {
+          "callee": "float",
+          "line": 68
+        },
+        {
+          "callee": "print",
+          "line": 70
+        },
+        {
+          "callee": "print",
+          "line": 71
+        },
+        {
+          "callee": "print",
+          "line": 72
+        },
+        {
+          "callee": "print",
+          "line": 73
+        },
+        {
+          "callee": "print",
+          "line": 74
+        },
+        {
+          "callee": "MotorDatabase",
+          "line": 78
+        },
+        {
+          "callee": "print",
+          "line": 83
+        },
+        {
+          "callee": "print",
+          "line": 84
+        },
+        {
+          "callee": "db_motors.search",
+          "line": 90
+        },
+        {
+          "callee": "candidates.sort",
+          "line": 113
+        },
+        {
+          "callee": "print",
+          "line": 115
+        },
+        {
+          "callee": "main",
+          "line": 129
+        },
+        {
+          "callee": "Path(__file__).resolve",
+          "line": 14
+        },
+        {
+          "callee": "str",
+          "line": 16
+        },
+        {
+          "callee": "Path",
+          "line": 28
+        },
+        {
+          "callee": "print",
+          "line": 31
+        },
+        {
+          "callee": "sys.exit",
+          "line": 32
+        },
+        {
+          "callee": "PropulsionComponent",
+          "line": 38
+        },
+        {
+          "callee": "float",
+          "line": 66
+        },
+        {
+          "callee": "db_motors.load",
+          "line": 79
+        },
+        {
+          "callee": "print",
+          "line": 80
+        },
+        {
+          "callee": "sys.exit",
+          "line": 81
+        },
+        {
+          "callee": "candidates.append",
+          "line": 101
+        },
+        {
+          "callee": "print",
+          "line": 117
+        },
+        {
+          "callee": "enumerate",
+          "line": 119
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 65
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 67
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 68
+        },
+        {
+          "callee": "abs",
+          "line": 100
+        },
+        {
+          "callee": "print",
+          "line": 120
+        },
+        {
+          "callee": "print",
+          "line": 121
+        },
+        {
+          "callee": "print",
+          "line": 123
+        },
+        {
+          "callee": "print",
+          "line": 124
+        },
+        {
+          "callee": "print",
+          "line": 125
+        },
+        {
+          "callee": "Path",
+          "line": 14
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 66
+        },
+        {
+          "callee": "float",
+          "line": 122
+        },
+        {
+          "callee": "Path(__file__).resolve",
+          "line": 77
+        },
+        {
+          "callee": "Path",
+          "line": 77
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "ac206cf26bed8a0c7b5dd36c1a865b10b895d17bfb7313bc720c859ecb920d58"
+    },
+    "PyThrust/pythrust/__init__.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "PyThrust",
+      "sha256": "4142193748ce5aa470e6e7c9e5aae3ad97d8bbb13259f464609455fe24dfe0b7"
+    },
+    "PyThrust/pythrust/battery/__init__.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "PyThrust",
+      "sha256": "de66bd81737502fc7020ea5be3f523b330ae75e20a8c3d7b21587f2e8835ee8e"
+    },
+    "PyThrust/pythrust/battery/fixed.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 10
+        },
+        {
+          "callee": "max",
+          "line": 34
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "295be468c829359addcbec5c8c12a768e44c49bf27b0321c2d74ed7bad15df75"
+    },
+    "PyThrust/pythrust/battery/rate_map.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 17
+        },
+        {
+          "callee": "tuple",
+          "line": 34
+        },
+        {
+          "callee": "tuple",
+          "line": 35
+        },
+        {
+          "callee": "tuple",
+          "line": 36
+        },
+        {
+          "callee": "any",
+          "line": 42
+        },
+        {
+          "callee": "any",
+          "line": 44
+        },
+        {
+          "callee": "any",
+          "line": 46
+        },
+        {
+          "callee": "object.__setattr__",
+          "line": 55
+        },
+        {
+          "callee": "object.__setattr__",
+          "line": 56
+        },
+        {
+          "callee": "object.__setattr__",
+          "line": 57
+        },
+        {
+          "callee": "cls",
+          "line": 73
+        },
+        {
+          "callee": "float",
+          "line": 99
+        },
+        {
+          "callee": "float",
+          "line": 103
+        },
+        {
+          "callee": "self.ocv",
+          "line": 117
+        },
+        {
+          "callee": "self.resistance",
+          "line": 118
+        },
+        {
+          "callee": "self._point_from_cell_state",
+          "line": 120
+        },
+        {
+          "callee": "self.state_at_current",
+          "line": 130
+        },
+        {
+          "callee": "self.ocv",
+          "line": 139
+        },
+        {
+          "callee": "self.resistance",
+          "line": 140
+        },
+        {
+          "callee": "self._point_from_cell_state",
+          "line": 142
+        },
+        {
+          "callee": "self.ocv",
+          "line": 153
+        },
+        {
+          "callee": "self.resistance",
+          "line": 154
+        },
+        {
+          "callee": "self._point_from_cell_state",
+          "line": 175
+        },
+        {
+          "callee": "self.ocv",
+          "line": 189
+        },
+        {
+          "callee": "self.resistance",
+          "line": 190
+        },
+        {
+          "callee": "self._point_from_cell_state",
+          "line": 194
+        },
+        {
+          "callee": "self.resistance",
+          "line": 208
+        },
+        {
+          "callee": "self.state_at_current",
+          "line": 211
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 219
+        },
+        {
+          "callee": "self.state_at_power",
+          "line": 223
+        },
+        {
+          "callee": "self.step_current",
+          "line": 226
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 237
+        },
+        {
+          "callee": "self._integrate_with_point_function",
+          "line": 238
+        },
+        {
+          "callee": "self.integrate_current",
+          "line": 256
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 272
+        },
+        {
+          "callee": "self._integrate_with_point_function",
+          "line": 273
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 289
+        },
+        {
+          "callee": "self._integrate_with_point_function",
+          "line": 290
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 308
+        },
+        {
+          "callee": "self._integrate_with_point_function",
+          "line": 309
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 325
+        },
+        {
+          "callee": "self._integrate_with_point_function",
+          "line": 326
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 342
+        },
+        {
+          "callee": "self._integrate_to_dod",
+          "line": 343
+        },
+        {
+          "callee": "self.integrate_current_to_dod",
+          "line": 361
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 377
+        },
+        {
+          "callee": "self._integrate_to_dod",
+          "line": 378
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 394
+        },
+        {
+          "callee": "self._integrate_to_dod",
+          "line": 395
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 413
+        },
+        {
+          "callee": "self._integrate_to_dod",
+          "line": 414
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 430
+        },
+        {
+          "callee": "self._integrate_to_dod",
+          "line": 431
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 440
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 441
+        },
+        {
+          "callee": "self._solve_dod",
+          "line": 442
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 448
+        },
+        {
+          "callee": "self._validate_integration_inputs",
+          "line": 449
+        },
+        {
+          "callee": "self._solve_dod",
+          "line": 450
+        },
+        {
+          "callee": "zip",
+          "line": 484
+        },
+        {
+          "callee": "self._integration_result",
+          "line": 512
+        },
+        {
+          "callee": "self._validate_dod_interval",
+          "line": 529
+        },
+        {
+          "callee": "self._reversible_energy_wh",
+          "line": 533
+        },
+        {
+          "callee": "self._reversible_energy_wh",
+          "line": 534
+        },
+        {
+          "callee": "self._usable_energy_at_c_rate",
+          "line": 551
+        },
+        {
+          "callee": "self._reversible_energy_wh",
+          "line": 552
+        },
+        {
+          "callee": "BatteryPoint",
+          "line": 578
+        },
+        {
+          "callee": "min",
+          "line": 594
+        },
+        {
+          "callee": "math.isclose",
+          "line": 595
+        },
+        {
+          "callee": "math.isclose",
+          "line": 597
+        },
+        {
+          "callee": "np.linspace",
+          "line": 602
+        },
+        {
+          "callee": "np.array",
+          "line": 603
+        },
+        {
+          "callee": "self.integrate_current",
+          "line": 610
+        },
+        {
+          "callee": "point_function",
+          "line": 625
+        },
+        {
+          "callee": "self._initial_integration_histories",
+          "line": 626
+        },
+        {
+          "callee": "self._time_integration_events",
+          "line": 666
+        },
+        {
+          "callee": "solve_ivp",
+          "line": 667
+        },
+        {
+          "callee": "zip",
+          "line": 688
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 693
+        },
+        {
+          "callee": "point_function",
+          "line": 694
+        },
+        {
+          "callee": "self._integration_result",
+          "line": 701
+        },
+        {
+          "callee": "point_function",
+          "line": 722
+        },
+        {
+          "callee": "self._initial_integration_histories",
+          "line": 723
+        },
+        {
+          "callee": "self._dod_integration_events",
+          "line": 757
+        },
+        {
+          "callee": "solve_ivp",
+          "line": 758
+        },
+        {
+          "callee": "zip",
+          "line": 779
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 784
+        },
+        {
+          "callee": "point_function",
+          "line": 785
+        },
+        {
+          "callee": "self._integration_result",
+          "line": 792
+        },
+        {
+          "callee": "residual",
+          "line": 804
+        },
+        {
+          "callee": "residual",
+          "line": 805
+        },
+        {
+          "callee": "range",
+          "line": 815
+        },
+        {
+          "callee": "min",
+          "line": 856
+        },
+        {
+          "callee": "min",
+          "line": 873
+        },
+        {
+          "callee": "histories['time_s'].append",
+          "line": 912
+        },
+        {
+          "callee": "histories['dod'].append",
+          "line": 913
+        },
+        {
+          "callee": "histories['voltage_v'].append",
+          "line": 914
+        },
+        {
+          "callee": "histories['current_a'].append",
+          "line": 915
+        },
+        {
+          "callee": "histories['c_rate'].append",
+          "line": 916
+        },
+        {
+          "callee": "histories['power_w'].append",
+          "line": 917
+        },
+        {
+          "callee": "histories['efficiency'].append",
+          "line": 918
+        },
+        {
+          "callee": "BatteryIntegrationResult",
+          "line": 929
+        },
+        {
+          "callee": "histories['time_s'].extend",
+          "line": 962
+        },
+        {
+          "callee": "histories['dod'].extend",
+          "line": 963
+        },
+        {
+          "callee": "histories['voltage_v'].extend",
+          "line": 964
+        },
+        {
+          "callee": "histories['current_a'].extend",
+          "line": 965
+        },
+        {
+          "callee": "histories['c_rate'].extend",
+          "line": 966
+        },
+        {
+          "callee": "histories['power_w'].extend",
+          "line": 967
+        },
+        {
+          "callee": "histories['efficiency'].extend",
+          "line": 968
+        },
+        {
+          "callee": "len",
+          "line": 38
+        },
+        {
+          "callee": "ValueError",
+          "line": 39
+        },
+        {
+          "callee": "ValueError",
+          "line": 41
+        },
+        {
+          "callee": "ValueError",
+          "line": 43
+        },
+        {
+          "callee": "ValueError",
+          "line": 45
+        },
+        {
+          "callee": "ValueError",
+          "line": 47
+        },
+        {
+          "callee": "ValueError",
+          "line": 49
+        },
+        {
+          "callee": "ValueError",
+          "line": 51
+        },
+        {
+          "callee": "ValueError",
+          "line": 53
+        },
+        {
+          "callee": "Path(path).open",
+          "line": 68
+        },
+        {
+          "callee": "json.load",
+          "line": 69
+        },
+        {
+          "callee": "np.interp",
+          "line": 99
+        },
+        {
+          "callee": "np.interp",
+          "line": 103
+        },
+        {
+          "callee": "self.state_at_current",
+          "line": 107
+        },
+        {
+          "callee": "self.state_at_current",
+          "line": 111
+        },
+        {
+          "callee": "BatteryPoint",
+          "line": 159
+        },
+        {
+          "callee": "ValueError",
+          "line": 186
+        },
+        {
+          "callee": "ValueError",
+          "line": 205
+        },
+        {
+          "callee": "math.sqrt",
+          "line": 210
+        },
+        {
+          "callee": "ValueError",
+          "line": 216
+        },
+        {
+          "callee": "min",
+          "line": 219
+        },
+        {
+          "callee": "ValueError",
+          "line": 225
+        },
+        {
+          "callee": "ValueError",
+          "line": 255
+        },
+        {
+          "callee": "ValueError",
+          "line": 307
+        },
+        {
+          "callee": "ValueError",
+          "line": 360
+        },
+        {
+          "callee": "ValueError",
+          "line": 412
+        },
+        {
+          "callee": "len",
+          "line": 463
+        },
+        {
+          "callee": "len",
+          "line": 463
+        },
+        {
+          "callee": "ValueError",
+          "line": 464
+        },
+        {
+          "callee": "len",
+          "line": 465
+        },
+        {
+          "callee": "self.state_at_power",
+          "line": 466
+        },
+        {
+          "callee": "self._integration_result",
+          "line": 467
+        },
+        {
+          "callee": "ValueError",
+          "line": 476
+        },
+        {
+          "callee": "self.integrate_power",
+          "line": 485
+        },
+        {
+          "callee": "RuntimeError",
+          "line": 511
+        },
+        {
+          "callee": "ValueError",
+          "line": 531
+        },
+        {
+          "callee": "ValueError",
+          "line": 545
+        },
+        {
+          "callee": "ValueError",
+          "line": 547
+        },
+        {
+          "callee": "max",
+          "line": 594
+        },
+        {
+          "callee": "float",
+          "line": 604
+        },
+        {
+          "callee": "self._integration_result",
+          "line": 629
+        },
+        {
+          "callee": "self._integration_result",
+          "line": 638
+        },
+        {
+          "callee": "self._append_integration_sample",
+          "line": 647
+        },
+        {
+          "callee": "self._integration_result",
+          "line": 648
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 658
+        },
+        {
+          "callee": "point_function",
+          "line": 659
+        },
+        {
+          "callee": "RuntimeError",
+          "line": 677
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 689
+        },
+        {
+          "callee": "point_function",
+          "line": 690
+        },
+        {
+          "callee": "self._append_integration_sample",
+          "line": 691
+        },
+        {
+          "callee": "self._clip_dod",
+          "line": 693
+        },
+        {
+          "callee": "self._stop_reason",
+          "line": 698
+        },
+        {
+          "callee": "ValueError",
+          "line": 718
+        },
+        {
+          "callee": "ValueError",
+          "line": 720
+        },
+        {
+          "callee": "self._integration_result",
+          "line": 726
+        },
+        {
+          "callee": "self._integration_result",
+          "line": 735
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 747
+        },
+        {
+          "callee": "point_function",
+          "line": 748
+        },
+        {
+          "callee": "RuntimeError",
+          "line": 768
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 780
+        },
+        {
+          "callee": "point_function",
+          "line": 781
+        },
+        {
+          "callee": "self._append_integration_sample",
+          "line": 782
+        },
+        {
+          "callee": "self._clip_dod",
+          "line": 784
+        },
+        {
+          "callee": "self._stop_reason",
+          "line": 789
+        },
+        {
+          "callee": "ValueError",
+          "line": 807
+        },
+        {
+          "callee": "ValueError",
+          "line": 813
+        },
+        {
+          "callee": "residual",
+          "line": 817
+        },
+        {
+          "callee": "float",
+          "line": 833
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 834
+        },
+        {
+          "callee": "point_function",
+          "line": 835
+        },
+        {
+          "callee": "self._feasibility_margin",
+          "line": 836
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 847
+        },
+        {
+          "callee": "point_function",
+          "line": 848
+        },
+        {
+          "callee": "self._feasibility_margin",
+          "line": 849
+        },
+        {
+          "callee": "ValueError",
+          "line": 878
+        },
+        {
+          "callee": "ValueError",
+          "line": 880
+        },
+        {
+          "callee": "ValueError",
+          "line": 882
+        },
+        {
+          "callee": "ValueError",
+          "line": 887
+        },
+        {
+          "callee": "ValueError",
+          "line": 889
+        },
+        {
+          "callee": "ValueError",
+          "line": 891
+        },
+        {
+          "callee": "float",
+          "line": 34
+        },
+        {
+          "callee": "float",
+          "line": 35
+        },
+        {
+          "callee": "float",
+          "line": 36
+        },
+        {
+          "callee": "len",
+          "line": 40
+        },
+        {
+          "callee": "len",
+          "line": 40
+        },
+        {
+          "callee": "len",
+          "line": 40
+        },
+        {
+          "callee": "data.get",
+          "line": 74
+        },
+        {
+          "callee": "data.get",
+          "line": 75
+        },
+        {
+          "callee": "self._clip_dod",
+          "line": 99
+        },
+        {
+          "callee": "self._clip_dod",
+          "line": 103
+        },
+        {
+          "callee": "math.sqrt",
+          "line": 173
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 204
+        },
+        {
+          "callee": "max",
+          "line": 219
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 254
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 306
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 359
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 411
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 475
+        },
+        {
+          "callee": "self._extend_profile_histories",
+          "line": 494
+        },
+        {
+          "callee": "self._integration_result",
+          "line": 501
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 544
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 546
+        },
+        {
+          "callee": "float",
+          "line": 579
+        },
+        {
+          "callee": "float",
+          "line": 580
+        },
+        {
+          "callee": "float",
+          "line": 581
+        },
+        {
+          "callee": "float",
+          "line": 582
+        },
+        {
+          "callee": "float",
+          "line": 583
+        },
+        {
+          "callee": "float",
+          "line": 584
+        },
+        {
+          "callee": "float",
+          "line": 585
+        },
+        {
+          "callee": "float",
+          "line": 586
+        },
+        {
+          "callee": "float",
+          "line": 587
+        },
+        {
+          "callee": "float",
+          "line": 594
+        },
+        {
+          "callee": "self.ocv",
+          "line": 603
+        },
+        {
+          "callee": "np.trapezoid",
+          "line": 604
+        },
+        {
+          "callee": "BatteryState",
+          "line": 611
+        },
+        {
+          "callee": "self._clip_dod",
+          "line": 658
+        },
+        {
+          "callee": "self._clip_dod",
+          "line": 689
+        },
+        {
+          "callee": "float",
+          "line": 691
+        },
+        {
+          "callee": "float",
+          "line": 693
+        },
+        {
+          "callee": "float",
+          "line": 704
+        },
+        {
+          "callee": "float",
+          "line": 705
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 717
+        },
+        {
+          "callee": "self._clip_dod",
+          "line": 747
+        },
+        {
+          "callee": "min",
+          "line": 763
+        },
+        {
+          "callee": "self._clip_dod",
+          "line": 780
+        },
+        {
+          "callee": "float",
+          "line": 782
+        },
+        {
+          "callee": "float",
+          "line": 784
+        },
+        {
+          "callee": "float",
+          "line": 795
+        },
+        {
+          "callee": "float",
+          "line": 796
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 806
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 806
+        },
+        {
+          "callee": "self._clip_dod",
+          "line": 834
+        },
+        {
+          "callee": "self._clip_dod",
+          "line": 847
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 877
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 879
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 881
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 886
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 886
+        },
+        {
+          "callee": "zip",
+          "line": 44
+        },
+        {
+          "callee": "Path",
+          "line": 68
+        },
+        {
+          "callee": "self.state_at_current",
+          "line": 242
+        },
+        {
+          "callee": "self.state_at_power",
+          "line": 277
+        },
+        {
+          "callee": "self.state_at_voltage",
+          "line": 294
+        },
+        {
+          "callee": "self.state_at_load_resistance",
+          "line": 313
+        },
+        {
+          "callee": "self.state_at_power_loss",
+          "line": 330
+        },
+        {
+          "callee": "self.state_at_current",
+          "line": 347
+        },
+        {
+          "callee": "self.state_at_power",
+          "line": 382
+        },
+        {
+          "callee": "self.state_at_voltage",
+          "line": 399
+        },
+        {
+          "callee": "self.state_at_load_resistance",
+          "line": 418
+        },
+        {
+          "callee": "self.state_at_power_loss",
+          "line": 435
+        },
+        {
+          "callee": "self._initial_integration_histories",
+          "line": 469
+        },
+        {
+          "callee": "list",
+          "line": 492
+        },
+        {
+          "callee": "float",
+          "line": 603
+        },
+        {
+          "callee": "float",
+          "line": 658
+        },
+        {
+          "callee": "float",
+          "line": 689
+        },
+        {
+          "callee": "float",
+          "line": 780
+        },
+        {
+          "callee": "self.state_at_voltage",
+          "line": 443
+        },
+        {
+          "callee": "self.state_at_power",
+          "line": 451
+        },
+        {
+          "callee": "self._histories_from_result(result).items",
+          "line": 492
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 443
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 451
+        },
+        {
+          "callee": "self._histories_from_result",
+          "line": 492
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "b022873a21892005fbc4333584fc5d5a45fd808f467f92031a5084c11051090c"
+    },
+    "PyThrust/pythrust/battery/state.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 10
+        },
+        {
+          "callee": "dataclass",
+          "line": 33
+        },
+        {
+          "callee": "dataclass",
+          "line": 50
+        },
+        {
+          "callee": "tuple",
+          "line": 94
+        },
+        {
+          "callee": "any",
+          "line": 95
+        },
+        {
+          "callee": "cls",
+          "line": 25
+        },
+        {
+          "callee": "histories.items",
+          "line": 89
+        },
+        {
+          "callee": "ValueError",
+          "line": 96
+        },
+        {
+          "callee": "ValueError",
+          "line": 18
+        },
+        {
+          "callee": "ValueError",
+          "line": 24
+        },
+        {
+          "callee": "_as_float_tuple",
+          "line": 69
+        },
+        {
+          "callee": "_as_float_tuple",
+          "line": 70
+        },
+        {
+          "callee": "_as_float_tuple",
+          "line": 71
+        },
+        {
+          "callee": "_as_float_tuple",
+          "line": 72
+        },
+        {
+          "callee": "_as_float_tuple",
+          "line": 73
+        },
+        {
+          "callee": "_as_float_tuple",
+          "line": 74
+        },
+        {
+          "callee": "_as_float_tuple",
+          "line": 75
+        },
+        {
+          "callee": "len",
+          "line": 77
+        },
+        {
+          "callee": "len",
+          "line": 78
+        },
+        {
+          "callee": "ValueError",
+          "line": 79
+        },
+        {
+          "callee": "ValueError",
+          "line": 81
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 82
+        },
+        {
+          "callee": "ValueError",
+          "line": 83
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 84
+        },
+        {
+          "callee": "ValueError",
+          "line": 85
+        },
+        {
+          "callee": "ValueError",
+          "line": 87
+        },
+        {
+          "callee": "object.__setattr__",
+          "line": 90
+        },
+        {
+          "callee": "float",
+          "line": 94
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 17
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 23
+        },
+        {
+          "callee": "histories.values",
+          "line": 77
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 95
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "cc8e66287d1d5fe937772567599f5f678421a5047ebf69f058c9d7199674603b"
+    },
+    "PyThrust/pythrust/motors/__init__.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "PyThrust",
+      "sha256": "c2b6c75ea068e4686e10a3d52cdf1258ceefb641e84e0e25e60e4cd0256a48ad"
+    },
+    "PyThrust/pythrust/motors/database.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 12
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 28
+        },
+        {
+          "callee": "len",
+          "line": 53
+        },
+        {
+          "callee": "sorted",
+          "line": 57
+        },
+        {
+          "callee": "self._entries.get",
+          "line": 61
+        },
+        {
+          "callee": "Path",
+          "line": 65
+        },
+        {
+          "callee": "self._entries.clear",
+          "line": 70
+        },
+        {
+          "callee": "sorted",
+          "line": 73
+        },
+        {
+          "callee": "bool",
+          "line": 76
+        },
+        {
+          "callee": "Path",
+          "line": 81
+        },
+        {
+          "callee": "self._entries.values",
+          "line": 118
+        },
+        {
+          "callee": "self._entries.keys",
+          "line": 57
+        },
+        {
+          "callee": "data_dir.exists",
+          "line": 66
+        },
+        {
+          "callee": "data_dir.glob",
+          "line": 73
+        },
+        {
+          "callee": "self.load_entry",
+          "line": 74
+        },
+        {
+          "callee": "json_path.exists",
+          "line": 82
+        },
+        {
+          "callee": "MotorEntry",
+          "line": 88
+        },
+        {
+          "callee": "results.append",
+          "line": 129
+        },
+        {
+          "callee": "open",
+          "line": 85
+        },
+        {
+          "callee": "json.load",
+          "line": 86
+        },
+        {
+          "callee": "m.get",
+          "line": 89
+        },
+        {
+          "callee": "m.get",
+          "line": 90
+        },
+        {
+          "callee": "m.get",
+          "line": 91
+        },
+        {
+          "callee": "float",
+          "line": 92
+        },
+        {
+          "callee": "float",
+          "line": 93
+        },
+        {
+          "callee": "float",
+          "line": 94
+        },
+        {
+          "callee": "float",
+          "line": 95
+        },
+        {
+          "callee": "float",
+          "line": 96
+        },
+        {
+          "callee": "float",
+          "line": 97
+        },
+        {
+          "callee": "float",
+          "line": 98
+        },
+        {
+          "callee": "m.get",
+          "line": 92
+        },
+        {
+          "callee": "m.get",
+          "line": 93
+        },
+        {
+          "callee": "m.get",
+          "line": 94
+        },
+        {
+          "callee": "m.get",
+          "line": 95
+        },
+        {
+          "callee": "m.get",
+          "line": 96
+        },
+        {
+          "callee": "m.get",
+          "line": 97
+        },
+        {
+          "callee": "m.get",
+          "line": 98
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "4cbd82fe126591ab368307942fb4fd5d134f0c364526ed65d47fee40cf8ad327"
+    },
+    "PyThrust/pythrust/openmdao/__init__.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "PyThrust",
+      "sha256": "d382c68c2478e7c4e4ec149c314cd0603fa7b34833ed649b04cafc4bbd08500c"
+    },
+    "PyThrust/pythrust/openmdao/components.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "self.options.declare",
+          "line": 22
+        },
+        {
+          "callee": "self.add_input",
+          "line": 30
+        },
+        {
+          "callee": "self.add_input",
+          "line": 31
+        },
+        {
+          "callee": "self.add_input",
+          "line": 32
+        },
+        {
+          "callee": "self.add_input",
+          "line": 33
+        },
+        {
+          "callee": "self.add_input",
+          "line": 35
+        },
+        {
+          "callee": "self.add_input",
+          "line": 36
+        },
+        {
+          "callee": "self.add_input",
+          "line": 38
+        },
+        {
+          "callee": "self.add_input",
+          "line": 39
+        },
+        {
+          "callee": "self.add_input",
+          "line": 40
+        },
+        {
+          "callee": "self.add_input",
+          "line": 42
+        },
+        {
+          "callee": "self.add_input",
+          "line": 43
+        },
+        {
+          "callee": "self.add_output",
+          "line": 46
+        },
+        {
+          "callee": "self.add_output",
+          "line": 47
+        },
+        {
+          "callee": "self.add_output",
+          "line": 48
+        },
+        {
+          "callee": "self.add_output",
+          "line": 49
+        },
+        {
+          "callee": "self.add_output",
+          "line": 50
+        },
+        {
+          "callee": "self.add_output",
+          "line": 51
+        },
+        {
+          "callee": "self.add_output",
+          "line": 52
+        },
+        {
+          "callee": "self.add_output",
+          "line": 53
+        },
+        {
+          "callee": "self.declare_partials",
+          "line": 56
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 59
+        },
+        {
+          "callee": "BatterySpec",
+          "line": 65
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 69
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 72
+        },
+        {
+          "callee": "self._get_specs",
+          "line": 78
+        },
+        {
+          "callee": "float",
+          "line": 80
+        },
+        {
+          "callee": "float",
+          "line": 81
+        },
+        {
+          "callee": "float",
+          "line": 82
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 84
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 85
+        },
+        {
+          "callee": "float",
+          "line": 60
+        },
+        {
+          "callee": "float",
+          "line": 61
+        },
+        {
+          "callee": "float",
+          "line": 62
+        },
+        {
+          "callee": "float",
+          "line": 63
+        },
+        {
+          "callee": "float",
+          "line": 66
+        },
+        {
+          "callee": "float",
+          "line": 67
+        },
+        {
+          "callee": "float",
+          "line": 70
+        },
+        {
+          "callee": "float",
+          "line": 73
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "f8f15cc69aebe1a4c3ba6cde6aba7d6473b6a2c1724a035729042c9602cf25fb"
+    },
+    "PyThrust/pythrust/propellers/__init__.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "PyThrust",
+      "sha256": "a063d129ab7dd6c4c2526e2ed0db810bcb551b114646c9c4fbdd958b3eb8a8d1"
+    },
+    "PyThrust/pythrust/propellers/database.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 13
+        },
+        {
+          "callee": "dataclass",
+          "line": 25
+        },
+        {
+          "callee": "round",
+          "line": 211
+        },
+        {
+          "callee": "float",
+          "line": 214
+        },
+        {
+          "callee": "_find_insert_index",
+          "line": 224
+        },
+        {
+          "callee": "len",
+          "line": 231
+        },
+        {
+          "callee": "min",
+          "line": 238
+        },
+        {
+          "callee": "PropellerMetadata",
+          "line": 252
+        },
+        {
+          "callee": "data_by_rpm.items",
+          "line": 306
+        },
+        {
+          "callee": "PropellerEntry",
+          "line": 316
+        },
+        {
+          "callee": "sorted",
+          "line": 49
+        },
+        {
+          "callee": "max",
+          "line": 57
+        },
+        {
+          "callee": "_find_bracketing_indices",
+          "line": 59
+        },
+        {
+          "callee": "self._interp_at_rpm",
+          "line": 64
+        },
+        {
+          "callee": "self._interp_at_rpm",
+          "line": 65
+        },
+        {
+          "callee": "self.data_by_rpm.get",
+          "line": 77
+        },
+        {
+          "callee": "_find_insert_index",
+          "line": 94
+        },
+        {
+          "callee": "len",
+          "line": 121
+        },
+        {
+          "callee": "sorted",
+          "line": 125
+        },
+        {
+          "callee": "self._entries.get",
+          "line": 129
+        },
+        {
+          "callee": "Path",
+          "line": 133
+        },
+        {
+          "callee": "self._entries.clear",
+          "line": 138
+        },
+        {
+          "callee": "sorted",
+          "line": 140
+        },
+        {
+          "callee": "bool",
+          "line": 145
+        },
+        {
+          "callee": "Path",
+          "line": 155
+        },
+        {
+          "callee": "_load_entry",
+          "line": 157
+        },
+        {
+          "callee": "bool",
+          "line": 162
+        },
+        {
+          "callee": "self._entries.values",
+          "line": 175
+        },
+        {
+          "callee": "candidates.sort",
+          "line": 187
+        },
+        {
+          "callee": "self.find_by_size",
+          "line": 200
+        },
+        {
+          "callee": "entry.get_coefficients",
+          "line": 204
+        },
+        {
+          "callee": "abs",
+          "line": 212
+        },
+        {
+          "callee": "float",
+          "line": 213
+        },
+        {
+          "callee": "max",
+          "line": 238
+        },
+        {
+          "callee": "json.loads",
+          "line": 244
+        },
+        {
+          "callee": "all",
+          "line": 249
+        },
+        {
+          "callee": "csv_path.exists",
+          "line": 263
+        },
+        {
+          "callee": "csv_path.open",
+          "line": 269
+        },
+        {
+          "callee": "csv.DictReader",
+          "line": 270
+        },
+        {
+          "callee": "sorted",
+          "line": 307
+        },
+        {
+          "callee": "data_by_rpm.items",
+          "line": 310
+        },
+        {
+          "callee": "self.data_by_rpm.keys",
+          "line": 49
+        },
+        {
+          "callee": "min",
+          "line": 57
+        },
+        {
+          "callee": "float",
+          "line": 73
+        },
+        {
+          "callee": "float",
+          "line": 73
+        },
+        {
+          "callee": "float",
+          "line": 105
+        },
+        {
+          "callee": "float",
+          "line": 105
+        },
+        {
+          "callee": "self._entries.keys",
+          "line": 125
+        },
+        {
+          "callee": "data_dir.exists",
+          "line": 134
+        },
+        {
+          "callee": "data_dir.glob",
+          "line": 140
+        },
+        {
+          "callee": "_load_entry",
+          "line": 141
+        },
+        {
+          "callee": "Path",
+          "line": 156
+        },
+        {
+          "callee": "len",
+          "line": 238
+        },
+        {
+          "callee": "json_path.read_text",
+          "line": 244
+        },
+        {
+          "callee": "str",
+          "line": 253
+        },
+        {
+          "callee": "str",
+          "line": 254
+        },
+        {
+          "callee": "str",
+          "line": 255
+        },
+        {
+          "callee": "float",
+          "line": 256
+        },
+        {
+          "callee": "float",
+          "line": 257
+        },
+        {
+          "callee": "int",
+          "line": 258
+        },
+        {
+          "callee": "str",
+          "line": 259
+        },
+        {
+          "callee": "seen_keys.setdefault",
+          "line": 295
+        },
+        {
+          "callee": "seen.add",
+          "line": 300
+        },
+        {
+          "callee": "data_by_rpm.setdefault(rpm, []).append",
+          "line": 302
+        },
+        {
+          "callee": "ValueError",
+          "line": 314
+        },
+        {
+          "callee": "candidates.append",
+          "line": 182
+        },
+        {
+          "callee": "len",
+          "line": 222
+        },
+        {
+          "callee": "len",
+          "line": 222
+        },
+        {
+          "callee": "required_cols.issubset",
+          "line": 271
+        },
+        {
+          "callee": "ValueError",
+          "line": 273
+        },
+        {
+          "callee": "_normalize_rpm",
+          "line": 277
+        },
+        {
+          "callee": "float",
+          "line": 278
+        },
+        {
+          "callee": "float",
+          "line": 279
+        },
+        {
+          "callee": "float",
+          "line": 280
+        },
+        {
+          "callee": "set",
+          "line": 295
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 303
+        },
+        {
+          "callee": "len",
+          "line": 311
+        },
+        {
+          "callee": "ValueError",
+          "line": 312
+        },
+        {
+          "callee": "set",
+          "line": 271
+        },
+        {
+          "callee": "float",
+          "line": 277
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 286
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 286
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 286
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 286
+        },
+        {
+          "callee": "ValueError",
+          "line": 288
+        },
+        {
+          "callee": "ValueError",
+          "line": 292
+        },
+        {
+          "callee": "ValueError",
+          "line": 298
+        },
+        {
+          "callee": "data_by_rpm.setdefault",
+          "line": 302
+        },
+        {
+          "callee": "ValueError",
+          "line": 283
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "0023cea3d22f8f68e77742ab59f51fec6c745c920ee0d38ac47a6ba7d4a5d495"
+    },
+    "PyThrust/pythrust/propulsion/__init__.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "PyThrust",
+      "sha256": "dcea13fc967933551ba327adedb276e7fd5ec0ae763590c6da0f4043d9f58878"
+    },
+    "PyThrust/pythrust/propulsion/autotune.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 23
+        },
+        {
+          "callee": "dataclass",
+          "line": 42
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 74
+        },
+        {
+          "callee": "max",
+          "line": 147
+        },
+        {
+          "callee": "least_squares",
+          "line": 172
+        },
+        {
+          "callee": "float",
+          "line": 182
+        },
+        {
+          "callee": "bool",
+          "line": 183
+        },
+        {
+          "callee": "sum",
+          "line": 206
+        },
+        {
+          "callee": "sum",
+          "line": 207
+        },
+        {
+          "callee": "CalibrationResult",
+          "line": 228
+        },
+        {
+          "callee": "Path",
+          "line": 247
+        },
+        {
+          "callee": "len",
+          "line": 127
+        },
+        {
+          "callee": "len",
+          "line": 127
+        },
+        {
+          "callee": "warnings.append",
+          "line": 129
+        },
+        {
+          "callee": "len",
+          "line": 132
+        },
+        {
+          "callee": "warnings.append",
+          "line": 133
+        },
+        {
+          "callee": "CalibrationResult",
+          "line": 137
+        },
+        {
+          "callee": "evaluate_propulsion_state",
+          "line": 149
+        },
+        {
+          "callee": "max",
+          "line": 154
+        },
+        {
+          "callee": "float",
+          "line": 159
+        },
+        {
+          "callee": "_motor_state",
+          "line": 188
+        },
+        {
+          "callee": "thrust_errs.append",
+          "line": 192
+        },
+        {
+          "callee": "current_errs.append",
+          "line": 194
+        },
+        {
+          "callee": "math.sqrt",
+          "line": 197
+        },
+        {
+          "callee": "float",
+          "line": 198
+        },
+        {
+          "callee": "math.sqrt",
+          "line": 201
+        },
+        {
+          "callee": "float",
+          "line": 202
+        },
+        {
+          "callee": "sum",
+          "line": 205
+        },
+        {
+          "callee": "len",
+          "line": 205
+        },
+        {
+          "callee": "math.isnan",
+          "line": 210
+        },
+        {
+          "callee": "max",
+          "line": 211
+        },
+        {
+          "callee": "warnings.append",
+          "line": 218
+        },
+        {
+          "callee": "warnings.append",
+          "line": 223
+        },
+        {
+          "callee": "path.open",
+          "line": 250
+        },
+        {
+          "callee": "csv.DictReader",
+          "line": 251
+        },
+        {
+          "callee": "set",
+          "line": 254
+        },
+        {
+          "callee": "_motor_state",
+          "line": 162
+        },
+        {
+          "callee": "res.append",
+          "line": 168
+        },
+        {
+          "callee": "warnings.append",
+          "line": 213
+        },
+        {
+          "callee": "math.isnan",
+          "line": 222
+        },
+        {
+          "callee": "len",
+          "line": 233
+        },
+        {
+          "callee": "points.append",
+          "line": 267
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 124
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 125
+        },
+        {
+          "callee": "float",
+          "line": 139
+        },
+        {
+          "callee": "float",
+          "line": 140
+        },
+        {
+          "callee": "motor.get_winding_resistance",
+          "line": 153
+        },
+        {
+          "callee": "res.append",
+          "line": 164
+        },
+        {
+          "callee": "min",
+          "line": 174
+        },
+        {
+          "callee": "max",
+          "line": 193
+        },
+        {
+          "callee": "sum",
+          "line": 197
+        },
+        {
+          "callee": "len",
+          "line": 197
+        },
+        {
+          "callee": "sum",
+          "line": 201
+        },
+        {
+          "callee": "len",
+          "line": 201
+        },
+        {
+          "callee": "float",
+          "line": 261
+        },
+        {
+          "callee": "float",
+          "line": 262
+        },
+        {
+          "callee": "float",
+          "line": 263
+        },
+        {
+          "callee": "ManufacturerTestPoint",
+          "line": 268
+        },
+        {
+          "callee": "len",
+          "line": 134
+        },
+        {
+          "callee": "max",
+          "line": 167
+        },
+        {
+          "callee": "max",
+          "line": 174
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "9842a77c083007c7263e2031d3bb5218b5a5d4975ae70f01df0df37fd3ccb8ef"
+    },
+    "PyThrust/pythrust/propulsion/models/__init__.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "PyThrust",
+      "sha256": "b6f7c6c27fc75acfa4a2b385ab12acd31503a2b56f414da3ca48ed0088060160"
+    },
+    "PyThrust/pythrust/propulsion/models/battery.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "PyThrust",
+      "sha256": "fc019ccf294f92c981b36e3f45afba0a17bb3c791865b5dde10aaf14d615840f"
+    },
+    "PyThrust/pythrust/propulsion/models/motor.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 9
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "4d9f0b5ca53b0f2689e29d07b7c96cdf710b60f28f74d0fba7c46f4bc9c082e8"
+    },
+    "PyThrust/pythrust/propulsion/models/operating_point.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 9
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "f0f307cb6fe2f6f35a36b69cff73a11f429dcc5347afb7b962cf741989cd2812"
+    },
+    "PyThrust/pythrust/propulsion/models/propeller.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 9
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "75ada146f733da0a18034214ceaf40b2d12e7dfdfe85e54b060ba9d291b06569"
+    },
+    "PyThrust/pythrust/propulsion/models/system.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 8
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "a945a9295f3e89f03ece21055fef7426fb8a15a3d9262bc97b218a0c473175b4"
+    },
+    "PyThrust/pythrust/propulsion/solver.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "dataclass",
+          "line": 17
+        },
+        {
+          "callee": "max",
+          "line": 37
+        },
+        {
+          "callee": "prop_entry.get_coefficients",
+          "line": 39
+        },
+        {
+          "callee": "motor.get_no_load_current",
+          "line": 43
+        },
+        {
+          "callee": "self._validate_battery_state",
+          "line": 90
+        },
+        {
+          "callee": "max",
+          "line": 109
+        },
+        {
+          "callee": "g",
+          "line": 117
+        },
+        {
+          "callee": "g",
+          "line": 118
+        },
+        {
+          "callee": "root_scalar",
+          "line": 135
+        },
+        {
+          "callee": "self._build_point",
+          "line": 159
+        },
+        {
+          "callee": "evaluate_propulsion_state",
+          "line": 181
+        },
+        {
+          "callee": "self._evaluate_state",
+          "line": 196
+        },
+        {
+          "callee": "max",
+          "line": 205
+        },
+        {
+          "callee": "self._battery_power",
+          "line": 210
+        },
+        {
+          "callee": "self._battery_point",
+          "line": 217
+        },
+        {
+          "callee": "self._battery_voltage_from_point",
+          "line": 218
+        },
+        {
+          "callee": "self._battery_current_from_point_or_power",
+          "line": 224
+        },
+        {
+          "callee": "self._battery_efficiency",
+          "line": 230
+        },
+        {
+          "callee": "OperatingPoint",
+          "line": 262
+        },
+        {
+          "callee": "self._build_point",
+          "line": 299
+        },
+        {
+          "callee": "OperatingPoint",
+          "line": 311
+        },
+        {
+          "callee": "self._battery_point",
+          "line": 345
+        },
+        {
+          "callee": "float",
+          "line": 348
+        },
+        {
+          "callee": "self._battery_voltage",
+          "line": 359
+        },
+        {
+          "callee": "hasattr",
+          "line": 377
+        },
+        {
+          "callee": "getattr",
+          "line": 391
+        },
+        {
+          "callee": "float",
+          "line": 401
+        },
+        {
+          "callee": "prop_entry.data_by_rpm.values",
+          "line": 406
+        },
+        {
+          "callee": "j_maxes.sort",
+          "line": 414
+        },
+        {
+          "callee": "SolverConfig",
+          "line": 55
+        },
+        {
+          "callee": "OperatingPoint",
+          "line": 70
+        },
+        {
+          "callee": "self._evaluate_state",
+          "line": 93
+        },
+        {
+          "callee": "self._battery_voltage",
+          "line": 105
+        },
+        {
+          "callee": "self._estimate_j_max",
+          "line": 111
+        },
+        {
+          "callee": "max",
+          "line": 112
+        },
+        {
+          "callee": "max",
+          "line": 115
+        },
+        {
+          "callee": "self._build_infeasible_point",
+          "line": 121
+        },
+        {
+          "callee": "self._build_infeasible_point",
+          "line": 145
+        },
+        {
+          "callee": "ValueError",
+          "line": 337
+        },
+        {
+          "callee": "battery.terminal_voltage",
+          "line": 348
+        },
+        {
+          "callee": "max",
+          "line": 369
+        },
+        {
+          "callee": "battery.state_at_current",
+          "line": 380
+        },
+        {
+          "callee": "max",
+          "line": 392
+        },
+        {
+          "callee": "getattr",
+          "line": 401
+        },
+        {
+          "callee": "j_maxes.append",
+          "line": 409
+        },
+        {
+          "callee": "len",
+          "line": 415
+        },
+        {
+          "callee": "len",
+          "line": 416
+        },
+        {
+          "callee": "float",
+          "line": 102
+        },
+        {
+          "callee": "self._battery_voltage",
+          "line": 114
+        },
+        {
+          "callee": "motor.get_winding_resistance",
+          "line": 208
+        },
+        {
+          "callee": "float",
+          "line": 263
+        },
+        {
+          "callee": "float",
+          "line": 264
+        },
+        {
+          "callee": "float",
+          "line": 265
+        },
+        {
+          "callee": "float",
+          "line": 266
+        },
+        {
+          "callee": "float",
+          "line": 267
+        },
+        {
+          "callee": "float",
+          "line": 268
+        },
+        {
+          "callee": "float",
+          "line": 269
+        },
+        {
+          "callee": "float",
+          "line": 270
+        },
+        {
+          "callee": "float",
+          "line": 271
+        },
+        {
+          "callee": "float",
+          "line": 272
+        },
+        {
+          "callee": "float",
+          "line": 273
+        },
+        {
+          "callee": "float",
+          "line": 276
+        },
+        {
+          "callee": "float",
+          "line": 277
+        },
+        {
+          "callee": "float",
+          "line": 278
+        },
+        {
+          "callee": "float",
+          "line": 279
+        },
+        {
+          "callee": "float",
+          "line": 280
+        },
+        {
+          "callee": "float",
+          "line": 281
+        },
+        {
+          "callee": "float",
+          "line": 282
+        },
+        {
+          "callee": "hasattr",
+          "line": 336
+        },
+        {
+          "callee": "ValueError",
+          "line": 379
+        },
+        {
+          "callee": "len",
+          "line": 417
+        },
+        {
+          "callee": "self._battery_voltage",
+          "line": 84
+        },
+        {
+          "callee": "self._battery_efficiency",
+          "line": 87
+        },
+        {
+          "callee": "motor.get_winding_resistance",
+          "line": 103
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 120
+        },
+        {
+          "callee": "math.isfinite",
+          "line": 120
+        },
+        {
+          "callee": "abs",
+          "line": 129
+        },
+        {
+          "callee": "abs",
+          "line": 129
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "f8e12261294e0e3e787ca69714aa45f523574b9189b645a3f290196527c17a3f"
+    },
+    "PyThrust/scripts/convert_apc_dat.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "re.compile",
+          "line": 49
+        },
+        {
+          "callee": "re.compile",
+          "line": 50
+        },
+        {
+          "callee": "model.strip().replace",
+          "line": 54
+        },
+        {
+          "callee": "cleaned.replace('(', '_').replace",
+          "line": 55
+        },
+        {
+          "callee": "cleaned.replace('/', '_').replace",
+          "line": 56
+        },
+        {
+          "callee": "line.split('(')[0].strip",
+          "line": 63
+        },
+        {
+          "callee": "_MODEL_RE.match",
+          "line": 64
+        },
+        {
+          "callee": "float",
+          "line": 67
+        },
+        {
+          "callee": "float",
+          "line": 68
+        },
+        {
+          "callee": "path.read_text(errors='ignore').splitlines",
+          "line": 110
+        },
+        {
+          "callee": "next",
+          "line": 114
+        },
+        {
+          "callee": "_parse_model",
+          "line": 118
+        },
+        {
+          "callee": "_normalize_id",
+          "line": 119
+        },
+        {
+          "callee": "_iter_data_rows",
+          "line": 121
+        },
+        {
+          "callee": "json_path.write_text",
+          "line": 163
+        },
+        {
+          "callee": "len",
+          "line": 165
+        },
+        {
+          "callee": "argparse.ArgumentParser",
+          "line": 169
+        },
+        {
+          "callee": "parser.add_argument",
+          "line": 172
+        },
+        {
+          "callee": "parser.add_argument",
+          "line": 177
+        },
+        {
+          "callee": "parser.add_argument",
+          "line": 182
+        },
+        {
+          "callee": "parser.parse_args",
+          "line": 188
+        },
+        {
+          "callee": "output_dir.mkdir",
+          "line": 195
+        },
+        {
+          "callee": "sorted",
+          "line": 199
+        },
+        {
+          "callee": "print",
+          "line": 207
+        },
+        {
+          "callee": "SystemExit",
+          "line": 212
+        },
+        {
+          "callee": "cleaned.replace",
+          "line": 58
+        },
+        {
+          "callee": "ValueError",
+          "line": 66
+        },
+        {
+          "callee": "match.group",
+          "line": 67
+        },
+        {
+          "callee": "match.group",
+          "line": 68
+        },
+        {
+          "callee": "line.strip",
+          "line": 85
+        },
+        {
+          "callee": "stripped.split",
+          "line": 91
+        },
+        {
+          "callee": "zip",
+          "line": 102
+        },
+        {
+          "callee": "rows.append",
+          "line": 104
+        },
+        {
+          "callee": "csv_path.open",
+          "line": 129
+        },
+        {
+          "callee": "csv.writer",
+          "line": 130
+        },
+        {
+          "callee": "writer.writerow",
+          "line": 131
+        },
+        {
+          "callee": "input_dir.exists",
+          "line": 192
+        },
+        {
+          "callee": "SystemExit",
+          "line": 193
+        },
+        {
+          "callee": "input_dir.glob",
+          "line": 199
+        },
+        {
+          "callee": "_convert_file",
+          "line": 202
+        },
+        {
+          "callee": "main",
+          "line": 212
+        },
+        {
+          "callee": "model.strip",
+          "line": 54
+        },
+        {
+          "callee": "cleaned.replace",
+          "line": 55
+        },
+        {
+          "callee": "cleaned.replace",
+          "line": 56
+        },
+        {
+          "callee": "_RPM_RE.search",
+          "line": 78
+        },
+        {
+          "callee": "stripped.startswith",
+          "line": 88
+        },
+        {
+          "callee": "len",
+          "line": 92
+        },
+        {
+          "callee": "len",
+          "line": 92
+        },
+        {
+          "callee": "float",
+          "line": 96
+        },
+        {
+          "callee": "float",
+          "line": 101
+        },
+        {
+          "callee": "float",
+          "line": 103
+        },
+        {
+          "callee": "path.read_text",
+          "line": 110
+        },
+        {
+          "callee": "writer.writerow",
+          "line": 152
+        },
+        {
+          "callee": "json.dumps",
+          "line": 163
+        },
+        {
+          "callee": "path.is_file",
+          "line": 200
+        },
+        {
+          "callee": "line.split",
+          "line": 63
+        },
+        {
+          "callee": "int",
+          "line": 79
+        },
+        {
+          "callee": "len",
+          "line": 100
+        },
+        {
+          "callee": "ln.strip",
+          "line": 114
+        },
+        {
+          "callee": "match.group",
+          "line": 79
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "14a27e3e51f165c6e431090ef074540e44b821bc42c146231918a9bdc7b63d3b"
+    },
+    "PyThrust/scripts/generate_readme_plots.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "matplotlib.use",
+          "line": 6
+        },
+        {
+          "callee": "sys.path.insert",
+          "line": 11
+        },
+        {
+          "callee": "Path",
+          "line": 19
+        },
+        {
+          "callee": "str",
+          "line": 11
+        },
+        {
+          "callee": "plt.rcParams.update",
+          "line": 38
+        },
+        {
+          "callee": "fig.savefig",
+          "line": 59
+        },
+        {
+          "callee": "plt.close",
+          "line": 60
+        },
+        {
+          "callee": "print",
+          "line": 61
+        },
+        {
+          "callee": "fig.subplots_adjust",
+          "line": 65
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 75
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 81
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 82
+        },
+        {
+          "callee": "print",
+          "line": 87
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 88
+        },
+        {
+          "callee": "FixedVoltageBattery",
+          "line": 94
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 95
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 96
+        },
+        {
+          "callee": "PropulsionCalibrator().calibrate",
+          "line": 116
+        },
+        {
+          "callee": "result.to_system_spec",
+          "line": 124
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 125
+        },
+        {
+          "callee": "np.linspace",
+          "line": 127
+        },
+        {
+          "callee": "plt.subplots",
+          "line": 144
+        },
+        {
+          "callee": "fig.suptitle",
+          "line": 145
+        },
+        {
+          "callee": "fig.text",
+          "line": 146
+        },
+        {
+          "callee": "ax1.plot",
+          "line": 155
+        },
+        {
+          "callee": "ax1.scatter",
+          "line": 156
+        },
+        {
+          "callee": "ax1.set_title",
+          "line": 164
+        },
+        {
+          "callee": "ax1.set_xlabel",
+          "line": 165
+        },
+        {
+          "callee": "ax1.set_ylabel",
+          "line": 166
+        },
+        {
+          "callee": "ax1.grid",
+          "line": 167
+        },
+        {
+          "callee": "ax1.legend",
+          "line": 168
+        },
+        {
+          "callee": "ax2.plot",
+          "line": 170
+        },
+        {
+          "callee": "ax2.scatter",
+          "line": 171
+        },
+        {
+          "callee": "ax2.set_title",
+          "line": 179
+        },
+        {
+          "callee": "ax2.set_xlabel",
+          "line": 180
+        },
+        {
+          "callee": "ax2.set_ylabel",
+          "line": 181
+        },
+        {
+          "callee": "ax2.grid",
+          "line": 182
+        },
+        {
+          "callee": "ax2.legend",
+          "line": 183
+        },
+        {
+          "callee": "apply_two_panel_layout",
+          "line": 185
+        },
+        {
+          "callee": "save_figure",
+          "line": 186
+        },
+        {
+          "callee": "print",
+          "line": 190
+        },
+        {
+          "callee": "plt.subplots",
+          "line": 191
+        },
+        {
+          "callee": "fig.suptitle",
+          "line": 192
+        },
+        {
+          "callee": "fig.text",
+          "line": 193
+        },
+        {
+          "callee": "sorted",
+          "line": 204
+        },
+        {
+          "callee": "zip",
+          "line": 207
+        },
+        {
+          "callee": "ax1.set_title",
+          "line": 213
+        },
+        {
+          "callee": "ax1.set_xlabel",
+          "line": 214
+        },
+        {
+          "callee": "ax1.set_ylabel",
+          "line": 215
+        },
+        {
+          "callee": "ax1.grid",
+          "line": 216
+        },
+        {
+          "callee": "ax1.legend",
+          "line": 217
+        },
+        {
+          "callee": "ax2.set_title",
+          "line": 219
+        },
+        {
+          "callee": "ax2.set_xlabel",
+          "line": 220
+        },
+        {
+          "callee": "ax2.set_ylabel",
+          "line": 221
+        },
+        {
+          "callee": "ax2.grid",
+          "line": 222
+        },
+        {
+          "callee": "ax2.legend",
+          "line": 223
+        },
+        {
+          "callee": "apply_two_panel_layout",
+          "line": 225
+        },
+        {
+          "callee": "save_figure",
+          "line": 226
+        },
+        {
+          "callee": "print",
+          "line": 230
+        },
+        {
+          "callee": "RateMapBattery.from_json",
+          "line": 231
+        },
+        {
+          "callee": "build_baseline_specs",
+          "line": 232
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 233
+        },
+        {
+          "callee": "BatteryState",
+          "line": 234
+        },
+        {
+          "callee": "plt.subplots",
+          "line": 275
+        },
+        {
+          "callee": "fig.suptitle",
+          "line": 276
+        },
+        {
+          "callee": "fig.text",
+          "line": 277
+        },
+        {
+          "callee": "ax1.plot",
+          "line": 286
+        },
+        {
+          "callee": "ax1.set_title",
+          "line": 287
+        },
+        {
+          "callee": "ax1.set_xlabel",
+          "line": 288
+        },
+        {
+          "callee": "ax1.set_ylabel",
+          "line": 289
+        },
+        {
+          "callee": "ax1.set_ylim",
+          "line": 290
+        },
+        {
+          "callee": "ax1.grid",
+          "line": 291
+        },
+        {
+          "callee": "ax2.plot",
+          "line": 293
+        },
+        {
+          "callee": "ax2.set_title",
+          "line": 301
+        },
+        {
+          "callee": "ax2.set_xlabel",
+          "line": 302
+        },
+        {
+          "callee": "ax2.set_ylabel",
+          "line": 303
+        },
+        {
+          "callee": "ax2.set_xticks",
+          "line": 304
+        },
+        {
+          "callee": "ax2.set_xticklabels",
+          "line": 305
+        },
+        {
+          "callee": "ax2.grid",
+          "line": 306
+        },
+        {
+          "callee": "ax2.set_ylim",
+          "line": 307
+        },
+        {
+          "callee": "zip",
+          "line": 308
+        },
+        {
+          "callee": "apply_two_panel_layout",
+          "line": 319
+        },
+        {
+          "callee": "save_figure",
+          "line": 320
+        },
+        {
+          "callee": "print",
+          "line": 324
+        },
+        {
+          "callee": "np.linspace",
+          "line": 325
+        },
+        {
+          "callee": "np.linspace",
+          "line": 326
+        },
+        {
+          "callee": "np.zeros",
+          "line": 327
+        },
+        {
+          "callee": "FixedVoltageBattery",
+          "line": 329
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 330
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 331
+        },
+        {
+          "callee": "enumerate",
+          "line": 369
+        },
+        {
+          "callee": "plt.figure",
+          "line": 389
+        },
+        {
+          "callee": "fig.add_axes",
+          "line": 390
+        },
+        {
+          "callee": "ax.contourf",
+          "line": 391
+        },
+        {
+          "callee": "fig.add_axes",
+          "line": 392
+        },
+        {
+          "callee": "fig.colorbar",
+          "line": 393
+        },
+        {
+          "callee": "cbar.set_label",
+          "line": 394
+        },
+        {
+          "callee": "ax.set_xlabel",
+          "line": 395
+        },
+        {
+          "callee": "ax.set_ylabel",
+          "line": 396
+        },
+        {
+          "callee": "fig.suptitle",
+          "line": 397
+        },
+        {
+          "callee": "fig.text",
+          "line": 398
+        },
+        {
+          "callee": "ax.grid",
+          "line": 406
+        },
+        {
+          "callee": "save_figure",
+          "line": 407
+        },
+        {
+          "callee": "configure_style",
+          "line": 411
+        },
+        {
+          "callee": "PropellerDatabase",
+          "line": 413
+        },
+        {
+          "callee": "db_prop.get",
+          "line": 418
+        },
+        {
+          "callee": "IMAGE_DIR.mkdir",
+          "line": 423
+        },
+        {
+          "callee": "generate_battery_mission_plot",
+          "line": 425
+        },
+        {
+          "callee": "generate_calibration_plot",
+          "line": 426
+        },
+        {
+          "callee": "generate_propeller_plot",
+          "line": 427
+        },
+        {
+          "callee": "generate_heatmap_plot",
+          "line": 428
+        },
+        {
+          "callee": "main",
+          "line": 432
+        },
+        {
+          "callee": "ManufacturerTestPoint",
+          "line": 112
+        },
+        {
+          "callee": "solver._build_point",
+          "line": 131
+        },
+        {
+          "callee": "model_thrusts_g.append",
+          "line": 141
+        },
+        {
+          "callee": "model_currents_a.append",
+          "line": 142
+        },
+        {
+          "callee": "set",
+          "line": 204
+        },
+        {
+          "callee": "ax1.plot",
+          "line": 210
+        },
+        {
+          "callee": "ax2.plot",
+          "line": 211
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 252
+        },
+        {
+          "callee": "battery.step_current",
+          "line": 264
+        },
+        {
+          "callee": "times_min.append",
+          "line": 265
+        },
+        {
+          "callee": "soc.append",
+          "line": 266
+        },
+        {
+          "callee": "voltages.append",
+          "line": 267
+        },
+        {
+          "callee": "currents.append",
+          "line": 268
+        },
+        {
+          "callee": "c_rates.append",
+          "line": 269
+        },
+        {
+          "callee": "labels.append",
+          "line": 270
+        },
+        {
+          "callee": "ax2.text",
+          "line": 309
+        },
+        {
+          "callee": "range",
+          "line": 337
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 357
+        },
+        {
+          "callee": "db.find_by_size",
+          "line": 370
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 373
+        },
+        {
+          "callee": "enumerate",
+          "line": 375
+        },
+        {
+          "callee": "db_prop.load",
+          "line": 414
+        },
+        {
+          "callee": "print",
+          "line": 415
+        },
+        {
+          "callee": "sys.exit",
+          "line": 416
+        },
+        {
+          "callee": "print",
+          "line": 420
+        },
+        {
+          "callee": "sys.exit",
+          "line": 421
+        },
+        {
+          "callee": "PropulsionCalibrator",
+          "line": 116
+        },
+        {
+          "callee": "range",
+          "line": 272
+        },
+        {
+          "callee": "range",
+          "line": 273
+        },
+        {
+          "callee": "max",
+          "line": 307
+        },
+        {
+          "callee": "len",
+          "line": 327
+        },
+        {
+          "callee": "len",
+          "line": 327
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 339
+        },
+        {
+          "callee": "db.get",
+          "line": 372
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 376
+        },
+        {
+          "callee": "find_hover_throttle",
+          "line": 382
+        },
+        {
+          "callee": "Path",
+          "line": 414
+        },
+        {
+          "callee": "Path(__file__).resolve",
+          "line": 11
+        },
+        {
+          "callee": "len",
+          "line": 203
+        },
+        {
+          "callee": "len",
+          "line": 272
+        },
+        {
+          "callee": "len",
+          "line": 273
+        },
+        {
+          "callee": "abs",
+          "line": 350
+        },
+        {
+          "callee": "len",
+          "line": 203
+        },
+        {
+          "callee": "len",
+          "line": 203
+        },
+        {
+          "callee": "max",
+          "line": 311
+        },
+        {
+          "callee": "abs",
+          "line": 367
+        },
+        {
+          "callee": "Path",
+          "line": 11
+        },
+        {
+          "callee": "len",
+          "line": 203
+        },
+        {
+          "callee": "int",
+          "line": 210
+        },
+        {
+          "callee": "int",
+          "line": 211
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "71320bca98c2356650f53957e27ba2691a72bdaed9637f5d8f58311dfed2367c"
+    },
+    "PyThrust/tests/test_autotune.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "pytest.fixture",
+          "line": 37
+        },
+        {
+          "callee": "pytest.fixture",
+          "line": 48
+        },
+        {
+          "callee": "pytest.fixture",
+          "line": 58
+        },
+        {
+          "callee": "pytest.fixture",
+          "line": 63
+        },
+        {
+          "callee": "PropellerDatabase",
+          "line": 39
+        },
+        {
+          "callee": "db.get",
+          "line": 42
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 50
+        },
+        {
+          "callee": "BatterySpec",
+          "line": 60
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 65
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 83
+        },
+        {
+          "callee": "pytest.mark.parametrize",
+          "line": 117
+        },
+        {
+          "callee": "db.load",
+          "line": 40
+        },
+        {
+          "callee": "pytest.skip",
+          "line": 41
+        },
+        {
+          "callee": "pytest.skip",
+          "line": 44
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 86
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 121
+        },
+        {
+          "callee": "_make_synthetic_table",
+          "line": 122
+        },
+        {
+          "callee": "PropulsionCalibrator",
+          "line": 127
+        },
+        {
+          "callee": "cal.calibrate",
+          "line": 128
+        },
+        {
+          "callee": "PropulsionCalibrator",
+          "line": 153
+        },
+        {
+          "callee": "cal.calibrate",
+          "line": 154
+        },
+        {
+          "callee": "any",
+          "line": 158
+        },
+        {
+          "callee": "PropulsionCalibrator",
+          "line": 166
+        },
+        {
+          "callee": "cal.calibrate",
+          "line": 167
+        },
+        {
+          "callee": "math.isnan",
+          "line": 173
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 178
+        },
+        {
+          "callee": "_make_synthetic_table",
+          "line": 179
+        },
+        {
+          "callee": "PropulsionCalibrator",
+          "line": 189
+        },
+        {
+          "callee": "cal.calibrate",
+          "line": 190
+        },
+        {
+          "callee": "any",
+          "line": 196
+        },
+        {
+          "callee": "csv_file.write_text",
+          "line": 204
+        },
+        {
+          "callee": "PropulsionCalibrator.load_csv",
+          "line": 210
+        },
+        {
+          "callee": "csv_file.write_text",
+          "line": 218
+        },
+        {
+          "callee": "PropulsionCalibrator.load_csv",
+          "line": 222
+        },
+        {
+          "callee": "csv_file.write_text",
+          "line": 227
+        },
+        {
+          "callee": "PropulsionCalibrator.load_csv",
+          "line": 233
+        },
+        {
+          "callee": "CalibrationResult",
+          "line": 239
+        },
+        {
+          "callee": "result.to_system_spec",
+          "line": 248
+        },
+        {
+          "callee": "isinstance",
+          "line": 249
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 255
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 268
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 281
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 292
+        },
+        {
+          "callee": "BatterySpec",
+          "line": 302
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 303
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 304
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 305
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 307
+        },
+        {
+          "callee": "points.append",
+          "line": 99
+        },
+        {
+          "callee": "len",
+          "line": 125
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 132
+        },
+        {
+          "callee": "abs",
+          "line": 138
+        },
+        {
+          "callee": "ManufacturerTestPoint",
+          "line": 151
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 155
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 168
+        },
+        {
+          "callee": "ManufacturerTestPoint",
+          "line": 183
+        },
+        {
+          "callee": "ManufacturerTestPoint",
+          "line": 184
+        },
+        {
+          "callee": "ManufacturerTestPoint",
+          "line": 185
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 191
+        },
+        {
+          "callee": "len",
+          "line": 194
+        },
+        {
+          "callee": "len",
+          "line": 211
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 212
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 213
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 214
+        },
+        {
+          "callee": "len",
+          "line": 223
+        },
+        {
+          "callee": "len",
+          "line": 234
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 250
+        },
+        {
+          "callee": "motor.get_no_load_current",
+          "line": 263
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 263
+        },
+        {
+          "callee": "motor.get_no_load_current",
+          "line": 264
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 264
+        },
+        {
+          "callee": "motor.get_no_load_current",
+          "line": 265
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 265
+        },
+        {
+          "callee": "motor.get_no_load_current",
+          "line": 278
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 278
+        },
+        {
+          "callee": "motor.get_winding_resistance",
+          "line": 288
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 288
+        },
+        {
+          "callee": "motor.get_winding_resistance",
+          "line": 289
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 289
+        },
+        {
+          "callee": "ManufacturerTestPoint",
+          "line": 100
+        },
+        {
+          "callee": "Path",
+          "line": 33
+        },
+        {
+          "callee": "w.lower",
+          "line": 196
+        },
+        {
+          "callee": "w.lower",
+          "line": 158
+        },
+        {
+          "callee": "w.lower",
+          "line": 158
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "f011064031bb78ee71373f81e822a98164c5d2296526c66daeecb42fe810cbce"
+    },
+    "PyThrust/tests/test_battery.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "pytest.mark.parametrize",
+          "line": 50
+        },
+        {
+          "callee": "pytest.mark.parametrize",
+          "line": 56
+        },
+        {
+          "callee": "pytest.mark.parametrize",
+          "line": 146
+        },
+        {
+          "callee": "pytest.mark.parametrize",
+          "line": 289
+        },
+        {
+          "callee": "pytest.mark.parametrize",
+          "line": 404
+        },
+        {
+          "callee": "pytest.mark.parametrize",
+          "line": 478
+        },
+        {
+          "callee": "pytest.mark.parametrize",
+          "line": 527
+        },
+        {
+          "callee": "pytest.mark.parametrize",
+          "line": 599
+        },
+        {
+          "callee": "pytest.mark.parametrize",
+          "line": 627
+        },
+        {
+          "callee": "RateMapBattery",
+          "line": 21
+        },
+        {
+          "callee": "FixedVoltageBattery",
+          "line": 36
+        },
+        {
+          "callee": "math.isclose",
+          "line": 40
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 44
+        },
+        {
+          "callee": "BatteryState",
+          "line": 63
+        },
+        {
+          "callee": "BatteryIntegrationResult",
+          "line": 64
+        },
+        {
+          "callee": "BatteryState",
+          "line": 104
+        },
+        {
+          "callee": "rate_map_battery.state_at_current",
+          "line": 105
+        },
+        {
+          "callee": "math.isclose",
+          "line": 108
+        },
+        {
+          "callee": "math.isclose",
+          "line": 109
+        },
+        {
+          "callee": "math.isclose",
+          "line": 110
+        },
+        {
+          "callee": "math.isclose",
+          "line": 111
+        },
+        {
+          "callee": "math.isclose",
+          "line": 112
+        },
+        {
+          "callee": "BatteryState",
+          "line": 116
+        },
+        {
+          "callee": "rate_map_battery.state_at_power",
+          "line": 117
+        },
+        {
+          "callee": "math.isclose",
+          "line": 127
+        },
+        {
+          "callee": "math.isclose",
+          "line": 128
+        },
+        {
+          "callee": "BatteryState",
+          "line": 132
+        },
+        {
+          "callee": "rate_map_battery.state_at_power_loss",
+          "line": 133
+        },
+        {
+          "callee": "math.isclose",
+          "line": 143
+        },
+        {
+          "callee": "BatteryState",
+          "line": 153
+        },
+        {
+          "callee": "rate_map_battery.state_at_power",
+          "line": 154
+        },
+        {
+          "callee": "BatteryState",
+          "line": 161
+        },
+        {
+          "callee": "rate_map_battery.state_at_current",
+          "line": 162
+        },
+        {
+          "callee": "BatteryState",
+          "line": 171
+        },
+        {
+          "callee": "rate_map_battery.step_current",
+          "line": 172
+        },
+        {
+          "callee": "math.isclose",
+          "line": 174
+        },
+        {
+          "callee": "math.isclose",
+          "line": 175
+        },
+        {
+          "callee": "rate_map_battery.integrate_current",
+          "line": 179
+        },
+        {
+          "callee": "math.isclose",
+          "line": 190
+        },
+        {
+          "callee": "math.isclose",
+          "line": 191
+        },
+        {
+          "callee": "math.isclose",
+          "line": 192
+        },
+        {
+          "callee": "rate_map_battery.integrate_c_rate",
+          "line": 199
+        },
+        {
+          "callee": "rate_map_battery.integrate_current",
+          "line": 205
+        },
+        {
+          "callee": "rate_map_battery.integrate_current",
+          "line": 218
+        },
+        {
+          "callee": "all",
+          "line": 227
+        },
+        {
+          "callee": "rate_map_battery.integrate_current",
+          "line": 233
+        },
+        {
+          "callee": "math.isclose",
+          "line": 242
+        },
+        {
+          "callee": "rate_map_battery.integrate_current",
+          "line": 246
+        },
+        {
+          "callee": "math.isclose",
+          "line": 256
+        },
+        {
+          "callee": "rate_map_battery.integrate_current",
+          "line": 261
+        },
+        {
+          "callee": "math.isclose",
+          "line": 271
+        },
+        {
+          "callee": "math.isclose",
+          "line": 272
+        },
+        {
+          "callee": "rate_map_battery.integrate_current",
+          "line": 276
+        },
+        {
+          "callee": "params.update",
+          "line": 307
+        },
+        {
+          "callee": "rate_map_battery.integrate_power",
+          "line": 314
+        },
+        {
+          "callee": "math.isclose",
+          "line": 326
+        },
+        {
+          "callee": "rate_map_battery.integrate_power",
+          "line": 333
+        },
+        {
+          "callee": "all",
+          "line": 342
+        },
+        {
+          "callee": "rate_map_battery.integrate_power",
+          "line": 348
+        },
+        {
+          "callee": "math.isclose",
+          "line": 357
+        },
+        {
+          "callee": "rate_map_battery.integrate_power",
+          "line": 361
+        },
+        {
+          "callee": "math.isclose",
+          "line": 371
+        },
+        {
+          "callee": "math.isclose",
+          "line": 372
+        },
+        {
+          "callee": "rate_map_battery.integrate_power",
+          "line": 376
+        },
+        {
+          "callee": "math.isclose",
+          "line": 387
+        },
+        {
+          "callee": "rate_map_battery.integrate_power",
+          "line": 391
+        },
+        {
+          "callee": "params.update",
+          "line": 422
+        },
+        {
+          "callee": "rate_map_battery.integrate_voltage",
+          "line": 429
+        },
+        {
+          "callee": "all",
+          "line": 439
+        },
+        {
+          "callee": "rate_map_battery.integrate_load_resistance",
+          "line": 443
+        },
+        {
+          "callee": "math.isclose",
+          "line": 454
+        },
+        {
+          "callee": "rate_map_battery.integrate_power_loss",
+          "line": 458
+        },
+        {
+          "callee": "math.isclose",
+          "line": 475
+        },
+        {
+          "callee": "getattr",
+          "line": 492
+        },
+        {
+          "callee": "rate_map_battery.integrate_current_to_dod",
+          "line": 499
+        },
+        {
+          "callee": "math.isclose",
+          "line": 508
+        },
+        {
+          "callee": "math.isclose",
+          "line": 509
+        },
+        {
+          "callee": "math.isclose",
+          "line": 510
+        },
+        {
+          "callee": "rate_map_battery.integrate_power_to_dod",
+          "line": 514
+        },
+        {
+          "callee": "math.isclose",
+          "line": 523
+        },
+        {
+          "callee": "math.isclose",
+          "line": 524
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 538
+        },
+        {
+          "callee": "rate_map_battery.state_at_power",
+          "line": 539
+        },
+        {
+          "callee": "rate_map_battery.dod_at_voltage_power",
+          "line": 541
+        },
+        {
+          "callee": "rate_map_battery.dod_at_power_voltage",
+          "line": 545
+        },
+        {
+          "callee": "math.isclose",
+          "line": 550
+        },
+        {
+          "callee": "math.isclose",
+          "line": 551
+        },
+        {
+          "callee": "rate_map_battery.integrate_power_profile",
+          "line": 555
+        },
+        {
+          "callee": "rate_map_battery.integrate_power",
+          "line": 561
+        },
+        {
+          "callee": "rate_map_battery.integrate_power",
+          "line": 567
+        },
+        {
+          "callee": "math.isclose",
+          "line": 576
+        },
+        {
+          "callee": "math.isclose",
+          "line": 578
+        },
+        {
+          "callee": "math.isclose",
+          "line": 579
+        },
+        {
+          "callee": "rate_map_battery.energy_knockdown_dod",
+          "line": 592
+        },
+        {
+          "callee": "rate_map_battery.energy_knockdown_dod",
+          "line": 593
+        },
+        {
+          "callee": "math.isclose",
+          "line": 595
+        },
+        {
+          "callee": "math.isclose",
+          "line": 596
+        },
+        {
+          "callee": "rate_map_battery.energy_knockdown_c_rate",
+          "line": 619
+        },
+        {
+          "callee": "rate_map_battery.energy_knockdown_c_rate",
+          "line": 620
+        },
+        {
+          "callee": "rate_map_battery.energy_knockdown_c_rate",
+          "line": 621
+        },
+        {
+          "callee": "params.update",
+          "line": 642
+        },
+        {
+          "callee": "path.write_text",
+          "line": 650
+        },
+        {
+          "callee": "RateMapBattery.from_json",
+          "line": 671
+        },
+        {
+          "callee": "RateMapBattery.from_json",
+          "line": 682
+        },
+        {
+          "callee": "battery.state_at_current",
+          "line": 683
+        },
+        {
+          "callee": "math.isclose",
+          "line": 690
+        },
+        {
+          "callee": "Path(__file__).resolve",
+          "line": 16
+        },
+        {
+          "callee": "battery.terminal_voltage",
+          "line": 39
+        },
+        {
+          "callee": "battery.terminal_power",
+          "line": 40
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 52
+        },
+        {
+          "callee": "BatteryState",
+          "line": 53
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 58
+        },
+        {
+          "callee": "BatteryState.from_dod",
+          "line": 59
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 86
+        },
+        {
+          "callee": "BatteryIntegrationResult",
+          "line": 87
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 148
+        },
+        {
+          "callee": "rate_map_battery.state_at_power_loss",
+          "line": 149
+        },
+        {
+          "callee": "BatteryState",
+          "line": 302
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 309
+        },
+        {
+          "callee": "rate_map_battery.integrate_current",
+          "line": 310
+        },
+        {
+          "callee": "BatteryState",
+          "line": 417
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 424
+        },
+        {
+          "callee": "rate_map_battery.integrate_power",
+          "line": 425
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 494
+        },
+        {
+          "callee": "method",
+          "line": 495
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 529
+        },
+        {
+          "callee": "rate_map_battery.integrate_current_to_dod",
+          "line": 530
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 583
+        },
+        {
+          "callee": "rate_map_battery.integrate_power_profile",
+          "line": 584
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 614
+        },
+        {
+          "callee": "rate_map_battery.energy_knockdown_dod",
+          "line": 615
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 644
+        },
+        {
+          "callee": "rate_map_battery.energy_knockdown_c_rate",
+          "line": 645
+        },
+        {
+          "callee": "json.dumps",
+          "line": 651
+        },
+        {
+          "callee": "math.sqrt",
+          "line": 122
+        },
+        {
+          "callee": "BatteryState",
+          "line": 180
+        },
+        {
+          "callee": "BatteryState",
+          "line": 200
+        },
+        {
+          "callee": "BatteryState",
+          "line": 206
+        },
+        {
+          "callee": "BatteryState",
+          "line": 219
+        },
+        {
+          "callee": "math.isclose",
+          "line": 227
+        },
+        {
+          "callee": "BatteryState",
+          "line": 234
+        },
+        {
+          "callee": "BatteryState",
+          "line": 247
+        },
+        {
+          "callee": "BatteryState",
+          "line": 262
+        },
+        {
+          "callee": "BatteryState",
+          "line": 277
+        },
+        {
+          "callee": "BatteryState",
+          "line": 315
+        },
+        {
+          "callee": "BatteryState",
+          "line": 334
+        },
+        {
+          "callee": "math.isclose",
+          "line": 342
+        },
+        {
+          "callee": "BatteryState",
+          "line": 349
+        },
+        {
+          "callee": "BatteryState",
+          "line": 362
+        },
+        {
+          "callee": "BatteryState",
+          "line": 377
+        },
+        {
+          "callee": "BatteryState",
+          "line": 392
+        },
+        {
+          "callee": "BatteryState",
+          "line": 430
+        },
+        {
+          "callee": "math.isclose",
+          "line": 439
+        },
+        {
+          "callee": "BatteryState",
+          "line": 444
+        },
+        {
+          "callee": "BatteryState",
+          "line": 459
+        },
+        {
+          "callee": "BatteryState",
+          "line": 500
+        },
+        {
+          "callee": "BatteryState",
+          "line": 515
+        },
+        {
+          "callee": "BatteryState",
+          "line": 556
+        },
+        {
+          "callee": "BatteryState",
+          "line": 562
+        },
+        {
+          "callee": "BatteryState",
+          "line": 683
+        },
+        {
+          "callee": "Path",
+          "line": 16
+        },
+        {
+          "callee": "BatteryState",
+          "line": 88
+        },
+        {
+          "callee": "BatteryState",
+          "line": 149
+        },
+        {
+          "callee": "rate_map_battery.resistance",
+          "line": 467
+        },
+        {
+          "callee": "BatteryState",
+          "line": 495
+        },
+        {
+          "callee": "BatteryState",
+          "line": 531
+        },
+        {
+          "callee": "BatteryState",
+          "line": 585
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "02b7d10105c621a182e4aa4c541f398968edc8446f9909c6aa520848b7ce37d0"
+    },
+    "PyThrust/tests/test_models.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "MotorSpec",
+          "line": 12
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 25
+        },
+        {
+          "callee": "math.isclose",
+          "line": 35
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 40
+        },
+        {
+          "callee": "math.isclose",
+          "line": 50
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 55
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 66
+        },
+        {
+          "callee": "math.isclose",
+          "line": 73
+        },
+        {
+          "callee": "BatterySpec",
+          "line": 77
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 81
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 84
+        },
+        {
+          "callee": "OperatingPoint",
+          "line": 91
+        },
+        {
+          "callee": "OperatingPoint",
+          "line": 124
+        },
+        {
+          "callee": "motor.get_no_load_current",
+          "line": 18
+        },
+        {
+          "callee": "motor.get_no_load_current",
+          "line": 19
+        },
+        {
+          "callee": "motor_iron.get_no_load_current",
+          "line": 35
+        },
+        {
+          "callee": "motor_drela.get_no_load_current",
+          "line": 50
+        },
+        {
+          "callee": "motor.get_winding_resistance",
+          "line": 61
+        },
+        {
+          "callee": "motor.get_winding_resistance",
+          "line": 62
+        },
+        {
+          "callee": "motor_quad.get_winding_resistance",
+          "line": 73
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "469ea6b0fcd9c79bd29557cb6e26b450b819a881b3f2fded9a8879cf0a774786"
+    },
+    "PyThrust/tests/test_motors.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "MotorDatabase",
+          "line": 7
+        },
+        {
+          "callee": "db.load",
+          "line": 11
+        },
+        {
+          "callee": "db.list_motors",
+          "line": 16
+        },
+        {
+          "callee": "db.get",
+          "line": 20
+        },
+        {
+          "callee": "MotorDatabase",
+          "line": 26
+        },
+        {
+          "callee": "db_single.load_entry",
+          "line": 28
+        },
+        {
+          "callee": "entry.to_spec",
+          "line": 35
+        },
+        {
+          "callee": "db.search",
+          "line": 43
+        },
+        {
+          "callee": "len",
+          "line": 17
+        },
+        {
+          "callee": "db_single.get",
+          "line": 32
+        },
+        {
+          "callee": "len",
+          "line": 51
+        },
+        {
+          "callee": "Path",
+          "line": 8
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "b702785653608de62a57872bc8803838d78b7cda6340e715fdfaf63ecb5f8de4"
+    },
+    "PyThrust/tests/test_openmdao.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "pytest.fixture",
+          "line": 23
+        },
+        {
+          "callee": "PropellerDatabase",
+          "line": 25
+        },
+        {
+          "callee": "db.get",
+          "line": 28
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 36
+        },
+        {
+          "callee": "BatterySpec",
+          "line": 42
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 43
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 44
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 46
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 47
+        },
+        {
+          "callee": "om.Problem",
+          "line": 60
+        },
+        {
+          "callee": "PropulsionComponent",
+          "line": 63
+        },
+        {
+          "callee": "model.add_subsystem",
+          "line": 64
+        },
+        {
+          "callee": "prob.setup",
+          "line": 66
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 69
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 70
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 71
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 72
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 73
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 74
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 75
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 76
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 77
+        },
+        {
+          "callee": "prob.set_val",
+          "line": 78
+        },
+        {
+          "callee": "prob.run_model",
+          "line": 81
+        },
+        {
+          "callee": "prob.check_partials",
+          "line": 94
+        },
+        {
+          "callee": "db.load",
+          "line": 26
+        },
+        {
+          "callee": "pytest.skip",
+          "line": 27
+        },
+        {
+          "callee": "pytest.skip",
+          "line": 30
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 84
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 85
+        },
+        {
+          "callee": "prob.get_val",
+          "line": 86
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 89
+        },
+        {
+          "callee": "pytest.approx",
+          "line": 90
+        },
+        {
+          "callee": "len",
+          "line": 97
+        },
+        {
+          "callee": "Path",
+          "line": 19
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "3bafafb878552fdd90b567c03945223d1ac4d1c3a91d108804404dc6136d8f8d"
+    },
+    "PyThrust/tests/test_propellers.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "PropellerMetadata",
+          "line": 33
+        },
+        {
+          "callee": "PropellerEntry",
+          "line": 48
+        },
+        {
+          "callee": "math.isclose",
+          "line": 50
+        },
+        {
+          "callee": "math.isclose",
+          "line": 51
+        },
+        {
+          "callee": "PropellerMetadata",
+          "line": 56
+        },
+        {
+          "callee": "PropellerEntry",
+          "line": 81
+        },
+        {
+          "callee": "PropellerEntry",
+          "line": 84
+        },
+        {
+          "callee": "entry.get_coefficients",
+          "line": 88
+        },
+        {
+          "callee": "entry.get_coefficients",
+          "line": 92
+        },
+        {
+          "callee": "entry.get_coefficients",
+          "line": 99
+        },
+        {
+          "callee": "math.isclose",
+          "line": 100
+        },
+        {
+          "callee": "math.isclose",
+          "line": 101
+        },
+        {
+          "callee": "entry.get_coefficients",
+          "line": 107
+        },
+        {
+          "callee": "math.isclose",
+          "line": 108
+        },
+        {
+          "callee": "math.isclose",
+          "line": 109
+        },
+        {
+          "callee": "entry.get_coefficients",
+          "line": 113
+        },
+        {
+          "callee": "math.isclose",
+          "line": 114
+        },
+        {
+          "callee": "math.isclose",
+          "line": 115
+        },
+        {
+          "callee": "json_file.write_text",
+          "line": 142
+        },
+        {
+          "callee": "csv_file.write_text",
+          "line": 143
+        },
+        {
+          "callee": "PropellerDatabase",
+          "line": 145
+        },
+        {
+          "callee": "db.load",
+          "line": 149
+        },
+        {
+          "callee": "db.get",
+          "line": 155
+        },
+        {
+          "callee": "db.find_by_size",
+          "line": 160
+        },
+        {
+          "callee": "db.get_interpolated_coefficients",
+          "line": 168
+        },
+        {
+          "callee": "math.isclose",
+          "line": 173
+        },
+        {
+          "callee": "(tmp_path / f'{prop_id}.json').write_text",
+          "line": 189
+        },
+        {
+          "callee": "(tmp_path / 'bad_cols.csv').write_text",
+          "line": 190
+        },
+        {
+          "callee": "PropellerDatabase",
+          "line": 192
+        },
+        {
+          "callee": "db.load",
+          "line": 195
+        },
+        {
+          "callee": "_find_insert_index",
+          "line": 17
+        },
+        {
+          "callee": "_find_insert_index",
+          "line": 18
+        },
+        {
+          "callee": "_find_insert_index",
+          "line": 19
+        },
+        {
+          "callee": "_find_insert_index",
+          "line": 20
+        },
+        {
+          "callee": "_find_insert_index",
+          "line": 21
+        },
+        {
+          "callee": "_find_bracketing_indices",
+          "line": 26
+        },
+        {
+          "callee": "_find_bracketing_indices",
+          "line": 27
+        },
+        {
+          "callee": "_find_bracketing_indices",
+          "line": 28
+        },
+        {
+          "callee": "_find_bracketing_indices",
+          "line": 29
+        },
+        {
+          "callee": "empty_entry.get_coefficients",
+          "line": 85
+        },
+        {
+          "callee": "json.dumps",
+          "line": 142
+        },
+        {
+          "callee": "db.list_propellers",
+          "line": 153
+        },
+        {
+          "callee": "db.find_by_size",
+          "line": 165
+        },
+        {
+          "callee": "json.dumps",
+          "line": 189
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 199
+        },
+        {
+          "callee": "db.load",
+          "line": 200
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 44
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 45
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 70
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 71
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 72
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 75
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 76
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 77
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "ecb31f2eb600bcc23b6b4a03a2ae6b51beef107034e99a3d3a796ba41fe35c54"
+    },
+    "PyThrust/tests/test_solver.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "MotorSpec",
+          "line": 21
+        },
+        {
+          "callee": "BatterySpec",
+          "line": 29
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 30
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 31
+        },
+        {
+          "callee": "PropellerMetadata",
+          "line": 33
+        },
+        {
+          "callee": "PropellerEntry",
+          "line": 56
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 63
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 65
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 87
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 90
+        },
+        {
+          "callee": "math.isclose",
+          "line": 116
+        },
+        {
+          "callee": "math.isclose",
+          "line": 117
+        },
+        {
+          "callee": "math.isclose",
+          "line": 118
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 125
+        },
+        {
+          "callee": "BatteryState",
+          "line": 126
+        },
+        {
+          "callee": "RateMapBattery",
+          "line": 127
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 140
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 150
+        },
+        {
+          "callee": "math.isclose",
+          "line": 163
+        },
+        {
+          "callee": "math.isclose",
+          "line": 164
+        },
+        {
+          "callee": "math.isclose",
+          "line": 165
+        },
+        {
+          "callee": "math.isclose",
+          "line": 167
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 172
+        },
+        {
+          "callee": "RateMapBattery",
+          "line": 173
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 186
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 197
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 223
+        },
+        {
+          "callee": "RateMapBattery",
+          "line": 224
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 253
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 260
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 261
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 280
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 281
+        },
+        {
+          "callee": "PropellerMetadata",
+          "line": 307
+        },
+        {
+          "callee": "PropellerEntry",
+          "line": 308
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 315
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 318
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 334
+        },
+        {
+          "callee": "PropellerMetadata",
+          "line": 366
+        },
+        {
+          "callee": "PropellerEntry",
+          "line": 382
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 384
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 386
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 404
+        },
+        {
+          "callee": "PropellerMetadata",
+          "line": 410
+        },
+        {
+          "callee": "PropellerEntry",
+          "line": 426
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 427
+        },
+        {
+          "callee": "solver._build_point",
+          "line": 430
+        },
+        {
+          "callee": "pytest.raises",
+          "line": 237
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 238
+        },
+        {
+          "callee": "PropulsionSolver._estimate_j_max",
+          "line": 304
+        },
+        {
+          "callee": "PropulsionSolver._estimate_j_max",
+          "line": 309
+        },
+        {
+          "callee": "SolverConfig",
+          "line": 315
+        },
+        {
+          "callee": "SolverConfig",
+          "line": 384
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 45
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 46
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 47
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 50
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 51
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 52
+        },
+        {
+          "callee": "BatteryState",
+          "line": 189
+        },
+        {
+          "callee": "BatteryState",
+          "line": 200
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 377
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 378
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 379
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 421
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 422
+        },
+        {
+          "callee": "PropellerDataPoint",
+          "line": 423
+        }
+      ],
+      "scope": "PyThrust",
+      "sha256": "fb86891911b4a7b9e758ef5762d6b5320682568d8eab04cc878fb797bb884b09"
+    },
+    "aero/aero.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "np.asarray",
+          "line": 90
+        },
+        {
+          "callee": "np.asarray",
+          "line": 91
+        },
+        {
+          "callee": "np.asarray",
+          "line": 92
+        },
+        {
+          "callee": "np.asarray",
+          "line": 96
+        },
+        {
+          "callee": "np.asarray",
+          "line": 98
+        },
+        {
+          "callee": "np.linalg.norm",
+          "line": 99
+        },
+        {
+          "callee": "np.linalg.norm",
+          "line": 106
+        },
+        {
+          "callee": "np.dot",
+          "line": 120
+        },
+        {
+          "callee": "np.linalg.norm",
+          "line": 125
+        },
+        {
+          "callee": "np.zeros",
+          "line": 136
+        },
+        {
+          "callee": "np.cross",
+          "line": 153
+        },
+        {
+          "callee": "np.zeros",
+          "line": 160
+        },
+        {
+          "callee": "abs",
+          "line": 162
+        },
+        {
+          "callee": "np.cross",
+          "line": 218
+        },
+        {
+          "callee": "np.linalg.norm",
+          "line": 227
+        },
+        {
+          "callee": "np.zeros",
+          "line": 229
+        },
+        {
+          "callee": "ValueError",
+          "line": 102
+        },
+        {
+          "callee": "np.clip",
+          "line": 139
+        },
+        {
+          "callee": "np.dot",
+          "line": 224
+        },
+        {
+          "callee": "np.dot",
+          "line": 233
+        },
+        {
+          "callee": "np.zeros",
+          "line": 109
+        },
+        {
+          "callee": "np.zeros",
+          "line": 109
+        },
+        {
+          "callee": "np.sign",
+          "line": 214
+        },
+        {
+          "callee": "abs",
+          "line": 241
+        },
+        {
+          "callee": "abs",
+          "line": 241
+        },
+        {
+          "callee": "np.log",
+          "line": 170
+        }
+      ],
+      "scope": "hopper",
+      "sha256": "9008c26ea2c2c26e1e26441ee17f27872e1d34bf1c0d9cb7179ce285d6e2b53f"
+    },
+    "chassis/hopper.py": {
+      "affected_references": [
+        {
+          "line": 13,
+          "name": "Propulsion"
+        },
+        {
+          "line": 58,
+          "name": "self.propulsion.get_thrust_and_moment"
+        },
+        {
+          "line": 46,
+          "name": "self.propulsion.get_mass"
+        }
+      ],
+      "calls": [
+        {
+          "callee": "field",
+          "line": 25
+        },
+        {
+          "callee": "np.asarray",
+          "line": 31
+        },
+        {
+          "callee": "np.asarray",
+          "line": 32
+        },
+        {
+          "callee": "np.asarray",
+          "line": 33
+        },
+        {
+          "callee": "self.cg.copy",
+          "line": 49
+        },
+        {
+          "callee": "np.diag",
+          "line": 52
+        },
+        {
+          "callee": "self.propulsion.get_thrust_and_moment",
+          "line": 58
+        },
+        {
+          "callee": "self.propulsion.get_mass",
+          "line": 46
+        },
+        {
+          "callee": "np.zeros",
+          "line": 26
+        },
+        {
+          "callee": "ValueError",
+          "line": 40
+        },
+        {
+          "callee": "getattr",
+          "line": 39
+        }
+      ],
+      "scope": "hopper",
+      "sha256": "6e2b2f93e98b844ce04f68d26b704c65270e9329e1abff76caa45cbcd5dcf0bd"
+    },
+    "helpers/constants.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "hopper",
+      "sha256": "4853ae63f4d7df5254af6fbab9b46dd31ca60aa722dd3580643064bfce9523a4"
+    },
+    "helpers/math.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "np.array",
+          "line": 32
+        },
+        {
+          "callee": "np.array",
+          "line": 63
+        },
+        {
+          "callee": "np.array",
+          "line": 13
+        },
+        {
+          "callee": "np.linalg.norm",
+          "line": 13
+        },
+        {
+          "callee": "np.square",
+          "line": 19
+        },
+        {
+          "callee": "np.square",
+          "line": 24
+        },
+        {
+          "callee": "np.square",
+          "line": 29
+        },
+        {
+          "callee": "np.transpose",
+          "line": 35
+        },
+        {
+          "callee": "np.deg2rad",
+          "line": 43
+        },
+        {
+          "callee": "np.array",
+          "line": 66
+        },
+        {
+          "callee": "np.linalg.norm",
+          "line": 66
+        },
+        {
+          "callee": "np.square",
+          "line": 19
+        },
+        {
+          "callee": "np.square",
+          "line": 24
+        },
+        {
+          "callee": "np.square",
+          "line": 29
+        },
+        {
+          "callee": "np.cos",
+          "line": 49
+        },
+        {
+          "callee": "np.sin",
+          "line": 51
+        },
+        {
+          "callee": "np.sin",
+          "line": 52
+        },
+        {
+          "callee": "np.cos",
+          "line": 54
+        },
+        {
+          "callee": "np.cos",
+          "line": 55
+        },
+        {
+          "callee": "np.sin",
+          "line": 57
+        },
+        {
+          "callee": "np.cos",
+          "line": 58
+        },
+        {
+          "callee": "np.sin",
+          "line": 60
+        },
+        {
+          "callee": "np.square",
+          "line": 19
+        },
+        {
+          "callee": "np.square",
+          "line": 19
+        },
+        {
+          "callee": "np.square",
+          "line": 24
+        },
+        {
+          "callee": "np.square",
+          "line": 24
+        },
+        {
+          "callee": "np.square",
+          "line": 29
+        },
+        {
+          "callee": "np.square",
+          "line": 29
+        },
+        {
+          "callee": "np.cos",
+          "line": 49
+        },
+        {
+          "callee": "np.cos",
+          "line": 49
+        },
+        {
+          "callee": "np.sin",
+          "line": 49
+        },
+        {
+          "callee": "np.sin",
+          "line": 51
+        },
+        {
+          "callee": "np.cos",
+          "line": 52
+        },
+        {
+          "callee": "np.cos",
+          "line": 52
+        },
+        {
+          "callee": "np.sin",
+          "line": 52
+        },
+        {
+          "callee": "np.sin",
+          "line": 54
+        },
+        {
+          "callee": "np.cos",
+          "line": 55
+        },
+        {
+          "callee": "np.sin",
+          "line": 55
+        },
+        {
+          "callee": "np.sin",
+          "line": 55
+        },
+        {
+          "callee": "np.cos",
+          "line": 57
+        },
+        {
+          "callee": "np.sin",
+          "line": 58
+        },
+        {
+          "callee": "np.cos",
+          "line": 58
+        },
+        {
+          "callee": "np.cos",
+          "line": 58
+        },
+        {
+          "callee": "np.sin",
+          "line": 60
+        }
+      ],
+      "scope": "hopper",
+      "sha256": "5e6420ade1c4d642762ba4d6b0812a80f2f693a58151bbf16a4274efb521239a"
+    },
+    "main.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "print",
+          "line": 2
+        },
+        {
+          "callee": "main",
+          "line": 6
+        }
+      ],
+      "scope": "hopper",
+      "sha256": "67ebbf79c219721eb1f0cc6e4817b8fb218488b6dec4bbd25a1f0faee6527dbc"
+    },
+    "propulsion/propeller.py": {
+      "affected_references": [
+        {
+          "line": 4,
+          "name": "Propulsion"
+        }
+      ],
+      "calls": [
+        {
+          "callee": "super().__init__",
+          "line": 15
+        },
+        {
+          "callee": "super",
+          "line": 15
+        }
+      ],
+      "scope": "hopper",
+      "sha256": "caa5ee91e46d102b8ebe0c02e1dfec0ecdca18e2c423791fca6f2c19100ae7b6"
+    },
+    "propulsion/propulsion.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "auto",
+          "line": 6
+        },
+        {
+          "callee": "auto",
+          "line": 7
+        }
+      ],
+      "scope": "hopper",
+      "sha256": "e07b895d8399016a3b0511afb195d7ebf992050cef04ab3015600347f01750ce"
+    },
+    "scripts/ehopper.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "hopper",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "simulation/simulation.py": {
+      "affected_references": [
+        {
+          "line": 91,
+          "name": "mass"
+        },
+        {
+          "line": 93,
+          "name": "inertia"
+        },
+        {
+          "line": 9,
+          "name": "State"
+        },
+        {
+          "line": 37,
+          "name": "quarternion_to_dcm"
+        },
+        {
+          "line": 91,
+          "name": "self.hopper.mass"
+        },
+        {
+          "line": 96,
+          "name": "self.hopper.get_thrust_and_moment"
+        },
+        {
+          "line": 98,
+          "name": "self.aero.determine_at_point"
+        },
+        {
+          "line": 125,
+          "name": "inertia"
+        },
+        {
+          "line": 134,
+          "name": "euler_to_quaternion"
+        },
+        {
+          "line": 142,
+          "name": "State"
+        },
+        {
+          "line": 17,
+          "name": "self.state.update_state"
+        },
+        {
+          "line": 92,
+          "name": "self.hopper.CG"
+        },
+        {
+          "line": 93,
+          "name": "self.hopper.inertia"
+        },
+        {
+          "line": 145,
+          "name": "self.trajectory_ode"
+        },
+        {
+          "line": 118,
+          "name": "mass"
+        },
+        {
+          "line": 126,
+          "name": "inertia"
+        }
+      ],
+      "calls": [
+        {
+          "callee": "np.array",
+          "line": 22
+        },
+        {
+          "callee": "np.array",
+          "line": 23
+        },
+        {
+          "callee": "np.array",
+          "line": 25
+        },
+        {
+          "callee": "np.array",
+          "line": 27
+        },
+        {
+          "callee": "quarternion_to_dcm",
+          "line": 37
+        },
+        {
+          "callee": "atmosphere.speed_of_sound",
+          "line": 46
+        },
+        {
+          "callee": "atmosphere.density",
+          "line": 47
+        },
+        {
+          "callee": "atmosphere.dynamic_viscosity",
+          "line": 48
+        },
+        {
+          "callee": "np.asarray",
+          "line": 50
+        },
+        {
+          "callee": "np.linalg.norm",
+          "line": 59
+        },
+        {
+          "callee": "np.array",
+          "line": 79
+        },
+        {
+          "callee": "self.hopper.mass",
+          "line": 91
+        },
+        {
+          "callee": "np.asarray",
+          "line": 92
+        },
+        {
+          "callee": "np.asarray",
+          "line": 93
+        },
+        {
+          "callee": "self.hopper.get_thrust_and_moment",
+          "line": 96
+        },
+        {
+          "callee": "self.aero.determine_at_point",
+          "line": 98
+        },
+        {
+          "callee": "np.array",
+          "line": 114
+        },
+        {
+          "callee": "np.linalg.solve",
+          "line": 124
+        },
+        {
+          "callee": "np.concatenate",
+          "line": 129
+        },
+        {
+          "callee": "euler_to_quaternion",
+          "line": 134
+        },
+        {
+          "callee": "np.array",
+          "line": 136
+        },
+        {
+          "callee": "State",
+          "line": 142
+        },
+        {
+          "callee": "solve_ivp",
+          "line": 144
+        },
+        {
+          "callee": "self.state.update_state",
+          "line": 17
+        },
+        {
+          "callee": "print",
+          "line": 20
+        },
+        {
+          "callee": "np.linalg.norm",
+          "line": 35
+        },
+        {
+          "callee": "atmosphere.wind_velocity",
+          "line": 51
+        },
+        {
+          "callee": "np.arctan2",
+          "line": 75
+        },
+        {
+          "callee": "np.arcsin",
+          "line": 77
+        },
+        {
+          "callee": "self.hopper.CG",
+          "line": 92
+        },
+        {
+          "callee": "self.hopper.inertia",
+          "line": 93
+        },
+        {
+          "callee": "np.cross",
+          "line": 120
+        },
+        {
+          "callee": "np.clip",
+          "line": 77
+        },
+        {
+          "callee": "np.cross",
+          "line": 126
+        }
+      ],
+      "scope": "hopper",
+      "sha256": "087767eef40f728775d5bd8ee597a6e0a8c0769fe4d2d6ab2a060d06692f86ca"
+    },
+    "simulation/state.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "self.x_arr.append",
+          "line": 32
+        },
+        {
+          "callee": "self.y_arr.append",
+          "line": 33
+        },
+        {
+          "callee": "self.z_arr.append",
+          "line": 34
+        },
+        {
+          "callee": "self.u_arr.append",
+          "line": 35
+        },
+        {
+          "callee": "self.v_arr.append",
+          "line": 36
+        },
+        {
+          "callee": "self.w_arr.append",
+          "line": 37
+        },
+        {
+          "callee": "self.q0_arr.append",
+          "line": 38
+        },
+        {
+          "callee": "self.q1_arr.append",
+          "line": 39
+        },
+        {
+          "callee": "self.q2_arr.append",
+          "line": 40
+        },
+        {
+          "callee": "self.q3_arr.append",
+          "line": 41
+        },
+        {
+          "callee": "self.p_arr.append",
+          "line": 42
+        },
+        {
+          "callee": "self.q_arr.append",
+          "line": 43
+        },
+        {
+          "callee": "self.r_arr.append",
+          "line": 44
+        }
+      ],
+      "scope": "hopper",
+      "sha256": "7b8713aecd017a7ff1f0b3ad4e14e1c63c716d1181a6df516d25b7a7d1973b2a"
+    },
+    "test/__init__.py": {
+      "affected_references": [],
+      "calls": [],
+      "scope": "hopper",
+      "sha256": "d72bcd69d0ed6d706e690574d1dbdedf15ab740d5ce705aad834bd1b91b3d76e"
+    },
+    "test/test_pythrust.py": {
+      "affected_references": [],
+      "calls": [
+        {
+          "callee": "sys.path.insert",
+          "line": 11
+        },
+        {
+          "callee": "PropellerDatabase",
+          "line": 39
+        },
+        {
+          "callee": "propeller_database.load",
+          "line": 40
+        },
+        {
+          "callee": "propeller_database.get",
+          "line": 45
+        },
+        {
+          "callee": "MotorSpec",
+          "line": 49
+        },
+        {
+          "callee": "FixedVoltageBattery",
+          "line": 56
+        },
+        {
+          "callee": "SystemSpec",
+          "line": 57
+        },
+        {
+          "callee": "PropellerSpec",
+          "line": 58
+        },
+        {
+          "callee": "PropulsionSolver",
+          "line": 63
+        },
+        {
+          "callee": "str",
+          "line": 11
+        },
+        {
+          "callee": "KeyError",
+          "line": 47
+        },
+        {
+          "callee": "propeller_data.get_coefficients",
+          "line": 79
+        },
+        {
+          "callee": "solver.solve_operating_point",
+          "line": 105
+        },
+        {
+          "callee": "print",
+          "line": 126
+        },
+        {
+          "callee": "print",
+          "line": 127
+        },
+        {
+          "callee": "ValueError",
+          "line": 94
+        },
+        {
+          "callee": "results_at_rpm",
+          "line": 126
+        },
+        {
+          "callee": "results_at_voltage",
+          "line": 127
+        },
+        {
+          "callee": "Path(__file__).resolve",
+          "line": 10
+        },
+        {
+          "callee": "Path",
+          "line": 10
+        }
+      ],
+      "scope": "hopper",
+      "sha256": "a3590eef1c8b2d922a54464d7254205ca046c4af4e42f4bde815a67cec690a0d"
+    }
+  },
+  "schema": "pdr_r4_plant_control.source_index/1"
+}

@@ -27,8 +27,8 @@ class CodexReasoning:
         self,
         *,
         executable: str = "codex",
-        timeout_s: float = 300.0,
-        web_search: bool = False,
+        timeout_s: float = 3000,
+        web_search: bool = True,
     ):
         self.executable = executable
         self.timeout_s = timeout_s
@@ -115,6 +115,8 @@ class CodexReasoning:
                         "--disable",
                         "multi_agent",
                         "-",
+                        "-c",
+                        'model_reasoning_effort="ultra"',
                         cwd=root,
                         env=environment,
                         stdin=asyncio.subprocess.PIPE,
@@ -138,7 +140,8 @@ class CodexReasoning:
                     if isinstance(exc, asyncio.CancelledError):
                         raise
                     raise ProviderError(
-                        "Codex reasoning timed out; the local process was stopped."
+                        f"Codex reasoning timed out after {self.timeout_s:g} seconds; "
+                        "the local process was stopped."
                     ) from None
                 if process.returncode:
                     # CLI stderr may echo prompts or credentials; never persist it.

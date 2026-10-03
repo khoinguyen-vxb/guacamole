@@ -1,0 +1,26 @@
+P00: returned
+P01: returned
+P02: raised
+P03: raised
+P04: raised
+P05: raised
+P06: raised
+P07: raised
+P08a: raised
+P08b: raised
+P08c: raised
+P08d: raised
+P08e: raised
+P09: returned
+P10: raised
+P11: raised
+P11b: raised
+P12: raised
+P13: raised
+P14: raised
+STATIC: returned
+P15: returned
+P16: returned
+P17: raised
+P18: returned
+Raw diagnostic artifacts saved; no integrated or physical acceptance asserted.

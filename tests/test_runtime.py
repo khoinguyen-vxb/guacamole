@@ -1,7 +1,9 @@
+import asyncio
 import io
 import json
 import sqlite3
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -25,7 +27,7 @@ from guacamole import (
     TaskAuthorization,
     TaskReport,
 )
-from guacamole.context import ContextOverflow, ProviderError
+from guacamole.context import ContextBuilder, ContextOverflow, ProviderError
 from guacamole.contracts import (
     ContextPacket,
     Decide,
@@ -458,6 +460,54 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(record.author, "script")
             self.assertEqual(project.activity.get(choice).status, "completed")
             self.assertFalse(project.activity.get(choice).attempts)
+
+    async def test_context_assembly_leaves_event_loop_free(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with Project(root) as project:
+                source = root / "source.txt"
+                source.write_text("source context")
+                agent = AgentSpec(
+                    id="worker",
+                    task_id="task",
+                    parent_id="chief",
+                    objective="Inspect",
+                    context=ContextSpec(
+                        pinned=(project.ingest(source),),
+                        max_input_tokens=100_000,
+                        reserved_output_tokens=1000,
+                    ),
+                    decision_id=None,
+                )
+                assemble = ContextBuilder._assemble
+
+                def slow(*args, **kwargs):
+                    time.sleep(0.5)  # Stands in for a large project's assembly.
+                    return assemble(*args, **kwargs)
+
+                ticks = 0
+
+                async def tick():
+                    nonlocal ticks
+                    while True:
+                        await asyncio.sleep(0.01)
+                        ticks += 1
+
+                ticker = asyncio.create_task(tick())
+                with patch.object(ContextBuilder, "_assemble", slow):
+                    packet = await project.contexts.build(
+                        agent,
+                        "fixture",
+                        TestReasoning(),
+                        instructions="test",
+                        state={},
+                    )
+                ticker.cancel()
+                # A blocked loop (WebSocket handshakes time out) would not tick at all.
+                self.assertGreater(ticks, 10)
+                self.assertEqual(
+                    project.store.get("context", packet.id).data["id"], packet.id
+                )
 
     async def test_context_budget_inbox_and_restart(self):
         with tempfile.TemporaryDirectory() as directory:

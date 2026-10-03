@@ -63,7 +63,7 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
             "output.write_text('fixture-secret' if invalid else json.dumps(payload))\n"
         )
         self.executable.chmod(0o755)
-        self.provider = CodexReasoning(executable=str(self.executable))
+        self.provider = CodexReasoning(executable=str(self.executable), web_search=False)
         self.packet = ContextPacket(
             agent_id="fixture",
             invocation_id="fixture",

@@ -11,6 +11,10 @@ from threading import RLock
 from .contracts import JSON, ActivityEvent, Model, Ref, now, uid
 from .tools.registry import encode
 
+# Latest revision of each record.
+CURRENT = "FROM records r JOIN (SELECT kind,id,MAX(revision) rev FROM records GROUP BY kind,id) c ON r.kind=c.kind AND r.id=c.id AND r.revision=c.rev"
+LATEST = "SELECT r.* " + CURRENT
+
 
 class Snapshot(Model):
     ref: Ref
@@ -207,37 +211,43 @@ class Store:
             self._invalidate(ref, actor)
 
     def _invalidate(self, changed: Ref, actor: str) -> None:
-        # ponytail: scan local metadata; index dependency edges if projects outgrow it.
+        # Index dependency edges once per cascade; record data is never parsed.
+        stale = set(
+            self.db.execute("SELECT kind,id,revision FROM invalidations").fetchall()
+        )
+        dependents: dict[tuple[str, str, int], list[Ref]] = {}
+        for kind, id, revision, sha256, dependencies in self.db.execute(
+            "SELECT r.kind,r.id,r.revision,r.sha256,r.dependencies " + CURRENT
+        ):
+            if (kind, id, revision) in stale:
+                continue
+            ref = Ref(kind=kind, id=id, revision=revision, sha256=sha256)
+            for r in json.loads(dependencies):
+                dependents.setdefault((r["kind"], r["id"], r["revision"]), []).append(
+                    ref
+                )
         pending = [changed]
         while pending:
             old = pending.pop()
-            for snapshot in self.list():
-                if snapshot.stale:
+            for ref in dependents.pop((old.kind, old.id, old.revision), ()):
+                key = (ref.kind, ref.id, ref.revision)
+                if key in stale:
                     continue
-                if any(
-                    (r.kind, r.id, r.revision) == (old.kind, old.id, old.revision)
-                    for r in snapshot.dependencies
-                ):
-                    ref = snapshot.ref
-                    self.db.execute(
-                        "INSERT OR IGNORE INTO invalidations VALUES (?,?,?,?)",
-                        (
-                            ref.kind,
-                            ref.id,
-                            ref.revision,
-                            f"Changed {old.kind}:{old.id}@{old.revision}",
-                        ),
-                    )
-                    self.event(
-                        actor,
-                        "dependency.stale",
-                        ref.id,
-                        {
-                            "ref": ref.model_dump(mode="json"),
-                            "changed": old.model_dump(mode="json"),
-                        },
-                    )
-                    pending.append(ref)
+                stale.add(key)
+                self.db.execute(
+                    "INSERT OR IGNORE INTO invalidations VALUES (?,?,?,?)",
+                    (*key, f"Changed {old.kind}:{old.id}@{old.revision}"),
+                )
+                self.event(
+                    actor,
+                    "dependency.stale",
+                    ref.id,
+                    {
+                        "ref": ref.model_dump(mode="json"),
+                        "changed": old.model_dump(mode="json"),
+                    },
+                )
+                pending.append(ref)
 
     def _snapshot(self, row: sqlite3.Row) -> Snapshot:
         stale = (
@@ -292,11 +302,9 @@ class Store:
             raise ValueError(f"Stale reference: {ref.kind}:{ref.id}@{ref.revision}")
         return snapshot
 
-    def list(self, kind: str | None = None) -> tuple[Snapshot, ...]:
-        query = "SELECT r.* FROM records r JOIN (SELECT kind,id,MAX(revision) rev FROM records GROUP BY kind,id) c ON r.kind=c.kind AND r.id=c.id AND r.revision=c.rev"
-        rows = self.db.execute(
-            query + (" WHERE r.kind=?" if kind else ""), (kind,) if kind else ()
-        )
+    def list(self, *kinds: str) -> tuple[Snapshot, ...]:
+        where = f" WHERE r.kind IN ({','.join('?' * len(kinds))})" if kinds else ""
+        rows = self.db.execute(LATEST + where, kinds)
         return tuple(self._snapshot(row) for row in rows)
 
     def history(self, kind: str, id: str) -> tuple[Snapshot, ...]:

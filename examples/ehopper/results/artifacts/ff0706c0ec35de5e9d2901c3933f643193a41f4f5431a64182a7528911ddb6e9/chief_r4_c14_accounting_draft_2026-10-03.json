@@ -1,0 +1,253 @@
+{
+  "schema": "hopper_purchase_accounting_r4_v1",
+  "prepared_date": "2026-10-03",
+  "status": "Incomplete preliminary accounting for C14_traceable_mg996r_ovonic; not Chief selection, procurement authorization, budget compliance or physical acceptance.",
+  "candidate_configuration": "C14_traceable_mg996r_ovonic",
+  "requirement_ref": {"kind": "requirement", "id": "REQ-HARDWARE-BUDGET", "revision": 4, "sha256": "0a1e886cb48d7e054b9d88177a9e78a9a125d007f88948aaae5a3d8af22be2c6"},
+  "policy_source": {"kind": "source", "id": "b985cd4b473d49f5b74e889cc8f454f9", "revision": 1, "sha256": "5ef30df7ed9f7b87c042a1d7fdc7c8e1427e435fadde08ee00181e377da43c75"},
+  "price_input_files_in_order": ["analysis/chief_priced_bom_inputs_2026-10-02.json", "analysis/chief_priced_bom_supplement_2026-10-02.json", "analysis/chief_priced_bom_supplement_2026-10-03.json", "analysis/chief_priced_bom_policy_r4_2026-10-03.json"],
+  "accounting_notes": [
+    "Prices, original currencies (AUD or USD), tax bases, dates and supplier limitations remain in the named price inputs and must be retained by the audit output. This manifest does not re-fetch or alter them.",
+    "Budget currency is AUD; enforce vehicle cost strictly less than 500, excluding tax and shipping. Charge complete sales units, not installed fractions; no ownership credits.",
+    "Purchase quantities are candidate planning quantities, not orders. A minimum_purchase_units value of 1 is a provisional one-sales-unit assumption unless the cited evidence establishes otherwise; checkout minimums remain unverified.",
+    "Installed quantities describe the candidate architecture, not an assembled vehicle. Null means unknown, never zero. Material consumption includes cutting waste, supports and fabrication losses when subsequently established.",
+    "Mass values are dated supplier claims or explicitly conservative choices, not measurements. An omitted mass tolerance is not evidence of zero uncertainty. The calculator's installed_mass_upper_kg label means only nominal plus recorded allowance, not a guaranteed physical upper bound.",
+    "Full two-battery pack cost is charged while only one battery contributes flight mass. Bearings, straps, pads, resistors, jumpers and fasteners retain their pack semantics.",
+    "Shared stock and kit contents must be allocated once. Do not charge included motor mounts, propeller adapters, adapter rings or linkage-kit fasteners again; confirm their adequacy and installed mass coverage.",
+    "The eight fastener packs and thirty separate nuts are retained candidate assumptions, not a CAD-derived schedule. Do not interpret their aggregate stock counts as proof that the required lengths and interfaces are available.",
+    "AUD 20 contingency is an allowance, not a purchased component and not proof that listed omissions are covered. When gaps are priced, retain explicit accounting rather than silently spending or double-counting contingency.",
+    "gse_lines is empty because no separately priced GSE ledger has been established. It does not mean zero GSE cost or existing ownership. Vehicle and GSE completeness remain false.",
+    "The gimbal, servo, controller and sensing entries remain alternatives awaiting current Chief selection. No current mechanism decision or human review acceptance is implied."
+  ],
+  "coverage_complete": false,
+  "vehicle_lines": {
+    "motor_sunnysky_x2814_900_rmrc": {
+      "category": "hardware", "purchase_units": 2, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "motor", "required_stock_quantity": 2, "installed_quantity": 2, "mass_per_installed_unit_kg": 0.108,
+      "mass_basis": "108 g per motor retained from BuddyRC/PyThrust versus RMRC 106 g; mount, collet and screw mass coverage is unresolved.",
+      "purchase_basis": "RMRC product price is per motor; package lists X mount, six screws and collet adapter. Two motors required for this candidate.",
+      "purchase_evidence": {"url": "https://www.readymaderc.com/products/details/sunny-sky-x2814-900kv", "access_date": "2026-10-03", "section": "Price, stock, specifications and package contents"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Confirm two-unit stock and Australian delivery.", "Confirm included accessory masses, mounting geometry and opposite-rotation retention."]
+    },
+    "prop_apc_lp13065e_20261003": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "propeller", "required_stock_quantity": 1, "installed_quantity": 1, "mass_per_installed_unit_kg": 0.0300505,
+      "mass_basis": "Listed 1.06 oz converted to kg; installed adapter-ring mass coverage unconfirmed.",
+      "purchase_basis": "One LP13065E propeller; LPAR06E adapter-ring set included.",
+      "purchase_evidence": {"url": "https://www.apcprop.com/product/13x6-5e/", "access_date": "2026-10-03", "section": "Product specifications and price"},
+      "accounting_status": "provisional", "availability_status": "caveated", "unresolved": ["USD is inferred from storefront, not explicit beside extracted price.", "Dispatch stock, adapter fit and retention unconfirmed."]
+    },
+    "prop_apc_lp13065ep": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "propeller", "required_stock_quantity": 1, "installed_quantity": 1, "mass_per_installed_unit_kg": 0.0300505,
+      "mass_basis": "Listed 1.06 oz converted to kg; installed adapter-ring mass coverage unconfirmed.",
+      "purchase_basis": "One reverse-rotation LP13065EP propeller; LPAR06E adapter-ring set included.",
+      "purchase_evidence": {"url": "https://www.apcprop.com/product/13x6-5ep/", "access_date": "2026-10-02", "section": "Product specifications and price"},
+      "accounting_status": "provisional", "availability_status": "unknown", "unresolved": ["Confirm currency, dispatch stock and positive reverse-rotation retention.", "Matched aerodynamic performance is unmeasured."]
+    },
+    "esc_hw_skywalker40av2_uh": {
+      "category": "hardware", "purchase_units": 2, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "ESC", "required_stock_quantity": 2, "installed_quantity": 2, "mass_per_installed_unit_kg": 0.036,
+      "mass_basis": "Supplier lists 36 g each; confirm whether supplied leads and connectors are included.",
+      "purchase_basis": "Two separately priced HW80060022 ESCs, each including its BEC; do not add BEC purchase cost.",
+      "purchase_evidence": {"url": "https://ultimatehobbies.com.au/products/skywalker-40amp-v2-econo-air-esc-2-3s", "access_date": "2026-10-02", "section": "Price, warehouse stock and specifications"},
+      "accounting_status": "provisional", "availability_status": "caveated", "unresolved": ["Confirm two-unit availability and delivered V2 identity/4S rating despite conflicting title.", "Manufacturer command, failsafe and thermal limits still require review."]
+    },
+    "battery_ovonic_130c_4000_4s_2pack_20261003": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 2, "stock_unit": "battery", "required_stock_quantity": 1, "installed_quantity": 1, "mass_per_installed_unit_kg": 0.389, "mass_tolerance_per_unit_kg": 0.020,
+      "mass_basis": "Supplier lists 389 +/-20 g per battery; one installed battery yields 0.409 kg using the listed positive tolerance, not the two-pack mass.",
+      "purchase_basis": "AUD 89.99 listing is one mandatory two-battery sales pack. Charge the complete pack; second battery is purchased spare stock, not flight mass.",
+      "purchase_evidence": {"url": "https://www.ovonicshop.com/products/ovonic-130c-4s-4000mah-14-8v-lipo-battery-for-rc-airplane-edf-xt60-plug", "access_date": "2026-10-03", "section": "Two-pack title, price, warehouse and specifications"},
+      "accounting_status": "provisional", "availability_status": "caveated", "unresolved": ["Confirm stock and tax basis.", "Loaded resistance, usable capacity, sag and thermal performance are unmeasured."]
+    },
+    "servo_mg996r_makerstore": {
+      "category": "hardware", "purchase_units": 2, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "servo", "required_stock_quantity": 2, "installed_quantity": 2, "mass_per_installed_unit_kg": 0.070,
+      "mass_basis": "Maker Store lists 0.07 kg each, retained over the conflicting 55 g reference; packaging/accessory contribution unconfirmed.",
+      "purchase_basis": "One servo per listed sales unit; two for candidate transverse actuation.",
+      "purchase_evidence": {"url": "https://www.makerstore.com.au/product/mg996r-servo-90-rotation/", "access_date": "2026-10-02", "section": "Price, stock and specifications"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Servo choice depends on refined signed gyroscopic loads, balance, linkage ratio and continuous duty.", "Confirm identity, body dimensions and included horns/screws."]
+    },
+    "servo_supply_esc_bec_rail": {
+      "category": "included", "purchase_units": 1, "minimum_purchase_units": 1,
+      "purchase_basis": "Candidate uses already purchased ESC BECs on separate servo and avionics rails; outputs must not be paralleled. No additional regulator cost or mass is counted here.",
+      "purchase_evidence": {"url": "https://ultimatehobbies.com.au/products/skywalker-40amp-v2-econo-air-esc-2-3s", "access_date": "2026-10-02", "section": "BEC specification"},
+      "accounting_status": "provisional", "availability_status": "unknown", "unresolved": ["Confirm loaded 5 V rail capacity, servo demand and brownout behavior; required additional regulation is not yet priced."]
+    },
+    "mcu_rpi_pico2_core": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "board", "required_stock_quantity": 1, "installed_quantity": 1, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Board mass not supplied in inspected evidence.",
+      "purchase_basis": "One Pico 2 board; headers and programming cable must not be assumed included.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/raspberry-pi-pico-2.html", "access_date": "2026-10-02", "section": "Price, stock and specifications"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Reference controller only; hardware/interface choice and mass unresolved.", "Header and cable coverage unresolved; deployed flight firmware is outside current scope."]
+    },
+    "imu_mpu6050_core": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "module", "required_stock_quantity": 1, "installed_quantity": 1, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Module and installed header masses not listed.",
+      "purchase_basis": "One MPU-6050 module; inspect package contents before assuming headers supplied.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/mpu-6050-module-3-axis-gyroscope-acce-lerometer.html", "access_date": "2026-10-02", "section": "Price, stock and specifications"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Mass, vibration isolation, headers and installed sensing adequacy unresolved."]
+    },
+    "sens_micoair_mtf01": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "sensor", "required_stock_quantity": 1, "installed_quantity": 1, "mass_per_installed_unit_kg": 0.0045,
+      "mass_basis": "Listed 4.5 g; included cable coverage unconfirmed.",
+      "purchase_basis": "One MTF-01; retain USD 25.90 regular price from input, not the temporary sale price.",
+      "purchase_evidence": {"url": "https://store.micoair.com/product/mtf-01/", "access_date": "2026-10-02", "section": "Price and specifications"},
+      "accounting_status": "provisional", "availability_status": "unknown", "unresolved": ["Stock and cable contents unconfirmed.", "Outdoor range at 5 m and lower-reflectance/low-texture ground unverified."]
+    },
+    "rx_happymodel_ep2_cubefpv": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "receiver", "required_stock_quantity": 1, "installed_quantity": 1, "mass_per_installed_unit_kg": 0.00044,
+      "mass_basis": "Listed 0.44 g; additional leads/retention not included here.",
+      "purchase_basis": "One EP2 receiver; compatible transmitter and its power source belong in separately priced GSE.",
+      "purchase_evidence": {"url": "https://cubefpv.com/product/receiver-elrs-happymodel-2-4g-ep2-rx/", "access_date": "2026-10-03", "section": "Price, two-unit stock and specifications"},
+      "accounting_status": "provisional", "availability_status": "caveated", "unresolved": ["Reconfirm low stock, compatibility and installed range/failsafe.", "Receiver is not an independent hardware kill."]
+    },
+    "spine_al_6063_16x1_bunnings": {
+      "category": "material", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "m", "required_stock_quantity": null, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Require CAD cut length and density-based mass; whole 1 m purchased length is not automatically carried.",
+      "purchase_basis": "Charge one complete 1 m length of 16 mm OD, 1 mm wall 6063-T5 tube.",
+      "purchase_evidence": {"url": "https://www.bunnings.com.au/metal-mate-16-x-1mm-1m-aluminium-round-tube-1m_p1067768", "access_date": "2026-10-02", "section": "Price and specifications"},
+      "accounting_status": "provisional", "availability_status": "caveated", "unresolved": ["Store price/stock, cut plan, kerf, structural adequacy and mounting geometry unresolved."]
+    },
+    "petg_ozfdm_basic_1kg": {
+      "category": "material", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "kg", "required_stock_quantity": null, "installed_quantity": null, "mass_per_installed_unit_kg": 1,
+      "mass_basis": "Stock is measured in kg, so mass per installed kg is 1 by definition. Installed kg and printing losses remain unknown; spool hardware is not flown.",
+      "purchase_basis": "Charge the complete 1 kg PETG spool; allocate all candidate printed supports, feet, mounts and any selected fairing once.",
+      "purchase_evidence": {"url": "https://ozfdm.com.au/collections/petg", "access_date": "2026-10-02", "section": "PETG Basic 1 kg listings"},
+      "accounting_status": "provisional", "availability_status": "caveated", "unresolved": ["Per-colour stock, print plan, density, strength, temperature suitability and full rocket-shaped body treatment unresolved."]
+    },
+    "allowance_contingency": {
+      "category": "contingency", "purchase_units": 1, "minimum_purchase_units": 1,
+      "purchase_basis": "Retain the existing AUD 20 engineering contingency once. No supplier, installed mass or ownership credit is implied.",
+      "accounting_status": "provisional", "availability_status": "unknown", "unresolved": ["Not a substitute for pricing identified missing items."]
+    },
+    "baro_bmp280_dfrobot_core": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "module", "required_stock_quantity": 1, "installed_quantity": 1, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Mass not listed.",
+      "purchase_basis": "One SEN0372 barometer module; shielding and mounting material require coverage.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/bmp280-digital-pressure-sensor-module-v1-0.html", "access_date": "2026-10-02", "section": "Price, stock and specification table"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Mass, pressure-port shielding and rotor-wake bias unresolved."]
+    },
+    "bearing_623zz_minibearings": {
+      "category": "hardware", "purchase_units": 2, "minimum_purchase_units": 1, "stock_per_purchase_unit": 2, "stock_unit": "bearing", "required_stock_quantity": 4, "installed_quantity": 4, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Bearing mass not listed.",
+      "purchase_basis": "Two complete two-bearing packs provide four bearings for the candidate two-axis gimbal; price is AUD 4.86 ex GST per pack.",
+      "purchase_evidence": {"url": "https://miniaturebearings.com.au/products/3x10x4-bearings-623zzseco", "access_date": "2026-10-03", "section": "Pack price, stock and 3 x 10 x 4 mm dimensions"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Plain-shank pivots, spacers, retention, bearing loads and interface tolerances unresolved."]
+    },
+    "linkage_gator_m3_65mm_kit": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "kit", "required_stock_quantity": 1, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Kit/component masses and installed subset unknown.",
+      "purchase_basis": "One kit includes two 65 mm rods, four ball links, four M3 x 20 screws and four locking nuts. Track these contents separately in the later installation schedule without buying them twice.",
+      "purchase_evidence": {"url": "https://www.gator-rc.com/products/gator-rc-aluminum-pushrod-ball-link-set-65mm-m3-hardware-included", "access_date": "2026-10-03", "section": "Price, stock and pack contents"},
+      "accounting_status": "provisional", "availability_status": "caveated", "unresolved": ["Australian delivery, adjustment range, required geometry, backlash and installed contents unresolved."]
+    },
+    "legs_al_6063_10x1_bunnings": {
+      "category": "material", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "m", "required_stock_quantity": null, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Require CAD cut schedule and material density; do not fly the entire stock length by assumption.",
+      "purchase_basis": "One complete 1 m length of 10 mm OD, 1 mm wall 6063-T5 tube.",
+      "purchase_evidence": {"url": "https://www.bunnings.com.au/metal-mate-10-x-1mm-1m-aluminium-round-tube-1m_p1067742", "access_date": "2026-10-02", "section": "Price and specifications"},
+      "accounting_status": "provisional", "availability_status": "caveated", "unresolved": ["Required leg lengths, kerf, stock coverage, buckling and touchdown loads unresolved."]
+    },
+    "feet_pads_dualsky_dsbpm_uh": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 5, "stock_unit": "pad", "required_stock_quantity": null, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Pad mass, thickness and installed cut portions unknown.",
+      "purchase_basis": "One pack contains five 30 x 70 mm pads; allocation between battery tray and feet awaits CAD.",
+      "purchase_evidence": {"url": "https://ultimatehobbies.com.au/collections/battery-strap", "access_date": "2026-10-02", "section": "DSBP.M five-pad listing"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Installation allocation, adhesive needs and cushioning performance unresolved."]
+    },
+    "fasteners_m3_core_packs": {
+      "category": "hardware", "purchase_units": 8, "minimum_purchase_units": 1, "stock_per_purchase_unit": 10, "stock_unit": "listed_screw_set", "required_stock_quantity": null, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "No length-specific installed schedule or mass data.",
+      "purchase_basis": "Retain eight whole ten-set packs from the historical candidate. Each length is a separate SKU; aggregate eighty sets does not prove usable length coverage.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/hardware/screws-nuts.html", "access_date": "2026-10-02", "section": "FIT0294/FIT0061/FIT0270/FIT0280/FIT0273/FIT0274 listings"},
+      "accounting_status": "provisional", "availability_status": "caveated", "unresolved": ["CAD must replace the eight-pack assumption with exact lengths, quantities and stock checks.", "Whether sets include nuts is unclear; prevent double purchase counting.", "These are not established plain-shank gimbal pivots."]
+    },
+    "nuts_m3_hex_core": {
+      "category": "hardware", "purchase_units": 30, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "nut", "required_stock_quantity": null, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Installed quantity and individual nut mass unknown.",
+      "purchase_basis": "Retain thirty individually priced M3 nuts; the input conservatively does not apply the listed volume discount. Reconcile included kit nuts before finalizing.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/m3-hex-nut.html", "access_date": "2026-10-03", "section": "Unit price, stock and price breaks"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["CAD count, anti-loosening provision and washer coverage unresolved."]
+    },
+    "battery_strap_dualsky_dsbsm_uh": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 5, "stock_unit": "strap", "required_stock_quantity": null, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Strap mass and installed count unknown; remaining straps are not flight mass.",
+      "purchase_basis": "One five-strap pack, 263 mm nominal length per strap.",
+      "purchase_evidence": {"url": "https://ultimatehobbies.com.au/collections/battery-strap", "access_date": "2026-10-02", "section": "DSBS.M five-strap listing"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Retention count and wrap length must be checked around the Ovonic battery and actual tray, not the earlier Turnigy dimensions."]
+    },
+    "battery_connector_xt60_core": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 2, "stock_unit": "connector_half", "required_stock_quantity": 1, "installed_quantity": 1, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Additional vehicle connector-half mass unknown; battery-side half is assumed included in the listed battery mass and must not be added twice.",
+      "purchase_basis": "Buy one male/female pair; install the half mating the battery lead. Keep unused half as purchased stock and confirm connector gender before wiring.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/xt60-connectors-male-female-pair.html", "access_date": "2026-10-03", "section": "PRT-10474 price and pair contents"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Confirm mating gender, solder/insulation coverage, retention and endurance temperature."]
+    },
+    "power_wire_14awg_core": {
+      "category": "material", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 2, "stock_unit": "m", "required_stock_quantity": null, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Installed routing length and insulated-wire linear mass unknown.",
+      "purchase_basis": "One kit contains 1 m red plus 1 m black 14 AWG wire. Total 2 m does not replace separate colour-specific stock checks.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/high-temperature-resistant-silicone-wire-14awg-2-5-mm2-1m-red-black.html", "access_date": "2026-10-02", "section": "FIT0583 price and package contents"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Colour-specific cut schedule, included ESC leads, arming-loop wire, fabrication waste and voltage-drop calculation unresolved."]
+    },
+    "servo_leads_core": {
+      "category": "hardware", "purchase_units": 2, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "extension_lead", "required_stock_quantity": null, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Lead mass and final routing requirement unknown.",
+      "purchase_basis": "Two separately purchased 300 mm servo extension leads retained as candidate quantities.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/servo-extension-cable-300mm.html", "access_date": "2026-10-02", "section": "FIT0033 price and description"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["CAD routing, power-rail separation, connector retention and current capability unresolved."]
+    },
+    "arming_link_xt60_core": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 2, "stock_unit": "connector_half", "required_stock_quantity": 2, "installed_quantity": 2, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Male/female half masses unknown; both halves fly when armed. Loop wire must be allocated from the power-wire stock.",
+      "purchase_basis": "One complete XT60 pair for the removable series arming link, separate from the battery mating connector purchase.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/xt60-connectors-male-female-pair.html", "access_date": "2026-10-03", "section": "PRT-10474 price and pair contents"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Series-disconnect wiring, covered energized contacts, accessibility, anti-spark need and inhibit procedure unresolved; not a remote kill."]
+    },
+    "divider_resistors_10k_core": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 20, "stock_unit": "resistor", "required_stock_quantity": 6, "installed_quantity": 6, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Individual installed resistor mass not listed.",
+      "purchase_basis": "One twenty-resistor pack; conceptual divider uses five series resistors over one, leaving fourteen uninstalled.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/resistor-10k-ohm-1-4-watt-pth-20-pack-thick-leads.html", "access_date": "2026-10-03", "section": "PRT-14491 price and pack contents"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Divider tolerance, ADC loading/protection/filtering and final interface design unresolved; required capacitor/protection parts not priced."]
+    },
+    "protoboard_60x80_core": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 1, "stock_unit": "board", "required_stock_quantity": 1, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Board mass and any installed cut fraction unknown.",
+      "purchase_basis": "One complete 60 x 80 mm board is purchased; do not prorate cost if cut.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/60x80mm-protoboard.html", "access_date": "2026-10-03", "section": "CE09582 price, dispatch and dimensions"},
+      "accounting_status": "provisional", "availability_status": "caveated", "unresolved": ["Listed dispatch 12-15 October; installation layout, substrate mass and mounting schedule unresolved."]
+    },
+    "jumpers_ff_20cm_core": {
+      "category": "hardware", "purchase_units": 1, "minimum_purchase_units": 1, "stock_per_purchase_unit": 40, "stock_unit": "jumper_wire", "required_stock_quantity": null, "installed_quantity": null, "mass_per_installed_unit_kg": null,
+      "mass_basis": "Installed wire count, cut lengths, housings and mass unknown.",
+      "purchase_basis": "One complete forty-wire female/female 200 mm ribbon; matching headers are not assumed included.",
+      "purchase_evidence": {"url": "https://core-electronics.com.au/solderless-breadboard-jumper-cable-wires-female-female-40-pieces.html", "access_date": "2026-10-03", "section": "CE05098 price and contents"},
+      "accounting_status": "provisional", "availability_status": "listed_available", "unresolved": ["Signal pinout, routing, vibration retention, matching headers and final harness adequacy unresolved."]
+    }
+  },
+  "gse_lines": [],
+  "unpriced_vehicle_items": [
+    "Plain-shank gimbal pivot pins or shoulder screws, spacers and required retaining hardware; existing M3 screw packs do not establish suitable bearing interfaces.",
+    "Whole minimum purchase of solder and any separately required flux used in the vehicle; soldering equipment is separate GSE, but incorporated consumables are not automatically excluded.",
+    "Whole minimum purchases of required heat-shrink, electrical insulation/sleeving, strain relief and connector retention materials.",
+    "Required thread-locking compound, adhesive, washers or alternative anti-loosening hardware after the joint design is established.",
+    "Controller/sensor male headers and mating connectors not demonstrably included in purchased kits.",
+    "Any required ADC filtering/protection, decoupling, power regulation or independent inhibit hardware identified by the electrical-interface review.",
+    "Any additional propeller adapter or positive-retention hardware needed after confirming the included collets and adapter rings.",
+    "Any additional fairing, sensor shielding, isolation, feet or mounting material not supplied by the existing purchased stock; rocket-shape and complete CAD coverage are unresolved."
+  ],
+  "unpriced_gse_items": [
+    "Compatible ExpressLRS transmitter, its required battery/power source and charging accessories; assume none owned.",
+    "4S-capable balance charger, required power supply/AC lead, XT60 charging lead and JST-XH balance connection accessories.",
+    "Battery charging/storage safety equipment and suitable guarded operating area provisions; no equipment ownership assumed.",
+    "Guarded coaxial thrust/torque test fixture, load cells, instrumentation amplifiers, calibration equipment and data acquisition.",
+    "RPM measurement, inline electrical power measurement, voltage/current meters and motor/ESC/battery temperature measurement equipment.",
+    "Assembly mass scale and equipment for CG/inertia and actuator travel/backlash measurements.",
+    "3D-printer access or fabrication service, soldering station and required reusable hand tools, cutting/drilling tools and measuring tools.",
+    "Computer/programming and logging interface, suitable USB/data cables and required adapters; do not assume an existing computer is available.",
+    "Restraints/tethers, guarding/netting and test-area equipment for staged ground and flight tests; specify suitability before costing."
+  ],
+  "next_steps": [
+    "Compute this incomplete ledger using chief_r4_bom_audit.py, the complete ordered price inputs and policy supplement, declaring the output file. Inspect return code and logs.",
+    "Publish actual input/output artifacts and run the saved artifact-derived check through verify_command with every tested artifact Ref. Expect unresolved coverage, not a compliance pass.",
+    "Research and price enumerated omissions and GSE; replace assumed purchase/installation schedules with reviewed quantities while preserving this draft.",
+    "Complete mass, mission-energy and control-mechanism assessment before any Chief preliminary component selection."
+  ]
+}

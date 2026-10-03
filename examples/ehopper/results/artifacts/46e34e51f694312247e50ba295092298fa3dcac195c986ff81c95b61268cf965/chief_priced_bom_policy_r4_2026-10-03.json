@@ -1,0 +1,58 @@
+{
+  "schema": "hopper_priced_bom_supplement_v1",
+  "status": "Confirmed purchasing-policy supplement for preliminary BOM analysis. Does not change supplier prices, quantities, installed masses or candidate selections. Not budget-compliance verification, procurement authorization or PDR/CDR acceptance.",
+  "prepared_date": "2026-10-03",
+  "extends": "analysis/chief_priced_bom_inputs_2026-10-02.json",
+  "requires": {
+    "script": "analysis/chief_priced_bom_compute.py",
+    "minimum_script_revision": 2,
+    "reason": "Revision 2 validates and consumes policy_confirmations. Apply this supplement after the supplier supplements. Original files remain unchanged."
+  },
+  "requirements": [
+    {"id": "REQ-HARDWARE-BUDGET", "revision": 4}
+  ],
+  "policy_confirmations": [
+    {
+      "policy": "purchase_unit_policy",
+      "decision": "confirmed",
+      "recorded_date": "2026-10-03",
+      "source": {
+        "kind": "source",
+        "id": "b985cd4b473d49f5b74e889cc8f454f9",
+        "revision": 1,
+        "sha256": "5ef30df7ed9f7b87c042a1d7fdc7c8e1427e435fadde08ee00181e377da43c75",
+        "locator": ""
+      },
+      "source_quote": "The proposal also charged the vehicle budget for whole minimum purchase packs/spools, including the mandatory two-battery pack even though only one battery flies; do not assume any equipment is already owned.",
+      "application": "Charge whole minimum purchasable packs, spools and stock lengths to the vehicle budget, including the full mandatory two-battery pack. Count only installed quantities in flight mass. No ownership credits or prorated stock costs."
+    },
+    {
+      "policy": "gse_policy",
+      "decision": "confirmed",
+      "recorded_date": "2026-10-03",
+      "source": {
+        "kind": "source",
+        "id": "b985cd4b473d49f5b74e889cc8f454f9",
+        "revision": 1,
+        "sha256": "5ef30df7ed9f7b87c042a1d7fdc7c8e1427e435fadde08ee00181e377da43c75",
+        "locator": ""
+      },
+      "source_quote": "Recovery for the latest human reply, 'Yes I agree with your proposal': the question was whether reusable ground equipment should be priced separately from the AUD 500 vehicle cap.",
+      "application": "Itemize and price required reusable ground equipment separately from the strictly less than AUD 500 vehicle hardware/material cap. Assume no equipment is owned. This confirms the accounting category, not the completeness or classification of the historical excluded_gse list. Tax and shipping remain excluded under REQ-HARDWARE-BUDGET revision 4."
+    }
+  ],
+  "open_items": [
+    {
+      "id": "OI-R4-BOM-REPORTING-CONSISTENCY",
+      "description": "The inspected revision-2 calculator hardcodes requirement revision 3 in verification scope and retains static limitation text calling the purchasing policies unconfirmed. Prepare a new sandbox copy with current reporting before claiming revision-4 verification; preserve historical inputs and script. The merger also retains historical requirement revisions, which must not be presented as concurrent current requirements."
+    },
+    {
+      "id": "OI-R4-BOM-PURCHASE-INSTALL-AUDIT",
+      "description": "Policy confirmation does not enforce pack arithmetic. Audit explicit purchase-unit quantities, minimum orders, installed quantities and installed mass for every selected line. The current line_mass function multiplies the same quantity field used for purchasing by unit_mass_kg; verify battery packs, stock materials and spares without silently equating purchased quantity with installed quantity."
+    },
+    {
+      "id": "OI-R4-GSE-COST-COVERAGE",
+      "description": "Establish a separately priced complete reusable-GSE schedule with dated supplier evidence, currency and units. An excluded_gse list alone does not establish its cost or completeness; ambiguous vehicle consumables and hardware cannot silently be excluded."
+    }
+  ]
+}

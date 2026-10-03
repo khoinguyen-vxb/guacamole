@@ -318,9 +318,7 @@ class Runtime:
             ],
             "records": [
                 {"ref": s.ref.model_dump(mode="json"), "stale": s.stale}
-                for s in store.list()
-                if s.ref.kind
-                in {
+                for s in store.list(
                     "source",
                     "requirement",
                     "open_item",
@@ -332,7 +330,7 @@ class Runtime:
                     "summary",
                     "tool_result",
                     "job_inputs",
-                }
+                )
             ],
             "requests": [
                 {

@@ -1,0 +1,1926 @@
+{
+  "diagnostic_harness_correction": {
+    "in_memory_replacements": [
+      {
+        "after": "OUT = TASK / 'results_core_r2'",
+        "before": "OUT = TASK / 'results'"
+      },
+      {
+        "after": "sys.path[:] = _r2_correct_import_path(original_sys_path, SOURCE, PENDULUM)",
+        "before": "sys.path[:] = [str(SOURCE)] + [p for p in sys.path if not under(p, SOURCE) and not under(p, PENDULUM)]"
+      }
+    ],
+    "integrated_plant_test_performed": false,
+    "launcher_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core_r2.py",
+    "launcher_sha256": "db432384fcdc5eb23ca87b9fd93abee636d732c9d757c655429f64445da426c2",
+    "original_probe_and_results_preserved": true,
+    "path_audit": {
+      "all_original_selected_site_paths_preserved": true,
+      "method": "preserve sysconfig purelib/platlib paths before excluding source subdirectory shortcuts",
+      "protected_original_site_paths": [
+        "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages"
+      ],
+      "removed_checkout_shortcuts": [],
+      "selected_interpreter_site_roots": [
+        "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages"
+      ]
+    },
+    "physical_test_performed": false,
+    "plant_source_modified": false,
+    "previous_observation_ref": {
+      "id": "d6f6a9e2716147788d519d24a01c8c31",
+      "kind": "tool_result",
+      "revision": 1,
+      "sha256": "36721c97cc89d2ee04f6dbbe8ee55d6ceca9cb68472666902e8e8fb9272e63c1"
+    },
+    "previous_run_interpretation": "The first probe removed the selected interpreter site-packages. Its import failures do not establish absent dependencies or reproduce downstream plant defects.",
+    "retained_core_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py",
+    "retained_core_sha256": "5e4013bce605ae55d8d85c7f844eda10cb336db167d49b2e3615dbabbe44166f",
+    "revision": 2
+  },
+  "limitations": [
+    "No integrated plant, controller, mission, geometry or hardware acceptance test is performed.",
+    "Normal imports and diagnostic imports using temporary in-memory shims are reported separately.",
+    "AST call indexing cannot prove the absence of dynamic imports, reflection or runtime aliasing.",
+    "Source manifests exclude .git and virtual environments; they include pre-existing bytecode caches.",
+    "PyThrust execution and pytest are deferred and must not be inferred from dependency imports."
+  ],
+  "pendulum_root": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/PendulumControlProject",
+  "probe_source_sha256": "db432384fcdc5eb23ca87b9fd93abee636d732c9d757c655429f64445da426c2",
+  "probes": {
+    "M0": {
+      "description": "Before/after file hashes, sizes and mtimes over recorded manifest scope",
+      "execution": "returned",
+      "result": {
+        "changes": {
+          "6dof_hopper": {
+            "added": [],
+            "modified": [],
+            "removed": []
+          },
+          "PendulumControlProject": {
+            "added": [],
+            "modified": [],
+            "removed": []
+          }
+        },
+        "excluded": {
+          "6dof_hopper": [
+            ".git",
+            ".venv"
+          ],
+          "PendulumControlProject": [
+            ".git"
+          ]
+        },
+        "source_tree_unchanged": true
+      }
+    },
+    "P00": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Backend identity, distribution metadata and actual imports, separately",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "actual_imports": {
+          "black": {
+            "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/black/__init__.py",
+            "imported": true,
+            "module_version": "26.5.1",
+            "stderr": "",
+            "stdout": ""
+          },
+          "matplotlib": {
+            "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/matplotlib/__init__.py",
+            "imported": true,
+            "module_version": "3.11.1",
+            "stderr": "",
+            "stdout": ""
+          },
+          "numpy": {
+            "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/numpy/__init__.py",
+            "imported": true,
+            "module_version": "2.5.2",
+            "stderr": "",
+            "stdout": ""
+          },
+          "openmdao": {
+            "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/openmdao/__init__.py",
+            "imported": true,
+            "module_version": "3.45.0",
+            "stderr": "",
+            "stdout": ""
+          },
+          "openmdao.api": {
+            "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/openmdao/api.py",
+            "imported": true,
+            "module_version": null,
+            "stderr": "",
+            "stdout": ""
+          },
+          "pytest": {
+            "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/pytest/__init__.py",
+            "imported": true,
+            "module_version": "9.1.1",
+            "stderr": "",
+            "stdout": ""
+          },
+          "scipy": {
+            "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/scipy/__init__.py",
+            "imported": true,
+            "module_version": "1.18.0",
+            "stderr": "",
+            "stdout": ""
+          },
+          "scipy.integrate": {
+            "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/scipy/integrate/__init__.py",
+            "imported": true,
+            "module_version": null,
+            "stderr": "",
+            "stdout": ""
+          }
+        },
+        "base_prefix": "/home/ngvnngkhoi/miniconda3",
+        "bytecode_disabled": true,
+        "cache_policy": "temporary directories inside task sandbox, removed at completion",
+        "cwd": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control",
+        "distribution_metadata": {
+          "black": {
+            "version": "26.5.1"
+          },
+          "matplotlib": {
+            "version": "3.11.1"
+          },
+          "numpy": {
+            "version": "2.5.2"
+          },
+          "openmdao": {
+            "version": "3.45.0"
+          },
+          "pytest": {
+            "version": "9.1.1"
+          },
+          "scipy": {
+            "version": "1.18.0"
+          },
+          "setuav-pythrust": {
+            "version": "0.2.0"
+          },
+          "uv": {
+            "version": "0.12.5"
+          }
+        },
+        "executable_resolved": "/home/ngvnngkhoi/miniconda3/bin/python3.13",
+        "implementation": "CPython",
+        "original_sys_path": [
+          "/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control",
+          "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper",
+          "/home/ngvnngkhoi/guacamole/src",
+          "/home/ngvnngkhoi/miniconda3/lib/python313.zip",
+          "/home/ngvnngkhoi/miniconda3/lib/python3.13",
+          "/home/ngvnngkhoi/miniconda3/lib/python3.13/lib-dynload",
+          "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages"
+        ],
+        "prefix": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv",
+        "probe_sys_path": [
+          "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper",
+          "/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control",
+          "/home/ngvnngkhoi/guacamole/src",
+          "/home/ngvnngkhoi/miniconda3/lib/python313.zip",
+          "/home/ngvnngkhoi/miniconda3/lib/python3.13",
+          "/home/ngvnngkhoi/miniconda3/lib/python3.13/lib-dynload",
+          "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages"
+        ],
+        "pytest_executed": false,
+        "python_meets_declared_minimum": true,
+        "python_requirement": ">=3.13, as declared in source pyproject.toml",
+        "python_version": "3.13.11 | packaged by Anaconda, Inc. | (main, Dec 10 2025, 21:29:12) [GCC 14.3.0]",
+        "source_directory_present": true,
+        "sys_executable": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/bin/python",
+        "virtual_environment_active": true
+      }
+    },
+    "P01": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Import original gravity constant",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "gravity_value": 9.8065,
+        "unit": "m/s^2"
+      }
+    },
+    "P02": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Import original helpers.math",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "module_file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/helpers/math.py"
+      }
+    },
+    "P03": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Call original quarternion_to_dcm on identity quaternion",
+      "diagnostic_only": false,
+      "exception": "UnboundLocalError",
+      "execution": "raised",
+      "message": "cannot access local variable 'quaternions' where it is not associated with a value",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 176, in <lambda>\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/helpers/math.py\", line 13, in quarternion_to_dcm\n    quaternions = np.array(quaternions) / np.linalg.norm(quaternions)\n                           ^^^^^^^^^^^\nUnboundLocalError: cannot access local variable 'quaternions' where it is not associated with a value\n"
+    },
+    "P04": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Call Euler helper with the exact three-argument pattern in solve_ode",
+      "diagnostic_only": false,
+      "exception": "TypeError",
+      "execution": "raised",
+      "message": "euler_to_quaternion() takes from 1 to 2 positional arguments but 3 were given",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 177, in <lambda>\nTypeError: euler_to_quaternion() takes from 1 to 2 positional arguments but 3 were given\n"
+    },
+    "P05": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Measure the rotation axis associated with the first Euler-vector element",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "dominant_axis_for_first_element": "z",
+        "input": [
+          10,
+          0,
+          0
+        ],
+        "input_unit": "deg",
+        "quaternion_scalar_first": [
+          0.9961946980917455,
+          0.0,
+          0.0,
+          0.08715574274765817
+        ]
+      }
+    },
+    "P06": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Call State.update_state with the single ndarray used by trajectory_ode",
+      "diagnostic_only": false,
+      "exception": "TypeError",
+      "execution": "raised",
+      "message": "State.update_state() missing 12 required positional arguments: 'y', 'z', 'u', 'v', 'w', 'q0', 'q1', 'q2', 'q3', 'p', 'q', and 'r'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 189, in state_update\nTypeError: State.update_state() missing 12 required positional arguments: 'y', 'z', 'u', 'v', 'w', 'q0', 'q1', 'q2', 'q3', 'p', 'q', and 'r'\n"
+    },
+    "P07": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Normal simulation import with repository root but not simulation/ on sys.path",
+      "diagnostic_only": false,
+      "exception": "ModuleNotFoundError",
+      "execution": "raised",
+      "message": "No module named 'state'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 191, in <lambda>\n  File \"/home/ngvnngkhoi/miniconda3/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1387, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/simulation.py\", line 4, in <module>\n    from state import State\nModuleNotFoundError: No module named 'state'\n"
+    },
+    "P08a": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Diagnostic import shim; case=constructor; no source repair",
+      "diagnostic_only": true,
+      "execution": "returned",
+      "result": {
+        "state_attribute_is_none": true,
+        "supplied_state_preserved": false
+      }
+    },
+    "P08b": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Diagnostic import shim; case=fresh_rhs; no source repair",
+      "diagnostic_only": true,
+      "exception": "AttributeError",
+      "execution": "raised",
+      "message": "'Simulation' object has no attribute 'time'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 231, in <lambda>\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 219, in simulation_case\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/simulation.py\", line 16, in trajectory_ode\n    if self.time != 0:\n       ^^^^^^^^^\nAttributeError: 'Simulation' object has no attribute 'time'\n"
+    },
+    "P08c": {
+      "captured_stderr": "",
+      "captured_stdout": "bricked\n",
+      "description": "Diagnostic import shim; case=time_zero; no source repair",
+      "diagnostic_only": true,
+      "exception": "AttributeError",
+      "execution": "raised",
+      "message": "'numpy.ndarray' object has no attribute 'x'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 231, in <lambda>\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 222, in simulation_case\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/simulation.py\", line 22, in trajectory_ode\n    position = np.array([state.x, state.y, state.z], dtype=float)\n                         ^^^^^^^\nAttributeError: 'numpy.ndarray' object has no attribute 'x'\n"
+    },
+    "P08d": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Diagnostic import shim; case=time_one; no source repair",
+      "diagnostic_only": true,
+      "exception": "TypeError",
+      "execution": "raised",
+      "message": "State.update_state() missing 12 required positional arguments: 'y', 'z', 'u', 'v', 'w', 'q0', 'q1', 'q2', 'q3', 'p', 'q', and 'r'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 231, in <lambda>\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 226, in simulation_case\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/simulation.py\", line 17, in trajectory_ode\n    self.state.update_state(state)\n    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^\nTypeError: State.update_state() missing 12 required positional arguments: 'y', 'z', 'u', 'v', 'w', 'q0', 'q1', 'q2', 'q3', 'p', 'q', and 'r'\n"
+    },
+    "P08e": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Diagnostic import shim; case=solve; no source repair",
+      "diagnostic_only": true,
+      "exception": "TypeError",
+      "execution": "raised",
+      "message": "euler_to_quaternion() takes from 1 to 2 positional arguments but 3 were given",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 231, in <lambda>\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 228, in simulation_case\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/simulation.py\", line 134, in solve_ode\n    q = euler_to_quaternion(init_roll, init_pitch, init_yaw)\nTypeError: euler_to_quaternion() takes from 1 to 2 positional arguments but 3 were given\n"
+    },
+    "P09": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "AST inspection of integration-result return",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "function_line": 133,
+        "return_lines": [],
+        "solve_ode_has_return": false
+      }
+    },
+    "P10": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Instantiate original Propellor using demonstration electrical values, not a hardware selection",
+      "diagnostic_only": false,
+      "exception": "TypeError",
+      "execution": "raised",
+      "message": "Can't instantiate abstract class Propellor without an implementation for abstract methods 'get_local_cg', 'get_mass', 'get_thrust_and_moment'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 243, in propeller_construction\nTypeError: Can't instantiate abstract class Propellor without an implementation for abstract methods 'get_local_cg', 'get_mass', 'get_thrust_and_moment'\n"
+    },
+    "P11": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Literal implementation of declared abstract signature: direct bound call",
+      "diagnostic_only": false,
+      "exception": "TypeError",
+      "execution": "raised",
+      "message": "literal_contract.<locals>.LiteralSignatures.get_mass() takes 1 positional argument but 2 were given",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 261, in literal_contract\nTypeError: literal_contract.<locals>.LiteralSignatures.get_mass() takes 1 positional argument but 2 were given\n"
+    },
+    "P11b": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Literal implementation of declared abstract signature: actual Hopper.mass caller",
+      "diagnostic_only": false,
+      "exception": "TypeError",
+      "execution": "raised",
+      "message": "literal_contract.<locals>.LiteralSignatures.get_mass() takes 1 positional argument but 2 were given",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 127, in probe\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 263, in <lambda>\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_r4_plant_control/probe_core.py [R2 diagnostic harness]\", line 261, in literal_contract\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/chassis/hopper.py\", line 46, in mass\n    return self.mass_wo_propellant + self.propulsion.get_mass(time)\n                                     ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^\nTypeError: literal_contract.<locals>.LiteralSignatures.get_mass() takes 1 positional argument but 2 were given\n"
+    },
+    "P12": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Compare original aerodynamic moments at zero and near-zero airspeed",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "force_unit": "N",
+        "moment_nonzero_at_1e-6_mps": true,
+        "moment_unit": "N*m",
+        "moment_zero_at_zero_airspeed": true,
+        "near_zero_force_moment": [
+          [
+            -6.8386974281506025e-15,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            -0.00210546875,
+            0.0
+          ]
+        ],
+        "rate_unit": "rad/s",
+        "velocity_unit": "m/s",
+        "zero_speed_force_moment": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      }
+    },
+    "P13": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Detect mutation of caller-provided aerodynamic tube axis",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "caller_array_mutated": true,
+        "caller_axis_after": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "caller_axis_before": [
+          2.0,
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "P14": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Measure original Hopper mass and CG ownership using an explicit diagnostic stub",
+      "diagnostic_only": true,
+      "execution": "returned",
+      "result": {
+        "airframe_mass_kg": 1.0,
+        "cg_ignores_propulsion_mass": true,
+        "composite_cg_expected_if_stub_is_added_m": [
+          0.1,
+          0.0,
+          0.0
+        ],
+        "inertia_offdiagonal_representable": false,
+        "returned_cg_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "returned_inertia_kg_m2": [
+          [
+            0.01,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.02,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            0.03
+          ]
+        ],
+        "returned_mass_kg": 2.0,
+        "stub_propulsion_mass_kg": 1.0
+      }
+    },
+    "P15": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "AST caller and unused-variable index, with nested PyThrust separated",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "caller_locations": [],
+        "core_python_files_indexed": [
+          "aero/aero.py",
+          "chassis/hopper.py",
+          "helpers/constants.py",
+          "helpers/math.py",
+          "main.py",
+          "propulsion/propeller.py",
+          "propulsion/propulsion.py",
+          "scripts/ehopper.py",
+          "simulation/simulation.py",
+          "simulation/state.py",
+          "test/__init__.py",
+          "test/test_pythrust.py"
+        ],
+        "moment_arm_locations": [],
+        "moment_arm_used_outside_chassis_hopper": false,
+        "pythrust_python_files_indexed_separately": 34,
+        "simulation_class_callers_outside_module": 0,
+        "unused_rhs_names": [
+          "alpha",
+          "beta",
+          "dynamic_pressure",
+          "mach",
+          "reynolds"
+        ]
+      }
+    },
+    "P16": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Search definitions for environment and controller/actuator interfaces",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "controller_or_actuator_definitions": [],
+        "controller_or_actuator_symbols_outside_pythrust": 0,
+        "environment_definitions": [],
+        "environment_definitions_outside_pythrust": 0,
+        "pythrust_atmosphere_paths": []
+      }
+    },
+    "P17": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Isolated attitude-formula diagnostics with explicit in-memory name shim",
+      "diagnostic_only": true,
+      "execution": "returned",
+      "result": {
+        "body_yaw_rate_rad_s": 0.2,
+        "dcm_equals_transpose_of_body_to_world": true,
+        "dcm_max_absolute_error": 0.0,
+        "dcm_orthogonality_max_error": 4.440892098500626e-16,
+        "dcm_orthonormal": true,
+        "diagnostic_change": "One in-memory AST parameter rename solely to expose the existing DCM formula; no file modified",
+        "duration_s": 10.0,
+        "integrated_original_plant": false,
+        "kinematics_matches_analytic_yaw": true,
+        "max_quaternion_norm_error": 5.551115123125783e-16,
+        "quaternion_component_max_error": 7.771561172376096e-16
+      }
+    },
+    "P18": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Index pendulum reference contents without executing GUI or user-input entry points",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "hopper_references": [],
+        "hopper_references_found": false,
+        "pendulum_execution_performed": false,
+        "pid_text_references": [
+          {
+            "file": "README.md",
+            "line": 3,
+            "text": "This project aims to explore different control techniques for pendulum systems, including PID, Model Predictive Control (MPC), and Deep Learning methods. The project will involve simulations using Python and Gazebo, as well as real-world implementation using a Raspberry Pi and ODrive 3.6 motor controller."
+          },
+          {
+            "file": "README.md",
+            "line": 286,
+            "text": "#### 4.1 PID Control"
+          },
+          {
+            "file": "README.md",
+            "line": 288,
+            "text": "- [ ] **4.1.1 Design PID Controller**"
+          },
+          {
+            "file": "README.md",
+            "line": 289,
+            "text": "  - Develop a PID control algorithm based on the linearized model."
+          },
+          {
+            "file": "README.md",
+            "line": 290,
+            "text": "- [ ] **4.1.2 Simulate PID Control in Python**"
+          },
+          {
+            "file": "README.md",
+            "line": 291,
+            "text": "  - Test the PID controller within the Python simulation environment."
+          },
+          {
+            "file": "README.md",
+            "line": 292,
+            "text": "- [ ] **4.1.3 Tune PID Parameters**"
+          },
+          {
+            "file": "README.md",
+            "line": 294,
+            "text": "- [ ] **4.1.4 Apply PID Control in Gazebo**"
+          },
+          {
+            "file": "README.md",
+            "line": 295,
+            "text": "  - Implement the PID controller in the Gazebo simulation."
+          },
+          {
+            "file": "README.md",
+            "line": 329,
+            "text": "- [ ] **5.5 Test PID Control on Hardware**"
+          },
+          {
+            "file": "README.md",
+            "line": 330,
+            "text": "  - Apply the PID controller to the physical system and observe performance."
+          }
+        ],
+        "python_definitions": [
+          {
+            "file": "src/pendulum_model.py",
+            "line": 6,
+            "name": "NonlinearPendulum"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 28,
+            "name": "LinearizedPendulum"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 50,
+            "name": "NonlinearDoublePendulum"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 99,
+            "name": "LinearizedDoublePendulum"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 7,
+            "name": "__init__"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 13,
+            "name": "equations_of_motion"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 20,
+            "name": "integrate_step"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 24,
+            "name": "simulate"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 29,
+            "name": "__init__"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 35,
+            "name": "equations_of_motion"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 42,
+            "name": "integrate_step"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 46,
+            "name": "simulate"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 51,
+            "name": "__init__"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 57,
+            "name": "equations_of_motion"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 91,
+            "name": "integrate_step"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 95,
+            "name": "simulate"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 100,
+            "name": "__init__"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 106,
+            "name": "equations_of_motion"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 127,
+            "name": "integrate_step"
+          },
+          {
+            "file": "src/pendulum_model.py",
+            "line": 131,
+            "name": "simulate"
+          },
+          {
+            "file": "src/main.py",
+            "line": 10,
+            "name": "main"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 16,
+            "name": "TitleBar"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 109,
+            "name": "PendulumSimulator"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 17,
+            "name": "__init__"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 22,
+            "name": "init_ui"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 83,
+            "name": "minimize"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 86,
+            "name": "maximize"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 94,
+            "name": "close"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 97,
+            "name": "mousePressEvent"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 102,
+            "name": "mouseMoveEvent"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 106,
+            "name": "mouseReleaseEvent"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 110,
+            "name": "__init__"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 116,
+            "name": "init_ui"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 230,
+            "name": "apply_stylesheet"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 268,
+            "name": "update_pendulum_type"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 281,
+            "name": "update_time_mode"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 290,
+            "name": "run_simulation"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 391,
+            "name": "stop_simulation"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 398,
+            "name": "prepare_single_pendulum_animation"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 525,
+            "name": "prepare_double_pendulum_animation"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 665,
+            "name": "main"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 454,
+            "name": "init"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 464,
+            "name": "update"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 583,
+            "name": "init"
+          },
+          {
+            "file": "src/gui.py",
+            "line": 594,
+            "name": "update"
+          }
+        ]
+      }
+    },
+    "P19": {
+      "description": "PyThrust import and database probe",
+      "execution": "unperformed",
+      "reason": "Deferred to a separate inspected-backend probe; not inferred from P00 imports"
+    },
+    "P20": {
+      "description": "Original PyThrust demonstration execution",
+      "execution": "unperformed",
+      "reason": "Deferred to a separate inspected-backend probe; not inferred from P00 imports"
+    },
+    "P21": {
+      "description": "pytest collection and execution",
+      "execution": "unperformed",
+      "reason": "Deferred to a separate inspected-backend probe; not inferred from P00 imports"
+    },
+    "STATIC": {
+      "captured_stderr": "",
+      "captured_stdout": "",
+      "description": "Locate defect-register evidence in current source files; no execution conclusions",
+      "diagnostic_only": false,
+      "execution": "returned",
+      "result": {
+        "locations": [
+          {
+            "assertion": {
+              "contains": [
+                "from state import State"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "from state import State": [
+                4
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D01",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "class State:"
+              ],
+              "file": "simulation/state.py"
+            },
+            "contains_locations": {
+              "class State:": [
+                1
+              ]
+            },
+            "file": "simulation/state.py",
+            "id": "D01",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "exists": false,
+              "file": "simulation/__init__.py"
+            },
+            "exists_observed": false,
+            "file": "simulation/__init__.py",
+            "id": "D01"
+          },
+          {
+            "assertion": {
+              "contains": [
+                ">=3.13"
+              ],
+              "file": "pyproject.toml",
+              "not_contains": [
+                "[build-system]",
+                "pythrust"
+              ]
+            },
+            "contains_locations": {
+              ">=3.13": [
+                6
+              ]
+            },
+            "file": "pyproject.toml",
+            "id": "D02",
+            "not_contains_locations": {
+              "[build-system]": [],
+              "pythrust": []
+            }
+          },
+          {
+            "assertion": {
+              "contains": [
+                "Hello from 6dof-hopper!"
+              ],
+              "file": "main.py"
+            },
+            "contains_locations": {
+              "Hello from 6dof-hopper!": [
+                2
+              ]
+            },
+            "file": "main.py",
+            "id": "D02",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "file": "scripts/ehopper.py",
+              "size_bytes": 0
+            },
+            "file": "scripts/ehopper.py",
+            "id": "D02",
+            "size_bytes_observed": 0
+          },
+          {
+            "assertion": {
+              "file": "README.md",
+              "size_bytes": 0
+            },
+            "file": "README.md",
+            "id": "D02",
+            "size_bytes_observed": 0
+          },
+          {
+            "assertion": {
+              "exists": false,
+              "file": "helpers/__init__.py"
+            },
+            "exists_observed": false,
+            "file": "helpers/__init__.py",
+            "id": "D02"
+          },
+          {
+            "assertion": {
+              "exists": false,
+              "file": "chassis/__init__.py"
+            },
+            "exists_observed": false,
+            "file": "chassis/__init__.py",
+            "id": "D02"
+          },
+          {
+            "assertion": {
+              "exists": false,
+              "file": "propulsion/__init__.py"
+            },
+            "exists_observed": false,
+            "file": "propulsion/__init__.py",
+            "id": "D02"
+          },
+          {
+            "assertion": {
+              "exists": false,
+              "file": "aero/__init__.py"
+            },
+            "exists_observed": false,
+            "file": "aero/__init__.py",
+            "id": "D02"
+          },
+          {
+            "assertion": {
+              "contains": [
+                "def quarternion_to_dcm(quarternion: NDArray, transpose=False):",
+                "quaternions = np.array(quaternions) / np.linalg.norm(quaternions)",
+                ":param quaternions:"
+              ],
+              "file": "helpers/math.py"
+            },
+            "contains_locations": {
+              ":param quaternions:": [
+                8
+              ],
+              "def quarternion_to_dcm(quarternion: NDArray, transpose=False):": [
+                5
+              ],
+              "quaternions = np.array(quaternions) / np.linalg.norm(quaternions)": [
+                13,
+                66
+              ]
+            },
+            "file": "helpers/math.py",
+            "id": "D03",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "TBL = quarternion_to_dcm(quaternion_unit)"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "TBL = quarternion_to_dcm(quaternion_unit)": [
+                37
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D03",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "def euler_to_quaternion(euler_angles, degrees=True):",
+                "# Euler angles are defined as [roll, pitch, yaw], [phi, theta, psi], [z, y, x]",
+                "psi, theta, phi = euler_angles"
+              ],
+              "file": "helpers/math.py"
+            },
+            "contains_locations": {
+              "# Euler angles are defined as [roll, pitch, yaw], [phi, theta, psi], [z, y, x]": [
+                41
+              ],
+              "def euler_to_quaternion(euler_angles, degrees=True):": [
+                40
+              ],
+              "psi, theta, phi = euler_angles": [
+                46
+              ]
+            },
+            "file": "helpers/math.py",
+            "id": "D04",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "def solve_ode(self, init_roll, init_pitch, init_yaw, t_max):",
+                "q = euler_to_quaternion(init_roll, init_pitch, init_yaw)"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "def solve_ode(self, init_roll, init_pitch, init_yaw, t_max):": [
+                133
+              ],
+              "q = euler_to_quaternion(init_roll, init_pitch, init_yaw)": [
+                134
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D04",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "def __init__(self, state: State, environment, hopper, aero):",
+                "self.state = None",
+                "initial_state = (0, 0, 0, 0, 0, 0, q[0], q[1], q[2], q[3], 0, 0, 0)",
+                "self.state = State(*initial_state)"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "def __init__(self, state: State, environment, hopper, aero):": [
+                9
+              ],
+              "initial_state = (0, 0, 0, 0, 0, 0, q[0], q[1], q[2], q[3], 0, 0, 0)": [
+                135
+              ],
+              "self.state = None": [
+                10
+              ],
+              "self.state = State(*initial_state)": [
+                142
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D05",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "if self.time != 0:"
+              ],
+              "file": "simulation/simulation.py",
+              "not_contains": [
+                "self.time ="
+              ]
+            },
+            "contains_locations": {
+              "if self.time != 0:": [
+                16
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D06",
+            "not_contains_locations": {
+              "self.time =": []
+            }
+          },
+          {
+            "assertion": {
+              "contains": [
+                "def trajectory_ode(self, time, state):",
+                "self.state.update_state(state)",
+                "position = np.array([state.x, state.y, state.z], dtype=float)",
+                "angular_rates = np.array([state.p, state.q, state.r], dtype=float)"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "angular_rates = np.array([state.p, state.q, state.r], dtype=float)": [
+                27
+              ],
+              "def trajectory_ode(self, time, state):": [
+                15
+              ],
+              "position = np.array([state.x, state.y, state.z], dtype=float)": [
+                22
+              ],
+              "self.state.update_state(state)": [
+                17
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D07",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "def update_state(self, x, y, z, u, v, w, q0, q1, q2, q3, p, q, r):",
+                "self.x_arr.append(x)"
+              ],
+              "file": "simulation/state.py"
+            },
+            "contains_locations": {
+              "def update_state(self, x, y, z, u, v, w, q0, q1, q2, q3, p, q, r):": [
+                31
+              ],
+              "self.x_arr.append(x)": [
+                32
+              ]
+            },
+            "file": "simulation/state.py",
+            "id": "D07",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "if self.state == None:",
+                "bricked"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "bricked": [
+                20
+              ],
+              "if self.state == None:": [
+                19
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D08",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "solution = solve_ivp(",
+                "RK45",
+                "max_step=0.01,",
+                "dense_output=True,"
+              ],
+              "file": "simulation/simulation.py",
+              "not_contains": [
+                "return solution",
+                "solution.success",
+                "events="
+              ]
+            },
+            "contains_locations": {
+              "RK45": [
+                148
+              ],
+              "dense_output=True,": [
+                152
+              ],
+              "max_step=0.01,": [
+                151
+              ],
+              "solution = solve_ivp(": [
+                144
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D09",
+            "not_contains_locations": {
+              "events=": [],
+              "return solution": [],
+              "solution.success": []
+            }
+          },
+          {
+            "assertion": {
+              "contains": [
+                "altitude = self.environment.elevation + height",
+                "atmosphere = self.environment.atmosphere",
+                "speed_of_sound = atmosphere.speed_of_sound(altitude)",
+                "density = atmosphere.density(altitude)",
+                "dynamic_viscosity = atmosphere.dynamic_viscosity(altitude)",
+                "atmosphere.wind_velocity(altitude), dtype=float"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "altitude = self.environment.elevation + height": [
+                42
+              ],
+              "atmosphere = self.environment.atmosphere": [
+                44
+              ],
+              "atmosphere.wind_velocity(altitude), dtype=float": [
+                51
+              ],
+              "density = atmosphere.density(altitude)": [
+                47
+              ],
+              "dynamic_viscosity = atmosphere.dynamic_viscosity(altitude)": [
+                48
+              ],
+              "speed_of_sound = atmosphere.speed_of_sound(altitude)": [
+                46
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D10",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "@abstractmethod",
+                "def get_mass(t):",
+                "def get_local_cg():",
+                "def get_thrust_and_moment(t):"
+              ],
+              "file": "propulsion/propulsion.py"
+            },
+            "contains_locations": {
+              "@abstractmethod": [
+                14,
+                18,
+                22
+              ],
+              "def get_local_cg():": [
+                19
+              ],
+              "def get_mass(t):": [
+                15
+              ],
+              "def get_thrust_and_moment(t):": [
+                23
+              ]
+            },
+            "file": "propulsion/propulsion.py",
+            "id": "D11",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "return self.mass_wo_propellant + self.propulsion.get_mass(time)",
+                "return self.propulsion.get_thrust_and_moment(time)"
+              ],
+              "file": "chassis/hopper.py"
+            },
+            "contains_locations": {
+              "return self.mass_wo_propellant + self.propulsion.get_mass(time)": [
+                46
+              ],
+              "return self.propulsion.get_thrust_and_moment(time)": [
+                58
+              ]
+            },
+            "file": "chassis/hopper.py",
+            "id": "D11",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "class Propellor(Propulsion):",
+                "super().__init__(type)",
+                "motor_kv_rpm_per_v,"
+              ],
+              "file": "propulsion/propeller.py",
+              "not_contains": [
+                "def get_mass",
+                "def get_thrust_and_moment",
+                "def get_local_cg",
+                "self.motor"
+              ]
+            },
+            "contains_locations": {
+              "class Propellor(Propulsion):": [
+                4
+              ],
+              "motor_kv_rpm_per_v,": [
+                8
+              ],
+              "super().__init__(type)": [
+                15
+              ]
+            },
+            "file": "propulsion/propeller.py",
+            "id": "D12",
+            "not_contains_locations": {
+              "def get_local_cg": [],
+              "def get_mass": [],
+              "def get_thrust_and_moment": [],
+              "self.motor": []
+            }
+          },
+          {
+            "assertion": {
+              "contains": [
+                "mass_wo_propellant: float",
+                "return self.mass_wo_propellant + self.propulsion.get_mass(time)",
+                "return self.cg.copy()",
+                "return np.diag((self.Ixx, self.Iyy, self.Izz))"
+              ],
+              "file": "chassis/hopper.py"
+            },
+            "contains_locations": {
+              "mass_wo_propellant: float": [
+                15
+              ],
+              "return np.diag((self.Ixx, self.Iyy, self.Izz))": [
+                52
+              ],
+              "return self.cg.copy()": [
+                49
+              ],
+              "return self.mass_wo_propellant + self.propulsion.get_mass(time)": [
+                46
+              ]
+            },
+            "file": "chassis/hopper.py",
+            "id": "D13",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "def get_local_cg():"
+              ],
+              "file": "propulsion/propulsion.py"
+            },
+            "contains_locations": {
+              "def get_local_cg():": [
+                19
+              ]
+            },
+            "file": "propulsion/propulsion.py",
+            "id": "D13",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "moment_arm: np.ndarray",
+                "self.moment_arm = np.asarray(self.moment_arm, dtype=float)"
+              ],
+              "file": "chassis/hopper.py"
+            },
+            "contains_locations": {
+              "moment_arm: np.ndarray": [
+                16
+              ],
+              "self.moment_arm = np.asarray(self.moment_arm, dtype=float)": [
+                32
+              ]
+            },
+            "file": "chassis/hopper.py",
+            "id": "D14",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "total_moment_body = aero_moment + prop_moment"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "total_moment_body = aero_moment + prop_moment": [
+                108
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D14",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "r_cp = tube_center - cg"
+              ],
+              "file": "aero/aero.py"
+            },
+            "contains_locations": {
+              "r_cp = tube_center - cg": [
+                114
+              ]
+            },
+            "file": "aero/aero.py",
+            "id": "D14",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "tube_axis_body=(1, 0, 0),",
+                "body +x is normally the tube longitudinal axis"
+              ],
+              "file": "aero/aero.py"
+            },
+            "contains_locations": {
+              "body +x is normally the tube longitudinal axis": [
+                32
+              ],
+              "tube_axis_body=(1, 0, 0),": [
+                17
+              ]
+            },
+            "file": "aero/aero.py",
+            "id": "D15",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "alpha = np.arctan2(air_velocity_body[2], air_velocity_body[0])",
+                "gravity_local = np.array([0, 0, GRAVITY])",
+                "height = -position[2]"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "alpha = np.arctan2(air_velocity_body[2], air_velocity_body[0])": [
+                75
+              ],
+              "gravity_local = np.array([0, 0, GRAVITY])": [
+                114
+              ],
+              "height = -position[2]": [
+                41
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D15",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "epsilon = 1e-10",
+                "if air_speed < epsilon:",
+                "return np.zeros(3), np.zeros(3)",
+                "omega_transverse_magnitude = np.linalg.norm(omega_transverse)"
+              ],
+              "file": "aero/aero.py"
+            },
+            "contains_locations": {
+              "epsilon = 1e-10": [
+                88
+              ],
+              "if air_speed < epsilon:": [
+                108
+              ],
+              "omega_transverse_magnitude = np.linalg.norm(omega_transverse)": [
+                227
+              ],
+              "return np.zeros(3), np.zeros(3)": [
+                109
+              ]
+            },
+            "file": "aero/aero.py",
+            "id": "D16",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "tube_axis = np.asarray(tube_axis_body, dtype=float)",
+                "tube_axis /= axis_norm"
+              ],
+              "file": "aero/aero.py"
+            },
+            "contains_locations": {
+              "tube_axis /= axis_norm": [
+                104
+              ],
+              "tube_axis = np.asarray(tube_axis_body, dtype=float)": [
+                98
+              ]
+            },
+            "file": "aero/aero.py",
+            "id": "D17",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "tube_length : float",
+                "outer_diameter : float",
+                "tube_center_body : array_like, shape (3,)",
+                "cg_body : array_like, shape (3,)"
+              ],
+              "file": "aero/aero.py"
+            },
+            "contains_locations": {
+              "cg_body : array_like, shape (3,)": [
+                62
+              ],
+              "outer_diameter : float": [
+                56
+              ],
+              "tube_center_body : array_like, shape (3,)": [
+                59
+              ],
+              "tube_length : float": [
+                53
+              ]
+            },
+            "file": "aero/aero.py",
+            "id": "D18",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "total_moment_body - np.cross(angular_rates, inertia @ angular_rates),"
+              ],
+              "file": "simulation/simulation.py",
+              "not_contains": [
+                "rotor",
+                "gyro"
+              ]
+            },
+            "contains_locations": {
+              "total_moment_body - np.cross(angular_rates, inertia @ angular_rates),": [
+                126
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D19",
+            "not_contains_locations": {
+              "gyro": [],
+              "rotor": []
+            }
+          },
+          {
+            "assertion": {
+              "contains": [
+                "mach = air_speed / speed_of_sound",
+                "reynolds = (",
+                "beta = np.arcsin(np.clip(air_velocity_body[1] / air_speed, -1, 1))"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "beta = np.arcsin(np.clip(air_velocity_body[1] / air_speed, -1, 1))": [
+                77
+              ],
+              "mach = air_speed / speed_of_sound": [
+                68
+              ],
+              "reynolds = (": [
+                71
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D20",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "cd: float",
+                "csa: float",
+                "reference_length: Optional[float] = None"
+              ],
+              "file": "chassis/hopper.py"
+            },
+            "contains_locations": {
+              "cd: float": [
+                20
+              ],
+              "csa: float": [
+                21
+              ],
+              "reference_length: Optional[float] = None": [
+                28
+              ]
+            },
+            "file": "chassis/hopper.py",
+            "id": "D20",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "initial_state = (0, 0, 0, 0, 0, 0, q[0], q[1], q[2], q[3], 0, 0, 0)"
+              ],
+              "file": "simulation/simulation.py",
+              "not_contains": [
+                "ground",
+                "events="
+              ]
+            },
+            "contains_locations": {
+              "initial_state = (0, 0, 0, 0, 0, 0, q[0], q[1], q[2], q[3], 0, 0, 0)": [
+                135
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "D21",
+            "not_contains_locations": {
+              "events=": [],
+              "ground": []
+            }
+          },
+          {
+            "assertion": {
+              "contains": [
+                "def get_thrust_and_moment(",
+                "return self.propulsion.get_thrust_and_moment(time)"
+              ],
+              "file": "chassis/hopper.py"
+            },
+            "contains_locations": {
+              "def get_thrust_and_moment(": [
+                54
+              ],
+              "return self.propulsion.get_thrust_and_moment(time)": [
+                58
+              ]
+            },
+            "file": "chassis/hopper.py",
+            "id": "D22",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "def get_thrust_and_moment(t):"
+              ],
+              "file": "propulsion/propulsion.py"
+            },
+            "contains_locations": {
+              "def get_thrust_and_moment(t):": [
+                23
+              ]
+            },
+            "file": "propulsion/propulsion.py",
+            "id": "D22",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "GRAVITY = 9.8065"
+              ],
+              "file": "helpers/constants.py"
+            },
+            "contains_locations": {
+              "GRAVITY = 9.8065": [
+                1
+              ]
+            },
+            "file": "helpers/constants.py",
+            "id": "D23",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "sys.path.insert(0, str(PYTHRUST_ROOT))",
+                "def results_at_rpm(rpm: float) -> dict:",
+                "Run this from the PyThrust repository root after: python -m pip install -e ."
+              ],
+              "file": "test/test_pythrust.py",
+              "not_contains": [
+                "def test_",
+                "assert "
+              ]
+            },
+            "contains_locations": {
+              "Run this from the PyThrust repository root after: python -m pip install -e .": [
+                3
+              ],
+              "def results_at_rpm(rpm: float) -> dict:": [
+                71
+              ],
+              "sys.path.insert(0, str(PYTHRUST_ROOT))": [
+                11
+              ]
+            },
+            "file": "test/test_pythrust.py",
+            "id": "D24",
+            "not_contains_locations": {
+              "assert ": [],
+              "def test_": []
+            }
+          },
+          {
+            "assertion": {
+              "contains": [
+                "l2 = 2 * (q1 * q2 + q0 * q3)",
+                "l3 = 2 * (q1 * q3 - q0 * q2)"
+              ],
+              "file": "helpers/math.py"
+            },
+            "contains_locations": {
+              "l2 = 2 * (q1 * q2 + q0 * q3)": [
+                20
+              ],
+              "l3 = 2 * (q1 * q3 - q0 * q2)": [
+                21
+              ]
+            },
+            "file": "helpers/math.py",
+            "id": "O01",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "TLB = TBL.T",
+                "position_dot = TLB @ velocity_body"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "TLB = TBL.T": [
+                38
+              ],
+              "position_dot = TLB @ velocity_body": [
+                111
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "O01",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "[[0, -p, -q, -r], [p, 0, r, -q], [q, -r, 0, p], [r, q, -p, 0]]",
+                "correction_gain = 0.5"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "[[0, -p, -q, -r], [p, 0, r, -q], [q, -r, 0, p], [r, q, -p, 0]]": [
+                80
+              ],
+              "correction_gain = 0.5": [
+                83
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "O02",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "- np.cross(angular_rates, velocity_body)",
+                "gravity_body = TBL @ gravity_local"
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "- np.cross(angular_rates, velocity_body)": [
+                120
+              ],
+              "gravity_body = TBL @ gravity_local": [
+                115
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "O03",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "contains": [
+                "body_rate_dot = np.linalg.solve("
+              ],
+              "file": "simulation/simulation.py"
+            },
+            "contains_locations": {
+              "body_rate_dot = np.linalg.solve(": [
+                124
+              ]
+            },
+            "file": "simulation/simulation.py",
+            "id": "O04",
+            "not_contains_locations": {}
+          },
+          {
+            "assertion": {
+              "exists": true,
+              "file": "aero/__pycache__"
+            },
+            "exists_observed": true,
+            "file": "aero/__pycache__",
+            "id": "O05"
+          },
+          {
+            "assertion": {
+              "exists": true,
+              "file": "chassis/__pycache__"
+            },
+            "exists_observed": true,
+            "file": "chassis/__pycache__",
+            "id": "O05"
+          },
+          {
+            "assertion": {
+              "exists": true,
+              "file": "propulsion/__pycache__"
+            },
+            "exists_observed": true,
+            "file": "propulsion/__pycache__",
+            "id": "O05"
+          },
+          {
+            "assertion": {
+              "exists": true,
+              "file": "simulation/__pycache__"
+            },
+            "exists_observed": true,
+            "file": "simulation/__pycache__",
+            "id": "O05"
+          },
+          {
+            "assertion": {
+              "exists": true,
+              "file": "test/__pycache__"
+            },
+            "exists_observed": true,
+            "file": "test/__pycache__",
+            "id": "O05"
+          },
+          {
+            "assertion": {
+              "contains": [
+                "OpenRocket equation 3.26 for cylindrical body lift",
+                "distance_integral = ("
+              ],
+              "file": "aero/aero.py"
+            },
+            "contains_locations": {
+              "OpenRocket equation 3.26 for cylindrical body lift": [
+                25
+              ],
+              "distance_integral = (": [
+                240
+              ]
+            },
+            "file": "aero/aero.py",
+            "id": "O06",
+            "not_contains_locations": {}
+          }
+        ],
+        "register_sha256": "1d20219ce01e9814036d7ee1249ea1538a01b6268a294acc684ea832cfd486bb"
+      }
+    }
+  },
+  "schema": "pdr_r4_plant_control.probes/1",
+  "source_root": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper",
+  "stage": "PDR diagnosis only",
+  "utc_finished": "2026-10-03T07:54:59.242839+00:00",
+  "utc_started": "2026-10-03T07:54:56.010007+00:00"
+}
