@@ -1,0 +1,1 @@
+{"path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/r5/caller_scan_before.json", "sha256": "fb75d04a072dd2d75806a3de12fe9196e42f0da1136031c2ba747e12ee6842f2", "trees": {"modified_copy": {"error_count": 0, "python_file_count": 12}, "supplied": {"error_count": 0, "python_file_count": 46}}}

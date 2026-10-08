@@ -15,8 +15,8 @@ Or: uv sync --extra sounding-rocket
     .venv/bin/python -m examples.ehopper.ehopper
 
 Edit the configuration below; this script has no command-line arguments.
-Install claude CLI and run claude login with your ChatGPT account before running.
-Reasoning uses a local claude exec process with GPT-6 Astra; no API key is needed.
+Install codex CLI and run codex login with your ChatGPT account before running.
+Reasoning uses a local codex exec process with GPT-6 Astra; no API key is needed.
 uv installs this script's document readers; backend installations are separate.
 See https://docs.astral.sh/uv/guides/scripts/ for inline dependency metadata.
 
@@ -59,7 +59,7 @@ from guacamole import (
     VerificationResult,
 )
 from guacamole.contracts import FileRecord
-from guacamole.providers.claude import ClaudeReasoning
+from guacamole.providers.codex import CodexReasoning
 from guacamole.tools.mcp import ToolSession
 from guacamole.websocket import WebSocketBridge
 
@@ -74,6 +74,7 @@ EXTRA_TOOLS = (FREECAD_MCP,)
 RESUME_RUN_ID: str | None = None  # None automatically resumes a single saved run.
 CONTROL_PORT = 8766
 CONTEXT = ContextSpec(max_input_tokens=12800000, reserved_output_tokens=20000)
+WORKER_MAX_INPUT_TOKENS = CONTEXT.max_input_tokens
 BUDGET = Budget(
     max_steps=200000, max_tool_calls=15000, max_seconds=720000, max_agents=24
 )
@@ -623,6 +624,30 @@ def configure_run(project: Project, run_id: str | None = None) -> ContextSpec:
                     actor="script",
                     event="agent.budgets_updated",
                 )
+            # Raise live workers to the worker floor; the Chief sets their limits at spawn.
+            for snapshot in store.list("agent"):
+                agent = store.model("agent", snapshot.ref.id, AgentSpec)
+                state = store.maybe("agent_state", agent.id)
+                if agent.id == chief.id or (state and state.data.get("status") == "superseded"):
+                    continue
+                floor = min(
+                    WORKER_MAX_INPUT_TOKENS,
+                    capacity - agent.context.reserved_output_tokens,
+                )
+                if agent.context.max_input_tokens < floor:
+                    store.put(
+                        "agent",
+                        agent.id,
+                        agent.model_copy(
+                            update={
+                                "context": agent.context.model_copy(
+                                    update={"max_input_tokens": floor}
+                                )
+                            }
+                        ),
+                        actor="script",
+                        event="agent.budgets_updated",
+                    )
     return context
 
 
@@ -652,7 +677,7 @@ def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
     lines.extend(("", "## Executables visible to this host (presence only)"))
     for name in (
         "uv",
-        "claude",
+        "codex",
         "freecad",
         "freecadcmd",
         "FreeCADCmd",
@@ -692,9 +717,9 @@ async def notifications(project: Project) -> None:
 
 
 async def main() -> None:
-    if shutil.which("claude") is None:
+    if shutil.which("codex") is None:
         raise SystemExit(
-            "Install claude CLI on PATH and run 'claude login' with your ChatGPT account."
+            "Install codex CLI on PATH and run 'codex login' with your ChatGPT account."
         )
     missing = [
         name
@@ -712,7 +737,7 @@ async def main() -> None:
         WORKSPACE,
         sandbox=SANDBOX,
         tools=ToolRegistry(),
-        reasoning=ClaudeReasoning(web_search=True),
+        reasoning=CodexReasoning(web_search=True),
     ) as project:
         register_tools(project)
         runs = project.store.list("run")

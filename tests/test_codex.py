@@ -97,7 +97,7 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn('web_search="disabled"', argv)
         self.assertIn("Do not execute tools yourself.", capture["instructions"])
         self.assertFalse(Path(capture["cwd"]).exists())
-        self.assertEqual(await self.provider.count_tokens("π"), 2)
+        self.assertEqual(await self.provider.count_tokens("π"), 1026)
         with Project(self.root / "state", reasoning=self.provider) as project:
             await project.run(
                 ProjectRequest(
@@ -106,8 +106,30 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
             )
             packet = project.store.list("context")[0].data
             self.assertEqual(packet["provider"], "codex-cli")
-            self.assertEqual(packet["token_count_method"], "utf8_upper_bound")
-            self.assertEqual(packet["input_tokens"], len(packet["prompt"].encode()))
+            self.assertEqual(packet["token_count_method"], self.provider.token_count_method)
+            self.assertEqual(
+                packet["input_tokens"], await self.provider.count_tokens(packet["prompt"])
+            )
+
+    async def test_token_count_compresses_text_and_accepts_literal_special_tokens(self):
+        prompt = "Hopper engineering evidence: mass and inertia. " * 1000
+        self.assertLess(await self.provider.count_tokens(prompt), len(prompt.encode()) // 2)
+        self.assertGreater(await self.provider.count_tokens("<|endoftext|>"), 1024)
+
+    async def test_cli_character_limit_covers_initial_and_validation_retry_prompts(self):
+        with (
+            patch.object(self.provider, "max_input_chars", len(self.packet.prompt) - 1),
+            self.assertRaisesRegex(ProviderError, "CLI input limit"),
+        ):
+            await self.provider.respond(self.packet)
+        self.assertFalse(self.capture.exists())
+        packet = self.packet.model_copy(update={"prompt": '{"mode":"invalid_once"}'})
+        with (
+            patch.object(self.provider, "max_input_chars", len(packet.prompt)),
+            self.assertRaisesRegex(ProviderError, "correction feedback exceeds"),
+        ):
+            await self.provider.respond(packet)
+        self.assertEqual(json.loads(self.capture.read_text())["attempt"], 1)
 
     async def test_live_web_search_keeps_engineering_tools_in_runtime(self):
         provider = CodexReasoning(executable=str(self.executable), web_search=True)

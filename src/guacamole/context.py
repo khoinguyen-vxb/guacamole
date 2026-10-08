@@ -35,6 +35,26 @@ class ProviderError(RuntimeError):
     """A locally constructed provider diagnostic safe to persist without secrets."""
 
 
+def encode_context(payload: dict) -> str:
+    """Reference exact evidence already included as a source instead of embedding it twice."""
+    contents = {encode(s["ref"]): s["data"] for s in payload["sources"]}
+    sources = []
+    for source in payload["sources"]:
+        data = source["data"]
+        if source["ref"]["kind"] == "decision":
+            request = data["request"]
+            context = [
+                entry | {"content": {"included_source": entry["ref"]}}
+                if encode(entry["ref"]) in contents
+                and contents[encode(entry["ref"])] == entry["content"]
+                else entry
+                for entry in request["context"]
+            ]
+            source = source | {"data": data | {"request": request | {"context": context}}}
+        sources.append(source)
+    return encode(payload | {"sources": sources})
+
+
 class ContextBuilder:
     def __init__(
         self, store: Store, activity: Activity, registry: ToolRegistry
@@ -111,6 +131,7 @@ class ContextBuilder:
         state: JSON,
     ) -> ContextPacket:
         spec = agent.context
+        max_chars = getattr(provider, "max_input_chars", None)
         if (
             spec.max_input_tokens + spec.reserved_output_tokens
             > provider.context_capacity_tokens
@@ -139,7 +160,13 @@ class ContextBuilder:
                 snapshot.model_dump(mode="json") | {"locator": ref.locator}
             )
             refs.append(ref)
-        count = count_tokens(encode(payload))
+        prompt = encode_context(payload)
+        if max_chars is not None and len(prompt) > max_chars:
+            raise ContextOverflow(
+                f"Pinned context and contracts require {len(prompt)} characters; "
+                f"provider input limit is {max_chars}"
+            )
+        count = count_tokens(prompt)
         if count > spec.max_input_tokens:
             raise ContextOverflow(
                 f"Pinned context and contracts require {count} input tokens; budget is {spec.max_input_tokens}"
@@ -159,20 +186,24 @@ class ContextBuilder:
             if entry.delivered_at is None or entry.acknowledged_at is not None:
                 continue
             payload["messages"].append(entry.message.model_dump(mode="json"))
-            measured = count_tokens(encode(payload))
-            if measured <= spec.max_input_tokens:
+            prompt = encode_context(payload)
+            measured = count_tokens(prompt)
+            if measured <= spec.max_input_tokens and (
+                max_chars is None or len(prompt) <= max_chars
+            ):
                 count = measured
                 messages.append(entry.message.id)
             else:
                 payload["messages"].pop()
                 if entry.message.sender.startswith("human:"):
                     raise ContextOverflow(
-                        "Human input exceeds the context budget; increase the budget before continuing"
+                        "Human input exceeds the context budget or provider input limit; "
+                        "reduce context before continuing"
                     )
                 omissions.append(
                     Omission(
                         item=entry.message.id,
-                        reason="Inbox message exceeds remaining input budget; remains pending",
+                        reason="Inbox message exceeds remaining input budget or provider input limit; remains pending",
                     )
                 )
         selected = (
@@ -197,8 +228,11 @@ class ContextBuilder:
             payload["sources"].append(
                 snapshot.model_dump(mode="json") | {"locator": ref.locator}
             )
-            measured = count_tokens(encode(payload))
-            if measured <= spec.max_input_tokens:
+            prompt = encode_context(payload)
+            measured = count_tokens(prompt)
+            if measured <= spec.max_input_tokens and (
+                max_chars is None or len(prompt) <= max_chars
+            ):
                 count = measured
                 refs.append(ref)
             else:
@@ -206,7 +240,7 @@ class ContextBuilder:
                 omissions.append(
                     Omission(
                         item=f"{ref.kind}:{ref.id}@{ref.revision}",
-                        reason="Selected source exceeds remaining input budget",
+                        reason="Selected source exceeds remaining input budget or provider input limit",
                     )
                 )
         packet = ContextPacket(
@@ -215,7 +249,7 @@ class ContextBuilder:
             request_id=request_id,
             provider=provider.name,
             model=provider.model,
-            prompt=encode(payload),
+            prompt=encode_context(payload),
             input_tokens=count,
             token_count_method=getattr(provider, "token_count_method", "exact"),
             reserved_output_tokens=spec.reserved_output_tokens,

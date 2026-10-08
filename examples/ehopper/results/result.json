@@ -2,10 +2,13 @@
   "run_id": "0d3952dea3fd4803a63b63a01d64464c",
   "status": "incomplete",
   "reviews": [],
-  "human_requests": [],
+  "human_requests": [
+    "6c551c32277644ffa86cb21314b9745c"
+  ],
   "open_items": [
-    "chief: blocked: {\"detail\":\"Claude exited with status 1; run 'claude auth status' and check model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}",
-    "pdr_r5_propulsion_worker: blocked: {\"detail\":\"Claude exited with status 1; run 'claude auth status' and check model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}",
-    "pdr_r5_cad_worker: blocked: {\"reason\":\"Pinned context and contracts require 474893 input tokens; budget is 400000\"}"
+    "chief: blocked: {\"detail\":\"Codex exited with status 1; run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}",
+    "pdr_r5_propulsion_worker: blocked: {\"detail\":\"Codex exited with status 1; run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\",\"selected\":[{\"id\":\"4c4fa0bf081e40a290ca45d594969356\",\"kind\":\"tool_result\",\"locator\":\"\",\"revision\":1,\"sha256\":\"2067afb918be8dcefc86d1fe191949c4179f29da07facc84a5340af5d32e446e\"},{\"id\":\"5e982749fd82487180d94f35416d647f\",\"kind\":\"decision\",\"locator\":\"\",\"revision\":1,\"sha256\":\"6730460eac47e3f3b6c4401e7cbb8f91ca993098768e0e7687530252a60949c8\"},{\"id\":\"eadb9fb2606b47c18adf61537afece9c\",\"kind\":\"decision\",\"locator\":\"\",\"revision\":1,\"sha256\":\"a72afd3d109d39489e8336389b1d62b5159d1018ba54bff4026f2601e4d3224d\"}]}",
+    "pdr_r5_cad_worker: blocked: {\"detail\":\"Codex exited with status 1; run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\",\"selected\":[{\"id\":\"eadb9fb2606b47c18adf61537afece9c\",\"kind\":\"decision\",\"locator\":\"\",\"revision\":1,\"sha256\":\"a72afd3d109d39489e8336389b1d62b5159d1018ba54bff4026f2601e4d3224d\"},{\"id\":\"550ff03b9e3e43f78f44ce10be0c887c\",\"kind\":\"tool_result\",\"locator\":\"\",\"revision\":1,\"sha256\":\"35eefa0a5e541562e6c946349479b7daff6d58ed8a2f0bed5f7ffdd59b4b69d4\"}]}",
+    "pdr_r5_simulator_worker: blocked: {\"detail\":\"Codex exited with status 1; run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\",\"selected\":[{\"id\":\"b5a7f901f13045ebae099bb4f9b9c1b3\",\"kind\":\"tool_result\",\"locator\":\"\",\"revision\":1,\"sha256\":\"614c234b53a16f06384a38cd49613e9091715bc84fe8f29585e55a27d6b570fd\"},{\"id\":\"cc1be58913b1416a897adfa387bc83a3\",\"kind\":\"tool_result\",\"locator\":\"\",\"revision\":1,\"sha256\":\"e43a6334a144b14181497a0b7ebabf0a23fbe8a9a14291c9031df6dbbbc023e3\"},{\"id\":\"5e982749fd82487180d94f35416d647f\",\"kind\":\"decision\",\"locator\":\"\",\"revision\":1,\"sha256\":\"6730460eac47e3f3b6c4401e7cbb8f91ca993098768e0e7687530252a60949c8\"},{\"id\":\"eadb9fb2606b47c18adf61537afece9c\",\"kind\":\"decision\",\"locator\":\"\",\"revision\":1,\"sha256\":\"a72afd3d109d39489e8336389b1d62b5159d1018ba54bff4026f2601e4d3224d\"}]}"
   ]
 }

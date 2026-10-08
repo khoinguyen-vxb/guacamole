@@ -9,6 +9,7 @@ from contextlib import suppress
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
+import tiktoken
 from pydantic import ValidationError
 
 from ..context import ProviderError
@@ -21,7 +22,8 @@ class CodexReasoning:
     name = "codex-cli"
     model = "gpt-6-astra"
     context_capacity_tokens = 1_050_000
-    token_count_method = "utf8_upper_bound"
+    max_input_chars = 1_048_576
+    token_count_method = "tiktoken_o200k_base_estimate_10pct_plus_1024"
 
     def __init__(
         self,
@@ -35,12 +37,19 @@ class CodexReasoning:
         self.web_search = web_search
 
     async def count_tokens(self, prompt: str) -> int:
-        # ponytail: conservative byte bound; add a local tokenizer if context is too sparse.
-        return len(prompt.encode("utf-8"))
+        # ponytail: encoding estimate, not an exact Astra mapping; retain headroom
+        # for tokenizer differences and CLI instructions until a mapping is available.
+        tokens = len(tiktoken.get_encoding("o200k_base").encode_ordinary(prompt))
+        return (tokens * 11 + 9) // 10 + 1024
 
     async def respond(self, packet: ContextPacket) -> AgentTurn:
         if packet.provider != self.name or packet.model != self.model:
             raise ValueError("Context packet targets another provider")
+        if len(packet.prompt) > self.max_input_chars:
+            raise ProviderError(
+                f"Codex input requires {len(packet.prompt)} characters; "
+                f"CLI input limit is {self.max_input_chars}. Rebuild the context."
+            )
         if (
             packet.input_tokens + packet.reserved_output_tokens
             > self.context_capacity_tokens
@@ -217,10 +226,11 @@ class CodexReasoning:
                             await self.count_tokens(prompt)
                             + packet.reserved_output_tokens
                             > self.context_capacity_tokens
+                            or len(prompt) > self.max_input_chars
                         ):
                             raise ProviderError(
                                 "Codex response failed validation and correction feedback "
-                                "exceeds model capacity; no action executed "
+                                "exceeds model capacity or CLI input limit; no action executed "
                                 f"({detail})."
                             ) from None
                         retried = True

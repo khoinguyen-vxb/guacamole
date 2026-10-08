@@ -1,0 +1,1 @@
+{"copy_hashes_match_baseline": true, "file_count": 17, "path": "software/r5/copy_manifest_initial.json", "sha256": "1f240a4627c8208e6cd0b4dc6b69a8974e8f8d4cc78fdd5bf761afc58ee828f9"}

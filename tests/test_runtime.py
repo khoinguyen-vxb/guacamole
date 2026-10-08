@@ -27,7 +27,12 @@ from guacamole import (
     TaskAuthorization,
     TaskReport,
 )
-from guacamole.context import ContextBuilder, ContextOverflow, ProviderError
+from guacamole.context import (
+    ContextBuilder,
+    ContextOverflow,
+    ProviderError,
+    encode_context,
+)
 from guacamole.contracts import (
     ContextPacket,
     Decide,
@@ -46,6 +51,63 @@ from guacamole.providers.astra import AstraReasoning
 
 
 class RuntimeTests(unittest.IsolatedAsyncioTestCase):
+    def test_context_references_only_identical_included_decision_evidence(self):
+        ref = {"kind": "source", "id": "evidence", "revision": 1, "sha256": "hash"}
+        content = {"text": "Historical engineering evidence " * 100}
+        entries = [
+            {"ref": ref, "content": content},
+            {"ref": ref | {"revision": 2}, "content": content},
+            {"ref": ref, "content": {"text": "Different historical content"}},
+        ]
+        payload = {"sources": [
+            {"ref": ref, "data": content},
+            {"ref": {"kind": "decision"}, "data": {
+                "request": {"context": entries, "question": "Choose design"},
+                "result": {"selected": "approved"},
+            }},
+        ]}
+        original = json.dumps(payload)
+        encoded = encode_context(payload)
+        sources = json.loads(encoded)["sources"]
+        context = sources[1]["data"]["request"]["context"]
+        self.assertEqual(context[0]["content"], {"included_source": ref})
+        self.assertEqual(context[1:], entries[1:])
+        self.assertEqual(sources[0]["data"], content)
+        self.assertEqual(sources[1]["data"]["result"], {"selected": "approved"})
+        self.assertEqual(json.dumps(payload), original)
+        self.assertLess(len(encoded), len(original))
+
+    async def test_context_obeys_provider_character_limit_independently_of_tokens(self):
+        class Limited(TestReasoning):
+            max_input_chars = 30_000
+
+            async def count_tokens(self, prompt):
+                return len(prompt) // 10
+
+        with tempfile.TemporaryDirectory() as directory, Project(Path(directory)) as project:
+            source = Path(directory) / "large.txt"
+            source.write_text("π" * 30_000)
+            ref = project.ingest(source)
+            agent = AgentSpec(
+                id="worker", task_id="task", parent_id="chief", objective="Inspect",
+                context=ContextSpec(selected=(ref,), max_input_tokens=100_000),
+                decision_id=None,
+            )
+            packet = await project.contexts.build(
+                agent, "request", Limited(), instructions="test", state={},
+            )
+            self.assertLessEqual(len(packet.prompt), Limited.max_input_chars)
+            self.assertNotIn(ref, packet.sources)
+            self.assertTrue(packet.deferred)
+            self.assertEqual(packet.input_tokens, await Limited().count_tokens(packet.prompt))
+            pinned = agent.model_copy(update={"context": agent.context.model_copy(
+                update={"pinned": (ref,), "selected": ()},
+            )})
+            with self.assertRaisesRegex(ContextOverflow, "characters"):
+                await project.contexts.build(
+                    pinned, "request", Limited(), instructions="test", state={},
+                )
+
     async def test_invalid_reads_do_not_poison_context_and_can_be_corrected(self):
         class Reader(TestReasoning):
             def __init__(self, wanted, bad):

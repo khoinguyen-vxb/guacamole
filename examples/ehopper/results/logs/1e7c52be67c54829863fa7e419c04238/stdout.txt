@@ -1,0 +1,235 @@
+{
+  "initial_copy_candidates_match_supplied_plant": true,
+  "initial_copy_python_hashes_match_supplied_plant": true,
+  "limitations": [
+    "Terminal-name matches are candidates, not resolved object identities.",
+    "Import aliases are conservatively expanded without lexical shadowing analysis.",
+    "Symbol references include callbacks, annotations, bases and ordinary reads; they are not all calls.",
+    "Enclosing scopes are syntactic; decorators and default expressions execute in their defining scope.",
+    "Assignment aliases, reflective calls, dynamic dispatch and external callers are not fully resolved.",
+    "Supplied PyThrust is scanned read-only; it is intentionally absent from the copied tree.",
+    "This program does not import source modules, check dependencies or verify plant physics."
+  ],
+  "scan_sha256": "fb75d04a072dd2d75806a3de12fe9196e42f0da1136031c2ba747e12ee6842f2",
+  "status": "Static caller-review aid; not verification",
+  "supplied_caller_and_reference_candidates": {
+    "Aerodynamics": [],
+    "CG": [
+      {
+        "call_lines": [
+          92
+        ],
+        "expression": "self.hopper.CG",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          92
+        ],
+        "scope": "Simulation.trajectory_ode"
+      }
+    ],
+    "Hopper": [],
+    "Propellor": [],
+    "Propulsion": [
+      {
+        "call_lines": [],
+        "expression": "Propulsion",
+        "path": "chassis/hopper.py",
+        "reference_lines": [
+          13
+        ],
+        "scope": "Hopper"
+      },
+      {
+        "call_lines": [],
+        "expression": "Propulsion",
+        "path": "propulsion/propeller.py",
+        "reference_lines": [
+          4
+        ],
+        "scope": "Propellor"
+      }
+    ],
+    "Simulation": [],
+    "State": [
+      {
+        "call_lines": [],
+        "expression": "State",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          9
+        ],
+        "scope": "Simulation.__init__"
+      },
+      {
+        "call_lines": [
+          142
+        ],
+        "expression": "State",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          142
+        ],
+        "scope": "Simulation.solve_ode"
+      }
+    ],
+    "determine_at_point": [
+      {
+        "call_lines": [
+          98
+        ],
+        "expression": "self.aero.determine_at_point",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          98
+        ],
+        "scope": "Simulation.trajectory_ode"
+      }
+    ],
+    "euler_to_quaternion": [
+      {
+        "call_lines": [
+          134
+        ],
+        "expression": "euler_to_quaternion",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          134
+        ],
+        "scope": "Simulation.solve_ode"
+      }
+    ],
+    "get_local_cg": [],
+    "get_mass": [
+      {
+        "call_lines": [
+          46
+        ],
+        "expression": "self.propulsion.get_mass",
+        "path": "chassis/hopper.py",
+        "reference_lines": [
+          46
+        ],
+        "scope": "Hopper.mass"
+      }
+    ],
+    "get_thrust_and_moment": [
+      {
+        "call_lines": [
+          58
+        ],
+        "expression": "self.propulsion.get_thrust_and_moment",
+        "path": "chassis/hopper.py",
+        "reference_lines": [
+          58
+        ],
+        "scope": "Hopper.get_thrust_and_moment"
+      },
+      {
+        "call_lines": [
+          96
+        ],
+        "expression": "self.hopper.get_thrust_and_moment",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          96
+        ],
+        "scope": "Simulation.trajectory_ode"
+      }
+    ],
+    "inertia": [
+      {
+        "call_lines": [],
+        "expression": "inertia",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          125,
+          126
+        ],
+        "scope": "Simulation.trajectory_ode"
+      },
+      {
+        "call_lines": [
+          93
+        ],
+        "expression": "self.hopper.inertia",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          93
+        ],
+        "scope": "Simulation.trajectory_ode"
+      }
+    ],
+    "mass": [
+      {
+        "call_lines": [],
+        "expression": "mass",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          118
+        ],
+        "scope": "Simulation.trajectory_ode"
+      },
+      {
+        "call_lines": [
+          91
+        ],
+        "expression": "self.hopper.mass",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          91
+        ],
+        "scope": "Simulation.trajectory_ode"
+      }
+    ],
+    "quarternion_to_dcm": [
+      {
+        "call_lines": [
+          37
+        ],
+        "expression": "quarternion_to_dcm",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          37
+        ],
+        "scope": "Simulation.trajectory_ode"
+      }
+    ],
+    "quaternion_to_dcm": [],
+    "solve_ode": [],
+    "trajectory_ode": [
+      {
+        "call_lines": [],
+        "expression": "self.trajectory_ode",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          145
+        ],
+        "scope": "Simulation.solve_ode"
+      }
+    ],
+    "unpack_state": [],
+    "update_state": [
+      {
+        "call_lines": [
+          17
+        ],
+        "expression": "self.state.update_state",
+        "path": "simulation/simulation.py",
+        "reference_lines": [
+          17
+        ],
+        "scope": "Simulation.trajectory_ode"
+      }
+    ]
+  },
+  "tree_counts_and_errors": {
+    "modified_copy": {
+      "parse_or_coverage_errors": [],
+      "python_file_count": 12
+    },
+    "supplied": {
+      "parse_or_coverage_errors": [],
+      "python_file_count": 46
+    }
+  }
+}

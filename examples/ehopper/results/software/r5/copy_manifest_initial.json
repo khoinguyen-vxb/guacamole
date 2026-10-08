@@ -1,0 +1,149 @@
+{
+  "baseline_sha256": "ab5d979836a7bd447c213d3c60f38d5475d674c9a5cbcfdfa862de677a3dc317",
+  "content_preservation": "Byte-for-byte copying; filesystem timestamps and permissions are not certified.",
+  "copy_plan_sha256": "d83a4e637666ea45398d34f9faa3f061a16fe3af7423e1d5a770f6105cf15e75",
+  "copy_script_sha256": "086c1b427b441e4d1c41a8ea7f5b8e1120539f400595ef17888544e98030a474",
+  "excluded_entries": [
+    {
+      "path": ".git",
+      "reason": "cache_or_dot_directory"
+    },
+    {
+      "path": ".venv",
+      "reason": "cache_or_dot_directory"
+    },
+    {
+      "path": "PyThrust",
+      "reason": "PyThrust_read_only_dependency"
+    },
+    {
+      "path": "aero/__pycache__",
+      "reason": "cache_or_dot_directory"
+    },
+    {
+      "path": "chassis/__pycache__",
+      "reason": "cache_or_dot_directory"
+    },
+    {
+      "path": "propulsion/__pycache__",
+      "reason": "cache_or_dot_directory"
+    },
+    {
+      "path": "simulation/__pycache__",
+      "reason": "cache_or_dot_directory"
+    },
+    {
+      "path": "test/__pycache__",
+      "reason": "cache_or_dot_directory"
+    }
+  ],
+  "file_count": 17,
+  "files": [
+    {
+      "path": "software/r5/6dof_hopper_r5/.gitmodules",
+      "sha256": "ab96c19ba543d0aa4d73c6768196aa4f482a53ed7fe59f40056e067929ad5ad2",
+      "size_bytes": 89,
+      "source_relative_path": ".gitmodules"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/.python-version",
+      "sha256": "a7b9da5e355ce2ea4508cc53756849f44c960d87a38e5a76d0c734d7512c5371",
+      "size_bytes": 6,
+      "source_relative_path": ".python-version"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/README.md",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source_relative_path": "README.md"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/aero/aero.py",
+      "sha256": "9008c26ea2c2c26e1e26441ee17f27872e1d34bf1c0d9cb7179ce285d6e2b53f",
+      "size_bytes": 8856,
+      "source_relative_path": "aero/aero.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/chassis/hopper.py",
+      "sha256": "6e2b2f93e98b844ce04f68d26b704c65270e9329e1abff76caa45cbcd5dcf0bd",
+      "size_bytes": 1691,
+      "source_relative_path": "chassis/hopper.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/helpers/constants.py",
+      "sha256": "4853ae63f4d7df5254af6fbab9b46dd31ca60aa722dd3580643064bfce9523a4",
+      "size_bytes": 18,
+      "source_relative_path": "helpers/constants.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/helpers/math.py",
+      "sha256": "5e6420ade1c4d642762ba4d6b0812a80f2f693a58151bbf16a4274efb521239a",
+      "size_bytes": 2169,
+      "source_relative_path": "helpers/math.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/main.py",
+      "sha256": "67ebbf79c219721eb1f0cc6e4817b8fb218488b6dec4bbd25a1f0faee6527dbc",
+      "size_bytes": 95,
+      "source_relative_path": "main.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/propulsion/propeller.py",
+      "sha256": "caa5ee91e46d102b8ebe0c02e1dfec0ecdca18e2c423791fca6f2c19100ae7b6",
+      "size_bytes": 349,
+      "source_relative_path": "propulsion/propeller.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/propulsion/propulsion.py",
+      "sha256": "e07b895d8399016a3b0511afb195d7ebf992050cef04ab3015600347f01750ce",
+      "size_bytes": 446,
+      "source_relative_path": "propulsion/propulsion.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/pyproject.toml",
+      "sha256": "d8761e3e5cc51e06b35e78e85a00c3df5c572d41a024ce596ce44ca0714f19a9",
+      "size_bytes": 315,
+      "source_relative_path": "pyproject.toml"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/scripts/ehopper.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0,
+      "source_relative_path": "scripts/ehopper.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/simulation/simulation.py",
+      "sha256": "087767eef40f728775d5bd8ee597a6e0a8c0769fe4d2d6ab2a060d06692f86ca",
+      "size_bytes": 5077,
+      "source_relative_path": "simulation/simulation.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/simulation/state.py",
+      "sha256": "7b8713aecd017a7ff1f0b3ad4e14e1c63c716d1181a6df516d25b7a7d1973b2a",
+      "size_bytes": 1760,
+      "source_relative_path": "simulation/state.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/test/__init__.py",
+      "sha256": "d72bcd69d0ed6d706e690574d1dbdedf15ab740d5ce705aad834bd1b91b3d76e",
+      "size_bytes": 29,
+      "source_relative_path": "test/__init__.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/test/test_pythrust.py",
+      "sha256": "a3590eef1c8b2d922a54464d7254205ca046c4af4e42f4bde815a67cec690a0d",
+      "size_bytes": 4051,
+      "source_relative_path": "test/test_pythrust.py"
+    },
+    {
+      "path": "software/r5/6dof_hopper_r5/uv.lock",
+      "sha256": "43d1ea601be8aca2aca63f7d543f825d7b9e4f43621b5814323d00c7d906426f",
+      "size_bytes": 165443,
+      "source_relative_path": "uv.lock"
+    }
+  ],
+  "physical_validation": "unperformed",
+  "schema": "hopper_source_copy_manifest_r5_v1",
+  "source_root": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper",
+  "status": "Unmodified initial copy; not a repaired or verified plant"
+}
