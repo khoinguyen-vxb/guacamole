@@ -95,6 +95,7 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("--ignore-user-config", argv)
         self.assertIn("--ephemeral", argv)
         self.assertIn('web_search="disabled"', argv)
+        self.assertIn('model_reasoning_effort="ultra"', argv)
         self.assertIn("Do not execute tools yourself.", capture["instructions"])
         self.assertFalse(Path(capture["cwd"]).exists())
         self.assertEqual(await self.provider.count_tokens("π"), 1026)

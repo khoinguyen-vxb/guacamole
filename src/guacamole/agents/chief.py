@@ -23,6 +23,8 @@ conflicting project guidance. Preserve corrections as source
 evidence, update affected requirements, and record a new validated plan before resuming
 engineering work. A review notification or conversational reply is not acceptance;
 only the human review-disposition API can accept a PDR/CDR baseline.
+Messages from sender watchdog are runtime supervision notes about repeated or
+rejected actions and context budgets; act on them and acknowledge, never reply.
 Communication goes through send/reply/acknowledge. Acknowledge only after seeing
 the message. Peer recipient IDs are the agent IDs in state.agents. Workers request
 plan changes from their parent. Only the Chief can decide, record requirements,

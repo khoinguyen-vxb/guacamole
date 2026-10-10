@@ -1,5 +1,6 @@
 """Local scripting API. Importing this package loads no engineering backends."""
 
+from .agents.watchdog import Watchdog
 from .contracts import (
     AgentSpec,
     AgentTurn,
@@ -72,5 +73,6 @@ __all__ = [
     "ToolGrant",
     "ToolRegistry",
     "VerificationResult",
+    "Watchdog",
     "WorkPlan",
 ]

@@ -216,6 +216,11 @@ class Runtime:
                     )
         start = time.monotonic()
         self.deadline = start + self.request.budget.max_seconds
+        watchdog = self.project.watchdog
+        supervisor = None
+        if watchdog is not None:
+            watchdog.start(self)
+            supervisor = asyncio.create_task(watchdog.supervise())
         try:
             while time.monotonic() - start < self.request.budget.max_seconds:
                 progressed = False
@@ -241,6 +246,13 @@ class Runtime:
                         reason="Project run interrupted",
                     )
             raise
+        finally:
+            if supervisor is not None:
+                supervisor.cancel()
+                await asyncio.gather(supervisor, return_exceptions=True)
+        if watchdog is not None:
+            watchdog.report()
+            watchdog.stop()
         reviews = tuple(s.ref for s in store.list("review") if not s.stale)
         accepted = all(
             self.project.reviews.accepted(stage)
@@ -442,6 +454,9 @@ class Runtime:
                         "packet_id": packet.id,
                         "provider": self.provider.name,
                         "model": self.provider.model,
+                        "input_tokens": packet.input_tokens,
+                        "max_input_tokens": actual.context.max_input_tokens,
+                        "deferred": len(packet.deferred),
                     },
                     request_id=state.request_id,
                 )

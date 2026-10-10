@@ -57,8 +57,9 @@ from guacamole import (
     SourceExcerpt,
     ToolRegistry,
     VerificationResult,
+    Watchdog,
 )
-from guacamole.contracts import FileRecord
+from guacamole.contracts import FileRecord, now
 from guacamole.providers.codex import CodexReasoning
 from guacamole.tools.mcp import ToolSession
 from guacamole.websocket import WebSocketBridge
@@ -75,6 +76,9 @@ RESUME_RUN_ID: str | None = None  # None automatically resumes a single saved ru
 CONTROL_PORT = 8766
 CONTEXT = ContextSpec(max_input_tokens=12800000, reserved_output_tokens=20000)
 WORKER_MAX_INPUT_TOKENS = CONTEXT.max_input_tokens
+# The watchdog prints a status report at this interval and helps looping or
+# context-saturated agents using its own low-effort Codex process (no web search).
+WATCHDOG_REPORT_S = 600.0
 BUDGET = Budget(
     max_steps=200000, max_tool_calls=15000, max_seconds=720000, max_agents=24
 )
@@ -699,7 +703,7 @@ def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
 
 
 async def notifications(project: Project) -> None:
-    cursor = 0
+    cursor, started = 0, now()
     while True:
         for event in project.events(after=cursor):
             cursor = event.sequence
@@ -713,6 +717,8 @@ async def notifications(project: Project) -> None:
                     f"\nReview package ready: {project.sandbox / 'reviews' / event.entity_id}",
                     flush=True,
                 )
+            elif event.type == "watchdog.report" and event.timestamp >= started:
+                print(f"\n{event.details['text']}", flush=True)
         await asyncio.sleep(0.5)
 
 
@@ -738,6 +744,9 @@ async def main() -> None:
         sandbox=SANDBOX,
         tools=ToolRegistry(),
         reasoning=CodexReasoning(web_search=True),
+        watchdog=Watchdog(
+            CodexReasoning(web_search=False), report_interval_s=WATCHDOG_REPORT_S
+        ),  # Runs at the lowest reasoning effort to reserve usage budget.
     ) as project:
         register_tools(project)
         runs = project.store.list("run")

@@ -198,6 +198,39 @@ Supply project documents through `ProjectRequest.documents` as shown above.
 Actual rocket PDR/CDR delivery is **not yet validated**;
 the offline tests exercise orchestration with labelled fixtures.
 
+## Runtime watchdog
+
+Pass a `Watchdog` to start a supervisor beside the Chief for every run:
+
+```python
+from guacamole import Watchdog
+
+project = Project(
+    workspace, sandbox=Path("results/project"), tools=tools,
+    reasoning=CodexReasoning(),
+    watchdog=Watchdog(CodexReasoning(web_search=False), report_interval_s=600),
+)
+```
+
+Its reasoning provider can be a different model; `Watchdog()` reuses the project's.
+Either way the watchdog runs a copy at the lowest reasoning effort (`effort="low"`
+for `CodexReasoning` and `ClaudeReasoning`) to reserve usage budget; the project's
+provider keeps its own effort. `CodexReasoning(effort=...)` defaults to `"ultra"`.
+It polls the activity log every `poll_s` seconds without calling a model. When an
+agent's last `loop_turns` actions were all rejected or identical, or its last prompt
+used at least `compact_at` of its input budget, the watchdog's model receives the
+recent turns, cited references that are stale, superseded or unknown (with current
+revisions), and the agent's largest optional sources. It then sends that agent a
+`Note@1` from sender `watchdog` (waking it if waiting); when earlier notes have not
+helped it is instructed to ask the human a non-blocking question instead. Agents compact their own context in
+response; pinned material is never dropped. Every `report_interval_s` and at the end
+of each run it emits a `watchdog.report` event with per-agent status, steps,
+context use, deferred items and objective, plus pending human requests, open items,
+reviews, dispatched input tokens and interventions. `details["text"]` is a readable
+summary; the Electronic Hopper and Kookaburra launchers print it. Watchdog failures
+are recorded as `watchdog.failed` events and never stop the run. Pass the request
+from `project.requests(agent="watchdog")` to `project.trace` for its packets, turns and notes.
+
 ## Human questions and corrections
 
 The Chief and every worker can issue a typed `AskHuman` action with a question,

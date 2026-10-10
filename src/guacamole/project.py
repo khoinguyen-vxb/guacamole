@@ -44,6 +44,7 @@ from .tools.registry import Tool, ToolRegistry, encode
 
 if TYPE_CHECKING:
     from .agents.runtime import Runtime
+    from .agents.watchdog import Watchdog
 
 
 class Project:
@@ -54,6 +55,7 @@ class Project:
         sandbox: Path | None = None,
         tools: ToolRegistry | None = None,
         reasoning: ReasoningProvider | None = None,
+        watchdog: "Watchdog | None" = None,
         read_only: bool = False,
     ) -> None:
         workspace = workspace.expanduser().resolve()
@@ -105,6 +107,7 @@ class Project:
                 if name not in self.tools.schemas:
                     self.tools.schema(name, annotation)
             self.reasoning = reasoning
+            self.watchdog = watchdog
             self.activity = Activity(self.store, self.tools)
             self.human = Humans(self)
             self.contexts = ContextBuilder(self.store, self.activity, self.tools)
