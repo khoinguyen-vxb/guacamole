@@ -33,8 +33,14 @@ class Decisions:
         if len({d.id for d in plan.deliverables}) != len(plan.deliverables):
             raise ValueError("Deliverable IDs must be unique")
         for task in plan.tasks:
-            if not set(task.depends_on + task.peers) <= tasks.keys():
-                raise ValueError("Unknown task dependency or peer grant")
+            # Workers can always message their parent, so a "chief" peer grant is a no-op.
+            unknown = (
+                set(task.depends_on) | (set(task.peers) - {"chief"})
+            ) - tasks.keys()
+            if unknown:
+                raise ValueError(
+                    f"Task {task.id} names unknown dependencies or peers: {sorted(unknown)}"
+                )
             if task.result_schema not in self.project.tools.schemas:
                 raise ValueError("Unknown task result schema")
         tuple(
@@ -126,11 +132,13 @@ class Decisions:
             )
         )
         candidates, references = [], list(self.project.human.references(run_id))
+        rejected: dict[str, str] = {}
         for candidate in request.candidates:
             try:
                 references.extend(self._eligible(candidate, request))
                 candidates.append(candidate)
             except (ValueError, KeyError) as exc:
+                rejected[candidate.id] = str(exc)
                 store.event(
                     "runtime",
                     "decision.candidate_rejected",
@@ -139,13 +147,12 @@ class Decisions:
                     request_id=record.id,
                 )
         if selected not in {candidate.id for candidate in candidates}:
-            activity.transition(
-                record.id,
-                "blocked",
-                actor="runtime",
-                reason="Selected candidate is unknown or ineligible",
+            # The Chief can only correct a plan if it sees why the plan was rejected.
+            reason = "Selected candidate is unknown or ineligible: " + rejected.get(
+                selected, "no candidate has this id"
             )
-            raise DecisionBlocked("Selected candidate is unknown or ineligible")
+            activity.transition(record.id, "blocked", actor="runtime", reason=reason)
+            raise DecisionBlocked(reason)
         try:
             # No external invocation: validation and recording have no async gap.
             with store.atomic():

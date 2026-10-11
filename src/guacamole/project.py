@@ -60,8 +60,11 @@ class Project:
         reasoning: ReasoningProvider | None = None,
         watchdog: "Watchdog | None" = None,
         middleware: "Sequence[ContextMiddleware]" = (),
+        max_concurrent_calls: int = 4,
         read_only: bool = False,
     ) -> None:
+        if max_concurrent_calls < 1:
+            raise ValueError("max_concurrent_calls must be at least 1")
         workspace = workspace.expanduser().resolve()
         self._lock = None
         with ExitStack() as cleanup:
@@ -113,6 +116,8 @@ class Project:
             self.reasoning = reasoning
             self.watchdog = watchdog
             self.middleware = tuple(middleware)
+            # Agents' model calls in flight at once; the rest queue (provider rate limits).
+            self.max_concurrent_calls = max_concurrent_calls
             self.activity = Activity(self.store, self.tools)
             self.human = Humans(self)
             self.contexts = ContextBuilder(self.store, self.activity, self.tools)
@@ -415,7 +420,10 @@ class Project:
             evidence.outcome != verification.outcome
             or evidence.explanation != verification.explanation
         ):
-            raise ValueError("Evidence must preserve the actual verification result")
+            raise ValueError(
+                "Evidence must preserve the actual verification result: copy its "
+                "outcome and explanation exactly; add commentary in the rationale"
+            )
         dependencies = (
             *evidence.artifacts,
             *evidence.requirements,

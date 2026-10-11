@@ -69,11 +69,11 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                     self.assertTrue(Path(result.log.path).is_file())
                     self.assertEqual(call.call_args.args[0], "execute_code_headless")
                     self.assertIn("saved CAD script", call.call_args.args[1]["code"])
+                    self.assertTrue(result.succeeded)
                     call.return_value = "Failed to run headless code: backend absent"
-                    with self.assertRaisesRegex(
-                        RuntimeError, "FreeCAD execution failed"
-                    ):
-                        await project.call(tool, {"script": "cad.py"})
+                    failed = await project.call(tool, {"script": "cad.py"})
+                    self.assertFalse(failed.succeeded)
+                    self.assertIn("backend absent", failed.reply)
                     call.return_value = "Code executed successfully: GUI fixture"
                     await project.call(tool, {"script": "cad.py", "headless": False})
                     self.assertEqual(call.call_args.args[0], "execute_code")

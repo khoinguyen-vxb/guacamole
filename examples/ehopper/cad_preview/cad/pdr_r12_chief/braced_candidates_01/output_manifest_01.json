@@ -1,0 +1,107 @@
+{
+  "schema": "hopper_candidate_output_manifest/1",
+  "files": [
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_TRIPOD_S1.FCStd",
+      "sha256": "9ec8d78841da5ab02ad09b8bb36c6dd05ccc807029827127216c8d59dc7def26"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_TRIPOD_S1_tubes.step",
+      "sha256": "57c5ec371a25bf5534c8720ce3286ec9225983b64e2e99b4291d710f505f7150"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_TRIPOD_S1_arrangement.svg",
+      "sha256": "e55cd3f9dc1587a4827e101908bca317a829e3cf413e210daa7ea0e57fe10fed"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_TRIPOD_S4.FCStd",
+      "sha256": "e8b831a02cff5124f7b58bfcabb052ccc55c058458a26a301ca671a8f4115c01"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_TRIPOD_S4_tubes.step",
+      "sha256": "16f6c101a132d8cb931096887d3366e139da57a2241b4305751b3f96ea9053b3"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_TRIPOD_S4_arrangement.svg",
+      "sha256": "04540a90dea9f49f0faa24ea204ecaee8f74daca0e41cdfdb6b8b3f241c16971"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_QUADPOD_S1.FCStd",
+      "sha256": "0ce280e69360e94b7404069b3ca72280863535a24faea58f697986e090e5c14a"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_QUADPOD_S1_tubes.step",
+      "sha256": "1384218d8c84f40d1731f10b45cb6f098e132a9f0a33ea21ecc9b2c6833979cb"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_QUADPOD_S1_arrangement.svg",
+      "sha256": "60391060a2d1919d549d8e59b1b7124d784e14044ab78aed0836aedbfee6d492"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_QUADPOD_S4.FCStd",
+      "sha256": "453794be7b1b87da36474455f77d94ea0dc9f785697be96c942d2a21f2ac76f6"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_QUADPOD_S4_tubes.step",
+      "sha256": "c6852d05e0136760064be8b9e8a14c6851254f58632aa0cb4811d90aefd65a23"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_INTERMEDIATE_D279_QUADPOD_S4_arrangement.svg",
+      "sha256": "02f77e7e73e38a0955fb29cbb2efa9443368b4f2b7bbf4d17588316cd27d4f26"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_TRIPOD_S1.FCStd",
+      "sha256": "ccc96ec6dabf4773ef1415011ec10b1a850ed47acf46ff2dc5c7124a09a32615"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_TRIPOD_S1_tubes.step",
+      "sha256": "7d064b85dae09a7546278ad3fa738c0ad2c322063079391106610dd2a914a550"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_TRIPOD_S1_arrangement.svg",
+      "sha256": "171acdad736f85d9c706db1d1bdf75c3f9d71f00809c6b558f24f09e0a65a860"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_TRIPOD_S4.FCStd",
+      "sha256": "2388a72632d04a6e8f7aeb1aa428cab6305cb0afdf4ef85dba9a630f4fa9190d"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_TRIPOD_S4_tubes.step",
+      "sha256": "fbc1482fc515a17b5a83a433be622fcdbc551791b8cb5ebca29a3f56951cb8ca"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_TRIPOD_S4_arrangement.svg",
+      "sha256": "5c2c09409da21ea38ecf96e037b2c1bc0319e4c1fc65f069bbe677f093fdf4e0"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_QUADPOD_S1.FCStd",
+      "sha256": "2a14208c236d6d2127962ee9dbc753d659a8b43dc5cb494c7cb00ef3b649d429"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_QUADPOD_S1_tubes.step",
+      "sha256": "af7ee62b8d5b4430df102142e7b7477c37cb188430ddcc0369730d89e6f1d7f5"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_QUADPOD_S1_arrangement.svg",
+      "sha256": "1cb5643eef27629e54df79786458e7fd6e9acdb93df09801f22ff44041e93b67"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_QUADPOD_S4.FCStd",
+      "sha256": "3ef9219459da80bfabd4a5334cd0e9e937ed7dddd284630cbe004c3402d7f1c8"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_QUADPOD_S4_tubes.step",
+      "sha256": "9e43a5400708e525ea076a216dee96cf218979a8b2edbb80e52aeeff58c5f244"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/G_WIDE_D330_QUADPOD_S4_arrangement.svg",
+      "sha256": "61f54ef2645d001b45bfa2dc77ce1c4771fb80836cd86612b5397400e0d9f32c"
+    },
+    {
+      "path": "cad/pdr_r12_chief/braced_candidates_01/cad_measurements_01.json",
+      "sha256": "c32c8008c261f6b1c2fb3b495eeb3c2d9bde97ca16f3fdb082f1802fc5f0d44e"
+    }
+  ],
+  "manifest_path": "cad/pdr_r12_chief/braced_candidates_01/output_manifest_01.json",
+  "evidence_boundary": "Produced files and measurements are not a VerificationResult. Retain an editable artifact-bound checker and execute it through verify_command before recording verification evidence."
+}

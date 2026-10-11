@@ -1,0 +1,1 @@
+{"analysis_output": "analysis/pdr_r12_chief/structural_clearance_screen_results_offset20_01.json", "case_count": 48, "independent_verification": "not performed", "physical_acceptance": "not assessed"}

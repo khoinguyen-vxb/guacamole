@@ -143,6 +143,10 @@ class Activity:
 
     def recover(self) -> None:
         for record in self.requests():
+            # A peer request is a persisted message awaiting a reply; nothing ran, and
+            # interrupting it left the recipient unable to answer after a restart.
+            if record.kind == "peer":
+                continue
             if record.status in {"dispatched", "running", "cancel_requested"}:
                 status = "uncertain" if record.kind == "tool" else "interrupted"
                 self.transition(

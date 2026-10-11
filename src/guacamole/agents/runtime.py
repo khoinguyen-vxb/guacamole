@@ -43,6 +43,7 @@ from ..contracts import (
     ToolCall,
     Verify,
     Wait,
+    now,
     uid,
 )
 from ..decision import DecisionBlocked
@@ -55,6 +56,7 @@ from .chief import CHIEF, COMMON
 class Runtime:
     def __init__(self, project: Project, provider: ReasoningProvider) -> None:
         self.project, self.provider = project, provider
+        self.calls = asyncio.Semaphore(project.max_concurrent_calls)
         self.run_id = ""
         self.chief_id = ""
         self.request: ProjectRequest
@@ -274,16 +276,24 @@ class Runtime:
             watchdog.start(self)
             supervisor = asyncio.create_task(watchdog.supervise())
         try:
-            while time.monotonic() - start < self.request.budget.max_seconds:
-                progressed = False
-                for agent in self._agents():
-                    state = store.model("agent_state", agent.id, AgentState)
-                    if state.status != "active":
-                        continue
-                    progressed = True
-                    await self.step(agent, state)
-                if not progressed:
-                    break
+            # Agents reason concurrently, each with at most one turn in flight.
+            async with asyncio.TaskGroup() as group:
+                running: dict[str, asyncio.Task[None]] = {}
+                while time.monotonic() - start < self.request.budget.max_seconds:
+                    for agent in self._agents():
+                        state = store.model("agent_state", agent.id, AgentState)
+                        if agent.id not in running and state.status == "active":
+                            running[agent.id] = group.create_task(
+                                self.step(agent, state)
+                            )
+                    if not running:
+                        break
+                    # ponytail: 1 s poll picks up agents woken outside a turn (human
+                    # input, watchdog); an asyncio.Event set on wake would remove it.
+                    done, _ = await asyncio.wait(
+                        running.values(), timeout=1, return_when=asyncio.FIRST_COMPLETED
+                    )
+                    running = {k: t for k, t in running.items() if t not in done}
         except asyncio.CancelledError:
             for agent in self._agents():
                 state = store.model("agent_state", agent.id, AgentState)
@@ -390,6 +400,19 @@ class Runtime:
             "workspace": str(store.directory),
             "sandbox": str(self.project.sandbox),
             "last_observation": state.observation,
+            # Inbox context drops acknowledged mail and never shows outgoing mail, so
+            # workers re-sent the same report every turn without this.
+            # ponytail: last 5 sends, payloads cut at 2000 chars.
+            "sent_messages": [
+                {
+                    "id": m.id,
+                    "recipient": m.recipient,
+                    "kind": m.kind,
+                    "created_at": m.created_at,
+                    "payload": encode(m.payload)[:2000],
+                }
+                for m in self.project.activity.sent(agent.id)[-5:]
+            ],
             "agents": [
                 {
                     "id": a.id,
@@ -502,7 +525,7 @@ class Runtime:
         if record.status == "queued":
             activity.transition(record.id, "dispatched", actor="runtime")
             activity.transition(record.id, "running", actor="runtime")
-        started = time.monotonic()
+        started, since = time.monotonic(), now()
         phase = "context"
         changed = state.model_copy(update={"steps": state.steps + 1})
         self._save_state(agent, changed)
@@ -547,80 +570,83 @@ class Runtime:
                     await self._hook(
                         middleware, middleware.before_model(call), state.request_id
                     )
-                context_state = self._context_state(agent, state)
+                # Queue before assembly so the prompt is current when it is sent;
+                # the slot is released before the action runs tools.
+                async with self.calls:
+                    context_state = self._context_state(agent, state)
 
-                def build(spec: AgentSpec) -> Awaitable[ContextPacket]:
-                    return self.project.contexts.build(
-                        spec,
-                        state.request_id,
-                        self.provider,
-                        instructions=CHIEF if agent.id == self.chief_id else COMMON,
-                        state=context_state,
-                        memory=call.memory,
-                        omissions=call.omissions,
-                    )
+                    def build(spec: AgentSpec) -> Awaitable[ContextPacket]:
+                        return self.project.contexts.build(
+                            spec,
+                            state.request_id,
+                            self.provider,
+                            instructions=CHIEF if agent.id == self.chief_id else COMMON,
+                            state=context_state,
+                            memory=call.memory,
+                            omissions=call.omissions,
+                        )
 
-                try:
-                    packet = await build(call.agent)
-                except ContextOverflow:
-                    # Budgets are set without seeing the runtime state each prompt
-                    # carries; required material may grow them to the run's limit.
-                    limit = min(
-                        self.request.context.max_input_tokens,
-                        self.provider.context_capacity_tokens
-                        - call.agent.context.reserved_output_tokens,
-                    )
-                    previous = call.agent.context.max_input_tokens
-                    if previous >= limit:
-                        raise
-                    stored = store.model("agent", agent.id, AgentSpec)
-                    with store.atomic():
-                        store.put(
-                            "agent",
-                            agent.id,
-                            stored.model_copy(
-                                update={
-                                    "context": stored.context.model_copy(
-                                        update={"max_input_tokens": limit}
-                                    )
-                                }
-                            ),
-                            actor="runtime",
-                            request_id=state.request_id,
+                    try:
+                        packet = await build(call.agent)
+                    except ContextOverflow:
+                        # Budgets are set without seeing the runtime state each prompt
+                        # carries; required material may grow them to the run's limit.
+                        limit = min(
+                            self.request.context.max_input_tokens,
+                            self.provider.context_capacity_tokens
+                            - call.agent.context.reserved_output_tokens,
                         )
-                        store.event(
-                            "runtime",
-                            "agent.budget_raised",
-                            agent.id,
-                            {"from": previous, "to": limit},
-                            request_id=state.request_id,
-                        )
-                    call.agent = call.agent.model_copy(
-                        update={
-                            "context": call.agent.context.model_copy(
-                                update={"max_input_tokens": limit}
+                        previous = call.agent.context.max_input_tokens
+                        if previous >= limit:
+                            raise
+                        stored = store.model("agent", agent.id, AgentSpec)
+                        with store.atomic():
+                            store.put(
+                                "agent",
+                                agent.id,
+                                stored.model_copy(
+                                    update={
+                                        "context": stored.context.model_copy(
+                                            update={"max_input_tokens": limit}
+                                        )
+                                    }
+                                ),
+                                actor="runtime",
+                                request_id=state.request_id,
                             )
-                        }
+                            store.event(
+                                "runtime",
+                                "agent.budget_raised",
+                                agent.id,
+                                {"from": previous, "to": limit},
+                                request_id=state.request_id,
+                            )
+                        call.agent = call.agent.model_copy(
+                            update={
+                                "context": call.agent.context.model_copy(
+                                    update={"max_input_tokens": limit}
+                                )
+                            }
+                        )
+                        packet = await build(call.agent)
+                    if self.project.human.version(self.run_id) != human_version:
+                        return
+                    store.event(
+                        agent.id,
+                        "provider.dispatched",
+                        packet.invocation_id,
+                        {
+                            "packet_id": packet.id,
+                            "provider": self.provider.name,
+                            "model": self.provider.model,
+                            "input_tokens": packet.input_tokens,
+                            "max_input_tokens": call.agent.context.max_input_tokens,
+                            "deferred": len(packet.deferred),
+                        },
+                        request_id=state.request_id,
                     )
-                    packet = await build(call.agent)
-                if self.project.human.version(self.run_id) != human_version:
-                    return
-                store.event(
-                    agent.id,
-                    "provider.dispatched",
-                    packet.invocation_id,
-                    {
-                        "packet_id": packet.id,
-                        "provider": self.provider.name,
-                        "model": self.provider.model,
-                        "input_tokens": packet.input_tokens,
-                        "max_input_tokens": call.agent.context.max_input_tokens,
-                        "deferred": len(packet.deferred),
-                    },
-                    request_id=state.request_id,
-                )
-                phase = "provider"
-                turn = AgentTurn.model_validate(await self.provider.respond(packet))
+                    phase = "provider"
+                    turn = AgentTurn.model_validate(await self.provider.respond(packet))
                 store.put(
                     "agent_turn",
                     packet.invocation_id,
@@ -714,7 +740,7 @@ class Runtime:
             activity.transition(
                 state.request_id, "blocked", actor="runtime", reason=reason
             )
-        except (ContextOverflow, DecisionBlocked) as exc:
+        except ContextOverflow as exc:
             if self.project.human.version(self.run_id) != human_version:
                 return
             changed = changed.model_copy(
@@ -740,10 +766,13 @@ class Runtime:
                 and isinstance(exc, ValueError)
             )
             # The runtime wrote these messages; tool exceptions may carry secrets.
+            # A rejected decision stays correctable: blocking the Chief ended the run.
             runtime_rejection = (
                 phase == "action"
                 and not isinstance(turn.action, (ToolCall, Retry))
-                and isinstance(exc, (ValueError, KeyError, PermissionError))
+                and isinstance(
+                    exc, (ValueError, KeyError, PermissionError, DecisionBlocked)
+                )
             )
             detail = (
                 "Read contains an unknown, mismatched, or stale reference. "
@@ -796,6 +825,12 @@ class Runtime:
                 update={"elapsed_s": state.elapsed_s + time.monotonic() - started}
             )
             self._save_state(agent, changed)
+            # Senders only wake agents already waiting; catch messages sent mid-turn.
+            if changed.status == "waiting" and any(
+                e.delivered_at and e.delivered_at >= since
+                for e in activity.inbox(agent.id)
+            ):
+                self._wake(agent, changed, "Message arrived during its turn")
 
     async def act(
         self,
@@ -1035,12 +1070,15 @@ class Runtime:
                                 "progress to your parent as a new message without "
                                 "reply_to; use finish only when the task is complete"
                             )
-                        activity.transition(
-                            request_id,
-                            "completed",
-                            actor=agent.id,
-                            result=action.payload,
-                        )
+                        # A request already ended (e.g. interrupted by an older
+                        # restart) keeps its status; the answer is still delivered.
+                        if pending.status not in TERMINAL:
+                            activity.transition(
+                                request_id,
+                                "completed",
+                                actor=agent.id,
+                                result=action.payload,
+                            )
                         entry = store.model("inbox", parent_message.id, InboxEntry)
                         store.put(
                             "inbox",
@@ -1074,18 +1112,20 @@ class Runtime:
                 refs = (*action.refs, *project.contexts.search(action.search))
                 for ref in refs:
                     store.resolve(ref, current=True)
+                # Reload: the Chief may reassign this worker's plan while it reasons.
+                current = store.model("agent", agent.id, AgentSpec)
                 # Keep recent reads ahead of older optional material on later turns too.
-                context = agent.context.model_copy(
+                context = current.context.model_copy(
                     update={
                         "selected": tuple(
-                            dict.fromkeys((*refs, *agent.context.selected))
+                            dict.fromkeys((*refs, *current.context.selected))
                         )
                     }
                 )
                 store.put(
                     "agent",
                     agent.id,
-                    agent.model_copy(update={"context": context}),
+                    current.model_copy(update={"context": context}),
                     actor="runtime",
                 )
                 return {"selected": [r.model_dump(mode="json") for r in refs]}, "active"

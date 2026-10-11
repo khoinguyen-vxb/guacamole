@@ -175,6 +175,7 @@ class Humans:
         run_id: str | None = None,
         references: tuple[Ref, ...] = (),
         reply_to: str | None = None,
+        keep_workers: bool = False,
     ) -> Ref:
         project, store = self.project, self.project.store
         if run_id is None:
@@ -228,23 +229,24 @@ class Humans:
                     {**run.data, "status": "incomplete", "result": None},
                     actor=actor,
                 )
-            asker = (
-                store.model("agent_state", reply.requester, AgentState)
-                if reply and store.maybe("agent_state", reply.requester)
+            # A non-blocking answer, or a note sent with keep_workers, leaves the plan
+            # and workers standing; the recipient reads the pinned input and replans
+            # if needed. Turns in flight restart once to include it.
+            recipient = None
+            if reply and not reply.required:
+                recipient = reply.requester
+            elif keep_workers and run:
+                recipient = str(run.data["chief_id"])
+            state = (
+                store.model("agent_state", recipient, AgentState)
+                if recipient and store.maybe("agent_state", recipient)
                 else None
             )
-            if (
-                reply
-                and not reply.required
-                and asker
-                and asker.status not in {"completed", "superseded"}
-            ):
-                # The asker kept working without this answer, so the plan and workers
-                # stand; it reads the reply from its inbox and replans if needed.
+            if state and state.status not in {"completed", "superseded"}:
                 runtime = project.runtime
-                if asker.status == "waiting" and runtime and runtime.run_id == run_id:
-                    agent = store.model("agent", reply.requester, AgentSpec)
-                    runtime._wake(agent, asker, "Human reply")
+                if state.status == "waiting" and runtime and runtime.run_id == run_id:
+                    agent = store.model("agent", recipient, AgentSpec)
+                    runtime._wake(agent, state, "Human input")
                 return source
             agents = []
             for snapshot in store.list("agent"):

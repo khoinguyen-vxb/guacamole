@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "<string>", line 71, in <module>
+    raise ValueError('Summary exceeds console bound; no partial summary emitted')
+ValueError: Summary exceeds console bound; no partial summary emitted

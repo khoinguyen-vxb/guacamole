@@ -1,0 +1,80 @@
+{"check": "unlimited.initial_components", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "unlimited.initial_snapshot_unchanged", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "unlimited.quaternion_norm", "details": {"max_absolute_error": 2.220446049250313e-16, "tolerance": 1e-09, "unit": "1"}}
+{"end_s": 7.8, "integration": "unlimited", "message": "The solver successfully reached the end of the integration interval.", "nfev": 1217, "start_s": 7.0, "status": 0}
+{"check": "unlimited.exponential_motor", "details": {"max_absolute_error": 5.684341886080802e-14, "tolerance": 1e-05, "unit": "rad/s"}}
+{"check": "unlimited.exponential_filter", "details": {"max_absolute_error": 1.3877787807814457e-17, "tolerance": 1e-08, "unit": "rad"}}
+{"check": "unlimited.cascaded_actual_angle", "details": {"max_absolute_error": 2.0816681711721685e-17, "tolerance": 1e-08, "unit": "rad"}}
+{"check": "unlimited.analytic_gimbal_rate", "details": {"max_absolute_error": 8.673617379884035e-17, "tolerance": 5e-08, "unit": "rad/s"}}
+{"check": "unlimited.analytic_gimbal_acceleration", "details": {"max_absolute_error": 5.898059818321144e-16, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "unlimited_refined.initial_components", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "unlimited_refined.initial_snapshot_unchanged", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "unlimited_refined.quaternion_norm", "details": {"max_absolute_error": 3.3306690738754696e-16, "tolerance": 1e-09, "unit": "1"}}
+{"end_s": 7.8, "integration": "unlimited_refined", "message": "The solver successfully reached the end of the integration interval.", "nfev": 2417, "start_s": 7.0, "status": 0}
+{"check": "unlimited.refinement.motor_speed", "details": {"max_absolute_error": 8.526512829121202e-14, "tolerance": 1e-05, "unit": "rad/s"}}
+{"check": "unlimited.refinement.filter_angles", "details": {"max_absolute_error": 1.3877787807814457e-17, "tolerance": 1e-08, "unit": "rad"}}
+{"check": "unlimited.refinement.actual_angles", "details": {"max_absolute_error": 2.0816681711721685e-17, "tolerance": 1e-08, "unit": "rad"}}
+{"check": "unlimited.held_bounded_speed", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "rad/s"}}
+{"check": "unlimited.held_bounded_angles", "details": {"max_absolute_error": 0.0, "tolerance": 1e-08, "unit": "rad"}}
+{"check": "unlimited.actual_signed_rotor_speeds", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "rad/s"}}
+{"max_gimbal_acceleration_rad_s2": [0.9999999999999999, 0.7499999999999999], "max_gimbal_rate_rad_s": [0.07357588823428847, 0.05518191617571632], "max_motor_acceleration_rad_s2": [833.3333333333334, 555.5555555555555], "sample_count": 161, "sampled_limits": "unlimited", "scope": "Output samples and dense midpoints only; not continuous numerical certification"}
+{"check": "unlimited.rate_derivative_0_0", "details": {"max_absolute_error": 3.0669952688633373e-10, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "unlimited.rate_derivative_0_1", "details": {"max_absolute_error": 7.632824927661375e-11, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "unlimited.rate_derivative_1_0", "details": {"max_absolute_error": 6.310021949396116e-11, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "unlimited.rate_derivative_1_1", "details": {"max_absolute_error": 2.0426021984931708e-11, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "unlimited.rate_derivative_2_0", "details": {"max_absolute_error": 3.437083950785791e-12, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "unlimited.rate_derivative_2_1", "details": {"max_absolute_error": 4.5824594119281414e-12, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "saturated.initial_components", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "saturated.initial_snapshot_unchanged", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "saturated.quaternion_norm", "details": {"max_absolute_error": 3.097522238704187e-14, "tolerance": 1e-09, "unit": "1"}}
+{"end_s": 7.8, "integration": "saturated", "message": "The solver successfully reached the end of the integration interval.", "nfev": 1370, "start_s": 7.0, "status": 0}
+{"check": "saturated.piecewise_motor", "details": {"max_absolute_error": 2.2737367544323206e-13, "tolerance": 1e-05, "unit": "rad/s"}}
+{"check": "saturated.held_bounded_speed", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "rad/s"}}
+{"check": "saturated.held_bounded_angles", "details": {"max_absolute_error": 0.0, "tolerance": 1e-08, "unit": "rad"}}
+{"check": "saturated.actual_signed_rotor_speeds", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "rad/s"}}
+{"max_gimbal_acceleration_rad_s2": [4.285714285714285, 4.0], "max_gimbal_rate_rad_s": [0.4674384571869679, 0.4362758933745035], "max_motor_acceleration_rad_s2": [4000.0, 666.6666666666667], "sample_count": 161, "sampled_limits": "saturated", "scope": "Output samples and dense midpoints only; not continuous numerical certification"}
+{"check": "saturated.rate_derivative_0_0", "details": {"max_absolute_error": 2.269073817728895e-09, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "saturated.rate_derivative_0_1", "details": {"max_absolute_error": 5.56554802244591e-10, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "saturated.rate_derivative_1_0", "details": {"max_absolute_error": 4.736309122677085e-10, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "saturated.rate_derivative_1_1", "details": {"max_absolute_error": 1.4056400488016152e-10, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "saturated.rate_derivative_2_0", "details": {"max_absolute_error": 4.176659018639839e-11, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "saturated.rate_derivative_2_1", "details": {"max_absolute_error": 3.805633586040358e-11, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "saturated_refined.initial_components", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "saturated_refined.initial_snapshot_unchanged", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "saturated_refined.quaternion_norm", "details": {"max_absolute_error": 6.661338147750939e-16, "tolerance": 1e-09, "unit": "1"}}
+{"end_s": 7.8, "integration": "saturated_refined", "message": "The solver successfully reached the end of the integration interval.", "nfev": 2495, "start_s": 7.0, "status": 0}
+{"check": "saturated.refinement.motor_speed", "details": {"max_absolute_error": 4.547473508864641e-13, "tolerance": 1e-05, "unit": "rad/s"}}
+{"check": "saturated.refinement.filter_angles", "details": {"max_absolute_error": 2.516970382115957e-10, "tolerance": 1e-08, "unit": "rad"}}
+{"check": "saturated.refinement.actual_angles", "details": {"max_absolute_error": 9.732760430924969e-11, "tolerance": 1e-08, "unit": "rad"}}
+{"bounded_gimbal_rad": [0.2572039484286074, -0.24005701853336694], "bounded_rotor_speed_rad_s": [700.0, 0.0], "motor_transition_elapsed_s": [0.03, 0.0], "saturation_fixture_initial_actuator_state": [100.0, 120.0, 0.0, 0.0, 0.0, 0.0]}
+{"check": "release.all_endpoint_states_carried", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "release.gimbal_rate_continuity", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "rad/s"}}
+{"check": "release.initial_components", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "release.initial_snapshot_unchanged", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "release.quaternion_norm", "details": {"max_absolute_error": 2.0461410343841635e-13, "tolerance": 1e-09, "unit": "1"}}
+{"end_s": 8.6, "integration": "release", "message": "The solver successfully reached the end of the integration interval.", "nfev": 1535, "start_s": 7.8, "status": 0}
+{"check": "release.piecewise_motor", "details": {"max_absolute_error": 8.159838671417674e-08, "tolerance": 1e-05, "unit": "rad/s"}}
+{"check": "release.held_bounded_speed", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "rad/s"}}
+{"check": "release.held_bounded_angles", "details": {"max_absolute_error": 0.0, "tolerance": 1e-08, "unit": "rad"}}
+{"check": "release.actual_signed_rotor_speeds", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "rad/s"}}
+{"max_gimbal_acceleration_rad_s2": [4.789758239644995, 4.47044102366866], "max_gimbal_rate_rad_s": [0.42631499072174045, 0.3978939913402911], "max_motor_acceleration_rad_s2": [4000.0, 1214.3931365842082], "sample_count": 161, "sampled_limits": "release", "scope": "Output samples and dense midpoints only; not continuous numerical certification"}
+{"check": "release.rate_derivative_0_0", "details": {"max_absolute_error": 2.263743303920762e-09, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "release.rate_derivative_0_1", "details": {"max_absolute_error": 5.428976157517695e-10, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "release.rate_derivative_1_0", "details": {"max_absolute_error": 4.76056638554212e-10, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "release.rate_derivative_1_1", "details": {"max_absolute_error": 1.4021417360510213e-10, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "release.rate_derivative_2_0", "details": {"max_absolute_error": 4.694378219483042e-11, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "release.rate_derivative_2_1", "details": {"max_absolute_error": 2.919642305698744e-11, "tolerance": 2e-06, "unit": "rad/s^2"}}
+{"check": "release_refined.initial_components", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "release_refined.initial_snapshot_unchanged", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "release_refined.quaternion_norm", "details": {"max_absolute_error": 3.11972669919669e-14, "tolerance": 1e-09, "unit": "1"}}
+{"end_s": 8.6, "integration": "release_refined", "message": "The solver successfully reached the end of the integration interval.", "nfev": 2861, "start_s": 7.8, "status": 0}
+{"check": "release.refinement.motor_speed", "details": {"max_absolute_error": 9.740585937834112e-08, "tolerance": 1e-05, "unit": "rad/s"}}
+{"check": "release.refinement.filter_angles", "details": {"max_absolute_error": 1.1963308677032103e-09, "tolerance": 1e-08, "unit": "rad"}}
+{"check": "release.refinement.actual_angles", "details": {"max_absolute_error": 4.53421938884091e-10, "tolerance": 1e-08, "unit": "rad"}}
+{"check": "release.predecessor_initial_not_replaced", "details": {"max_absolute_error": 0.0, "tolerance": 0.0, "unit": "mixed SI state"}}
+{"check": "invalid.zero_motor_tau", "details": {"deliberate_negative_fixture": true, "message": "motor_time_constant_s must be positive"}}
+{"check": "invalid.zero_output_tau", "details": {"deliberate_negative_fixture": true, "message": "gimbal_output_lag_s must be finite and positive"}}
+{"check": "invalid.negative_actual_speed", "details": {"deliberate_negative_fixture": true, "message": "Actual rotor speed magnitudes cannot be negative"}}
+{"check": "invalid.actual_speed_above_limit", "details": {"deliberate_negative_fixture": true, "message": "Actual rotor speed exceeds the configured fixture limit"}}
+{"check": "invalid.actual_joint_outside_limit", "details": {"deliberate_negative_fixture": true, "message": "Actuator state leaves joint/cone domain; no silent clipping"}}
+{"controller_executed": false, "file_sha256_after": {"analytical_fixture_config_r12_01.json": "397133a2ab342cf35a29c4758adcb0e3f52682cc96dc85dfd0710323247b54c5", "analytical_fixture_models_r12_01.py": "25ae16b4a9fbfe42a1e083f952316a8d26cc69559fbef11f62c871f997d0e517", "repaired_hopper_r12/chassis/hopper.py": "f2b6e4b54634220105655e994e3ff5c78e84c60084879696a25ef39fdc29ff05", "repaired_hopper_r12/helpers/math.py": "281a5578b6d33c45578350429cb30ead28ba6a378c571c2c6929c60819ceecfb", "repaired_hopper_r12/propulsion/actuators.py": "bacfd1457ea3d24ae82d4868f3418b46c967fc2442d83d36e96973467645be78", "repaired_hopper_r12/propulsion/propeller.py": "ce7be67ceae3866ecf402ee03b7812c3ea1e39c216ca5d412322af53d586ae3b", "repaired_hopper_r12/propulsion/propulsion.py": "d860528b277893bbfe59527b7fcc2017955cc66681d3994fb66744a8006271de", "repaired_hopper_r12/simulation/environment.py": "ba795b5d1d5344a1ecf5b2b5cc122255234d5ff394fb0dc41ee3366196aac03c", "repaired_hopper_r12/simulation/simulation.py": "a186c50ab7c5500e7da14bb5c98a5c2772ff97d63645558be3cfdc3b6e5ca1a8", "repaired_hopper_r12/simulation/state.py": "b62a1a4fcc70a4a88e07f77996e955a64184891ce614957c85ccb7d63e90f294", "verify_actuator_response_r12_01.py": "b23611266cdb84cb1d226eb9ffa2b5d6a4559956895f4538884471b181a3a03c"}, "file_sha256_before": {"analytical_fixture_config_r12_01.json": "397133a2ab342cf35a29c4758adcb0e3f52682cc96dc85dfd0710323247b54c5", "analytical_fixture_models_r12_01.py": "25ae16b4a9fbfe42a1e083f952316a8d26cc69559fbef11f62c871f997d0e517", "repaired_hopper_r12/chassis/hopper.py": "f2b6e4b54634220105655e994e3ff5c78e84c60084879696a25ef39fdc29ff05", "repaired_hopper_r12/helpers/math.py": "281a5578b6d33c45578350429cb30ead28ba6a378c571c2c6929c60819ceecfb", "repaired_hopper_r12/propulsion/actuators.py": "bacfd1457ea3d24ae82d4868f3418b46c967fc2442d83d36e96973467645be78", "repaired_hopper_r12/propulsion/propeller.py": "ce7be67ceae3866ecf402ee03b7812c3ea1e39c216ca5d412322af53d586ae3b", "repaired_hopper_r12/propulsion/propulsion.py": "d860528b277893bbfe59527b7fcc2017955cc66681d3994fb66744a8006271de", "repaired_hopper_r12/simulation/environment.py": "ba795b5d1d5344a1ecf5b2b5cc122255234d5ff394fb0dc41ee3366196aac03c", "repaired_hopper_r12/simulation/simulation.py": "a186c50ab7c5500e7da14bb5c98a5c2772ff97d63645558be3cfdc3b6e5ca1a8", "repaired_hopper_r12/simulation/state.py": "b62a1a4fcc70a4a88e07f77996e955a64184891ce614957c85ccb7d63e90f294", "verify_actuator_response_r12_01.py": "b23611266cdb84cb1d226eb9ffa2b5d6a4559956895f4538884471b181a3a03c"}, "interpreter": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/bin/python", "preservation_scope": "Listed r12 files only, not whole-checkout cleanliness"}

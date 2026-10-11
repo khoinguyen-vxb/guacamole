@@ -48,6 +48,8 @@ class Interject(Model):
     text: str = Field(pattern=r"\S")
     author: str = Field(pattern=r"\S")
     references: tuple[Ref, ...] = ()
+    # True: a note for the Chief; the current plan and workers keep running.
+    keep_workers: bool = False
 
 
 class HumanReply(Model):
@@ -120,6 +122,7 @@ class WebSocketBridge:
                         author=operation.author,
                         run_id=operation.run_id,
                         references=operation.references,
+                        keep_workers=operation.keep_workers,
                     )
                     result = {"ref": ref.model_dump(mode="json")}
                 case HumanReply():

@@ -514,10 +514,12 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                         action = Wait(reason="Fixture finished")
                 else:
                     self.worker_results.append(data["state"]["last_observation"])
+                    # Concurrent turns may overlap the replan; probe until it lands.
+                    done = data["state"]["last_observation"].get("result") == "ok"
                     action = (
-                        ToolCall(tool=tool.definition.grant, arguments={})
-                        if count < 2
-                        else Wait(reason="Fixture probed")
+                        Wait(reason="Fixture probed")
+                        if done or count >= 10
+                        else ToolCall(tool=tool.definition.grant, arguments={})
                     )
                 return AgentTurn(
                     rationale=Rationale(objective=task, explanation="Fixture"),
@@ -550,9 +552,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 await project.run(resume=result.run_id)
                 resumed = project.store.get("agent", worker["id"]).data
                 self.assertEqual(resumed["decision_id"], chief["decision_id"])
-        # Turn 1 ran under the uncovered first plan; turn 2 under the replacement.
+        # Turn 1 ran under the uncovered first plan; a later turn under the replacement.
         self.assertEqual(provider.worker_results[1]["phase"], "action")
-        self.assertEqual(provider.worker_results[2]["result"], "ok")
+        self.assertIn("ok", [r.get("result") for r in provider.worker_results])
 
     async def test_rejected_action_explains_runtime_errors_but_not_tool_errors(self):
         secret = "fixture-secret-must-not-persist"
@@ -905,6 +907,125 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 reopened.activity.transition(request.id, "dispatched", actor="runtime")
                 self.assertEqual(len(reopened.activity.get(request.id).attempts), 2)
 
+    async def test_restart_keeps_peer_requests_answerable(self):
+        with tempfile.TemporaryDirectory() as directory:
+            with Project(Path(directory)) as project:
+                records = [
+                    project.activity.request(
+                        RequestRecord(
+                            run_id="script",
+                            requester="a",
+                            target=target,
+                            kind=kind,
+                            arguments={},
+                            purpose="fixture",
+                        )
+                    )
+                    for kind, target in (("peer", "b"), ("tool", "probe"))
+                ]
+                for record in records:
+                    project.activity.transition(
+                        record.id, "dispatched", actor="runtime"
+                    )
+            # Reopening the workspace runs crash recovery, as an EHopper restart does.
+            with Project(Path(directory)) as project:
+                peer, tool = (project.activity.get(r.id).status for r in records)
+        self.assertEqual(peer, "dispatched")
+        self.assertEqual(tool, "uncertain")
+
+    async def test_agents_reason_concurrently_and_correct_rejected_plans(self):
+        class Overlap(TestReasoning):
+            def __init__(self):
+                self.steps = {}
+                self.chief_seen = []
+                # Chief and both workers must be mid-call at once; a serial loop deadlocks.
+                self.all_in_flight = asyncio.Barrier(3)
+
+            async def respond(self, packet):
+                data = json.loads(packet.prompt)
+                task = data["agent"]["task_id"]
+                count = self.steps.get(task, 0)
+                self.steps[task] = count + 1
+                if task != "chief":
+                    await asyncio.wait_for(self.all_in_flight.wait(), 5)
+                    action = Finish(
+                        result=TaskReport(summary=task).model_dump(mode="json")
+                    )
+                else:
+                    self.chief_seen.append(data)
+                    requirement = next(iter(project.store.list("requirement")), None)
+                    worker = TaskAuthorization(id="A", objective="w", peers=("chief",))
+                    if count == 0:
+                        action = Record(
+                            record=Requirement(
+                                id="r",
+                                wording="fixture",
+                                source=project.store.list("source")[0].ref,
+                                source_quote="fixture",
+                            )
+                        )
+                    elif count in (1, 2):
+                        # The first plan names an unknown peer; the Chief sees why.
+                        peers = ("chief", "ghost") if count == 1 else ("chief",)
+                        action = Decide(
+                            selected="fixture",
+                            request=plan_request(
+                                requirement.ref,
+                                tasks=(
+                                    worker.model_copy(update={"peers": peers}),
+                                    worker.model_copy(update={"id": "B"}),
+                                ),
+                            ),
+                        )
+                    elif count in (3, 4):
+                        action = Spawn(
+                            decision_id=data["agent"]["decision_id"],
+                            task_id="A" if count == 3 else "B",
+                        )
+                    elif count == 5:
+                        await asyncio.wait_for(self.all_in_flight.wait(), 5)
+                        # Workers finish during this turn, so their replies arrive
+                        # while the Chief is not yet waiting.
+                        while (
+                            sum(
+                                s.data["status"] == "completed"
+                                for s in project.store.list("agent_state")
+                            )
+                            < 2
+                        ):
+                            await asyncio.sleep(0.01)
+                        action = Wait(reason="Await workers")
+                    else:
+                        action = Wait(reason="Fixture finished")
+                return AgentTurn(
+                    rationale=Rationale(objective=task, explanation="Fixture"),
+                    action=action,
+                )
+
+        provider = Overlap()
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=provider) as project,
+        ):
+            await project.run(
+                ProjectRequest(
+                    description="fixture",
+                    context=ContextSpec(max_input_tokens=200_000),
+                )
+            )
+            states = [s.data["status"] for s in project.store.list("agent_state")]
+        self.assertIn(
+            "['ghost']", provider.chief_seen[2]["state"]["last_observation"]["detail"]
+        )
+        self.assertEqual(states.count("completed"), 2)
+        # Woken after its mid-turn Wait, the Chief saw both worker replies.
+        self.assertEqual(
+            len(
+                [m for m in provider.chief_seen[6]["messages"] if m["kind"] == "reply"]
+            ),
+            2,
+        )
+
     async def test_dynamic_workers_exchange_peer_subrequest_and_ping_human(self):
         class Conversation(TestReasoning):
             def __init__(self):
@@ -912,6 +1033,8 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 self.unanswered = []
                 self.follow_up = None
                 self.task_reply = None
+                self.asked = False
+                self.replied_at = None
 
             async def respond(self, packet):
                 data = json.loads(packet.prompt)
@@ -953,10 +1076,14 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     else:
                         action = Wait(reason="Fixture has no actual engineering tools")
                 elif task == "A":
-                    if count == 0:
-                        peer = next(
-                            a["id"] for a in state["agents"] if a["task_id"] == "B"
-                        )
+                    peer = next(
+                        (a["id"] for a in state["agents"] if a["task_id"] == "B"), None
+                    )
+                    if not self.asked and peer is None:
+                        # Agents run concurrently; B may not be spawned yet.
+                        action = Read()
+                    elif not self.asked:
+                        self.asked = True
                         action = Send(
                             recipient=peer,
                             request=True,
@@ -983,7 +1110,11 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                         action = Wait(reason="Await peer")
                 else:
                     messages = [m for m in data["messages"] if m["kind"] == "request"]
-                    if messages and count == 0:
+                    stage = None if self.replied_at is None else count - self.replied_at
+                    if stage is None and not messages:
+                        action = Read()  # A's request has not arrived yet.
+                    elif stage is None:
+                        self.replied_at = count
                         action = Send(
                             recipient=messages[0]["sender"],
                             reply_to=messages[0]["id"],
@@ -991,9 +1122,10 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                                 mode="json"
                             ),
                         )
-                    elif count == 1:
+                    elif stage == 1:
                         # The reply acknowledged the request, so it left B's context.
                         self.unanswered.extend(messages)
+                        self.sent_seen = state["sent_messages"]
                         action = Send(
                             recipient=next(
                                 a["id"] for a in state["agents"] if a["task_id"] == "A"
@@ -1002,7 +1134,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                                 mode="json"
                             ),
                         )
-                    elif count == 2:
+                    elif stage == 2:
                         # Replying to the task assignment is refused with guidance.
                         task_message = next(
                             m for m in data["messages"] if m["kind"] == "delegation"
@@ -1015,7 +1147,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                             ),
                         )
                     else:
-                        if count == 3:
+                        if stage == 3:
                             self.task_reply = state["last_observation"]
                         action = Finish(
                             result=TaskReport(summary="Peer replied").model_dump(
@@ -1063,6 +1195,8 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(len(peers), 1)
             self.assertEqual(peers[0].status, "completed")
             self.assertFalse(provider.unanswered)
+            # B's own reply stays visible after the request it answered left its inbox.
+            self.assertEqual([m["kind"] for m in provider.sent_seen], ["reply"])
             (request,) = [
                 e for e in project.inbox(sibling) if e.message.kind == "request"
             ]
@@ -1092,6 +1226,23 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     json.loads(packet.data["prompt"])["state"]["sandbox"],
                     str(project.sandbox),
                 )
+            # A keep_workers note reaches every agent without replanning or stopping them.
+            statuses = {
+                s.ref.id: s.data["status"] for s in project.store.list("agent_state")
+            }
+            plan = project.store.list("decision")[0].ref.id
+            note = project.human.interject(
+                "Prioritise CAD",
+                author="human",
+                run_id=result.run_id,
+                keep_workers=True,
+            )
+            self.assertEqual(
+                {s.ref.id: s.data["status"] for s in project.store.list("agent_state")},
+                statuses,
+            )
+            self.assertFalse(project.store.get("decision", plan).stale)
+            self.assertIn(note, project.human.references(result.run_id))
             project.human.reply(
                 question.message.request_id,
                 "Use the new measurement instead",

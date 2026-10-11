@@ -1,35 +1,36 @@
+import hashlib
 import json
 from getpass import getpass
+
 from websockets.sync.client import connect
 
 token = getpass("Current EHopper authorization token: ").strip()
 # Accept the whole "Authorization: Bearer <token>" line EHopper prints at startup.
 token = token.removeprefix("Authorization:").strip().removeprefix("Bearer").strip()
+# True: a priority note for the Chief; the plan and running workers continue.
+# False: a correction; the Chief replans from scratch and every worker is stopped.
+keep_workers = True
 text = """
-Structural correction (hard constraint): replace the single central spine with a tripod or
-quadpod structure built from CFRP (carbon-fibre) tube spines. Compare the tripod and quadpod
-options and recommend one with justification.
+Priority: move to candidate CAD now. Model the braced CFRP tripod and quadpod landing legs
+directly in the FreeCAD candidates (intermediate stance with 279.4 mm propellers and wide
+stance with 330.2 mm propellers, as in your structural_trade_review_checkpoint_01 handoff)
+instead of completing a separate analytic braced-leg study first. Use the CAD mass, CG and
+clearance results for the structural down-selection.
 
-This supersedes the single aluminium tube spine in structural decision
-01797f347ac344f984e1912cc5247b28 and the aluminium/PETG-only structural study. Research and
-price CFRP tubes within the existing AUD 500 vehicle budget.
-
-Budget amendment: printed PETG parts no longer need to be costed. Exclude PETG filament from
-the AUD 500 vehicle budget; all other purchased hardware and materials still count.
-
-Keep the bottom-mounted propulsion (REQ-PROPULSION-PLACEMENT) and the common two-axis gimbal.
-If the tripod/quadpod layout conflicts with the gimbal, ask me before changing the actuation
-concept.
+This is a priority note, not a requirement change: keep the current plan, decisions and the
+plant worker running.
 """
 
 command = {
-    # Fixed ID: rerunning returns the stored result instead of interjecting twice.
-    "id": "interject-cfrp-pod-01",
+    # The ID follows the text: rerunning the same message returns the stored result
+    # instead of interjecting twice, and an edited message is always sent.
+    "id": "interject-" + hashlib.sha256(text.encode()).hexdigest()[:12],
     "command": {
         "kind": "interject",
         "run_id": "0d3952dea3fd4803a63b63a01d64464c",
         "author": "Khoi",
         "text": text,
+        "keep_workers": keep_workers,
     },
 }
 
@@ -48,5 +49,5 @@ with connect(
     except TimeoutError:
         raise SystemExit(
             "No acknowledgement received. Check the EHopper event log; rerunning "
-            "this script is safe because it reuses the same command ID."
+            "this script is safe because the same text reuses the same command ID."
         ) from None

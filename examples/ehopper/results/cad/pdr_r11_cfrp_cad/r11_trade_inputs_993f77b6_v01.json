@@ -1,0 +1,187 @@
+{
+  "schema": "r11_cfrp_structural_sensitivity_inputs_v1",
+  "author_task": "pdr_r11_cfrp_cad",
+  "date": "2026-10-11",
+  "status": "EXPLORATORY INPUTS; calculations, CAD and independent verification not yet performed",
+  "selected_vehicle_parameters": false,
+  "chief_selection": null,
+  "scope": "Compare thin-CFRP tripod and quadpod legs, and CFRP versus aluminium single spine. No fabrication release, actuation-concept change, PID tuning or physical acceptance.",
+  "provenance": {
+    "work_plan": "e24e26be17ee47c59e7f82e918be1842 revision 1",
+    "configuration": "REQ-VEHICLE-CONFIGURATION revision 2",
+    "placement": "REQ-PROPULSION-PLACEMENT revision 1",
+    "budget": "REQ-HARDWARE-BUDGET revision 5",
+    "frame": "f046cc4fe5294a6f9a61027529056f61 revision 1",
+    "recovered_measurement_method": "Reviewed r8_solid_fixture_01.py through current tool_result 8db724a8a01a418b9f78c88439591448 revision 1. Reuse measurement of individual Part.Solid objects and unsaved native parameter probes; do not reuse its historical authorization or fixture dimensions as vehicle inputs.",
+    "headless_diagnosis": "Human source 6461e706a0c84ff394997606ff098cdb revision 1. GUI RPC unavailable; headless execution does not require the addon. Generic Shape mass-property access failed; use individual solids and fresh filenames.",
+    "historical_inputs": "The reviewed r10 input file supplies recovery context only. Its geometry, aluminium-only assumptions, ownership and stale embedded references are not adopted.",
+    "reference_designs": "Completed supplied read d11d0157b77b4411b89f9bc5d704ff3c revision 1 is qualitative precedent only. Photos were not inspected and supply no numerical inputs.",
+    "supplier_coordination": "Propulsion peer request bc007e46b24943bcbf6d2c43b3b8f309 is outstanding. No response or current supplier stock evidence is assumed here."
+  },
+  "units": {
+    "length": "mm",
+    "mass": "kg",
+    "density": "kg/m^3",
+    "elastic_modulus": "GPa",
+    "force": "N",
+    "stress": "MPa",
+    "physical_inertia": "kg m^2",
+    "study_angles": "deg",
+    "interface_angles": "rad",
+    "future_purchase_currency": "AUD"
+  },
+  "frame_contract": {
+    "cad_axes": "+X forward, +Y left, +Z upward",
+    "cad_origin": "Neutral spine-axis intersection with nominal uncompressed level-ground plane",
+    "body_axes": "Forward-right-down, fixed to stationary structure",
+    "R_BC": [[1,0,0],[0,-1,0],[0,0,-1]],
+    "gimbal_rotation_body": "Rx(alpha) Ry(beta)",
+    "cad_rotation_about_pivot": "transpose(R_BC) Rx(alpha) Ry(beta) R_BC",
+    "outer_group_rotation_body": "Rx(alpha)",
+    "neutral_complete_vehicle_CG_C_mm": null,
+    "fixed_O_B0_C_mm": null,
+    "datum_rule": "O_B0 is fixed at the complete neutral vehicle CG after that CG is established. Neither CAD origin nor a partial structural CG substitutes for it.",
+    "point_relative_to_O_B0_m": "0.001 R_BC (p_C_mm - CG_C0_mm)",
+    "inertia_rule": "Density-weight raw solid inertia in mm^5 by rho*1e-15, aggregate about the relevant CG using parallel-axis terms, then rotate the full tensor. An inertia already in kg mm^2 instead uses 1e-6."
+  },
+  "comparison_design": {
+    "leg_counts": [3,4],
+    "regular_polygon_phase_deg": 0,
+    "equal_footprint_foot_circumradii_mm": [300,350,400,450],
+    "equal_support_inradii_mm": [175,225,275],
+    "support_inradius_formula": "r = R*cos(pi/n), for the polygon of point foot centres",
+    "equal_inradius_radius_formula": "R = r/cos(pi/n)",
+    "report": [
+      "Foot-centre coordinates, circumdiameter, directional spans, support-polygon area and minimum inradius",
+      "Tube cut length, installed tube-only mass, whole-stock quantity, kerf, end trim and unused stock",
+      "Full-contact, first-foot and incomplete-contact cases without assuming equal load sharing",
+      "Equivalent axial/bending/buckling indicators under identical explicitly stated loads and restraint assumptions",
+      "Spine mass and stiffness comparisons at equal section and length; no assumption of equal material strength",
+      "Rotor, structure and ground clearance limitations; no leg-count recommendation based only on mass"
+    ]
+  },
+  "leg_geometry_hypotheses": {
+    "pivot_heights_C_mm": [300,360,420],
+    "attachment_height_above_pivot_mm": 30,
+    "attachment_radius_mm": 80,
+    "foot_sphere_radius_mm": 12,
+    "foot_centre_height_C_mm": 12,
+    "leg_centreline": "Straight radial segment from attachment point to foot centre at the same azimuth; cut length initially equals centreline length, before actual joint insertion allowances",
+    "section_candidates": [
+      {"id":"LEG-8x0p5", "outside_diameter_mm":8, "wall_mm":0.5},
+      {"id":"LEG-10x0p5", "outside_diameter_mm":10, "wall_mm":0.5},
+      {"id":"LEG-10x1", "outside_diameter_mm":10, "wall_mm":1},
+      {"id":"LEG-12x1", "outside_diameter_mm":12, "wall_mm":1}
+    ],
+    "section_status": "Generic geometric sensitivities, not evidence that these sections or laminates are purchasable",
+    "actual_joint_insertion_lengths_mm": null,
+    "actual_clamps_and_retention": null,
+    "foot_mass_kg": null,
+    "attachment_ring_or_plate_mass_kg": null
+  },
+  "spine_comparison_hypotheses": {
+    "outside_diameter_mm": 16,
+    "wall_mm": 1,
+    "lengths_mm": [260,350,450],
+    "materials": ["CFRP-SENSITIVITY", "ALUMINIUM-SENSITIVITY"],
+    "basis": "Equal geometry first. The recovered 16x1 mm screening section is not a selected current aluminium stock specification. Actual stock alternatives and equivalent-stiffness options require supplier reconciliation.",
+    "battery_and_avionics": "Must remain above both rotor envelopes; placements and mounting masses are not specified by this tube-only comparison."
+  },
+  "material_hypotheses": {
+    "CFRP-SENSITIVITY": {
+      "density_kg_m3": [1400,1600],
+      "effective_axial_modulus_GPa": [40,70,100],
+      "effective_bending_modulus_GPa": [40,70,100],
+      "status": "Assumed sensitivity values only; independent modulus sweeps are not a laminate constitutive model",
+      "allowable_axial_stress_MPa": null,
+      "allowable_bending_stress_MPa": null,
+      "allowable_clamp_pressure_MPa": null,
+      "laminate_and_fibre_orientation": null,
+      "interlaminar_and_crush_limits": null
+    },
+    "ALUMINIUM-SENSITIVITY": {
+      "density_kg_m3": 2700,
+      "elastic_modulus_GPa": 69,
+      "status": "Nominal analytical assumptions, not verified purchased alloy/temper properties",
+      "alloy_and_temper": null,
+      "allowable_stress_MPa": null
+    },
+    "PETG": {
+      "purchase_filament_charge_AUD": 0,
+      "exemption_basis": "REQ-HARDWARE-BUDGET revision 5",
+      "installed_mass_exempt": false,
+      "printed_effective_density_kg_m3": null,
+      "print_orientation_infill_creep_and_strength": null
+    }
+  },
+  "load_sensitivities": {
+    "reference_total_vehicle_masses_kg": [1,1.5,2],
+    "reference_mass_status": "Load-case hypotheses only, not computed or selected vehicle mass",
+    "gravity_m_s2": 9.80665,
+    "vertical_load_multipliers": [1,3,5],
+    "load_multiplier_status": "Comparison factors, not an impact simulation or agreed design load",
+    "horizontal_force_to_vertical_force_ratios": [0,0.2],
+    "contact_cases": ["all feet with explicitly ideal equal vertical load", "one foot takes the full prescribed load", "two active feet", "quadpod supported on only three feet"],
+    "restraint_cases": [
+      "Ideal axial strut: requires compatible lateral contact forces, friction and joints; calculate required horizontal reactions rather than assuming them available",
+      "Clamped-root end-loaded member with specified vertical and horizontal foot forces: resolve axial and transverse loads and calculate bending indicators",
+      "Euler column indicators with K=1 and K=2; not a local-shell-buckling or joint-strength acceptance check"
+    ],
+    "euler_effective_length_factors": [1,2],
+    "ground_friction_coefficient": null,
+    "joint_rotational_stiffness": null,
+    "landing_energy_absorption_and_stopping_distance": null,
+    "strength_safety_factor": null,
+    "acceptance_rule": "Report demand and model sensitivity only; no structural safety pass while allowables, joints and landing loads are unresolved."
+  },
+  "kinematic_envelope_sensitivities": {
+    "rotor_diameters_mm": [279.4,330.2],
+    "diameter_status": "11-inch and 13-inch geometric cases; no propeller or propulsion selection",
+    "rotor_centres_below_pivot_mm": [120,220],
+    "rotor_slab_half_thickness_mm": 8,
+    "joint_half_ranges_deg": [10,15],
+    "joint_domain": "Independent rectangular alpha/beta domain, including simultaneous extremes; not a resultant tilt cone",
+    "additional_radial_envelope_allowances_mm": [0,5,10],
+    "comparison_clearance_threshold_mm": 10,
+    "airframe_tilt_sensitivity_deg": [0,5],
+    "uniform_settlement_sensitivity_mm": [0,10,20],
+    "differential_ground_height_sensitivity_mm": [0,10,20],
+    "status": "All values are screening hypotheses, not accepted travel or physical clearances. Zero allowance is a nominal baseline only.",
+    "mechanical_topology": "Retain the common two-axis gimbal. Pivot-to-rotor offsets here describe only rigid kinematics; actual bearing, motor-carrier, shaft, harness and linkage paths remain to be demonstrated without crossing blade envelopes.",
+    "verification_distinction": "Separate nominal CAD distances and sampled joint-domain results from conservative continuous-domain bounds. Bounds must identify their covering geometry, domain and numerical margin. Preserve unmodelled blade flexibility, tube/joint deformation, tolerances and settling limitations.",
+    "conflict_rule": "If a required layout conflicts with the retained actuation concept, report to Chief/human; do not substitute another concept."
+  },
+  "cutting_stock_sensitivities": {
+    "hypothetical_stock_lengths_mm": [500,1000],
+    "saw_kerf_mm": 2,
+    "trim_each_stock_end_mm": 5,
+    "status": "Assumed cutting sensitivity only. Supplier nominal/usable lengths, minimum packs, dimensional tolerances and tool process remain unverified.",
+    "supplier_variants": [],
+    "stock_unit_prices": null,
+    "tax_basis": null,
+    "source_urls": [],
+    "source_access_dates": [],
+    "purchase_rule": "Charge whole minimum purchasable stock/packs after supplier reconciliation; never prorate installed length. Count leg and spine cuts together only for identical supplier stock variants. Include non-exempt joints, adhesive and retention hardware."
+  },
+  "mass_and_interface_rules": {
+    "stationary_group": "Spine, fixed attachment ring/plate, landing legs and fixed equipment; individual assignments pending",
+    "outer_gimbal_group": "Members carried by Rx(alpha), including any outer-mounted actuator; individual assignments pending",
+    "inner_gimbal_group": "Common carrier and non-spinning motor portions carried by Rx(alpha)Ry(beta); individual assignments pending",
+    "rotating_groups": "Separate upper and lower propellers and motor rotating portions; catalogue motor mass must not be double-counted when rotor/stator split is unknown",
+    "commercial_inertia": "Unknown unless supplied or measured; any homogeneous-envelope approximation must be separately labelled",
+    "swept_envelopes": "Nonphysical clearance geometry; exclude from mass and inertia",
+    "partial_mass_rule": "Report tube-only or custom-part subtotals explicitly. Do not label these complete vehicle mass, CG or inertia.",
+    "complete_vehicle_mass_kg": null,
+    "complete_vehicle_inertia_kg_m2": null,
+    "mounting_patterns": null,
+    "linkage_endpoints_and_actuator_limits": null
+  },
+  "execution_and_evidence": {
+    "new_files_directory": "cad/pdr_r11_cfrp_cad/",
+    "preserve_earlier_outputs": true,
+    "cad_execution": "Saved scripts through freecad_run(headless=True) only; declare every export and use fresh output names after partial failures",
+    "measurement": "Reopen native and STEP artifacts, enumerate valid individual solids, retain component identities, density-weight their properties and test native parameter edits/recompute without modifying baseline artifacts",
+    "independent_checks": "Retain editable programs using actual artifact inputs. verify_command stdout must contain only VerificationResult JSON; diagnostics on stderr; include every tested current artifact Ref in tool inputs.",
+    "recommendation_gate": "Send numerical comparisons and bounded recommendations to Chief before treating any dimensions, leg count or material as selected."
+  }
+}

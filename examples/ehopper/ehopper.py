@@ -15,8 +15,8 @@ Or: uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra m
     .venv/bin/python -m examples.ehopper.ehopper
 
 Edit the configuration below; this script has no command-line arguments.
-Install claude CLI and run claude login with your ChatGPT account before running.
-Reasoning uses a local claude exec process with GPT-6 Astra; no API key is needed.
+Install the Claude Code CLI and run claude login with your Claude account before running.
+Reasoning uses a local claude --print process with Claude Opus 5.5; no API key is needed.
 Optional OPENAI_API_KEY adds context summarization and Graphiti/mem0 memory.
 uv installs this script's document readers; backend installations are separate.
 See https://docs.astral.sh/uv/guides/scripts/ for inline dependency metadata.
@@ -44,7 +44,7 @@ from zipfile import ZipFile
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 from mcp.types import CallToolResult, TextContent
-from pydantic import Field
+from pydantic import Field, ValidationError
 
 from guacamole import (
     AgentSpec,
@@ -79,8 +79,10 @@ CONTROL_PORT = 8766
 CONTEXT = ContextSpec(max_input_tokens=12800000, reserved_output_tokens=20000)
 WORKER_MAX_INPUT_TOKENS = CONTEXT.max_input_tokens
 # The watchdog prints a status report at this interval and helps looping or
-# context-saturated agents using its own low-effort claude process (no web search).
+# context-saturated agents using its own low-effort Claude process (no web search).
 WATCHDOG_REPORT_S = 600.0
+# Agent model calls running at once; others queue. Lower it if Claude rate-limits.
+MAX_CONCURRENT_CALLS = 4
 BUDGET = Budget(
     max_steps=200000, max_tool_calls=15000, max_seconds=720000, max_agents=24
 )
@@ -90,7 +92,7 @@ BUDGET = Budget(
 # every agent turn feeds a Graphiti knowledge graph and mem0 memory (billed usage).
 SUMMARY_MODEL = "openai/gpt-6-luna"  # 922k-token input holds untrimmed sources.
 SUMMARIZE_AT_TOKENS = 150_000  # Optional sources above this are compacted.
-CLEAR_AT_TOKENS = 80_000  # Above this, reads beyond the latest 8 are hidden per call.
+CLEAR_AT_TOKENS = 400_000  # Above this, reads beyond the latest 8 are hidden per call.
 
 # Optional interpreter overrides, e.g. {"6dof_hopper": Path("/path/to/python")}.
 # Otherwise use the repository's .venv/bin/python if present, then this interpreter.
@@ -210,6 +212,7 @@ class Execution(Model):
 
 
 class FreeCADExecution(Model):
+    succeeded: bool
     reply: str
     files: tuple[ProducedFile, ...]
     missing_outputs: tuple[str, ...]
@@ -515,6 +518,8 @@ def register_tools(project: Project) -> None:
 
         Include the tested artifact Refs in tool inputs. Stdout must contain only
         the result JSON; diagnostic logging belongs on stderr. Never invent checks.
+        outcome "passed" requires every check to be true; report a program with
+        unperformed (null) checks as "inconclusive" or leave those checks out.
         """
         result = await execute(command, repository, workdir, timeout_s=timeout_s)
         if result.returncode or result.timed_out:
@@ -523,9 +528,18 @@ def register_tools(project: Project) -> None:
                 explanation=f"Verification did not complete successfully; inspect {result.stderr_log.path}",
                 checks={"process_completed": False},
             )
-        return VerificationResult.model_validate_json(
-            Path(result.stdout_log.path).read_text()
-        )
+        try:
+            return VerificationResult.model_validate_json(
+                Path(result.stdout_log.path).read_text()
+            )
+        except ValidationError as exc:
+            # Raised, this was hidden as "exception text omitted", so agents could
+            # not fix their checker; the schema message is ours and safe to show.
+            return VerificationResult(
+                outcome="inconclusive",
+                explanation=f"Checker stdout is not a valid VerificationResult: {exc}"[:2000],
+                checks={"result_schema_valid": False},
+            )
 
     async def freecad_status() -> str:
         """Inspect the GUI addon through FreeCAD MCP. Headless CAD needs no GUI addon."""
@@ -543,6 +557,8 @@ def register_tools(project: Project) -> None:
         path. Import FreeCAD/Part explicitly. Save FCStd/STEP and declare their
         sandbox-relative paths in outputs. Headless mode uses FreeCADCmd; GUI
         mode needs the running addon. Execution is not geometry verification.
+        A failed run returns succeeded=false with the end of FreeCAD's output,
+        including any traceback, in reply; partial outputs may remain on disk.
         """
         source = project.output_path(Path(script))
         output_paths = tuple(project.output_path(Path(p)) for p in outputs)
@@ -569,10 +585,12 @@ def register_tools(project: Project) -> None:
             if headless
             else "Code executed successfully:"
         )
-        if not any(line.startswith(success) for line in reply.splitlines()):
-            raise RuntimeError(f"FreeCAD execution failed; inspect {log}")
+        # Raised, the failure was hidden as "exception text omitted", so agents could
+        # not see their own script's traceback; it carries no host secrets.
+        succeeded = any(line.startswith(success) for line in reply.splitlines())
         return FreeCADExecution(
-            reply=reply[:16_000],
+            succeeded=succeeded,
+            reply=reply[:16_000] if succeeded else reply[-16_000:],
             files=tuple(ProducedFile.from_path(p) for p in output_paths if p.is_file()),
             missing_outputs=tuple(str(p) for p in output_paths if not p.is_file()),
             log=ProducedFile.from_path(log),
@@ -798,7 +816,7 @@ async def notifications(project: Project) -> None:
 async def main() -> None:
     if shutil.which("claude") is None:
         raise SystemExit(
-            "Install claude CLI on PATH and run 'claude login' with your ChatGPT account."
+            "Install the Claude Code CLI on PATH and run 'claude login' with your Claude account."
         )
     missing = [
         name
@@ -826,6 +844,7 @@ async def main() -> None:
         WORKSPACE,
         sandbox=SANDBOX,
         tools=ToolRegistry(),
+        max_concurrent_calls=MAX_CONCURRENT_CALLS,
         reasoning=ClaudeReasoning(web_search=True),
         watchdog=Watchdog(
             ClaudeReasoning(web_search=False), report_interval_s=WATCHDOG_REPORT_S
