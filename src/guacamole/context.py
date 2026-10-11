@@ -191,7 +191,13 @@ class ContextBuilder:
             ),
         )
         for entry in entries:
-            if entry.delivered_at is None or entry.acknowledged_at is not None:
+            # An answered message is settled even if never acknowledged; showing it
+            # again made agents reply to it again.
+            if (
+                entry.delivered_at is None
+                or entry.acknowledged_at is not None
+                or entry.response_message_id is not None
+            ):
                 continue
             payload["messages"].append(entry.message.model_dump(mode="json"))
             prompt = encode_context(payload)

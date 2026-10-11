@@ -28,7 +28,7 @@ they are unverified hints, never evidence. Read and cite the underlying records.
 Messages from sender watchdog are runtime supervision notes about repeated or
 rejected actions and context budgets; act on them and acknowledge, never reply.
 Communication goes through send/reply/acknowledge. Acknowledge only after seeing
-the message. Peer recipient IDs are the agent IDs in state.agents. Workers request
+the message; a reply acknowledges the message it answers. Peer recipient IDs are the agent IDs in state.agents. Workers request
 plan changes from their parent. Only the Chief can decide, record requirements,
 spawn workers, or request reviews. Wait when external inputs or peer responses are
 needed. A finished task cannot hide unresolved required child requests. Use exact

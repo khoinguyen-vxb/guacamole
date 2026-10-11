@@ -1,0 +1,226 @@
+{
+  "schema": "pdr_r9_analytical_fixture_config_v1",
+  "created_date": "2026-10-11",
+  "model_scope": "analytical_fixture",
+  "status": "synthetic_inputs_for_unperformed_tests",
+  "vehicle_baseline": false,
+  "physical_acceptance": "not_assessed",
+  "controller_enabled": false,
+  "provenance": "Numerical fixtures authored for audited sandbox plant verification; no supplier, CAD assembly, hardware identification or vehicle selection is represented.",
+  "current_decisions": {
+    "work_plan": "98d7c43a499d4584a77132cd5ac96874 revision 1",
+    "frames": "f046cc4fe5294a6f9a61027529056f61 revision 1",
+    "gimbal_architecture": "84ef41fdd3fd4266ada43df2ace64a48 revision 1"
+  },
+  "frame_contract": {
+    "local": "NED; fixed launch-ground origin",
+    "body": "FRD; axes fixed to central structure",
+    "translation_reference": "instantaneous complete-vehicle CG G",
+    "quaternion": "scalar-first Hamilton q_LB; R_LB maps B to L",
+    "euler": "named roll, pitch, yaw in rad; Rz(yaw) Ry(pitch) Rx(roll)",
+    "gimbal": "R_BM=Rx(alpha)Ry(beta); outer body-fixed x, inner carried y",
+    "rotor_order": ["upper", "lower"],
+    "spin_sign_reference": "common +z_M, not an unspecified visual CW/CCW convention",
+    "CAD_to_body_rotation": [[1, 0, 0], [0, -1, 0], [0, 0, -1]]
+  },
+  "mass_properties": {
+    "mass_kg": 2.0,
+    "cg_B0_m": [0.0, 0.0, 0.0],
+    "cg_rate_B0_m_s": [0.0, 0.0, 0.0],
+    "inertia_B_G_kg_m2": [[0.07, 0.006, -0.004], [0.006, 0.08, 0.003], [-0.004, 0.003, 0.06]],
+    "inertia_rate_B_G_kg_m2_s": [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
+    "relative_momentum_B_kg_m2_s": [0.0, 0.0, 0.0],
+    "relative_momentum_rate_B_N_m": [0.0, 0.0, 0.0],
+    "model_scope": "analytical_fixture",
+    "dynamics_mode": "rigid_body_fixture",
+    "provenance": "Synthetic constant complete-body mass and full inertia; not measured vehicle data.",
+    "limitations": [
+      "Frozen rigid-body fixture; rotor and joint relative momentum are explicitly omitted.",
+      "Actuator-response tests with this frozen mass model are numerical tests, not complete articulated-vehicle dynamics.",
+      "No vehicle ledger, structural acceptance or hardware mass reconciliation is represented."
+    ]
+  },
+  "geometry": {
+    "pivot_B0_m": [0.0, 0.0, -0.30],
+    "hub_offsets_M_m": [[0.0, 0.0, -0.04], [0.0, 0.0, 0.04]],
+    "spin_signs": [1, -1],
+    "model_scope": "analytical_fixture",
+    "provenance": "Synthetic intersecting-axis coaxial geometry; not selected pivot location, rotor spacing, lever arm or clearance evidence."
+  },
+  "lag_parameters": {
+    "rotor_spin_signs": [1, -1],
+    "motor_time_constant_s": [0.12, 0.18],
+    "rotor_speed_limit_rad_s": [700.0, 680.0],
+    "rotor_acceleration_limit_rad_s2": [4000.0, 3500.0],
+    "gimbal_demand_lag_s": 0.20,
+    "gimbal_output_lag_s": 0.20,
+    "joint_lower_rad": [-0.30, -0.28],
+    "joint_upper_rad": [0.30, 0.28],
+    "resultant_cone_limit_rad": 0.35,
+    "gimbal_rate_limit_rad_s": [1.0, 0.8],
+    "gimbal_acceleration_limit_rad_s2": [30.0, 24.0],
+    "model_scope": "analytical_fixture",
+    "provenance": "Synthetic motor lag and cascaded gimbal-filter parameters; no hardware calibration or loaded actuator capability.",
+    "limitations": [
+      "Speed-command abstraction, not an ESC PWM or motor electrical model.",
+      "Prescribed response without joint-load feedback, backlash, friction, compliance or thermal dynamics.",
+      "Joint, cone, rate and acceleration values are test inputs only."
+    ]
+  },
+  "environment": {
+    "gravity_m_s2": 9.80665,
+    "air_density_kg_m3": 1.225,
+    "wind_at_hubs_L_m_s": [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]],
+    "bus_voltage_V": 18.0,
+    "auxiliary_bus_current_A": 0.25,
+    "state_of_charge": 0.8,
+    "motor_temperature_K": [293.15, 293.15],
+    "esc_temperature_K": [293.15, 293.15],
+    "battery_temperature_K": 293.15,
+    "additional_external_loads": [],
+    "model_scope": "analytical_fixture",
+    "electrical_model": "Prescribed constant terminal voltage, SOC and temperatures; no dynamic battery closure.",
+    "nonpropulsive_load_model": "Explicitly omitted aerodynamic, wake-on-structure, contact and disturbance loads in the base analytical fixture.",
+    "provenance": "Synthetic environment inputs, not a verified operating envelope.",
+    "limitations": [
+      "Calm ambient air does not establish absence of rotor-wake or rotational aerodynamic loads.",
+      "No cylindrical aerodynamic model is imported or substituted for the exposed structure.",
+      "Fixed SOC and temperatures cannot establish endurance or continuous thermal feasibility.",
+      "Hub positions must be supplied from the actual instantaneous plant evaluation, not fixed here."
+    ]
+  },
+  "synthetic_paired_map": {
+    "model_scope": "analytical_fixture",
+    "model": "coupled_rational_speed_fixture_v1",
+    "formula": "For i in {upper,lower}, j is the other rotor; d_i=1+chi_i*(abs(omega_j)/omega_ref)^2; T_i=kT_i*omega_i^2/d_i; Q_i=kQ_i*omega_i^2/d_i.",
+    "thrust_coefficient_N_s2_rad2": [0.00010, 0.00010],
+    "drag_torque_coefficient_N_m_s2_rad2": [0.0000020, 0.0000020],
+    "cross_interference_coefficient": [0.20, 0.20],
+    "reference_speed_rad_s": 400.0,
+    "synthetic_efficiency": [0.75, 0.75],
+    "motor_torque_constant_N_m_A": [0.025, 0.025],
+    "idle_current_A": [0.15, 0.15],
+    "electrical_formula": "I_motor_i=I_idle_i+Q_i/Kt_i; I_bus_i=I_idle_i+Q_i*abs(omega_i)/(efficiency_i*V_bus). Quasi-steady arithmetic only; not a motor voltage/duty or acceleration-current solution.",
+    "electrical_response_model": "quasi_steady_estimate",
+    "reported_domain_checks": {
+      "coaxial_map_domain": null,
+      "rotor_speed": null,
+      "bus_voltage": null,
+      "motor_current": null,
+      "esc_current": null,
+      "battery_current": null,
+      "motor_thermal": null,
+      "esc_thermal": null,
+      "battery_thermal": null
+    },
+    "provenance": "Invented analytical functions for testing paired evaluation and signed external-load plumbing; NOT vendor performance data or calibrated coaxial losses.",
+    "limitations": [
+      "The synthetic functions ignore inflow, density, spacing and thermal effects despite receiving those interface inputs.",
+      "All physical operating-domain flags remain unresolved in the base fixture.",
+      "Currents exclude rotor kinetic-energy transients and cannot establish electrical feasibility.",
+      "Equal coefficients permit an independent closed-form trim fixture; real counter-rotating rotors need not have equal thrust or torque."
+    ]
+  },
+  "solver": {
+    "method": "DOP853",
+    "rtol": 1e-10,
+    "atol": [1e-11, 1e-11, 1e-11, 1e-11, 1e-11, 1e-11, 1e-11, 1e-11, 1e-11, 1e-11, 1e-11, 1e-11, 1e-11, 1e-8, 1e-8, 1e-11, 1e-11, 1e-11, 1e-11],
+    "atol_units": ["m", "m", "m", "m/s", "m/s", "m/s", "1", "1", "1", "1", "rad/s", "rad/s", "rad/s", "rad/s", "rad/s", "rad", "rad", "rad", "rad"],
+    "max_step_s": 0.01,
+    "initial_quaternion_unit_tolerance": 1e-12,
+    "domain_policy": "allow_unresolved_analytical_fixture",
+    "convergence_step_factor": 0.5,
+    "note": "Output sampling and maximum ODE step are not PID control cadence. No controller executes."
+  },
+  "test_vectors": {
+    "nonzero_initialization": {
+      "time_start_s": 7.0,
+      "duration_s": 0.60,
+      "position_G_L_m": [1.25, -0.75, -2.5],
+      "velocity_G_L_m_s": [0.2, -0.1, 0.3],
+      "roll_rad": 0.3,
+      "pitch_rad": -0.2,
+      "yaw_rad": 0.4,
+      "omega_B_rad_s": [0.4, -0.2, 0.3],
+      "rotor_speed_magnitude_rad_s": [100.0, 120.0],
+      "demand_filter_gimbal_rad": [0.03, -0.02],
+      "actual_gimbal_rad": [0.01, -0.01]
+    },
+    "spherical_free_rotation": {
+      "inertia_kg_m2": 0.08,
+      "duration_s": 0.60,
+      "note": "Explicitly override propulsion and nonpropulsive loads to zero; constant body omega gives independent Hamilton exponential orientation and ballistic CG translation."
+    },
+    "trim": {
+      "position_G_L_m": [0.7, -0.4, -2.0],
+      "duration_s": 1.0,
+      "formula": "For identical coefficients, identity attitude, zero rates and zero gimbal: omega_trim^2=m*g/(2*kT-m*g*chi/omega_ref^2). Require positive denominator and admissible fixture speeds. Opposite signs and equal Q balance axial torque.",
+      "note": "Compute speed from actual configuration inputs. Do not store a fabricated measured trim result. No closed-loop hover or mission test is represented."
+    },
+    "unlimited_lag": {
+      "duration_s": 0.8,
+      "initial_rotor_speed_rad_s": [100.0, 120.0],
+      "requested_rotor_speed_rad_s": [200.0, 220.0],
+      "initial_gimbal_rad": [0.0, 0.0],
+      "requested_gimbal_rad": [0.04, -0.03]
+    },
+    "saturated_command": {
+      "rotor_speed_magnitude_rad_s": [900.0, -20.0],
+      "gimbal_rad": [0.6, -0.6]
+    },
+    "momentum_balance": {
+      "omega_B_rad_s": [0.4, -0.2, 0.3],
+      "external_moment_B_G_N_m": [0.12, -0.08, 0.05],
+      "inertia_rate_B_G_kg_m2_s": [[0.001, 0.0002, 0.0], [0.0002, -0.0005, 0.0001], [0.0, 0.0001, 0.0003]],
+      "relative_momentum_B_kg_m2_s": [0.01, -0.02, 0.03],
+      "relative_momentum_rate_B_N_m": [0.003, 0.002, -0.004],
+      "note": "Instantaneous algebraic interface fixture, not a dynamically consistent vehicle joint trajectory. Use prescribed_internal_momentum mode explicitly."
+    },
+    "offset_kinematics": {
+      "cg_B0_m": [0.015, -0.020, 0.035],
+      "cg_rate_B0_m_s": [0.002, -0.003, 0.004],
+      "gimbal_rad": [0.12, -0.09],
+      "gimbal_rate_rad_s": [0.07, -0.05],
+      "gimbal_acceleration_rad_s2": [0.02, 0.03],
+      "wind_at_hubs_L_m_s": [[0.4, -0.2, 0.1], [0.3, -0.1, 0.2]],
+      "note": "Prescribed instantaneous kinematic fixture for hub velocities and fixed-datum conversion; not accepted moving-mass vehicle data."
+    },
+    "CAD_conversion": {
+      "neutral_cg_C_mm": [130.0, -42.0, 500.0],
+      "point_C_mm": [180.0, 17.0, 630.0],
+      "geometric_inertia_C_mm5": [[650000.0, 10000.0, -20000.0], [10000.0, 500000.0, 15000.0], [-20000.0, 15000.0, 250000.0]],
+      "density_kg_m3": 2700.0,
+      "note": "Synthetic full tensor and points for unit/rotation tests; not measurements from any CAD artifact."
+    }
+  },
+  "analytical_test_tolerances": {
+    "status": "proposed numerical regression thresholds; not human-agreed vehicle acceptance limits",
+    "state_roundtrip_absolute": 0.0,
+    "rotation_matrix_max_absolute": 1e-12,
+    "quaternion_norm_error": 1e-9,
+    "quaternion_component_error": 1e-8,
+    "force_error_N": 1e-10,
+    "moment_error_N_m": 1e-10,
+    "algebraic_acceleration_error_m_s2": 1e-9,
+    "algebraic_angular_acceleration_error_rad_s2": 1e-9,
+    "trajectory_position_error_m": 1e-7,
+    "trajectory_velocity_error_m_s": 1e-7,
+    "trajectory_angular_rate_error_rad_s": 1e-7,
+    "motor_speed_error_rad_s": 1e-5,
+    "gimbal_angle_error_rad": 1e-8,
+    "event_time_error_s": 1e-8,
+    "CAD_point_roundtrip_error_mm": 1e-10,
+    "inertia_conversion_error_kg_m2": 1e-15,
+    "kinematic_velocity_error_m_s": 1e-9,
+    "directional_derivative_error_rad_s2": 2e-6
+  },
+  "unperformed_vehicle_work": [
+    "Calibrated coaxial propulsion, electrical and thermal operating domains.",
+    "CAD-derived complete installed mass, configuration-dependent CG and full inertia.",
+    "Rotor and joint momentum, loaded actuator capability and multibody-model error bounds.",
+    "Exposed-structure aerodynamic and rotor-wake loads.",
+    "PID implementation, tuning, attitude recovery, tracking and saturation-recovery acceptance.",
+    "Takeoff, 300-second hover, landing, touchdown and mission energy acceptance.",
+    "Hardware, structural, flight and safety validation."
+  ]
+}

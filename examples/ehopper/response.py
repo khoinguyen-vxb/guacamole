@@ -2,9 +2,9 @@ import json
 from getpass import getpass
 from websockets.sync.client import connect
 
-token =  "CxChOMcZhVxmyCTSXrNRTop6A9ZXr_-lupaFsHPjy9E"
+token =  "mXGn4I9S97q2oExoiRv6s7wqwHe0akzo6NkKz9AI9t0"
 reply = """
-Referring to: 81d9c978978c45fb9e9d5717dfe72506
+Referring to: 2984ecb56af841d08c95f59239783ff1
 yeah sounds good to me bossman
 """
 
@@ -12,10 +12,10 @@ if "[" in reply:
     raise SystemExit("Fill in or remove the bracketed placeholders before sending.")
 
 message = {
-    "id": "reply-81d9c978978c45fb9e9d5717dfe72506",
+    "id": "reply-2984ecb56af841d08c95f59239783ff1",
     "command": {
         "kind": "reply_human",
-        "request_id": "81d9c978978c45fb9e9d5717dfe72506",
+        "request_id": "2984ecb56af841d08c95f59239783ff1",
         "author": "Khoi",
         "text": reply,
     },

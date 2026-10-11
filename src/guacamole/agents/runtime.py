@@ -95,6 +95,47 @@ class Runtime:
             self.project.activity.retry(record.id, actor="runtime", reason=reason)
         self._save_state(agent, state.model_copy(update={"status": "active"}))
 
+    def _adopt_plan(self, chief: AgentSpec) -> None:
+        """Move running workers onto the chief's current plan when it keeps their task.
+
+        Otherwise a replacement plan (e.g. one covering a new requirement) left
+        workers on the old plan, which then failed validation on every tool call.
+        """
+        store = self.project.store
+        tasks = {t.id: t for t in self.project.decisions.plan(chief.decision_id).tasks}
+        decision = store.get("decision", chief.decision_id).ref
+        for worker in self._agents():
+            task = tasks.get(worker.task_id)
+            state = store.model("agent_state", worker.id, AgentState)
+            if (
+                worker.parent_id != chief.id
+                or task is None
+                or worker.decision_id == chief.decision_id
+                or state.status in {"completed", "superseded"}
+            ):
+                continue
+            pins = tuple(r for r in worker.context.pinned if r.kind != "decision")
+            store.put(
+                "agent",
+                worker.id,
+                worker.model_copy(
+                    update={
+                        "decision_id": chief.decision_id,
+                        "objective": task.objective,
+                        "tools": task.tools,
+                        "peers": task.peers,
+                        "result_schema": task.result_schema,
+                        "completion_criteria": task.completion_criteria,
+                        "context": worker.context.model_copy(
+                            update={"pinned": (*pins, decision)}
+                        ),
+                    }
+                ),
+                actor="runtime",
+                request_id=state.request_id,
+                event="agent.plan_assigned",
+            )
+
     def _awaiting_human(self, agent_id: str) -> bool:
         return any(
             entry.message.sender == agent_id
@@ -219,6 +260,12 @@ class Runtime:
                     self._save_state(
                         agent, state.model_copy(update={"status": "active"})
                     )
+            chief = store.model("agent", self.chief_id, AgentSpec)
+            if chief.decision_id:
+                try:
+                    self._adopt_plan(chief)
+                except (ValueError, KeyError, DecisionBlocked):
+                    pass  # An invalid chief plan is the chief's to replace first.
         start = time.monotonic()
         self.deadline = start + self.request.budget.max_seconds
         watchdog = self.project.watchdog
@@ -692,6 +739,12 @@ class Runtime:
                 and isinstance(turn.action, Read)
                 and isinstance(exc, ValueError)
             )
+            # The runtime wrote these messages; tool exceptions may carry secrets.
+            runtime_rejection = (
+                phase == "action"
+                and not isinstance(turn.action, (ToolCall, Retry))
+                and isinstance(exc, (ValueError, KeyError, PermissionError))
+            )
             detail = (
                 "Read contains an unknown, mismatched, or stale reference. "
                 "Copy exact current Ref objects from the context and retry; no read queued."
@@ -699,6 +752,8 @@ class Runtime:
                 else "Rationale evidence contains an unknown, mismatched, or stale reference. "
                 "Copy exact current Ref objects from the context and retry; no action executed."
                 if invalid_rationale
+                else f"Action rejected: {exc}"[:1000]
+                if runtime_rejection
                 else (
                     str(exc)
                     if isinstance(exc, ProviderError)
@@ -837,6 +892,7 @@ class Runtime:
                         request_id=state.request_id,
                         event="agent.plan_assigned",
                     )
+                    self._adopt_plan(updated)
                 return {
                     "decision_id": decision,
                     "ref": store.get("decision", decision).ref.model_dump(mode="json"),
@@ -965,10 +1021,20 @@ class Runtime:
                             actor="runtime",
                             reason=delivered.reason,
                         )
-                    if parent_message and request_id:
+                    # A reply to a reply is a follow-up; the request it shares is
+                    # already closed, and closing it again rejected the send.
+                    if (
+                        parent_message
+                        and request_id
+                        and parent_message.kind != "reply"
+                    ):
                         pending = activity.get(request_id)
                         if pending.kind != "peer":
-                            raise ValueError("Use finish to close an assigned task")
+                            raise ValueError(
+                                "Your task assignment cannot be replied to. Send "
+                                "progress to your parent as a new message without "
+                                "reply_to; use finish only when the task is complete"
+                            )
                         activity.transition(
                             request_id,
                             "completed",
@@ -986,6 +1052,10 @@ class Runtime:
                             request_id=request_id,
                             event="message.answered",
                         )
+                    if parent_message:
+                        # A reply shows the message was seen. Left unacknowledged, it
+                        # stayed in context looking unanswered and agents replied again.
+                        activity.acknowledge(agent.id, parent_message.id)
                 peer = store.model("agent_state", action.recipient, AgentState)
                 if peer.status == "waiting":
                     recipient = store.model("agent", action.recipient, AgentSpec)

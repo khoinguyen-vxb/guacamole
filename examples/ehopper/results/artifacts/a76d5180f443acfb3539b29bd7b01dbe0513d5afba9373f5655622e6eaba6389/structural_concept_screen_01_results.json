@@ -1,0 +1,2339 @@
+{
+  "schema": "pdr_r9_structural_concept_sensitivity_v1",
+  "status": "Analysis only; independent verification and Chief selection pending",
+  "sources": [
+    {
+      "id": "STR-S01",
+      "citation": "[Bunnings Metal Mate tube](https://www.bunnings.com.au/metal-mate-12-x-1mm-1m-aluminium-rcr-round-tube_p1067750)",
+      "url": "https://www.bunnings.com.au/metal-mate-12-x-1mm-1m-aluminium-rcr-round-tube_p1067750",
+      "access_date": "2026-10-11",
+      "method": "Provider-side HTML text retrieval; images not inspected",
+      "locator": "Product title, I/N and price, retrieved lines 430-441; availability 446-464; alloy claim 467-473",
+      "product_id": "1067750",
+      "nominal_outer_diameter_mm": 12.0,
+      "nominal_wall_mm": 1.0,
+      "nominal_stock_length_mm": 1000.0,
+      "alloy_temper_supplier_claim": "6063-T5",
+      "displayed_price": 5.23,
+      "currency": "AUD",
+      "tax_basis": "GST-inclusive according to STR-S02",
+      "purchase_unit": "one 1000 mm stock length",
+      "availability": "Requires store/postcode selection; not established",
+      "limitations": "Retrieved page was marked crawled last year. Access date is not a supplier quote date. Historical AUD 5.94 is not reused as this retrieval. Dimensions/tolerances and properties are not independently measured."
+    },
+    {
+      "id": "STR-S02",
+      "citation": "[Bunnings terms of sale](https://www.bunnings.com.au/terms-conditions/online-and-special-order)",
+      "url": "https://www.bunnings.com.au/terms-conditions/online-and-special-order",
+      "access_date": "2026-10-11",
+      "method": "Provider-side indexed supplier-page text",
+      "locator": "Section 3, Pricing and payment, clause c; page states updated 13 March 2026",
+      "finding": "Displayed product prices are in Australian dollars and include GST."
+    },
+    {
+      "id": "STR-S03",
+      "citation": "[Jaycar TL6452 PETG](https://www.jaycar.com.au/slic3d-petg-filament-grey-1-75mm-1kg/p/TL6452)",
+      "url": "https://www.jaycar.com.au/slic3d-petg-filament-grey-1-75mm-1kg/p/TL6452",
+      "access_date": "2026-10-11",
+      "method": "Provider-side indexed product-page text; direct open and alternate storefront open returned Internal Error",
+      "locator": "Product title, CAT.NO TL6452, MPN 50.203.0391, displayed price and specifications",
+      "displayed_price": 17.95,
+      "displayed_currency_symbol": "$",
+      "currency_for_sensitivity": "AUD",
+      "currency_status": "Inferred from Jaycar Australia storefront; explicit currency-code statement not retrieved",
+      "tax_basis": "GST-inclusive according to STR-S04",
+      "purchase_unit": "one nominal 1 kg filament spool",
+      "filament_diameter_mm": 1.75,
+      "nominal_filament_mass_kg": 1.0,
+      "availability": "Not established; add-to-cart text is not stock confirmation",
+      "limitations": "Indexed page marked crawled last month. No density, mechanical-property or print-process certification retrieved. Spool/package dimensions are not printed-part geometry."
+    },
+    {
+      "id": "STR-S04",
+      "citation": "[Jaycar terms and conditions](https://help.jaycar.com.au/hc/en-us/articles/22466779698713-Terms-conditions)",
+      "url": "https://help.jaycar.com.au/hc/en-us/articles/22466779698713-Terms-conditions",
+      "access_date": "2026-10-11",
+      "method": "Provider-side indexed supplier-page text",
+      "locator": "Prices section; page states updated 13 March 2025",
+      "finding": "Australian site prices include GST; supplier reserves the right to change prices."
+    }
+  ],
+  "inputs": {
+    "status": "Exploratory sensitivity inputs, not selected dimensions or measured properties",
+    "tube": {
+      "outer_diameter_mm": 12.0,
+      "wall_mm": 1.0,
+      "stock_length_mm": 1000.0,
+      "dimension_source": "STR-S01",
+      "assumed_density_kg_m3": 2700.0,
+      "assumed_elastic_modulus_pa": 69000000000.0,
+      "property_status": "Uncertified generic analysis assumptions, not product test evidence",
+      "assumed_kerf_per_finished_part_mm": 3.0,
+      "assumed_end_trim_each_end_per_stock_mm": 5.0
+    },
+    "printed_material": {
+      "assumed_density_kg_m3": 1270.0,
+      "nominal_spool_mass_kg": 1.0,
+      "spool_source": "STR-S03",
+      "assumed_purchase_consumption_multiplier": 1.25,
+      "accounting": "Full-density net solid volume; no infill discount. Extra 25 percent for supports/waste is consumed material, not installed flight mass."
+    },
+    "main_member_lengths_mm": [
+      350.0,
+      450.0,
+      550.0
+    ],
+    "fork_upright_lengths_mm": [
+      150.0,
+      180.0,
+      220.0
+    ],
+    "hybrid_printed_net_volume_cm3": [
+      200.0,
+      260.0,
+      320.0
+    ],
+    "all_printed_net_volume_cm3": [
+      260.0,
+      320.0,
+      380.0
+    ],
+    "volume_scope": "Assumed total custom printed load-carrying structure, gimbal frames, equipment retention features and landing legs; commercial bearings, fasteners, straps, servos and linkages excluded and unresolved.",
+    "comparison_warning": "Shared lengths and volume sweeps do not imply equal stiffness, strength, mounting capacity or rotor clearance. Volumes are NOT measured CAD volumes.",
+    "price_basis": "Whole stock/spools at retrieved displayed prices. No tax deduction or shipping added. Jaycar AUD inference is explicit. Complete ex-tax vehicle budget remains unknown."
+  },
+  "concepts": {
+    "A_SINGLE_SPINE": {
+      "main_member_count": 1,
+      "description": "One load-carrying tube spine below the lower rotor; two outboard fork uprights route loads around the swept rotor to the common gimbal.",
+      "issues": [
+        "Spine clamp torsion/slip",
+        "Printed fork bending and creep",
+        "Positive axial/rotation retention",
+        "Full-motion lower-rotor bypass"
+      ]
+    },
+    "B_THREE_RAILS": {
+      "main_member_count": 3,
+      "description": "Three longitudinal tube rails with printed connecting nodes/plates and two outboard fork uprights.",
+      "issues": [
+        "Additional joints and assembly alignment",
+        "Separated rails provide composite stiffness only with adequate shear transfer",
+        "Full-motion lower-rotor bypass"
+      ]
+    },
+    "C_PRINTED_TRUSS": {
+      "main_member_count": 0,
+      "description": "Open printed truss with integrated mounting nodes, outboard fork and landing structure; no enclosing shell.",
+      "issues": [
+        "Layer-direction strength",
+        "Joint/segmentation stiffness",
+        "Creep and temperature sensitivity",
+        "Print-bed and process dependence",
+        "Full-motion lower-rotor bypass"
+      ]
+    }
+  },
+  "excluded_unresolved_items": [
+    "Installed propulsion, battery, ESCs, controller/sensors, receiver and wiring",
+    "Commercial servos, bearings, linkage hardware, hubs/adapters and fasteners",
+    "Additional retention straps/pads, connectors and power distribution",
+    "Reusable printer, cutting/drilling tools, assembly and measurement equipment, priced separately",
+    "No assumed ownership, free components or zero-valued missing BOM rows"
+  ],
+  "tube_section_derived": {
+    "cross_section_area_m2": 3.455751918948772e-05,
+    "area_second_moment_m4": 5.270021676396879e-10,
+    "assumed_material_EI_n_m2": 36.363149567138464,
+    "mass_per_length_kg_m": 0.09330530181161685,
+    "scope": "Ideal unperforated tube only, not joined structure or gimbal stiffness"
+  },
+  "cases": [
+    {
+      "case_id": "A_SINGLE_SPINE_01",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 650.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 331.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.06064844617755095,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.31464844617755094,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_02",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 650.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 331.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.06064844617755095,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.39084844617755093,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_03",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 650.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 331.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.06064844617755095,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.4670484461775509,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_04",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 710.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 271.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.06624676428624797,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.320246764286248,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_05",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 710.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 271.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.06624676428624797,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.396446764286248,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_06",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 710.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 271.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.06624676428624797,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.47264676428624797,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_07",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 790.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            220.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 191.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.07371118843117731,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.3277111884311773,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_08",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 790.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            220.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 191.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.07371118843117731,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.4039111884311773,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_09",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 790.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            220.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 191.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.07371118843117731,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.4801111884311773,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_10",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 750.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 231.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.06997897635871264,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.32397897635871264,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_11",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 750.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 231.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.06997897635871264,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.40017897635871263,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_12",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 750.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 231.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.06997897635871264,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.4763789763587126,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_13",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 810.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 171.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.07557729446740966,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.3295772944674097,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_14",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 810.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 171.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.07557729446740966,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.4057772944674096,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_15",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 810.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 171.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.07557729446740966,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.48197729446740967,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_16",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 890.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            220.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 91.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.083041718612339,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.337041718612339,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_17",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 890.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            220.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 91.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.083041718612339,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.413241718612339,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_18",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 890.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            220.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 91.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.083041718612339,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.489441718612339,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_19",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 850.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 131.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.07930950653987433,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.33330950653987435,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_20",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 850.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 131.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.07930950653987433,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.40950950653987434,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_21",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 850.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 131.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.07930950653987433,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.4857095065398743,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_22",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 910.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 71.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.08490782464857134,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.33890782464857133,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_23",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 910.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 71.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.08490782464857134,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.4151078246485713,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_24",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 910.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 71.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 1,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.08490782464857134,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.4913078246485713,
+      "displayed_price_material_subtotal_assuming_AUD": 23.18,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_25",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 990.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 214.0
+        },
+        {
+          "finished_cuts_mm": [
+            220.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 767.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.09237224879350069,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.3463722487935007,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_26",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 990.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 214.0
+        },
+        {
+          "finished_cuts_mm": [
+            220.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 767.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.09237224879350069,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.4225722487935007,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "A_SINGLE_SPINE_27",
+      "concept_id": "A_SINGLE_SPINE",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 990.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 214.0
+        },
+        {
+          "finished_cuts_mm": [
+            220.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 767.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.09237224879350069,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.4987722487935007,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_28",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 1350.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            350.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 131.0
+        },
+        {
+          "finished_cuts_mm": [
+            350.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 484.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.12596215744568276,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.37996215744568274,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_29",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 1350.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            350.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 131.0
+        },
+        {
+          "finished_cuts_mm": [
+            350.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 484.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.12596215744568276,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.4561621574456828,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_30",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 1350.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            350.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 131.0
+        },
+        {
+          "finished_cuts_mm": [
+            350.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 484.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.12596215744568276,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.5323621574456827,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_31",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 1410.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            350.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 101.0
+        },
+        {
+          "finished_cuts_mm": [
+            350.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 454.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.13156047555437975,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.3855604755543798,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_32",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 1410.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            350.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 101.0
+        },
+        {
+          "finished_cuts_mm": [
+            350.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 454.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.13156047555437975,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.4617604755543797,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_33",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 1410.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            350.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 101.0
+        },
+        {
+          "finished_cuts_mm": [
+            350.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 454.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.13156047555437975,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.5379604755543798,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_34",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 1490.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            350.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 61.0
+        },
+        {
+          "finished_cuts_mm": [
+            350.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 414.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.13902489969930912,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.3930248996993091,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_35",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 1490.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            350.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 61.0
+        },
+        {
+          "finished_cuts_mm": [
+            350.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 414.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.13902489969930912,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.46922489969930914,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_36",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 350.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 1490.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            350.0,
+            350.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 61.0
+        },
+        {
+          "finished_cuts_mm": [
+            350.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 414.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.13902489969930912,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.5454248996993091,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.00039302609473581217,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_37",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 1650.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            450.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 84.0
+        },
+        {
+          "finished_cuts_mm": [
+            450.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 231.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.1539537479891678,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.40795374798916784,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_38",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 1650.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            450.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 84.0
+        },
+        {
+          "finished_cuts_mm": [
+            450.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 231.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.1539537479891678,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.48415374798916777,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_39",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 1650.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            450.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 84.0
+        },
+        {
+          "finished_cuts_mm": [
+            450.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 231.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.1539537479891678,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.5603537479891678,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_40",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 1710.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            450.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 84.0
+        },
+        {
+          "finished_cuts_mm": [
+            450.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 171.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.15955206609786482,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.4135520660978648,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_41",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 1710.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            450.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 84.0
+        },
+        {
+          "finished_cuts_mm": [
+            450.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 171.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.15955206609786482,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.4897520660978648,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_42",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 1710.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            450.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 84.0
+        },
+        {
+          "finished_cuts_mm": [
+            450.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 171.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.15955206609786482,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.5659520660978647,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_43",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 1790.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            450.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 84.0
+        },
+        {
+          "finished_cuts_mm": [
+            450.0,
+            220.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 91.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.16701649024279416,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.4210164902427942,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_44",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 1790.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            450.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 84.0
+        },
+        {
+          "finished_cuts_mm": [
+            450.0,
+            220.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 91.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.16701649024279416,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.49721649024279413,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_45",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 450.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 1790.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            450.0,
+            450.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 84.0
+        },
+        {
+          "finished_cuts_mm": [
+            450.0,
+            220.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 91.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 2,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.16701649024279416,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.5734164902427942,
+      "displayed_price_material_subtotal_assuming_AUD": 28.41,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0008353236823976882,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_46",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 1950.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 131.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 3,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.18194533853265288,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.4359453385326529,
+      "displayed_price_material_subtotal_assuming_AUD": 33.64,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_47",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 1950.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 131.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 3,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.18194533853265288,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.5121453385326529,
+      "displayed_price_material_subtotal_assuming_AUD": 33.64,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_48",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 150.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 1950.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            150.0,
+            150.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 131.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 3,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.18194533853265288,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.5883453385326529,
+      "displayed_price_material_subtotal_assuming_AUD": 33.64,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_49",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 2010.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 71.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 3,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.1875436566413499,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.44154365664134987,
+      "displayed_price_material_subtotal_assuming_AUD": 33.64,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_50",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 2010.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 71.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 3,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.1875436566413499,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.5177436566413499,
+      "displayed_price_material_subtotal_assuming_AUD": 33.64,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_51",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 180.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 2010.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            180.0,
+            180.0
+          ],
+          "kerf_allowance_mm": 9.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 71.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 3,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.1875436566413499,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.5939436566413498,
+      "displayed_price_material_subtotal_assuming_AUD": 33.64,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_52",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 200.0,
+      "tube_finished_length_mm": 2090.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 214.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 214.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 3,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.3175,
+      "estimated_installed_tube_mass_kg": 0.1950080807862792,
+      "estimated_installed_print_mass_kg": 0.254,
+      "partial_structural_mass_kg": 0.4490080807862792,
+      "displayed_price_material_subtotal_assuming_AUD": 33.64,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_53",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 2090.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 214.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 214.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 3,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.1950080807862792,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.5252080807862792,
+      "displayed_price_material_subtotal_assuming_AUD": 33.64,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "B_THREE_RAILS_54",
+      "concept_id": "B_THREE_RAILS",
+      "main_member_length_mm": 550.0,
+      "fork_upright_length_mm": 220.0,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 2090.0,
+      "tube_stock_packing": [
+        {
+          "finished_cuts_mm": [
+            550.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 214.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0,
+            220.0
+          ],
+          "kerf_allowance_mm": 6.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 214.0
+        },
+        {
+          "finished_cuts_mm": [
+            550.0
+          ],
+          "kerf_allowance_mm": 3.0,
+          "end_trim_allowance_mm": 10.0,
+          "remaining_offcut_mm": 437.0
+        }
+      ],
+      "whole_tube_lengths_purchased": 3,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.1950080807862792,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.6014080807862792,
+      "displayed_price_material_subtotal_assuming_AUD": 33.64,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": 0.0015251245833625832,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "C_PRINTED_TRUSS_55",
+      "concept_id": "C_PRINTED_TRUSS",
+      "main_member_length_mm": null,
+      "fork_upright_length_mm": null,
+      "assumed_printed_net_volume_cm3": 260.0,
+      "tube_finished_length_mm": 0,
+      "tube_stock_packing": [],
+      "whole_tube_lengths_purchased": 0,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.41275,
+      "estimated_installed_tube_mass_kg": 0.0,
+      "estimated_installed_print_mass_kg": 0.3302,
+      "partial_structural_mass_kg": 0.3302,
+      "displayed_price_material_subtotal_assuming_AUD": 17.95,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": null,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "C_PRINTED_TRUSS_56",
+      "concept_id": "C_PRINTED_TRUSS",
+      "main_member_length_mm": null,
+      "fork_upright_length_mm": null,
+      "assumed_printed_net_volume_cm3": 320.0,
+      "tube_finished_length_mm": 0,
+      "tube_stock_packing": [],
+      "whole_tube_lengths_purchased": 0,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.508,
+      "estimated_installed_tube_mass_kg": 0.0,
+      "estimated_installed_print_mass_kg": 0.4064,
+      "partial_structural_mass_kg": 0.4064,
+      "displayed_price_material_subtotal_assuming_AUD": 17.95,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": null,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    },
+    {
+      "case_id": "C_PRINTED_TRUSS_57",
+      "concept_id": "C_PRINTED_TRUSS",
+      "main_member_length_mm": null,
+      "fork_upright_length_mm": null,
+      "assumed_printed_net_volume_cm3": 380.0,
+      "tube_finished_length_mm": 0,
+      "tube_stock_packing": [],
+      "whole_tube_lengths_purchased": 0,
+      "whole_filament_spools_purchased": 1,
+      "estimated_consumed_filament_including_waste_kg": 0.60325,
+      "estimated_installed_tube_mass_kg": 0.0,
+      "estimated_installed_print_mass_kg": 0.4826,
+      "partial_structural_mass_kg": 0.4826,
+      "displayed_price_material_subtotal_assuming_AUD": 17.95,
+      "single_bare_main_tube_cantilever_tip_compliance_m_per_n": null,
+      "assembly_stiffness": null,
+      "complete_vehicle_mass_kg": null,
+      "complete_vehicle_ex_tax_cost_aud": null,
+      "geometry_acceptance": "unperformed",
+      "structural_load_acceptance": "unperformed"
+    }
+  ],
+  "limitations": [
+    "No automatic ranking: assumed printed volumes do not prove comparable structural function.",
+    "No historical travel, lever arm, mass or rotor spacing is adopted.",
+    "The spine/rails must end below the complete lower-rotor swept envelope. Forks, cross-members, fasteners and wiring require actual CAD clearance checks over selected motion.",
+    "Servo stall rating is not continuous torque; actual gimbal loads, rotor momentum and response remain unresolved.",
+    "No yield, buckling, fatigue, joint, landing-impact or printed-material qualification is computed.",
+    "Partial structural masses and material costs must not be reported as whole-vehicle compliance.",
+    "No current product drawing or image was interpreted. Stock and property confirmation remain necessary.",
+    "No PDR/CDR acceptance, fabrication permission or flight validation is implied."
+  ],
+  "analysis_program_sha256": "9344a06c4f0f974011322c18072163b0b5032dc8fdee1248755a7a9a4f970d31"
+}

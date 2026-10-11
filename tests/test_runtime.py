@@ -35,6 +35,7 @@ from guacamole.context import (
     encode_context,
 )
 from guacamole.contracts import (
+    Acknowledge,
     AgentState,
     ContextPacket,
     Decide,
@@ -467,6 +468,125 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 secret, json.dumps(project.trace(project.requests()[0].id))
             )
 
+    async def test_replacement_plan_keeps_running_workers_on_their_task(self):
+        def probe() -> str:
+            return "ok"
+
+        class Replanner(TestReasoning):
+            def __init__(self):
+                self.steps = {}
+                self.worker_results = []
+
+            async def respond(self, packet):
+                data = json.loads(packet.prompt)
+                task = data["agent"]["task_id"]
+                count = self.steps.get(task, 0)
+                self.steps[task] = count + 1
+                source = project.store.list("source")[0].ref
+                tasks = (
+                    TaskAuthorization(
+                        id="A", objective="probe", tools=(tool.definition.grant,)
+                    ),
+                )
+                if task == "chief":
+                    if count in (0, 3):
+                        # The second requirement leaves the first plan uncovered.
+                        action = Record(
+                            record=Requirement(
+                                id=f"r{count // 3 + 1}",
+                                wording="fixture",
+                                source=source,
+                                source_quote="fixture",
+                            )
+                        )
+                    elif count in (1, 4):
+                        action = Decide(
+                            selected="fixture",
+                            request=plan_request(
+                                *(s.ref for s in project.store.list("requirement")),
+                                tasks=tasks,
+                            ),
+                        )
+                    elif count == 2:
+                        self.first_plan = data["agent"]["decision_id"]
+                        action = Spawn(decision_id=self.first_plan, task_id="A")
+                    else:
+                        action = Wait(reason="Fixture finished")
+                else:
+                    self.worker_results.append(data["state"]["last_observation"])
+                    action = (
+                        ToolCall(tool=tool.definition.grant, arguments={})
+                        if count < 2
+                        else Wait(reason="Fixture probed")
+                    )
+                return AgentTurn(
+                    rationale=Rationale(objective=task, explanation="Fixture"),
+                    action=action,
+                )
+
+        tools = ToolRegistry()
+        tool = tools.register(probe)
+        with tempfile.TemporaryDirectory() as directory:
+            provider = Replanner()
+            with Project(Path(directory), tools=tools, reasoning=provider) as project:
+                result = await project.run(
+                    ProjectRequest(
+                        description="fixture",
+                        context=ContextSpec(max_input_tokens=200_000),
+                    )
+                )
+                agents = [s.data for s in project.store.list("agent")]
+                (chief,) = [a for a in agents if not a["parent_id"]]
+                (worker,) = [a for a in agents if a["parent_id"]]
+                self.assertEqual(worker["decision_id"], chief["decision_id"])
+                # A worker left on an old plan by an earlier runtime moves on resume.
+                spec = project.store.model("agent", worker["id"], AgentSpec)
+                project.store.put(
+                    "agent",
+                    spec.id,
+                    spec.model_copy(update={"decision_id": provider.first_plan}),
+                    actor="script",
+                )
+                await project.run(resume=result.run_id)
+                resumed = project.store.get("agent", worker["id"]).data
+                self.assertEqual(resumed["decision_id"], chief["decision_id"])
+        # Turn 1 ran under the uncovered first plan; turn 2 under the replacement.
+        self.assertEqual(provider.worker_results[1]["phase"], "action")
+        self.assertEqual(provider.worker_results[2]["result"], "ok")
+
+    async def test_rejected_action_explains_runtime_errors_but_not_tool_errors(self):
+        secret = "fixture-secret-must-not-persist"
+
+        def leaky() -> str:
+            raise ValueError(secret)
+
+        class Rejected(TestReasoning):
+            def __init__(self):
+                self.observations = []
+
+            async def respond(self, packet):
+                self.observations.append(
+                    json.loads(packet.prompt)["state"]["last_observation"]
+                )
+                actions = (
+                    Acknowledge(message_id="missing"),
+                    ToolCall(tool=tool.definition.grant, arguments={}),
+                    Wait(reason="Fixture finished"),
+                )
+                return AgentTurn(
+                    rationale=Rationale(objective="Fixture", explanation="Fixture"),
+                    action=actions[len(self.observations) - 1],
+                )
+
+        tools = ToolRegistry()
+        tool = tools.register(leaky, requires_plan=False)
+        with tempfile.TemporaryDirectory() as directory:
+            provider = Rejected()
+            with Project(Path(directory), tools=tools, reasoning=provider) as project:
+                await project.run(ProjectRequest(description="fixture"))
+        self.assertIn("Unknown inbox: missing", provider.observations[1]["detail"])
+        self.assertNotIn(secret, json.dumps(provider.observations[2]))
+
     async def test_incomplete_provider_response_explains_output_limit(self):
         provider = LiteLLMReasoning("openai/gpt-6-astra")
         packet = ContextPacket(
@@ -726,6 +846,20 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     {omission.item for omission in packet_with_omission.deferred},
                 )
                 self.assertNotIn(huge.id, packet_with_omission.message_ids)
+                project.store.put(
+                    "inbox",
+                    message.id,
+                    entry.model_copy(update={"response_message_id": "reply"}),
+                    actor=agent.id,
+                )
+                answered = await project.contexts.build(
+                    agent,
+                    "task-request",
+                    TestReasoning(),
+                    instructions="test",
+                    state={},
+                )
+                self.assertNotIn(message.id, answered.message_ids)
                 tiny = agent.model_copy(
                     update={
                         "context": agent.context.model_copy(
@@ -775,6 +909,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         class Conversation(TestReasoning):
             def __init__(self):
                 self.steps = {}
+                self.unanswered = []
+                self.follow_up = None
+                self.task_reply = None
 
             async def respond(self, packet):
                 data = json.loads(packet.prompt)
@@ -827,7 +964,18 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                                 mode="json"
                             ),
                         )
-                    elif any(m["kind"] == "reply" for m in data["messages"]):
+                    elif self.follow_up is None and (
+                        replies := [m for m in data["messages"] if m["kind"] == "reply"]
+                    ):
+                        self.follow_up = replies[0]["id"]
+                        action = Send(
+                            recipient=replies[0]["sender"],
+                            reply_to=self.follow_up,
+                            payload=Note(text="Follow-up on the geometry").model_dump(
+                                mode="json"
+                            ),
+                        )
+                    elif self.follow_up:
                         action = AskHuman(
                             question="Can this peer evidence be used for the design?"
                         )
@@ -843,14 +991,32 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                                 mode="json"
                             ),
                         )
-                    elif messages and count == 1:
+                    elif count == 1:
+                        # The reply acknowledged the request, so it left B's context.
+                        self.unanswered.extend(messages)
                         action = Send(
-                            recipient=messages[0]["sender"],
+                            recipient=next(
+                                a["id"] for a in state["agents"] if a["task_id"] == "A"
+                            ),
                             payload=Note(text="Additional peer information").model_dump(
                                 mode="json"
                             ),
                         )
+                    elif count == 2:
+                        # Replying to the task assignment is refused with guidance.
+                        task_message = next(
+                            m for m in data["messages"] if m["kind"] == "delegation"
+                        )
+                        action = Send(
+                            recipient=task_message["sender"],
+                            reply_to=task_message["id"],
+                            payload=Note(text="Progress so far").model_dump(
+                                mode="json"
+                            ),
+                        )
                     else:
+                        if count == 3:
+                            self.task_reply = state["last_observation"]
                         action = Finish(
                             result=TaskReport(summary="Peer replied").model_dump(
                                 mode="json"
@@ -863,12 +1029,13 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     action=action,
                 )
 
+        provider = Conversation()
         with (
             tempfile.TemporaryDirectory() as directory,
             Project(
                 Path(directory) / "state",
                 sandbox=Path(directory) / "outputs",
-                reasoning=Conversation(),
+                reasoning=provider,
             ) as project,
         ):
             result = await project.run(
@@ -895,6 +1062,23 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             peers = [r for r in project.requests() if r.kind == "peer"]
             self.assertEqual(len(peers), 1)
             self.assertEqual(peers[0].status, "completed")
+            self.assertFalse(provider.unanswered)
+            (request,) = [
+                e for e in project.inbox(sibling) if e.message.kind == "request"
+            ]
+            self.assertIsNotNone(request.response_message_id)
+            self.assertIsNotNone(request.acknowledged_at)
+            (follow_up,) = [
+                s.data
+                for s in project.store.list("message")
+                if s.data["reply_to"] == provider.follow_up
+            ]
+            self.assertEqual(follow_up["sender"], questioner)
+            (reply,) = [
+                e for e in project.inbox(questioner) if e.message.id == provider.follow_up
+            ]
+            self.assertIsNotNone(reply.acknowledged_at)
+            self.assertIn("without reply_to", provider.task_reply["detail"])
             self.assertIsNotNone(peers[0].parent_id)
             self.assertTrue(project.trace(peers[0].parent_id)["events"])
             self.assertTrue(project.store.list("rationale"))

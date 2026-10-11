@@ -18,7 +18,7 @@ class TestReasoning:
         return len(prompt.encode())
 
 
-def plan_request(requirement, *, stage="PDR", tools=(), tasks=()):
+def plan_request(requirement, *more, stage="PDR", tools=(), tasks=()):
     return DecisionRequest(
         question="Select a fixture work plan",
         kind="work_plan",
@@ -29,7 +29,7 @@ def plan_request(requirement, *, stage="PDR", tools=(), tasks=()):
                 description="TEST ONLY",
                 plan=WorkPlan(
                     stage=stage,
-                    inputs=(requirement,),
+                    inputs=(requirement, *more),
                     chief_tools=tools,
                     tasks=tasks,
                     deliverables=(
@@ -37,7 +37,7 @@ def plan_request(requirement, *, stage="PDR", tools=(), tasks=()):
                             id=stage + "-design",
                             title="Fixture",
                             stage=stage,
-                            requirements=(requirement,),
+                            requirements=(requirement, *more),
                             artifact_kinds=("editable-design",),
                             evidence_kinds=("verification",),
                             acceptance_criteria=(

@@ -1,0 +1,1 @@
+{"status": "Analysis only; independent verification and Chief selection pending", "case_count": 57, "outputs": ["structural_concept_screen_01_results.json", "structural_concept_screen_01_report.md"]}

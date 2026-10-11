@@ -1,0 +1,133 @@
+STATIC CALLER REVIEW ONLY: no plant imports, source modifications or physical acceptance
+
+RELEVANT IMPORTS ACROSS BOTH INVENTORIED REPOSITORIES
+{"repository":"6dof_hopper","path":"chassis/hopper.py","imports":[{"module":"propulsion.propulsion","name":"Propulsion","asname":null,"line":6}]}
+{"repository":"6dof_hopper","path":"propulsion/propeller.py","imports":[{"module":"propulsion.propulsion","name":"Propulsion","asname":null,"line":1}]}
+{"repository":"6dof_hopper","path":"simulation/simulation.py","imports":[{"module":"helpers.math","name":"quarternion_to_dcm","asname":null,"line":2},{"module":"helpers.math","name":"euler_to_quaternion","asname":null,"line":2},{"module":"helpers.constants","name":"GRAVITY","asname":null,"line":3},{"module":"state","name":"State","asname":null,"line":4}]}
+
+FULL INVENTORIED SOURCE: chassis/hopper.py
+SHA256: 6e2b2f93e98b844ce04f68d26b704c65270e9329e1abff76caa45cbcd5dcf0bd
+1: from dataclasses import dataclass, field
+2: from typing import Optional
+3: 
+4: import numpy as np
+5: 
+6: from propulsion.propulsion import Propulsion
+7: 
+8: 
+9: @dataclass
+10: class Hopper:
+11:     """Mass properties and external geometry of the hopper."""
+12: 
+13:     propulsion: Propulsion
+14:     cg: np.ndarray
+15:     mass_wo_propellant: float
+16:     moment_arm: np.ndarray
+17:     Ixx: float
+18:     Iyy: float
+19:     Izz: float
+20:     cd: float
+21:     csa: float
+22:     length: float
+23:     outer_diameter: float
+24:     inner_diameter: float = 0.0
+25:     tube_center_body: np.ndarray = field(
+26:         default_factory=lambda: np.zeros(3, dtype=float)
+27:     )
+28:     reference_length: Optional[float] = None
+29: 
+30:     def __post_init__(self):
+31:         self.cg = np.asarray(self.cg, dtype=float)
+32:         self.moment_arm = np.asarray(self.moment_arm, dtype=float)
+33:         self.tube_center_body = np.asarray(
+34:             self.tube_center_body,
+35:             dtype=float,
+36:         )
+37: 
+38:         for name in ("cg", "moment_arm", "tube_center_body"):
+39:             if getattr(self, name).shape != (3,):
+40:                 raise ValueError(f"{name} must be a three-element vector")
+41: 
+42:         if self.reference_length is None:
+43:             self.reference_length = self.length
+44: 
+45:     def mass(self, time: float) -> float:
+46:         return self.mass_wo_propellant + self.propulsion.get_mass(time)
+47: 
+48:     def CG(self, time: float) -> np.ndarray:
+49:         return self.cg.copy()
+50: 
+51:     def inertia(self, time: float) -> np.ndarray:
+52:         return np.diag((self.Ixx, self.Iyy, self.Izz))
+53: 
+54:     def get_thrust_and_moment(
+55:         self,
+56:         time: float,
+57:     ) -> tuple[np.ndarray, np.ndarray]:
+58:         return self.propulsion.get_thrust_and_moment(time)
+
+FULL INVENTORIED SOURCE: propulsion/propulsion.py
+SHA256: e07b895d8399016a3b0511afb195d7ebf992050cef04ab3015600347f01750ce
+1: from enum import Enum, auto, unique
+2: from abc import ABC, abstractmethod
+3: 
+4: 
+5: class PropulsionType(Enum):
+6:     LIQUID = auto()
+7:     PROPELLER = auto()
+8: 
+9: 
+10: class Propulsion(ABC):
+11:     def __init__(self, type: PropulsionType):
+12:         self.type = type
+13: 
+14:     @abstractmethod
+15:     def get_mass(t):
+16:         pass
+17: 
+18:     @abstractmethod
+19:     def get_local_cg():
+20:         pass
+21: 
+22:     @abstractmethod
+23:     def get_thrust_and_moment(t):
+24:         pass
+
+FULL INVENTORIED SOURCE: propulsion/propeller.py
+SHA256: caa5ee91e46d102b8ebe0c02e1dfec0ecdca18e2c423791fca6f2c19100ae7b6
+1: from propulsion.propulsion import Propulsion
+2: 
+3: 
+4: class Propellor(Propulsion):
+5:     def __init__(
+6:         self,
+7:         type,
+8:         motor_kv_rpm_per_v,
+9:         motor_resistance_ohm,
+10:         motor_no_load_current,
+11:         motor_max_current,
+12:         battery_voltage_v,
+13:         system_resistance_ohm,
+14:     ):
+15:         super().__init__(type)
+
+FULL INVENTORIED SOURCE: helpers/constants.py
+SHA256: 4853ae63f4d7df5254af6fbab9b46dd31ca60aa722dd3580643064bfce9523a4
+1: GRAVITY = 9.8065
+
+FULL INVENTORIED SOURCE: main.py
+SHA256: 67ebbf79c219721eb1f0cc6e4817b8fb218488b6dec4bbd25a1f0faee6527dbc
+1: def main():
+2:     print("Hello from 6dof-hopper!")
+3: 
+4: 
+5: if __name__ == "__main__":
+6:     main()
+
+FULL INVENTORIED SOURCE: scripts/ehopper.py
+SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+(empty file)
+
+FULL INVENTORIED SOURCE: test/__init__.py
+SHA256: d72bcd69d0ed6d706e690574d1dbdedf15ab740d5ce705aad834bd1b91b3d76e
+1: """Project test modules."""

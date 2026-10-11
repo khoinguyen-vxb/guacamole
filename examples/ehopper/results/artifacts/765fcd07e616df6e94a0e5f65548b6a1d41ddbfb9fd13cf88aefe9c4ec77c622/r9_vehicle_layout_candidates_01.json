@@ -1,0 +1,210 @@
+{
+  "schema": "pdr_r9_preliminary_cad_layout_candidates_v1",
+  "status": "Preliminary candidate inputs; CAD generation, measurement and layout selection pending",
+  "scope": "Exposed minimum central structure and common two-axis coaxial propulsion gimbal; no fabrication or flight approval",
+  "provenance": {
+    "work_plan": "98d7c43a499d4584a77132cd5ac96874 revision 1",
+    "structural_selection": "01797f347ac344f984e1912cc5247b28 revision 1",
+    "actuator_selection": "84ef41fdd3fd4266ada43df2ace64a48 revision 1",
+    "frame_contract": "f046cc4fe5294a6f9a61027529056f61 revision 1",
+    "structural_study": "PDR-R9-STRUCTURAL-CONCEPT-SCREEN-RESULTS-01 revision 1",
+    "commercial_inputs": "PDR-R9-PROPULSION-SOURCE-REGISTER-01 revision 1",
+    "commercial_evidence_basis": "Previously registered supplier HTML text accessed 2026-10-11; not newly retrieved by this configuration-writing action. Drawings and product photographs have not been interpreted."
+  },
+  "units_and_frames": {
+    "cad_length_unit": "mm",
+    "simulator_length_unit": "m",
+    "mass_unit": "kg",
+    "physical_inertia_unit": "kg m^2",
+    "cad_axes": "+X forward, +Y left, +Z upward",
+    "cad_origin_definition": "Main spine axis intersected with the nominal feet-contact plane Z=0",
+    "body_axes": "Forward-right-down",
+    "R_BC": [[1, 0, 0], [0, -1, 0], [0, 0, -1]],
+    "neutral_complete_vehicle_cg_C_mm": null,
+    "neutral_complete_vehicle_cg_status": "Unknown until the installed component ledger is complete",
+    "fixed_datum_mapping": "r_B0_m = 0.001 * R_BC * (p_C_mm - CG_C0_mm)",
+    "instantaneous_moment_arm_mapping": "r_GB_m = 0.001 * R_BC * (p_C_mm - CG_C_current_mm)",
+    "gimbal_rotation_body": "R_BM = Rx(alpha) Ry(beta); outer body-X axis followed by carried inner-Y axis",
+    "cad_active_tilt_rotation": "R_Ctilt = transpose(R_BC) * R_BM * R_BC; apply about the candidate pivot",
+    "mass_conversion": "mass_kg = volume_mm3 * density_kg_m3 * 1e-9",
+    "geometric_inertia_conversion": "I_kg_m2 = I_geometric_mm5 * density_kg_m3 * 1e-15",
+    "inertia_reference_rule": "Aggregate individual solids with their assigned densities and the parallel-axis theorem about the stated CG; rotate the full tensor into body axes."
+  },
+  "selected_architecture": {
+    "structure": "Single aluminium tube spine, printed mounting nodes, outboard fork, equipment retention and landing legs",
+    "attitude_actuation": "Bearing-supported common two-axis gimbal with two independent servo/linkage channels; independently driven counter-rotating rotors provide differential external aerodynamic torque",
+    "exclusions": ["nosecone", "fins", "cosmetic fairing", "enclosing skin"],
+    "load_path_requirements": [
+      "Terminate the main spine below the complete lower-rotor swept envelope.",
+      "Route fork members, cross-members, bearings, fasteners and wiring outside both rotor swept envelopes.",
+      "Provide positive axial and rotational retention at structural joints; do not rely solely on friction.",
+      "Support gimbal loads through bearings rather than assuming servo output shafts alone are adequate.",
+      "Provide positive battery and electronics retention and a stable landing support polygon."
+    ]
+  },
+  "structural_seed": {
+    "study_case": "A_SINGLE_SPINE_14",
+    "status": "Selected starting concept; dimensions remain adjustable during preliminary CAD development",
+    "main_tube_finished_length_mm": 450,
+    "fork_upright_finished_lengths_mm": [180, 180],
+    "tube_outer_diameter_mm": 12,
+    "tube_wall_mm": 1,
+    "stock_length_mm": 1000,
+    "assumed_kerf_per_part_mm": 3,
+    "assumed_end_trim_each_end_per_stock_mm": 5,
+    "material_assumptions": {
+      "aluminium_density_kg_m3": 2700,
+      "printed_PETG_density_kg_m3": 1270,
+      "printed_density_basis": "Full-density geometric screening; not a validated print-process property"
+    },
+    "historical_study_printed_volume_cm3": 260,
+    "printed_volume_handling": "Retain only as a comparison allowance. Replace with generated part volumes; never add this allowance to the same CAD-derived parts.",
+    "stock_handling": "Recompute whole stock purchases if CAD changes cut lengths or adds tube members. One stock length is not an imposed design constraint."
+  },
+  "candidate_layout_hypotheses": {
+    "status": "Exploratory geometry, not an engineering selection or accepted installation",
+    "main_tube_axis": "+Z_C",
+    "main_tube_lower_end_z_mm": 100,
+    "main_tube_upper_end_z_expression": "main_tube_lower_end_z + main_tube_finished_length",
+    "fork_lower_end_below_spine_upper_end_mm": 30,
+    "fork_lower_end_z_expression": "main_tube_upper_end_z - fork_lower_end_below_spine_upper_end",
+    "fork_upright_axes": "Parallel to +Z_C, centred at X=+r and X=-r, Y=0",
+    "fork_upright_centre_radius_candidates_mm": [185, 205, 225],
+    "pivot_z_expression": "fork_lower_end_z + fork_upright_finished_length",
+    "pivot_xy_mm": [0, 0],
+    "pivot_endpoint_caveat": "Candidate pivot lies at the nominal upright upper-end plane. Bearing seats, extensions, fasteners and their masses are not yet designed.",
+    "rotor_plane_separation_candidates_mm": [120, 150, 180],
+    "rotor_plane_centres_neutral": "On the common module axis, at +separation/2 and -separation/2 relative to the pivot",
+    "motor_orientation_concept": "Two motors facing outward from a carrier between the rotor planes; actual shaft, adapter and mounting-stack positions remain unresolved",
+    "resultant_tilt_cone_screening_values_deg": [0, 5, 10, 15],
+    "tilt_domain": "Use the selected Rx(alpha)Ry(beta) convention. Resultant tilt satisfies cos(theta)=cos(alpha)*cos(beta); independent axis bounds do not replace the cone constraint.",
+    "rotor_swept_slab_half_thickness_candidates_mm": [5, 10],
+    "rotor_slab_status": "Assumed geometric screening envelopes only; actual blade axial extent, coning and flexibility are unknown. Hub thickness does not establish blade envelope thickness.",
+    "additional_rigid_clearance_screening_threshold_mm": 10,
+    "clearance_threshold_status": "Proposed study threshold, not human-approved flight clearance; does not establish allowances for blade flex, structural compliance or manufacturing tolerance",
+    "control_interface_rule": "Do not export these exploratory travel, separation or pivot values as selected simulator vehicle inputs. Do not adopt a historical 12-degree travel or 0.25 m lever arm."
+  },
+  "commercial_candidates": {
+    "selection_status": "Neither alternative selected",
+    "motor_common": {
+      "identity": "Original SunnySky X2814-900, not III/V3",
+      "installed_count": 2,
+      "catalog_rotor_diameter_mm": 35,
+      "catalog_body_length_excluding_shaft_mm": 36,
+      "catalog_overall_length_mm": 54,
+      "shaft_diameter_mm": 4,
+      "listed_mass_each_kg": 0.108,
+      "mass_basis": "Includes 100 mm 16 AWG wires and bullets; accessory-mass inclusion unclear",
+      "maximum_installed_envelope_confirmed": false,
+      "mount_pattern_mm": null,
+      "shaft_adapter_and_retention": null,
+      "source_urls": ["https://www.buddyrc.com/products/sunnysky-x2814-brushless-motors", "https://rcdrone.top/products/1pc-original-sunnysky-x2814-90"],
+      "access_date": "2026-10-11",
+      "registered_price_observation": {"value": 41.40, "currency": "USD", "quantity": "one motor and accessory bag", "tax_basis": "Displayed tax-inclusive", "availability": "Conflicting; not procurement-ready"}
+    },
+    "esc_common": {
+      "identity": "Hobbywing Skywalker 50A V2, SKU 80060442, 3-4S variant",
+      "installed_count": 2,
+      "listed_body_dimensions_mm": [60, 25, 8],
+      "listed_mass_each_kg": 0.036,
+      "installation_caveat": "Body dimensions do not include the complete routed wire, connector, cooling and service envelope",
+      "source_url": "https://www.hobbywing.com/en/products/skywalker-v2-series274",
+      "access_date": "2026-10-11",
+      "price_status": "Use propulsion procurement ledger; no accepted purchase quotation in this CAD configuration"
+    },
+    "ALT-3S-13IN": {
+      "propeller_pair": {
+        "identities": ["APC 13x6.5E", "APC 13x6.5EP"],
+        "installed_count_each": 1,
+        "diameter_mm": 330.2,
+        "pitch_in": 6.5,
+        "listed_mass_each_oz": 1.06,
+        "ounce_to_kg": 0.028349523125,
+        "hub_diameter_mm": 20.32,
+        "hub_thickness_mm": 10.414,
+        "bore_diameter_mm": 6.35,
+        "source_urls": ["https://www.apcprop.com/product/13x6-5e/", "https://www.apcprop.com/product/13x6-5ep/"],
+        "access_date": "2026-10-11",
+        "registered_price_each": {"value": 5.73, "currency": null, "currency_status": "Unconfirmed displayed dollar denomination"}
+      },
+      "battery": {
+        "identity": "Zeee 3S 5200 mAh 100C soft pack, Deans, two-pack purchase",
+        "installed_count": 1,
+        "minimum_purchased_count": 2,
+        "listed_mass_kg": 0.330,
+        "listed_mass_tolerance_kg": 0.015,
+        "listed_metric_dimensions_mm": [136, 43.5, 26],
+        "listed_dimension_tolerance_mm": 2,
+        "conflicting_height_in": 2.02,
+        "conflicting_height_converted_mm": 51.308,
+        "height_envelope_hypotheses_mm": [28, 53.308],
+        "height_hypothesis_basis": "Metric or conflicting imperial height, each with a 2 mm study allowance; neither resolves the supplier contradiction",
+        "accepted_installation_dimensions_mm": null,
+        "source_url": "https://zeeebattery.com/products/zeee-3s-lipo-battery-5200mah-11-1v-100c-deans-t-2pack",
+        "access_date": "2026-10-11",
+        "price_status": "Australian variant, currency, tax and availability unresolved; procurement ledger owns pricing"
+      }
+    },
+    "ALT-4S-11IN": {
+      "propeller_pair": {
+        "identities": ["APC 11x5.5E", "APC 11x5.5EP"],
+        "installed_count_each": 1,
+        "diameter_mm": 279.4,
+        "pitch_in": 5.5,
+        "listed_mass_each_oz": 0.81,
+        "ounce_to_kg": 0.028349523125,
+        "hub_diameter_mm": 20.32,
+        "hub_thickness_mm": 10.414,
+        "bore_diameter_mm": 6.35,
+        "source_urls": ["https://www.apcprop.com/product/11x5-5e/", "https://www.apcprop.com/product/11x5-5ep/"],
+        "access_date": "2026-10-11",
+        "registered_price_each": {"value": 4.17, "currency": null, "currency_status": "Unconfirmed displayed dollar denomination"}
+      },
+      "battery": {
+        "identity": "Zeee 4S 3300 mAh 100C soft pack, Deans, two-pack purchase",
+        "installed_count": 1,
+        "minimum_purchased_count": 2,
+        "listed_mass_kg": 0.355,
+        "mass_status": "Approximate supplier mass; installation accessories unresolved",
+        "listed_dimensions_mm": [132, 43, 29],
+        "listed_dimension_tolerance_mm": 2,
+        "source_url": "https://zeeebattery.com/products/zeee-4s-lipo-battery-3300mah-14-8v-100c-deans",
+        "access_date": "2026-10-11",
+        "price_status": "Australian variant, currency, tax and availability unresolved; procurement ledger owns pricing"
+      }
+    }
+  },
+  "mass_ownership": {
+    "custom_structure": "Assign material density to actual generated physical solids and count each installed part instance once.",
+    "commercial_hardware": "Use supplier or measured component mass once. Envelope solids are not additional hardware mass. A homogeneous-envelope inertia estimate must be labelled an approximation, not measured component inertia.",
+    "rotor_swept_envelopes": "Nonphysical clearance geometry; exclude from installed mass and inertia. Propeller mass belongs to the corresponding physical component ledger entry.",
+    "purchase_vs_installation": "Charge the complete battery purchase pack to vehicle procurement, but include only one battery in installed mass.",
+    "unresolved_items": ["two servos", "servo supply", "gimbal bearings", "linkages and horns", "motor adapters and retention", "structural fasteners", "battery straps and positive stops", "flight controller", "sensors", "receiver or other command interface", "power distribution and protection", "complete harness and connectors", "landing hardware"],
+    "missing_mass_policy": "Unknown is null, never zero. Report known subtotal and unresolved entries separately.",
+    "complete_installed_mass_kg": null,
+    "complete_vehicle_inertia_kg_m2": null,
+    "complete_vehicle_cost_ex_tax_shipping_AUD": null
+  },
+  "generation_and_measurement_contract": [
+    "Generate editable parameter-driven FCStd, STEP, arrangement drawings and a machine-readable measurement report through saved sandbox scripts and freecad_run.",
+    "Preserve existing artifacts; use fresh output names and declare every generated output.",
+    "Read mass properties from individual Part.Solid objects, not generic Part.Shape or Part.Compound properties.",
+    "Reopen actual native and STEP exports, record content hashes, enumerate valid solids and retain parameter-edit/recompute checks.",
+    "Separate physical parts from clearance envelopes and explicitly classify intended joint contact versus unwanted interference.",
+    "Report rotor-to-structure and rotor-to-rotor clearances for each tested configuration. A sampled motion sweep is not continuous-domain proof; retain the sampling grid and any conservative analytic bound separately.",
+    "Do not claim mounting-interface acceptance from placeholder geometry or inferred hole patterns.",
+    "Report the achieved pivot-to-CG relationship only when supported by the complete installed ledger; no undocumented ballast or assumed 0.25 m arm.",
+    "Retain an independent editable checker using actual artifact inputs. Verification must distinguish numerical geometry checks from unperformed structural, thermal and physical flight tests.",
+    "Chief reviews numerical and CAD evidence before selecting a layout or exporting selected vehicle parameters to the simulator."
+  ],
+  "acceptance_status": {
+    "cad_generated": false,
+    "layout_selected": false,
+    "geometry_verified": false,
+    "mounting_interfaces_verified": false,
+    "complete_mass_properties_available": false,
+    "structural_load_acceptance": "unperformed",
+    "physical_validation": "unperformed",
+    "review_disposition": "No accepted PDR or CDR implied"
+  }
+}

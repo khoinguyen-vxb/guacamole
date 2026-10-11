@@ -1,0 +1,331 @@
+STATIC SOURCE REVIEW ONLY; no plant imports, repairs or acceptance checks
+Preservation scope: Python sources and named setup/documentation files in both supplied repositories; nested PyThrust included
+Observed preservation: {"6dof_hopper": true, "PendulumControlProject": true}
+
+CURRENT FILE INVENTORY AND AFFECTED CALL CANDIDATES
+{"repository":"6dof_hopper","path":"PyThrust/pythrust/battery/rate_map.py","sha256":"b022873a21892005fbc4333584fc5d5a45fd808f467f92031a5084c11051090c","bytes":38912,"parse_error":null,"calls":[{"scope":"RateMapBattery._integrate_with_point_function","target":"solve_ivp","line":667},{"scope":"RateMapBattery._integrate_to_dod","target":"solve_ivp","line":758}]}
+{"repository":"6dof_hopper","path":"README.md","sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","bytes":0,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"aero/aero.py","sha256":"9008c26ea2c2c26e1e26441ee17f27872e1d34bf1c0d9cb7179ce285d6e2b53f","bytes":8856,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"chassis/hopper.py","sha256":"6e2b2f93e98b844ce04f68d26b704c65270e9329e1abff76caa45cbcd5dcf0bd","bytes":1691,"parse_error":null,"calls":[{"scope":"Hopper.mass","target":"self.propulsion.get_mass","line":46},{"scope":"Hopper.get_thrust_and_moment","target":"self.propulsion.get_thrust_and_moment","line":58}]}
+{"repository":"6dof_hopper","path":"helpers/constants.py","sha256":"4853ae63f4d7df5254af6fbab9b46dd31ca60aa722dd3580643064bfce9523a4","bytes":18,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"helpers/math.py","sha256":"5e6420ade1c4d642762ba4d6b0812a80f2f693a58151bbf16a4274efb521239a","bytes":2169,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"main.py","sha256":"67ebbf79c219721eb1f0cc6e4817b8fb218488b6dec4bbd25a1f0faee6527dbc","bytes":95,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"propulsion/propeller.py","sha256":"caa5ee91e46d102b8ebe0c02e1dfec0ecdca18e2c423791fca6f2c19100ae7b6","bytes":349,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"propulsion/propulsion.py","sha256":"e07b895d8399016a3b0511afb195d7ebf992050cef04ab3015600347f01750ce","bytes":446,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"pyproject.toml","sha256":"d8761e3e5cc51e06b35e78e85a00c3df5c572d41a024ce596ce44ca0714f19a9","bytes":315,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"scripts/ehopper.py","sha256":"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855","bytes":0,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"simulation/simulation.py","sha256":"087767eef40f728775d5bd8ee597a6e0a8c0769fe4d2d6ab2a060d06692f86ca","bytes":5077,"parse_error":null,"calls":[{"scope":"Simulation.trajectory_ode","target":"self.state.update_state","line":17},{"scope":"Simulation.trajectory_ode","target":"quarternion_to_dcm","line":37},{"scope":"Simulation.trajectory_ode","target":"self.hopper.mass","line":91},{"scope":"Simulation.trajectory_ode","target":"self.hopper.CG","line":92},{"scope":"Simulation.trajectory_ode","target":"self.hopper.inertia","line":93},{"scope":"Simulation.trajectory_ode","target":"self.hopper.get_thrust_and_moment","line":96},{"scope":"Simulation.trajectory_ode","target":"self.aero.determine_at_point","line":98},{"scope":"Simulation.solve_ode","target":"euler_to_quaternion","line":134},{"scope":"Simulation.solve_ode","target":"State","line":142},{"scope":"Simulation.solve_ode","target":"solve_ivp","line":144}]}
+{"repository":"6dof_hopper","path":"simulation/state.py","sha256":"7b8713aecd017a7ff1f0b3ad4e14e1c63c716d1181a6df516d25b7a7d1973b2a","bytes":1760,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"test/__init__.py","sha256":"d72bcd69d0ed6d706e690574d1dbdedf15ab740d5ce705aad834bd1b91b3d76e","bytes":29,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"test/test_pythrust.py","sha256":"a3590eef1c8b2d922a54464d7254205ca046c4af4e42f4bde815a67cec690a0d","bytes":4051,"parse_error":null,"calls":[]}
+{"repository":"6dof_hopper","path":"uv.lock","sha256":"43d1ea601be8aca2aca63f7d543f825d7b9e4f43621b5814323d00c7d906426f","bytes":165443,"parse_error":null,"calls":[]}
+{"repository":"PendulumControlProject","path":"README.md","sha256":"9c22907df0635a093a024eff395648c7b73e511b47858c5da79b89f2446c1d8c","bytes":13059,"parse_error":null,"calls":[]}
+{"repository":"PendulumControlProject","path":"src/gui.py","sha256":"e53b845c05025f4039b1c34f02766fc58fb96afd6bb117867467c5e4fc51cecc","bytes":26585,"parse_error":null,"calls":[]}
+{"repository":"PendulumControlProject","path":"src/main.py","sha256":"016c59131bf7f5d0360616a0b8dbb19033d0524bd610694e116faf968b1d8b30","bytes":5659,"parse_error":null,"calls":[]}
+{"repository":"PendulumControlProject","path":"src/pendulum_model.py","sha256":"b2aca9be8e608d8cb701407998ee26a7e6e62a51ed41be93660e3cf4caf39d50","bytes":4576,"parse_error":null,"calls":[{"scope":"NonlinearPendulum.integrate_step","target":"solve_ivp","line":21},{"scope":"NonlinearPendulum.simulate","target":"solve_ivp","line":25},{"scope":"LinearizedPendulum.integrate_step","target":"solve_ivp","line":43},{"scope":"LinearizedPendulum.simulate","target":"solve_ivp","line":47},{"scope":"NonlinearDoublePendulum.integrate_step","target":"solve_ivp","line":92},{"scope":"NonlinearDoublePendulum.simulate","target":"solve_ivp","line":96},{"scope":"LinearizedDoublePendulum.integrate_step","target":"solve_ivp","line":128},{"scope":"LinearizedDoublePendulum.simulate","target":"solve_ivp","line":132}]}
+{"repository":"PendulumControlProject","path":"src/requirements.txt","sha256":"f93023186506f98766ace0df3185ce4b14ba063be31281b6c7251b84d6bfdcea","bytes":33,"parse_error":null,"calls":[]}
+
+FULL CURRENT SOURCE: simulation/simulation.py
+SHA256: 087767eef40f728775d5bd8ee597a6e0a8c0769fe4d2d6ab2a060d06692f86ca
+1: import numpy as np
+2: from helpers.math import quarternion_to_dcm, euler_to_quaternion
+3: from helpers.constants import GRAVITY
+4: from state import State
+5: from scipy.integrate import solve_ivp
+6: 
+7: 
+8: class Simulation:
+9:     def __init__(self, state: State, environment, hopper, aero):
+10:         self.state = None
+11:         self.environment = environment
+12:         self.hopper = hopper
+13:         self.aero = aero
+14: 
+15:     def trajectory_ode(self, time, state):
+16:         if self.time != 0:
+17:             self.state.update_state(state)
+18: 
+19:         if self.state == None:
+20:             print("bricked")
+21: 
+22:         position = np.array([state.x, state.y, state.z], dtype=float)
+23:         velocity_body = np.array([state.u, state.v, state.w], dtype=float)
+24: 
+25:         quaternion = np.array([state.q0, state.q1, state.q2, state.q3], dtype=float)
+26: 
+27:         angular_rates = np.array([state.p, state.q, state.r], dtype=float)
+28: 
+29:         p, q, r = angular_rates
+30: 
+31:         # Preserve the original norm error for feedback correction.
+32:         quaternion_norm_error = 1 - quaternion @ quaternion
+33: 
+34:         # Use a unit quaternion when generating the DCM.
+35:         quaternion_unit = quaternion / np.linalg.norm(quaternion)
+36: 
+37:         TBL = quarternion_to_dcm(quaternion_unit)
+38:         TLB = TBL.T
+39: 
+40:         # Environment
+41:         height = -position[2]
+42:         altitude = self.environment.elevation + height
+43: 
+44:         atmosphere = self.environment.atmosphere
+45: 
+46:         speed_of_sound = atmosphere.speed_of_sound(altitude)
+47:         density = atmosphere.density(altitude)
+48:         dynamic_viscosity = atmosphere.dynamic_viscosity(altitude)
+49: 
+50:         wind_velocity_local = np.asarray(
+51:             atmosphere.wind_velocity(altitude), dtype=float
+52:         )
+53: 
+54:         # Relative airflow
+55:         rocket_velocity_local = TLB @ velocity_body
+56:         air_velocity_local = rocket_velocity_local - wind_velocity_local
+57:         air_velocity_body = TBL @ air_velocity_local
+58: 
+59:         air_speed = np.linalg.norm(air_velocity_body)
+60: 
+61:         if air_speed < 1e-8:
+62:             mach = 0
+63:             dynamic_pressure = 0
+64:             reynolds = 0
+65:             alpha = 0
+66:             beta = 0
+67:         else:
+68:             mach = air_speed / speed_of_sound
+69:             dynamic_pressure = 0.5 * density * air_speed**2
+70: 
+71:             reynolds = (
+72:                 density * air_speed * self.hopper.reference_length / dynamic_viscosity
+73:             )
+74: 
+75:             alpha = np.arctan2(air_velocity_body[2], air_velocity_body[0])
+76: 
+77:             beta = np.arcsin(np.clip(air_velocity_body[1] / air_speed, -1, 1))
+78: 
+79:         quaternion_rate_matrix = np.array(
+80:             [[0, -p, -q, -r], [p, 0, r, -q], [q, -r, 0, p], [r, q, -p, 0]]
+81:         )
+82: 
+83:         correction_gain = 0.5
+84: 
+85:         quaternion_dot = (
+86:             0.5 * quaternion_rate_matrix @ quaternion
+87:             + correction_gain * quaternion_norm_error * quaternion
+88:         )
+89: 
+90:         # Mass properties
+91:         mass = self.hopper.mass(time)
+92:         cg = np.asarray(self.hopper.CG(time))
+93:         inertia = np.asarray(self.hopper.inertia(time))
+94: 
+95:         # Forces and moments must all be in body coordinates
+96:         prop_force, prop_moment = self.hopper.get_thrust_and_moment(time)
+97: 
+98:         aero_force, aero_moment = self.aero.determine_at_point(
+99:             air_velocity_body=air_velocity_body,
+100:             angular_rates_body=angular_rates,
+101:             density=density,
+102:             dynamic_viscosity=dynamic_viscosity,
+103:             speed_of_sound=speed_of_sound,
+104:             cg=cg,
+105:         )
+106: 
+107:         total_force_body = aero_force + prop_force
+108:         total_moment_body = aero_moment + prop_moment
+109: 
+110:         # Translational kinematics
+111:         position_dot = TLB @ velocity_body
+112: 
+113:         # Translational dynamics
+114:         gravity_local = np.array([0, 0, GRAVITY])
+115:         gravity_body = TBL @ gravity_local
+116: 
+117:         velocity_dot = (
+118:             total_force_body / mass
+119:             + gravity_body
+120:             - np.cross(angular_rates, velocity_body)
+121:         )
+122: 
+123:         # Rotational dynamics
+124:         body_rate_dot = np.linalg.solve(
+125:             inertia,
+126:             total_moment_body - np.cross(angular_rates, inertia @ angular_rates),
+127:         )
+128: 
+129:         return np.concatenate(
+130:             (position_dot, velocity_dot, quaternion_dot, body_rate_dot)
+131:         )
+132: 
+133:     def solve_ode(self, init_roll, init_pitch, init_yaw, t_max):
+134:         q = euler_to_quaternion(init_roll, init_pitch, init_yaw)
+135:         initial_state = (0, 0, 0, 0, 0, 0, q[0], q[1], q[2], q[3], 0, 0, 0)
+136:         absolute_tolerance = np.array(
+137:             [1e-6] * 3  # position
+138:             + [1e-7] * 3  # velocity
+139:             + [1e-9] * 4  # quaternion
+140:             + [1e-8] * 3  # angular rates
+141:         )
+142:         self.state = State(*initial_state)
+143: 
+144:         solution = solve_ivp(
+145:             fun=self.trajectory_ode,
+146:             t_span=(0.0, t_max),
+147:             y0=initial_state,
+148:             method="RK45",
+149:             rtol=1e-7,
+150:             atol=absolute_tolerance,
+151:             max_step=0.01,
+152:             dense_output=True,
+153:         )
+
+FULL CURRENT SOURCE: simulation/state.py
+SHA256: 7b8713aecd017a7ff1f0b3ad4e14e1c63c716d1181a6df516d25b7a7d1973b2a
+1: class State:
+2:     def __init__(self, x, y, z, u, v, w, q0, q1, q2, q3, p, q, r):
+3:         self.x = x
+4:         self.y = y
+5:         self.z = z
+6:         self.u = u
+7:         self.v = v
+8:         self.w = w
+9:         self.q0 = q0
+10:         self.q1 = q1
+11:         self.q2 = q2
+12:         self.q3 = q3
+13:         self.p = p
+14:         self.q = q
+15:         self.r = r
+16: 
+17:         self.x_arr = []
+18:         self.y_arr = []
+19:         self.z_arr = []
+20:         self.u_arr = []
+21:         self.v_arr = []
+22:         self.w_arr = []
+23:         self.q0_arr = []
+24:         self.q1_arr = []
+25:         self.q2_arr = []
+26:         self.q3_arr = []
+27:         self.p_arr = []
+28:         self.q_arr = []
+29:         self.r_arr = []
+30: 
+31:     def update_state(self, x, y, z, u, v, w, q0, q1, q2, q3, p, q, r):
+32:         self.x_arr.append(x)
+33:         self.y_arr.append(y)
+34:         self.z_arr.append(z)
+35:         self.u_arr.append(u)
+36:         self.v_arr.append(v)
+37:         self.w_arr.append(w)
+38:         self.q0_arr.append(q0)
+39:         self.q1_arr.append(q1)
+40:         self.q2_arr.append(q2)
+41:         self.q3_arr.append(q3)
+42:         self.p_arr.append(p)
+43:         self.q_arr.append(q)
+44:         self.r_arr.append(r)
+45: 
+46:         self.x = x
+47:         self.y = y
+48:         self.z = z
+49:         self.u = u
+50:         self.v = v
+51:         self.w = w
+52:         self.q0 = q0
+53:         self.q1 = q1
+54:         self.q2 = q2
+55:         self.q3 = q3
+56:         self.p = p
+57:         self.q = q
+58:         self.r = r
+59: 
+60:     def unpack_state(self):
+61:         return (
+62:             self.x,
+63:             self.y,
+64:             self.z,
+65:             self.u,
+66:             self.v,
+67:             self.w,
+68:             self.q0,
+69:             self.q1,
+70:             self.q2,
+71:             self.q3,
+72:             self.p,
+73:             self.q,
+74:             self.r,
+75:         )
+
+FULL CURRENT SOURCE: helpers/math.py
+SHA256: 5e6420ade1c4d642762ba4d6b0812a80f2f693a58151bbf16a4274efb521239a
+1: from numpy.typing import NDArray
+2: import numpy as np
+3: 
+4: 
+5: def quarternion_to_dcm(quarternion: NDArray, transpose=False):
+6:     """
+7:     Transformation matrix of body wrt local level coordinates
+8:     :param quaternions:
+9:     :return:
+10:     """
+11: 
+12:     # Normalise Quaternions
+13:     quaternions = np.array(quaternions) / np.linalg.norm(quaternions)
+14: 
+15:     # Get quaternion components
+16:     q0, q1, q2, q3 = quaternions
+17: 
+18:     # Calculate transformation matrix components
+19:     l1 = np.square(q0) + np.square(q1) - np.square(q2) - np.square(q3)
+20:     l2 = 2 * (q1 * q2 + q0 * q3)
+21:     l3 = 2 * (q1 * q3 - q0 * q2)
+22: 
+23:     m1 = 2 * (q1 * q2 - q0 * q3)
+24:     m2 = np.square(q0) - np.square(q1) + np.square(q2) - np.square(q3)
+25:     m3 = 2 * (q2 * q3 + q0 * q1)
+26: 
+27:     n1 = 2 * (q0 * q2 + q1 * q3)
+28:     n2 = 2 * (q2 * q3 - q0 * q1)
+29:     n3 = np.square(q0) - np.square(q1) - np.square(q2) + np.square(q3)
+30: 
+31:     # Calculate transformation matrix
+32:     dcm = np.array([[l1, l2, l3], [m1, m2, m3], [n1, n2, n3]])
+33: 
+34:     if transpose:
+35:         return np.transpose(dcm)
+36:     else:
+37:         return dcm
+38: 
+39: 
+40: def euler_to_quaternion(euler_angles, degrees=True):
+41:     # Euler angles are defined as [roll, pitch, yaw], [phi, theta, psi], [z, y, x]
+42:     if degrees:
+43:         euler_angles = np.deg2rad(euler_angles)
+44: 
+45:     # Get Euler components
+46:     psi, theta, phi = euler_angles
+47: 
+48:     # Calculate Quaternions
+49:     q0 = np.cos(psi / 2) * np.cos(theta / 2) * np.cos(phi / 2) + np.sin(
+50:         psi / 2
+51:     ) * np.sin(theta / 2) * np.sin(phi / 2)
+52:     q1 = np.cos(psi / 2) * np.cos(theta / 2) * np.sin(phi / 2) - np.sin(
+53:         psi / 2
+54:     ) * np.sin(theta / 2) * np.cos(phi / 2)
+55:     q2 = np.cos(psi / 2) * np.sin(theta / 2) * np.cos(phi / 2) + np.sin(
+56:         psi / 2
+57:     ) * np.cos(theta / 2) * np.sin(phi / 2)
+58:     q3 = np.sin(psi / 2) * np.cos(theta / 2) * np.cos(phi / 2) - np.cos(
+59:         psi / 2
+60:     ) * np.sin(theta / 2) * np.sin(phi / 2)
+61: 
+62:     # Combine quaternion components into matrix of row vectors
+63:     quaternions = np.array([q0, q1, q2, q3])
+64: 
+65:     # Normalise Quaternions
+66:     quaternions = np.array(quaternions) / np.linalg.norm(quaternions)
+67: 
+68:     return quaternions
