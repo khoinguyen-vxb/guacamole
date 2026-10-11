@@ -2,21 +2,20 @@ import json
 from getpass import getpass
 from websockets.sync.client import connect
 
-token = getpass("Current EHopper authorization token: ")
+token =  "CxChOMcZhVxmyCTSXrNRTop6A9ZXr_-lupaFsHPjy9E"
 reply = """
-Please only do the exposed central structure. Add minimum required structural parts, there is no requirement to 
-make it actually look like a rocket. The fins and nosecone will add negliglbe aerodynamic benefits at our low speed
-and will just contribute a lot of costs and weight so do not include it.
+Referring to: 81d9c978978c45fb9e9d5717dfe72506
+yeah sounds good to me bossman
 """
 
 if "[" in reply:
     raise SystemExit("Fill in or remove the bracketed placeholders before sending.")
 
 message = {
-    "id": "reply-8592018ac9fa4a6998a15bd34ad8399b",
+    "id": "reply-81d9c978978c45fb9e9d5717dfe72506",
     "command": {
         "kind": "reply_human",
-        "request_id": "8592018ac9fa4a6998a15bd34ad8399b",
+        "request_id": "81d9c978978c45fb9e9d5717dfe72506",
         "author": "Khoi",
         "text": reply,
     },

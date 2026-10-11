@@ -221,6 +221,31 @@ class Humans:
             )
             if reply:
                 self._answer(reply, author=author, text=text, references=(source,))
+            if run:
+                store.put(
+                    "run",
+                    run_id,
+                    {**run.data, "status": "incomplete", "result": None},
+                    actor=actor,
+                )
+            asker = (
+                store.model("agent_state", reply.requester, AgentState)
+                if reply and store.maybe("agent_state", reply.requester)
+                else None
+            )
+            if (
+                reply
+                and not reply.required
+                and asker
+                and asker.status not in {"completed", "superseded"}
+            ):
+                # The asker kept working without this answer, so the plan and workers
+                # stand; it reads the reply from its inbox and replans if needed.
+                runtime = project.runtime
+                if asker.status == "waiting" and runtime and runtime.run_id == run_id:
+                    agent = store.model("agent", reply.requester, AgentSpec)
+                    runtime._wake(agent, asker, "Human reply")
+                return source
             agents = []
             for snapshot in store.list("agent"):
                 state = store.model("agent_state", snapshot.ref.id, AgentState)
@@ -347,13 +372,6 @@ class Humans:
                         request_id=request.id,
                         context_refs=(source,),
                     )
-                )
-            if run:
-                store.put(
-                    "run",
-                    run_id,
-                    {**run.data, "status": "incomplete", "result": None},
-                    actor=actor,
                 )
         return source
 

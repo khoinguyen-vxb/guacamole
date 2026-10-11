@@ -36,6 +36,7 @@ guacamole/
 │       ├── human.py                 # Human questions, replies, corrections and replanning
 │       ├── decision.py              # Typed choices, local validation and decision records
 │       ├── reviews.py               # Deliverable manifests, PDR/CDR packages and gates
+│       ├── middleware.py            # Optional Graphiti/mem0 memory, LangChain context edits
 │       │
 │       ├── tools/
 │       │   ├── registry.py          # Explicit typed callable registration
@@ -47,7 +48,9 @@ guacamole/
 │       │   └── runtime.py           # Spawner, context budgets, grants, provider boundary
 │       │
 │       ├── providers/
-│       │   └── astra.py             # Configured GPT-6 Astra reasoning integration
+│       │   ├── codex.py             # Codex CLI reasoning with a ChatGPT login
+│       │   ├── claude.py            # Claude Code CLI reasoning with a claude.ai login
+│       │   └── litellm.py           # Any API model through LiteLLM
 │       │
 │       └── websocket.py             # Optional local script control/events bridge
 │
@@ -62,6 +65,7 @@ guacamole/
     ├── test_tools.py                # Contracts and Python/MCP result equivalence
     ├── test_runtime.py              # Choices, agents, context, inbox/recovery and grants
     ├── test_human.py                # Human input, restart, superseded calls and controls
+    ├── test_middleware.py           # Summarization, context editing and memory hooks
     ├── test_sounding_rocket.py       # Example tool execution, document readers and launch guard
     └── test_project_workflow.py     # Source evidence, artifacts, PDR/CDR, invalidation
 

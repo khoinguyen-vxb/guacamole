@@ -1,19 +1,20 @@
 # /// script
 # requires-python = ">=3.13.3"
 # dependencies = [
-#   "guacamole-engineering[sounding-rocket]",
+#   "guacamole-engineering[sounding-rocket,langchain,graphiti,mem0]",
 # ]
 # [tool.uv.sources]
 # guacamole-engineering = { path = "../..", editable = true }
 # ///
 """Run with: uv run examples/sounding_rocket/kookaburra.py
 
-Or: uv sync --extra sounding-rocket
+Or: uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra mem0
     .venv/bin/python -m examples.sounding_rocket.kookaburra
 
 Edit the configuration below; this script has no command-line arguments.
 Install Codex CLI and run codex login with your ChatGPT account before running.
 Reasoning uses a local codex exec process with GPT-6 Astra; no API key is needed.
+Optional OPENAI_API_KEY adds context summarization and Graphiti/mem0 memory.
 uv installs this script's document readers; backend installations are separate.
 See https://docs.astral.sh/uv/guides/scripts/ for inline dependency metadata.
 
@@ -31,7 +32,7 @@ import os
 import shutil
 import signal
 import sys
-from contextlib import suppress
+from contextlib import AsyncExitStack, suppress
 from pathlib import Path
 from typing import Annotated
 from uuid import uuid4
@@ -54,6 +55,7 @@ from guacamole import (
     Watchdog,
 )
 from guacamole.contracts import FileRecord, now
+from guacamole.middleware import ContextMiddleware
 from guacamole.providers.codex import CodexReasoning
 from guacamole.tools.mcp import ToolSession
 from guacamole.websocket import WebSocketBridge
@@ -74,6 +76,13 @@ WATCHDOG_REPORT_S = 600.0
 BUDGET = Budget(
     max_steps=20000, max_tool_calls=15000, max_seconds=720000, max_agents=24
 )
+
+# Context middleware, README "Context middleware". Context editing always runs and
+# needs no API key. With OPENAI_API_KEY set, older sources are also summarized and
+# every agent turn feeds a Graphiti knowledge graph and mem0 memory (billed usage).
+SUMMARY_MODEL = "openai/gpt-6-luna"  # 922k-token input holds untrimmed sources.
+SUMMARIZE_AT_TOKENS = 150_000  # Optional sources above this are compacted.
+CLEAR_AT_TOKENS = 80_000  # Above this, reads beyond the latest 8 are hidden per call.
 
 # Optional interpreter overrides, e.g. {"candlebark": Path("/path/to/python3.10")}.
 # Otherwise use the repository's .venv/bin/python if present, then this interpreter.
@@ -529,6 +538,69 @@ def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
     )
 
 
+async def context_middleware(cleanup: AsyncExitStack) -> tuple[ContextMiddleware, ...]:
+    """Summarize, clear and recall agents' optional context; see SUMMARY_MODEL."""
+    from langchain.agents.middleware import (
+        ClearToolUsesEdit,
+        ContextEditingMiddleware,
+        SummarizationMiddleware,
+    )
+
+    from guacamole.middleware import GraphitiMemory, LangChainMiddleware, Mem0Memory
+
+    editing = LangChainMiddleware(
+        ContextEditingMiddleware(
+            edits=[ClearToolUsesEdit(trigger=CLEAR_AT_TOKENS, keep=8)]
+        )
+    )
+    if not os.environ.get("OPENAI_API_KEY"):
+        print(
+            "OPENAI_API_KEY is unset: context editing only, without summarization "
+            "or Graphiti/mem0 memory.",
+            flush=True,
+        )
+        return (editing,)
+    # Keep project activity out of the libraries' usage telemetry.
+    os.environ.setdefault("GRAPHITI_TELEMETRY_ENABLED", "false")
+    os.environ.setdefault("MEM0_TELEMETRY", "False")
+    from graphiti_core import Graphiti
+    from graphiti_core.driver.falkordb_driver import FalkorDriver
+    from langchain_litellm import ChatLiteLLM
+    from mem0 import AsyncMemory
+    from redislite.async_falkordb_client import AsyncFalkorDB
+
+    # Embedded FalkorDB; its append-only log keeps the graph through crashes.
+    graph_db = AsyncFalkorDB(
+        str(WORKSPACE / "graph.db"), serverconfig={"appendonly": "yes"}
+    )
+    cleanup.push_async_callback(graph_db.client.close)
+    # redislite's async close leaves its embedded server running until exit.
+    cleanup.push_async_callback(graph_db.client.shutdown)
+    graphiti = Graphiti(graph_driver=FalkorDriver(falkor_db=graph_db))
+    cleanup.push_async_callback(graphiti.close)
+    await graphiti.build_indices_and_constraints()
+    memory = AsyncMemory.from_config(
+        {
+            "vector_store": {
+                "provider": "qdrant",
+                "config": {"path": str(WORKSPACE / "mem0"), "on_disk": True},
+            },
+            "history_db_path": str(WORKSPACE / "mem0-history.db"),
+        }
+    )
+    cleanup.callback(memory.close)
+    summarizing = LangChainMiddleware(
+        SummarizationMiddleware(
+            ChatLiteLLM(model=SUMMARY_MODEL),
+            trigger=("tokens", SUMMARIZE_AT_TOKENS),
+            # Keep less than CLEAR_AT_TOKENS so compacted context is not cleared too.
+            keep=("tokens", 50_000),
+        )
+    )
+    # Summarize first: context editing hides cleared sources from later middleware.
+    return summarizing, editing, GraphitiMemory(graphiti), Mem0Memory(memory)
+
+
 async def notifications(project: Project) -> None:
     cursor, started = 0, now()
     while True:
@@ -556,13 +628,23 @@ async def main() -> None:
         )
     missing = [
         name
-        for name in ("websockets", "pypdf", "openpyxl", "pptx")
+        for name in (
+            "websockets",
+            "pypdf",
+            "openpyxl",
+            "pptx",
+            "langchain",
+            "langchain_litellm",
+            "graphiti_core",
+            "mem0",
+        )
         if importlib.util.find_spec(name) is None
     ]
     if missing:
         raise SystemExit(
             f"Missing example dependencies: {', '.join(missing)}. "
-            "Run 'uv sync --extra sounding-rocket', then "
+            "Run 'uv sync --extra sounding-rocket --extra langchain "
+            "--extra graphiti --extra mem0', then "
             "'.venv/bin/python -m examples.sounding_rocket.kookaburra'; "
             "or use 'uv run examples/sounding_rocket/kookaburra.py'."
         )
@@ -576,6 +658,9 @@ async def main() -> None:
         ),  # Runs at the lowest reasoning effort to reserve usage budget.
     ) as project:
         register_tools(project)
+        # Opened after the workspace lock: the graph and vector stores live in it.
+        cleanup = AsyncExitStack()
+        project.middleware = await context_middleware(cleanup)
         runs = project.store.list("run")
         if RESUME_RUN_ID is None and len(runs) > 1:
             raise ValueError("Multiple saved runs: set RESUME_RUN_ID in this script")
@@ -612,6 +697,7 @@ async def main() -> None:
             monitor.cancel()
             await asyncio.gather(monitor, return_exceptions=True)
             await project.drain()
+            await cleanup.aclose()
             project.export(project.output_path(Path("timeline.jsonl")))
 
 

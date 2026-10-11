@@ -119,12 +119,17 @@ This may defer more optional source material than an exact tokenizer.
 `reserved_output_tokens` reserves context headroom; the CLI controls generation
 limits and its own prompt overhead. See [Codex non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode).
 
-The separate `guacamole.providers.astra.AstraReasoning` adapter uses
-`gpt-6-astra` through the OpenAI Responses API. It reads `OPENAI_API_KEY` at call
-time; it does not reuse Codex CLI login credentials. Token counting uses the
-[official input-token endpoint](https://developers.openai.com/api/docs/guides/token-counting)
-for the exact saved prompt, including tool/action schemas and context. The model's
-documented capacity is checked separately from each agent's configured budget.
+For API access, `guacamole.providers.litellm.LiteLLMReasoning` reaches any
+[LiteLLM provider](https://docs.litellm.ai/docs/providers) (`uv sync --extra litellm`).
+Swap providers by model string: `LiteLLMReasoning("openai/gpt-6-astra")` or
+`LiteLLMReasoning("anthropic/claude-opus-5-5", effort="high")`. Credentials come
+from each provider's environment variables (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`,
+...), not Codex or Claude CLI logins. Capacity comes from LiteLLM's model map
+unless you pass `context_capacity_tokens`; other keyword arguments such as
+`api_base` or `num_retries` pass through to `litellm.acompletion`. Token counts use
+LiteLLM's local tokenizer plus 10% and 1,024 tokens of headroom
+(`token_count_method="litellm_estimate_10pct_plus_1024"`), with no API calls.
+The model's capacity is checked separately from each agent's configured budget.
 
 The Chief makes engineering selections through a typed `decide` action containing
 the alternatives and the selected candidate ID. Its rationale explains the choice.
@@ -170,9 +175,13 @@ work plans. Workers are created from validated task IDs, with their
 own objective, context, result schema, tool/peer grants and budgets. Workers can
 request information and reply directly to allowed peers through persistent inboxes.
 Each provider invocation saves its context before dispatch. Pinned material is
-never silently dropped; oversized context blocks the invocation. Optional excerpts
-and inbox messages that do not fit have explicit deferral records. Summaries cite
-their original revisions. Binary or large documents require a supplied reader
+never silently dropped. When required material exceeds an agent's budget, the
+runtime raises that budget to the run's `max_input_tokens` (capped by provider
+capacity) and records `agent.budget_raised`; beyond that, the invocation blocks.
+Optional excerpts and inbox messages that do not fit have explicit deferral records.
+Summaries cite their original revisions. Each prompt's `state` lists current
+records and unfinished, failed or interrupted requests; stale records and completed
+or cancelled requests stay in history but are left out. Binary or large documents require a supplied reader
 returning `SourceExcerpt`; originals remain available and unparsed inputs stay open.
 
 PDR and CDR packages contain manifests, copied editable artifacts, record snapshots,
@@ -214,7 +223,7 @@ project = Project(
 
 Its reasoning provider can be a different model; `Watchdog()` reuses the project's.
 Either way the watchdog runs a copy at the lowest reasoning effort (`effort="low"`
-for `CodexReasoning` and `ClaudeReasoning`) to reserve usage budget; the project's
+for `CodexReasoning`, `ClaudeReasoning` and `LiteLLMReasoning`) to reserve usage budget; the project's
 provider keeps its own effort. `CodexReasoning(effort=...)` defaults to `"ultra"`.
 It polls the activity log every `poll_s` seconds without calling a model. When an
 agent's last `loop_turns` actions were all rejected or identical, or its last prompt
@@ -230,6 +239,71 @@ reviews, dispatched input tokens and interventions. `details["text"]` is a reada
 summary; the Electronic Hopper and Kookaburra launchers print it. Watchdog failures
 are recorded as `watchdog.failed` events and never stop the run. Pass the request
 from `project.requests(agent="watchdog")` to `project.trace` for its packets, turns and notes.
+
+## Context middleware
+
+Pass middleware to run around every Chief and worker invocation. Install the extras
+you use: `uv sync --extra langchain --extra graphiti --extra mem0`. The `graphiti`
+extra embeds FalkorDB (`falkordblite`); its Linux wheels need glibc 2.39 or newer.
+
+```python
+from graphiti_core import Graphiti
+from graphiti_core.driver.falkordb_driver import FalkorDriver
+from langchain.agents.middleware import (
+    ClearToolUsesEdit, ContextEditingMiddleware, SummarizationMiddleware,
+)
+from langchain_litellm import ChatLiteLLM
+from mem0 import AsyncMemory
+from redislite.async_falkordb_client import AsyncFalkorDB
+
+from guacamole.middleware import GraphitiMemory, LangChainMiddleware, Mem0Memory
+
+# Embedded FalkorDB; at exit await graph_db.client.shutdown(), then .close().
+graph_db = AsyncFalkorDB(".guacamole/graph.db", serverconfig={"appendonly": "yes"})
+graphiti = Graphiti(graph_driver=FalkorDriver(falkor_db=graph_db))
+await graphiti.build_indices_and_constraints()
+project = Project(
+    workspace, sandbox=Path("results/project"), tools=tools,
+    reasoning=CodexReasoning(),
+    middleware=(
+        LangChainMiddleware(SummarizationMiddleware(
+            ChatLiteLLM(model="anthropic/claude-haiku-5-5"),
+            trigger=("tokens", 60_000), keep=("messages", 12),
+        )),
+        LangChainMiddleware(ContextEditingMiddleware(
+            edits=[ClearToolUsesEdit(trigger=40_000, keep=4)],
+        )),
+        GraphitiMemory(graphiti),
+        Mem0Memory(AsyncMemory()),
+    ),
+)
+```
+
+Middleware sees only an agent's optional context. Pinned requirements, human input
+and just-requested reads are never shown to it or removed.
+
+- `LangChainMiddleware` presents summaries, then selected sources oldest first,
+  as a LangChain conversation: read request, read tool call, source as tool result.
+  `SummarizationMiddleware` compacts older sources into a stored `Summary` citing
+  their exact revisions and updates the agent's context, like the `compact` action.
+  The adapter sets `trim_tokens_to_summarize=None`, so the summary prompt holds
+  every summarized source; choose a summary model whose context fits `trigger`.
+  `ContextEditingMiddleware` clears older source results for that
+  invocation only. Each one is listed in `ContextPacket.deferred`, and reading it
+  again makes it the most recent.
+- `GraphitiMemory` adds each agent turn (rationale, action, observation) to one
+  knowledge graph per project and recalls its most relevant time-stamped facts.
+- `Mem0Memory` stores turns per task (`user_id` is the project, `agent_id` the task)
+  and recalls that task's memories across runs and replacement workers.
+
+Recall queries use the agent's objective and last observation. Recalled items appear
+under `memory` in the prompt, after all other optional material, and are deferred
+first when the budget is tight. Agents treat them as unverified hints, not evidence.
+Turns sent for memory extraction are truncated to 16,000 characters; full records
+stay in SQLite. Each library keeps its own model, embedder and store configuration;
+Graphiti and mem0 default to OpenAI and read `OPENAI_API_KEY`. Failures are recorded
+as `middleware.failed` events with the hook and error type only, and never stop
+the run. Memory ingestion runs inline after each action.
 
 ## Human questions and corrections
 
@@ -374,11 +448,21 @@ uv run examples/sounding_rocket/kookaburra.py
 For the module entry point, install the example's dependencies into the project environment:
 
 ```bash
-uv sync --extra sounding-rocket
+uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra mem0
 .venv/bin/python -m examples.sounding_rocket.kookaburra
 ```
 
-The script selects the same extra using
+Kookaburra and the Electronic Hopper both run context middleware. Context editing
+always runs: above `CLEAR_AT_TOKENS` of optional sources, all but an agent's 8
+latest reads are left out of that call. With `OPENAI_API_KEY` set, sources above
+`SUMMARIZE_AT_TOKENS` are also summarized by `SUMMARY_MODEL` (`openai/gpt-6-luna`)
+through LiteLLM. Every turn also feeds Graphiti and mem0 memory, which use OpenAI's
+default models and are billed to that key. The graph (embedded FalkorDB with an
+append-only log) and the mem0 vectors live in the example's `.guacamole/`.
+Library telemetry is disabled. Memory starts empty for an existing run; earlier
+turns are not imported.
+
+The script selects the same extras using
 [uv inline metadata](https://docs.astral.sh/uv/guides/scripts/); `python -m` does not
 install inline dependencies. Startup checks for Codex and missing readers before reasoning.
 It registers typed
@@ -404,7 +488,7 @@ agent extracts and reviews the source content.
 ## Checks
 
 ```bash
-uv sync --extra sounding-rocket
+uv sync --all-extras
 PYTHONDONTWRITEBYTECODE=1 .venv/bin/python -m unittest discover -s tests -v
 .venv/bin/ruff check src tests
 .venv/bin/ruff format --check src tests

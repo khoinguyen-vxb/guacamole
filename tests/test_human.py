@@ -129,6 +129,68 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
                     self.assertEqual(len(history.human.inbox(pending_only=False)), 1)
                     self.assertEqual(len(history.events()), before)
 
+    async def test_non_blocking_reply_keeps_plan_and_reaches_asker(self):
+        class Asker(TestReasoning):
+            asked = False
+            answered = False
+
+            async def respond(self, packet):
+                if any(
+                    m["kind"] == "reply" and m["sender"].startswith("human:")
+                    for m in json.loads(packet.prompt)["messages"]
+                ):
+                    self.answered = True
+                    return turn(Wait(reason="Fixture received the answer"))
+                requirement = project.store.maybe("requirement", "payload")
+                if requirement is None:
+                    return turn(
+                        Record(
+                            record=Requirement(
+                                id="payload",
+                                wording="payload mass 2 kg",
+                                source=project.store.get("source", "brief").ref,
+                                source_quote="payload mass 2 kg",
+                            )
+                        )
+                    )
+                if not project.store.list("decision"):
+                    return turn(
+                        Decide(
+                            request=plan_request(requirement.ref), selected="fixture"
+                        )
+                    )
+                if not self.asked:
+                    self.asked = True
+                    return turn(
+                        AskHuman(question="Agree with 2 kg?", blocking=False)
+                    )
+                return turn(Wait(reason="Continue without the answer"))
+
+        with tempfile.TemporaryDirectory() as directory:
+            provider = Asker()
+            with Project(Path(directory), reasoning=provider) as project:
+                result = await project.run(brief())
+                (entry,) = project.human.inbox()
+                question_id = entry.message.request_id
+                plan = project.store.list("decision")[0].ref
+                requests = {r.id: r.status for r in project.requests()}
+                project.human.reply(question_id, "yes", author="test human")
+                self.assertEqual(project.activity.get(question_id).status, "completed")
+                self.assertFalse(project.store.resolve(plan).stale)
+                self.assertFalse(
+                    any(e.type == "agent.human_redirected" for e in project.events())
+                )
+                self.assertFalse(
+                    [
+                        r.id
+                        for r in project.requests()
+                        if r.status == "cancelled"
+                        and requests.get(r.id) != "cancelled"
+                    ]
+                )
+                await project.run(resume=result.run_id)
+                self.assertTrue(provider.answered)
+
     async def test_live_correction_discards_proposal_and_marks_late_result_stale(self):
         proposed, release_proposal = asyncio.Event(), asyncio.Event()
         running, release_tool = asyncio.Event(), asyncio.Event()

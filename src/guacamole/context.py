@@ -1,7 +1,7 @@
 """Source-preserving context selection and provider-specific token accounting."""
 
 import asyncio
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from typing import Protocol
 
 from .activity import Activity
@@ -50,7 +50,9 @@ def encode_context(payload: dict) -> str:
                 else entry
                 for entry in request["context"]
             ]
-            source = source | {"data": data | {"request": request | {"context": context}}}
+            source = source | {
+                "data": data | {"request": request | {"context": context}}
+            }
         sources.append(source)
     return encode(payload | {"sources": sources})
 
@@ -86,6 +88,8 @@ class ContextBuilder:
         *,
         instructions: str,
         state: JSON,
+        memory: Sequence[JSON] = (),
+        omissions: Sequence[Omission] = (),
     ) -> ContextPacket:
         loop = asyncio.get_running_loop()
 
@@ -109,6 +113,8 @@ class ContextBuilder:
                     count,
                     instructions=instructions,
                     state=state,
+                    memory=memory,
+                    deferred=omissions,
                 )
             finally:
                 reader.close()
@@ -129,6 +135,8 @@ class ContextBuilder:
         *,
         instructions: str,
         state: JSON,
+        memory: Sequence[JSON] = (),
+        deferred: Sequence[Omission] = (),
     ) -> ContextPacket:
         spec = agent.context
         max_chars = getattr(provider, "max_input_chars", None)
@@ -171,7 +179,7 @@ class ContextBuilder:
             raise ContextOverflow(
                 f"Pinned context and contracts require {count} input tokens; budget is {spec.max_input_tokens}"
             )
-        omissions: list[Omission] = []
+        omissions = list(deferred)
         messages: list[str] = []
         # New messages first. Inclusion is never acknowledgement.
         entries = sorted(
@@ -241,6 +249,26 @@ class ContextBuilder:
                     Omission(
                         item=f"{ref.kind}:{ref.id}@{ref.revision}",
                         reason="Selected source exceeds remaining input budget or provider input limit",
+                    )
+                )
+        # Middleware recall is the lowest-priority optional material.
+        recalled: list[JSON] = []
+        if memory:
+            payload["memory"] = recalled
+        for item in memory:
+            recalled.append(item)
+            prompt = encode_context(payload)
+            measured = count_tokens(prompt)
+            if measured <= spec.max_input_tokens and (
+                max_chars is None or len(prompt) <= max_chars
+            ):
+                count = measured
+            else:
+                recalled.pop()
+                omissions.append(
+                    Omission(
+                        item=f"memory:{item.get('source')}:{item.get('id')}",
+                        reason="Recalled memory exceeds remaining input budget or provider input limit",
                     )
                 )
         packet = ContextPacket(

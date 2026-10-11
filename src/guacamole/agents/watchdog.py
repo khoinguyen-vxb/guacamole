@@ -97,7 +97,7 @@ def _lowest_effort(provider: ReasoningProvider) -> ReasoningProvider:
     """Copy at the lowest reasoning effort; the project's own provider is untouched."""
     low = copy.copy(provider)
     # "low" is the lowest level both the Codex (gpt-6-astra) and Claude CLIs accept.
-    # ponytail: providers without an effort setting (Astra API) keep their default.
+    # ponytail: providers without an effort setting keep their default.
     if hasattr(low, "effort"):
         setattr(low, "effort", "low")  # noqa: B010 -- effort is outside the provider protocol
     return low

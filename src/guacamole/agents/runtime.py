@@ -2,11 +2,15 @@
 
 import asyncio
 import time
+from collections.abc import Awaitable
 from pathlib import Path
+from types import CoroutineType
+from typing import Any
 
 from ..context import ContextOverflow, ProviderError, ReasoningProvider
 from ..contracts import (
     JSON,
+    TERMINAL,
     Acknowledge,
     AgentSpec,
     AgentState,
@@ -42,6 +46,7 @@ from ..contracts import (
     uid,
 )
 from ..decision import DecisionBlocked
+from ..middleware import ContextMiddleware, Invocation
 from ..project import Project
 from ..tools.registry import encode
 from .chief import CHIEF, COMMON
@@ -315,6 +320,24 @@ class Runtime:
 
     def _context_state(self, agent: AgentSpec, state: AgentState) -> JSON:
         store = self.project.store
+        requests = [
+            r for r in self.project.activity.requests() if r.run_id == self.run_id
+        ]
+        # last_observation holds only the latest result, so without this agents
+        # re-ran reads they had made one call earlier.
+        # ponytail: fixed window of 8 calls (tool results run to ~18k chars each);
+        # older results stay reachable through read on their tool_result refs.
+        recent = sorted(
+            (
+                r
+                for r in requests
+                if r.requester == agent.id
+                and r.kind == "tool"
+                and r.status in TERMINAL
+                and r.id != state.observation.get("request_id")
+            ),
+            key=lambda r: r.created_at,
+        )[-8:]
         return {
             "run_id": self.run_id,
             "workspace": str(store.directory),
@@ -328,8 +351,10 @@ class Runtime:
                 }
                 for a in self._agents()
             ],
+            # Stale records cannot be read or cited, and finished requests stay
+            # reachable through their results; listing them grew every prompt.
             "records": [
-                {"ref": s.ref.model_dump(mode="json"), "stale": s.stale}
+                s.ref.model_dump(mode="json")
                 for s in store.list(
                     "source",
                     "requirement",
@@ -343,6 +368,7 @@ class Runtime:
                     "tool_result",
                     "job_inputs",
                 )
+                if not s.stale
             ],
             "requests": [
                 {
@@ -353,8 +379,19 @@ class Runtime:
                     "parent_id": r.parent_id,
                     "reason": r.reason,
                 }
-                for r in self.project.activity.requests()
-                if r.run_id == self.run_id
+                for r in requests
+                if r.status not in {"completed", "cancelled"}
+            ],
+            "recent_tool_calls": [
+                {
+                    "request_id": r.id,
+                    "tool": r.target,
+                    "arguments": r.arguments,
+                    "status": r.status,
+                    "result": r.result,
+                    "reason": r.reason,
+                }
+                for r in recent
             ],
             "catalogue": [
                 t.model_dump(mode="json") for t in self.project.tools.definitions()
@@ -371,6 +408,23 @@ class Runtime:
                 for s in store.list("review")
             ],
         }
+
+    async def _hook(
+        self,
+        middleware: ContextMiddleware,
+        hook: CoroutineType[Any, Any, None],
+        request_id: str,
+    ) -> None:
+        try:
+            await hook
+        except Exception as exc:  # noqa: BLE001 -- optional middleware never stops a run
+            self.project.store.event(
+                "runtime",
+                "middleware.failed",
+                type(middleware).__name__,
+                {"hook": hook.__qualname__, "error_type": type(exc).__name__},
+                request_id=request_id,
+            )
 
     async def step(self, agent: AgentSpec, state: AgentState) -> None:
         activity, store = self.project.activity, self.project.store
@@ -437,13 +491,71 @@ class Runtime:
                     self.deadline - time.monotonic(),
                 )
             ):
-                packet = await self.project.contexts.build(
+                call = Invocation(
+                    self.project,
                     actual,
-                    state.request_id,
-                    self.provider,
-                    instructions=CHIEF if agent.id == self.chief_id else COMMON,
-                    state=self._context_state(agent, state),
+                    query=f"{agent.objective}\n{encode(state.observation)}"[:4000],
                 )
+                for middleware in self.project.middleware:
+                    await self._hook(
+                        middleware, middleware.before_model(call), state.request_id
+                    )
+                context_state = self._context_state(agent, state)
+
+                def build(spec: AgentSpec) -> Awaitable[ContextPacket]:
+                    return self.project.contexts.build(
+                        spec,
+                        state.request_id,
+                        self.provider,
+                        instructions=CHIEF if agent.id == self.chief_id else COMMON,
+                        state=context_state,
+                        memory=call.memory,
+                        omissions=call.omissions,
+                    )
+
+                try:
+                    packet = await build(call.agent)
+                except ContextOverflow:
+                    # Budgets are set without seeing the runtime state each prompt
+                    # carries; required material may grow them to the run's limit.
+                    limit = min(
+                        self.request.context.max_input_tokens,
+                        self.provider.context_capacity_tokens
+                        - call.agent.context.reserved_output_tokens,
+                    )
+                    previous = call.agent.context.max_input_tokens
+                    if previous >= limit:
+                        raise
+                    stored = store.model("agent", agent.id, AgentSpec)
+                    with store.atomic():
+                        store.put(
+                            "agent",
+                            agent.id,
+                            stored.model_copy(
+                                update={
+                                    "context": stored.context.model_copy(
+                                        update={"max_input_tokens": limit}
+                                    )
+                                }
+                            ),
+                            actor="runtime",
+                            request_id=state.request_id,
+                        )
+                        store.event(
+                            "runtime",
+                            "agent.budget_raised",
+                            agent.id,
+                            {"from": previous, "to": limit},
+                            request_id=state.request_id,
+                        )
+                    call.agent = call.agent.model_copy(
+                        update={
+                            "context": call.agent.context.model_copy(
+                                update={"max_input_tokens": limit}
+                            )
+                        }
+                    )
+                    packet = await build(call.agent)
                 if self.project.human.version(self.run_id) != human_version:
                     return
                 store.event(
@@ -455,7 +567,7 @@ class Runtime:
                         "provider": self.provider.name,
                         "model": self.provider.model,
                         "input_tokens": packet.input_tokens,
-                        "max_input_tokens": actual.context.max_input_tokens,
+                        "max_input_tokens": call.agent.context.max_input_tokens,
                         "deferred": len(packet.deferred),
                     },
                     request_id=state.request_id,
@@ -535,6 +647,13 @@ class Runtime:
                         actor="runtime",
                         reason=str(observation.get("reason", "Awaiting human review")),
                     )
+            # ponytail: memory ingestion is inline and untimed; background it if slow.
+            for middleware in self.project.middleware:
+                await self._hook(
+                    middleware,
+                    middleware.after_model(call, turn, observation),
+                    state.request_id,
+                )
         except TimeoutError:
             if self.project.human.version(self.run_id) != human_version:
                 return
@@ -901,23 +1020,7 @@ class Runtime:
                 )
                 return {"selected": [r.model_dump(mode="json") for r in refs]}, "active"
             case Compact():
-                ref = project.summarize(action.summary, actor=agent.id)
-                context = agent.context.model_copy(
-                    update={
-                        "summaries": (*agent.context.summaries, ref),
-                        "selected": tuple(
-                            r
-                            for r in agent.context.selected
-                            if r not in action.summary.sources
-                        ),
-                    }
-                )
-                store.put(
-                    "agent",
-                    agent.id,
-                    agent.model_copy(update={"context": context}),
-                    actor="runtime",
-                )
+                ref = project.compact(agent.id, action.summary, actor=agent.id)
                 return {"summary": ref.model_dump(mode="json")}, "active"
             case Extract():
                 ref = project.extract(action.tool_request, actor=agent.id)

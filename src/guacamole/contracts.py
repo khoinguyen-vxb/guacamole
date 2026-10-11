@@ -136,7 +136,10 @@ class ContextPacket(Model):
     prompt: str
     input_tokens: int = Field(ge=0)
     token_count_method: Literal[
-        "exact", "utf8_upper_bound", "tiktoken_o200k_base_estimate_10pct_plus_1024"
+        "exact",
+        "utf8_upper_bound",
+        "tiktoken_o200k_base_estimate_10pct_plus_1024",
+        "litellm_estimate_10pct_plus_1024",
     ] = "exact"
     reserved_output_tokens: int = Field(gt=0)
     sources: tuple[Ref, ...] = ()

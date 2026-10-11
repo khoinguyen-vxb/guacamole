@@ -298,8 +298,9 @@ user projects or separately installed packages. The core generates validation an
 MCP schemas from explicitly registered Python callables. It validates both inputs
 and results; annotations alone do not validate data from agents or external tools.
 
-Shared SQLite persistence is in storage.py. The configured Astra reasoning
-integration is in providers/astra.py; dynamic agent execution is in agents/runtime.py.
+Shared SQLite persistence is in storage.py. Reasoning providers are in providers/:
+litellm.py for API models, codex.py and claude.py for the local CLIs. Dynamic agent
+execution is in agents/runtime.py; optional context middleware is in middleware.py.
 outline.txt lists the current files and their responsibilities.
 
 ## One Chief Engineer, agents defined by tasks

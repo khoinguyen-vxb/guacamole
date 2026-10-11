@@ -3,6 +3,7 @@
 import fcntl
 import hashlib
 import mimetypes
+from collections.abc import Sequence
 from contextlib import ExitStack
 from pathlib import Path
 from typing import TYPE_CHECKING, Self
@@ -12,6 +13,7 @@ from .context import ContextBuilder, ReasoningProvider
 from .contracts import (
     JSON,
     ActivityEvent,
+    AgentSpec,
     ArtifactRecord,
     AskHuman,
     ContextPacket,
@@ -45,6 +47,7 @@ from .tools.registry import Tool, ToolRegistry, encode
 if TYPE_CHECKING:
     from .agents.runtime import Runtime
     from .agents.watchdog import Watchdog
+    from .middleware import ContextMiddleware
 
 
 class Project:
@@ -56,6 +59,7 @@ class Project:
         tools: ToolRegistry | None = None,
         reasoning: ReasoningProvider | None = None,
         watchdog: "Watchdog | None" = None,
+        middleware: "Sequence[ContextMiddleware]" = (),
         read_only: bool = False,
     ) -> None:
         workspace = workspace.expanduser().resolve()
@@ -108,6 +112,7 @@ class Project:
                     self.tools.schema(name, annotation)
             self.reasoning = reasoning
             self.watchdog = watchdog
+            self.middleware = tuple(middleware)
             self.activity = Activity(self.store, self.tools)
             self.human = Humans(self)
             self.contexts = ContextBuilder(self.store, self.activity, self.tools)
@@ -312,6 +317,29 @@ class Project:
         return self.store.put(
             "summary", uid(), summary, actor=actor, dependencies=summary.sources
         )
+
+    def compact(self, agent_id: str, summary: Summary, *, actor: str) -> Ref:
+        """Replace an agent's optional sources and summaries with one citing them."""
+        ref = self.summarize(summary, actor=actor)
+        agent = self.store.model("agent", agent_id, AgentSpec)
+        context = agent.context.model_copy(
+            update={
+                "summaries": (
+                    *(r for r in agent.context.summaries if r not in summary.sources),
+                    ref,
+                ),
+                "selected": tuple(
+                    r for r in agent.context.selected if r not in summary.sources
+                ),
+            }
+        )
+        self.store.put(
+            "agent",
+            agent_id,
+            agent.model_copy(update={"context": context}),
+            actor="runtime",
+        )
+        return ref
 
     def publish(
         self,

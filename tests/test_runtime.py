@@ -1,5 +1,4 @@
 import asyncio
-import io
 import json
 import sqlite3
 import tempfile
@@ -7,8 +6,8 @@ import time
 import unittest
 from pathlib import Path
 from unittest.mock import patch
-from urllib.error import HTTPError
 
+import litellm
 from runtime_support import TestReasoning, plan_request
 
 from guacamole import (
@@ -26,7 +25,9 @@ from guacamole import (
     Requirement,
     TaskAuthorization,
     TaskReport,
+    ToolRegistry,
 )
+from guacamole.agents.runtime import Runtime
 from guacamole.context import (
     ContextBuilder,
     ContextOverflow,
@@ -34,6 +35,7 @@ from guacamole.context import (
     encode_context,
 )
 from guacamole.contracts import (
+    AgentState,
     ContextPacket,
     Decide,
     Finish,
@@ -44,10 +46,11 @@ from guacamole.contracts import (
     RequestRecord,
     Send,
     Spawn,
+    ToolCall,
     Wait,
 )
 from guacamole.decision import DecisionBlocked
-from guacamole.providers.astra import AstraReasoning
+from guacamole.providers.litellm import LiteLLMReasoning
 
 
 class RuntimeTests(unittest.IsolatedAsyncioTestCase):
@@ -281,6 +284,44 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     state["observation"]["selected"][0]["id"], reader.target.id
                 )
 
+    async def test_earlier_tool_results_stay_in_later_turns(self):
+        def shout(text: str) -> str:
+            return text.upper()
+
+        class Caller(TestReasoning):
+            def __init__(self):
+                self.states = []
+
+            async def respond(self, packet):
+                self.states.append(json.loads(packet.prompt)["state"])
+                calls = len(self.states)
+                return AgentTurn(
+                    rationale=Rationale(objective="Fixture", explanation="Fixture"),
+                    action=ToolCall(
+                        tool=tool.definition.grant, arguments={"text": f"call {calls}"}
+                    )
+                    if calls <= 3
+                    else Wait(reason="Fixture finished"),
+                )
+
+        tools = ToolRegistry()
+        tool = tools.register(shout, requires_plan=False)
+        with tempfile.TemporaryDirectory() as directory:
+            provider = Caller()
+            with Project(Path(directory), tools=tools, reasoning=provider) as project:
+                await project.run(
+                    ProjectRequest(
+                        description="Tool history fixture",
+                        context=ContextSpec(max_input_tokens=200_000),
+                    )
+                )
+        state = provider.states[3]
+        self.assertEqual(state["last_observation"]["result"], "CALL 3")
+        self.assertEqual(
+            [(c["arguments"]["text"], c["result"]) for c in state["recent_tool_calls"]],
+            [("call 1", "CALL 1"), ("call 2", "CALL 2")],
+        )
+
     async def test_invalid_rationale_references_can_be_corrected(self):
         class Correcting(TestReasoning):
             def __init__(self, bad, current):
@@ -341,42 +382,20 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                         project.store.list("agent_state")[0].data["status"], "waiting"
                     )
 
-    async def test_astra_uses_the_exact_counted_packet(self):
+    async def test_litellm_sends_the_exact_counted_packet(self):
         expected = AgentTurn(
             rationale=Rationale(
                 objective="fixture", explanation="No engineering claim"
             ),
             action=Wait(reason="await inputs"),
         )
-
-        class FakeHTTP(AstraReasoning):
-            def __init__(self):
-                super().__init__()
-                self.calls = []
-
-            def _post(self, path, data):
-                self.calls.append((path, data))
-                if path == "/input_tokens":
-                    return {"input_tokens": len(data["input"])}
-                return {
-                    "id": "fixture-response",
-                    "status": "completed",
-                    "output": [
-                        {
-                            "type": "message",
-                            "content": [
-                                {
-                                    "type": "output_text",
-                                    "text": expected.model_dump_json(),
-                                }
-                            ],
-                        }
-                    ],
-                }
-
-        provider = FakeHTTP()
+        # LiteLLM's mock_response runs its real request path without a network call.
+        provider = LiteLLMReasoning(
+            "anthropic/claude-opus-5-5",
+            effort="low",
+            mock_response=f"```json\n{expected.model_dump_json()}\n```",
+        )
         prompt = '{"instructions":"Return JSON", "sources":[]}'
-        count = await provider.count_tokens(prompt)
         packet = ContextPacket(
             agent_id="fixture",
             invocation_id="one",
@@ -384,59 +403,52 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             provider=provider.name,
             model=provider.model,
             prompt=prompt,
-            input_tokens=count,
+            input_tokens=await provider.count_tokens(prompt),
+            token_count_method=provider.token_count_method,
             reserved_output_tokens=1000,
         )
-        result = await provider.respond(packet)
-        self.assertEqual(result.provider_request_id, "fixture-response")
-        self.assertEqual(provider.calls[0][1]["input"], provider.calls[1][1]["input"])
-        self.assertEqual(provider.calls[1][1]["model"], "gpt-6-astra")
-        self.assertFalse(provider.calls[1][1]["store"])
-        self.assertNotIn("tools", provider.calls[1][1])
+        with patch.object(
+            litellm, "acompletion", wraps=litellm.acompletion
+        ) as completion:
+            result = await provider.respond(packet)
+        self.assertEqual(result.action, expected.action)
+        self.assertTrue(result.provider_request_id)
+        sent = completion.call_args.kwargs
+        self.assertEqual(sent["messages"][-1], {"role": "user", "content": prompt})
+        self.assertEqual(sent["model"], "anthropic/claude-opus-5-5")
+        self.assertEqual(sent["reasoning_effort"], "low")
+        self.assertEqual(sent["max_tokens"], 1000)
+        self.assertNotIn("tools", sent)
+        with self.assertRaisesRegex(ValueError, "context_capacity_tokens"):
+            LiteLLMReasoning("fixture/unmapped-model")
 
-    async def test_provider_http_diagnostics_survive_without_server_text(self):
+    async def test_provider_diagnostics_survive_without_server_text(self):
         secret = "fixture-secret-must-not-persist"
-
-        class CountedAstra(AstraReasoning):
-            async def count_tokens(self, prompt):
-                return len(prompt)
-
-        for phase, provider in (
-            ("context", AstraReasoning()),
-            ("provider", CountedAstra()),
+        for error, expected in (
+            (
+                litellm.RateLimitError(f"insufficient_quota {secret}", "openai", "m"),
+                "API credits or quota exhausted",
+            ),
+            (litellm.RateLimitError(secret, "openai", "m"), "API rate limit exceeded"),
+            (litellm.AuthenticationError(secret, "openai", "m"), "API key"),
+            (litellm.APIConnectionError(secret, "openai", "m"), "Connection failed"),
         ):
-            for code, expected in (
-                ("credit_balance_exhausted", "API credits or quota exhausted"),
-                ("insufficient_quota", "API credits or quota exhausted"),
-                ("rate_limit_exceeded", "API rate limit exceeded"),
-                (None, "Check API rate limits and billing quota"),
+            with (
+                self.subTest(expected=expected),
+                tempfile.TemporaryDirectory() as directory,
+                patch.object(litellm, "acompletion", side_effect=error),
+                Project(
+                    Path(directory), reasoning=LiteLLMReasoning("openai/gpt-6-astra")
+                ) as project,
             ):
-                body = json.dumps({"error": {"code": code, "message": secret}})
-                error = HTTPError(
-                    "https://api.openai.com/v1/responses",
-                    429,
-                    secret,
-                    {},
-                    io.BytesIO(body.encode() if code else secret.encode()),
-                )
-                with (
-                    self.subTest(phase=phase, code=code),
-                    tempfile.TemporaryDirectory() as directory,
-                    patch.dict("os.environ", {"OPENAI_API_KEY": secret}),
-                    patch("guacamole.providers.astra.urlopen", side_effect=error),
-                    Project(Path(directory), reasoning=provider) as project,
-                ):
-                    result = await project.run(ProjectRequest(description="fixture"))
-                    self.assertEqual(result.status, "incomplete")
-                    self.assertIn(expected, result.open_items[-1])
-                    request = project.requests()[0]
-                    self.assertIn("HTTP 429", request.reason)
-                    event = next(
-                        e for e in project.events() if e.type == "action.rejected"
-                    )
-                    self.assertEqual(event.details["phase"], phase)
-                    self.assertIn(expected, event.details["detail"])
-                    self.assertNotIn(secret, json.dumps(project.trace(request.id)))
+                result = await project.run(ProjectRequest(description="fixture"))
+                self.assertEqual(result.status, "incomplete")
+                self.assertIn(expected, result.open_items[-1])
+                event = next(e for e in project.events() if e.type == "action.rejected")
+                self.assertEqual(event.details["phase"], "provider")
+                self.assertIn(expected, event.details["detail"])
+                trace = json.dumps(project.trace(project.requests()[0].id))
+                self.assertNotIn(secret, trace)
 
     async def test_arbitrary_provider_exception_text_stays_private(self):
         secret = "fixture-secret-must-not-persist"
@@ -456,7 +468,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             )
 
     async def test_incomplete_provider_response_explains_output_limit(self):
-        provider = AstraReasoning()
+        provider = LiteLLMReasoning("openai/gpt-6-astra")
         packet = ContextPacket(
             agent_id="fixture",
             invocation_id="one",
@@ -467,20 +479,96 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             input_tokens=1,
             reserved_output_tokens=1000,
         )
+        truncated = litellm.ModelResponse(
+            choices=[
+                {
+                    "index": 0,
+                    "finish_reason": "length",
+                    "message": {"role": "assistant", "content": ""},
+                }
+            ]
+        )
         with (
-            patch.object(
-                provider,
-                "_post",
-                return_value={
-                    "id": "fixture-response",
-                    "status": "incomplete",
-                    "output": [],
-                    "incomplete_details": {"reason": "max_output_tokens"},
-                },
-            ),
+            patch.object(litellm, "acompletion", return_value=truncated),
             self.assertRaisesRegex(ProviderError, "reserved_output_tokens"),
         ):
             await provider.respond(packet)
+
+    async def test_context_state_lists_current_records_and_open_requests(self):
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory) / "state") as project,
+        ):
+            refs = []
+            for name in ("current.txt", "stale.txt"):
+                path = Path(directory) / name
+                path.write_text(name)
+                refs.append(project.ingest(path))
+            project.store.invalidate(refs[1], actor="script", reason="Fixture")
+            runtime = Runtime(project, TestReasoning())
+            runtime.run_id = "fixture-run"
+            ids = {}
+            for status in ("completed", "cancelled", "failed"):
+                record = project.activity.request(
+                    RequestRecord(
+                        run_id="fixture-run",
+                        requester="script",
+                        target="fixture",
+                        kind="tool",
+                        arguments={},
+                        purpose=status,
+                    )
+                )
+                for step in ("dispatched", "running", status):
+                    project.activity.transition(record.id, step, actor="script")
+                ids[status] = record.id
+            agent = AgentSpec(
+                task_id="fixture",
+                parent_id=None,
+                objective="fixture",
+                context=ContextSpec(),
+                decision_id=None,
+            )
+            state = runtime._context_state(agent, AgentState(request_id=ids["failed"]))
+            self.assertEqual(state["records"], [refs[0].model_dump(mode="json")])
+            self.assertEqual([r["id"] for r in state["requests"]], [ids["failed"]])
+
+    async def test_required_context_raises_a_small_budget_to_the_run_limit(self):
+        class Waiting(TestReasoning):
+            async def respond(self, packet):
+                return AgentTurn(
+                    rationale=Rationale(objective="fixture", explanation="Fixture"),
+                    action=Wait(reason="fixture"),
+                )
+
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=Waiting()) as project,
+        ):
+            request = ProjectRequest(
+                description="fixture", context=ContextSpec(max_input_tokens=200_000)
+            )
+            result = await project.run(request)
+            chief_id = str(project.store.get("run", result.run_id).data["chief_id"])
+            chief = project.store.model("agent", chief_id, AgentSpec)
+            # A budget below the runtime's own share of the prompt, as a Chief may set.
+            small = chief.context.model_copy(update={"max_input_tokens": 1_000})
+            project.store.put(
+                "agent",
+                chief_id,
+                chief.model_copy(update={"context": small}),
+                actor="script",
+            )
+            await project.run(resume=result.run_id)
+            raised = [e for e in project.events() if e.type == "agent.budget_raised"]
+            self.assertEqual(
+                [e.details for e in raised], [{"from": 1_000, "to": 200_000}]
+            )
+            chief = project.store.model("agent", chief_id, AgentSpec)
+            self.assertEqual(chief.context.max_input_tokens, 200_000)
+            self.assertFalse(
+                [r for r in project.requests() if "Pinned context" in (r.reason or "")]
+            )
 
     async def test_reasoning_required_and_explicit_choices_validated(self):
         with (

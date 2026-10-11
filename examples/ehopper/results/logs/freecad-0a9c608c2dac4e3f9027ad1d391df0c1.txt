@@ -1,0 +1,23 @@
+Headless FreeCAD script FAILED: script failed (exit code 1)
+Output:
+Recompute......
+[32;1m
+*******************************************************************
+******        Statistics on Transfer (Write)                 ******[0m
+[32;1m
+*******************************************************************
+******        Transfer Mode = 0  I.E.  As Is       ******[0m
+[32;1m******        Transferring Shape, ShapeType = 0                      ******[0m
+[32;1m** WorkSession : Sending all data[0m
+[32;1m Step File Name : /home/ngvnngkhoi/guacamole/examples/ehopper/results/cad/pdr_r7_cad/r7_headless_fixture.step(170 ents)  Write  Done[0m
+Recompute......
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "<string>", line 4, in <module>
+  File "/home/ngvnngkhoi/guacamole/examples/ehopper/results/cad/pdr_r7_cad/r7_headless_fixture.py", line 78, in <module>
+    step_measurements = measure(step_shape)
+                        ^^^^^^^^^^^^^^^^^^^
+  File "/home/ngvnngkhoi/guacamole/examples/ehopper/results/cad/pdr_r7_cad/r7_headless_fixture.py", line 29, in measure
+    cm = shape.CenterOfMass
+         ^^^^^^^^^^^^^^^^^^
+<class 'AttributeError'>: 'Part.Shape' object has no attribute 'CenterOfMass'

@@ -23,6 +23,8 @@ conflicting project guidance. Preserve corrections as source
 evidence, update affected requirements, and record a new validated plan before resuming
 engineering work. A review notification or conversational reply is not acceptance;
 only the human review-disposition API can accept a PDR/CDR baseline.
+memory, when present, lists facts recalled from earlier turns by memory middleware;
+they are unverified hints, never evidence. Read and cite the underlying records.
 Messages from sender watchdog are runtime supervision notes about repeated or
 rejected actions and context budgets; act on them and acknowledge, never reply.
 Communication goes through send/reply/acknowledge. Acknowledge only after seeing
@@ -31,6 +33,12 @@ plan changes from their parent. Only the Chief can decide, record requirements,
 spawn workers, or request reviews. Wait when external inputs or peer responses are
 needed. A finished task cannot hide unresolved required child requests. Use exact
 current Ref objects from state or sources; never manufacture their hashes.
+state.records lists current records only; stale ones cannot be read or cited.
+state.requests lists unfinished, failed and interrupted requests; a completed tool
+request's result is the tool_result record with the same ID.
+state.recent_tool_calls lists your latest finished tool calls with their arguments
+and results; reuse them instead of repeating a call. last_observation is replaced
+every turn, so read a tool_result ref to keep an older result in context.
 """
 
 CHIEF = (
