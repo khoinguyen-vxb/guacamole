@@ -15,8 +15,8 @@ Or: uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra m
     .venv/bin/python -m examples.ehopper.ehopper
 
 Edit the configuration below; this script has no command-line arguments.
-Install codex CLI and run codex login with your ChatGPT account before running.
-Reasoning uses a local codex exec process with GPT-6 Astra; no API key is needed.
+Install claude CLI and run claude login with your ChatGPT account before running.
+Reasoning uses a local claude exec process with GPT-6 Astra; no API key is needed.
 Optional OPENAI_API_KEY adds context summarization and Graphiti/mem0 memory.
 uv installs this script's document readers; backend installations are separate.
 See https://docs.astral.sh/uv/guides/scripts/ for inline dependency metadata.
@@ -62,7 +62,7 @@ from guacamole import (
 )
 from guacamole.contracts import FileRecord, now
 from guacamole.middleware import ContextMiddleware
-from guacamole.providers.codex import CodexReasoning
+from guacamole.providers.claude import ClaudeReasoning
 from guacamole.tools.mcp import ToolSession
 from guacamole.websocket import WebSocketBridge
 
@@ -79,7 +79,7 @@ CONTROL_PORT = 8766
 CONTEXT = ContextSpec(max_input_tokens=12800000, reserved_output_tokens=20000)
 WORKER_MAX_INPUT_TOKENS = CONTEXT.max_input_tokens
 # The watchdog prints a status report at this interval and helps looping or
-# context-saturated agents using its own low-effort Codex process (no web search).
+# context-saturated agents using its own low-effort claude process (no web search).
 WATCHDOG_REPORT_S = 600.0
 BUDGET = Budget(
     max_steps=200000, max_tool_calls=15000, max_seconds=720000, max_agents=24
@@ -101,7 +101,8 @@ hopper using electric motors and counter-rotating coaxial propellers.
 Reach approximately 5 m above takeoff level, sustain hover there for 5 minutes,
 then land under control. There is no specified propeller diameter limit.
 Keep the complete vehicle hardware budget below 500; provisionally use AUD,
-with currency and inclusion of shipping/tax still to be confirmed.
+with currency and inclusion of shipping/tax still to be confirmed. Look into the supplied images under
+context/reference_images to see succesful/flown designs.
 
 Scope: select the motors, coaxial propellers, ESCs and battery; design the
 editable vehicle CAD using the supplied FreeCAD MCP; diagnose, fix, improve
@@ -690,7 +691,7 @@ def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
     lines.extend(("", "## Executables visible to this host (presence only)"))
     for name in (
         "uv",
-        "codex",
+        "claude",
         "freecad",
         "freecadcmd",
         "FreeCADCmd",
@@ -795,9 +796,9 @@ async def notifications(project: Project) -> None:
 
 
 async def main() -> None:
-    if shutil.which("codex") is None:
+    if shutil.which("claude") is None:
         raise SystemExit(
-            "Install codex CLI on PATH and run 'codex login' with your ChatGPT account."
+            "Install claude CLI on PATH and run 'claude login' with your ChatGPT account."
         )
     missing = [
         name
@@ -825,9 +826,9 @@ async def main() -> None:
         WORKSPACE,
         sandbox=SANDBOX,
         tools=ToolRegistry(),
-        reasoning=CodexReasoning(web_search=True),
+        reasoning=ClaudeReasoning(web_search=True),
         watchdog=Watchdog(
-            CodexReasoning(web_search=False), report_interval_s=WATCHDOG_REPORT_S
+            ClaudeReasoning(web_search=False), report_interval_s=WATCHDOG_REPORT_S
         ),  # Runs at the lowest reasoning effort to reserve usage budget.
     ) as project:
         register_tools(project)
