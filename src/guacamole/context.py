@@ -4,6 +4,8 @@ import asyncio
 from collections.abc import Callable, Sequence
 from typing import Protocol
 
+from pydantic import JsonValue
+
 from .activity import Activity
 from .contracts import (
     JSON,
@@ -16,6 +18,27 @@ from .contracts import (
 )
 from .storage import Store
 from .tools.registry import ToolRegistry, encode
+
+# Prompt fields from least to most volatile. Each group but the last ends a prefix
+# providers may cache: the first changes with an agent's role and grants, the second
+# when it reads or records something, the last every turn.
+LAYOUT = (
+    (
+        "instructions",
+        "response_schema",
+        "result_schema",
+        "tool_schemas",
+        "catalogue",
+        "user_instructions",
+    ),
+    ("agent", "sources"),
+    ("memory", "messages", "state"),
+)
+# Frames a stable prefix that a CLI provider sends with its system instructions.
+CONTINUED = (
+    "The context packet is one JSON object. It begins below, and the user message "
+    "continues it.\n"
+)
 
 
 class ReasoningProvider(Protocol):
@@ -35,7 +58,51 @@ class ProviderError(RuntimeError):
     """A locally constructed provider diagnostic safe to persist without secrets."""
 
 
-def encode_context(payload: dict) -> str:
+def preview(value: JsonValue, limit: int) -> JsonValue:
+    """value within about limit encoded characters, keeping its structure.
+
+    Short fields stay verbatim, so a status beside a long log survives; long
+    strings, lists and objects end in a marker counting what was cut.
+    """
+    if len(encode(value)) <= limit:
+        return value
+    room = limit - 24  # Left for content once the marker is in
+    if isinstance(value, str):
+        keep = max(room, 0)
+        # Escapes make encoded text longer than the characters kept.
+        while keep and (size := len(encode(value[:keep]))) > room:
+            keep = keep * room // size
+        return f"{value[:keep]}…[{len(value) - keep} more chars]"
+    if isinstance(value, list):
+        items: list[JsonValue] = []
+        for item in value:
+            part = preview(item, room)
+            if len(encode(part)) + 1 > room:
+                break
+            items.append(part)
+            room -= len(encode(part)) + 1
+        cut = len(value) - len(items)
+        return [*items, f"…[{cut} more items]"] if cut else items
+    if isinstance(value, dict):
+        # Smallest first: short fields stay whole, long ones share what is left.
+        fields: dict[str, JsonValue] = {}
+        order = sorted(value, key=lambda key: len(encode(value[key])))
+        for index, key in enumerate(order):
+            overhead = len(encode(key)) + 2
+            share = max(room // (len(order) - index), 64)
+            part = preview(value[key], share - overhead)
+            if len(encode(part)) + overhead > room:
+                break
+            fields[key] = part
+            room -= len(encode(part)) + overhead
+        shown: dict[str, JsonValue] = {k: fields[k] for k in value if k in fields}
+        if len(fields) < len(value):
+            shown["…"] = f"[{len(value) - len(fields)} more fields]"
+        return shown
+    return value
+
+
+def _referenced(payload: dict) -> dict:
     """Reference exact evidence already included as a source instead of embedding it twice."""
     contents = {encode(s["ref"]): s["data"] for s in payload["sources"]}
     sources = []
@@ -54,7 +121,43 @@ def encode_context(payload: dict) -> str:
                 "data": data | {"request": request | {"context": context}}
             }
         sources.append(source)
-    return encode(payload | {"sources": sources})
+    return payload | {"sources": sources}
+
+
+def _render(data: dict) -> tuple[str, tuple[int, ...]]:
+    """Encode data in LAYOUT order; return the prompt and its cacheable prefix lengths."""
+    known = {key for group in LAYOUT for key in group}
+    groups = (*LAYOUT[:-1], (*LAYOUT[-1], *sorted(data.keys() - known)))
+    fields: list[str] = []
+    ends: list[int] = []
+    length = 1  # The opening brace
+    for group in groups:
+        for key in group:
+            if key in data:
+                fields.append(f"{encode(key)}:{encode(data[key])}")
+                length += len(fields[-1]) + 1  # The field and the comma after it
+        ends.append(length)
+    prompt = "{" + ",".join(fields) + "}"
+    return prompt, tuple(sorted({end for end in ends[:-1] if 1 < end < len(prompt)}))
+
+
+def _components(data: dict, pinned: int) -> dict[str, int]:
+    """Characters per prompt component; state and sources are split further."""
+    sizes: dict[str, int] = {}
+    for key, value in data.items():
+        if key == "state":
+            sizes |= {f"state.{k}": len(encode(v)) for k, v in value.items()}
+        elif key == "sources":
+            sizes["sources.pinned"] = sum(len(encode(s)) for s in value[:pinned])
+            sizes["sources.selected"] = sum(len(encode(s)) for s in value[pinned:])
+        else:
+            sizes[key] = len(encode(value))
+    return sizes
+
+
+def encode_context(payload: dict) -> str:
+    """The prompt for payload: stable fields first, included evidence referenced once."""
+    return _render(_referenced(payload))[0]
 
 
 class ContextBuilder:
@@ -90,6 +193,7 @@ class ContextBuilder:
         state: JSON,
         memory: Sequence[JSON] = (),
         omissions: Sequence[Omission] = (),
+        catalogue: bool = False,
     ) -> ContextPacket:
         loop = asyncio.get_running_loop()
 
@@ -115,6 +219,7 @@ class ContextBuilder:
                     state=state,
                     memory=memory,
                     deferred=omissions,
+                    catalogue=catalogue,
                 )
             finally:
                 reader.close()
@@ -137,6 +242,7 @@ class ContextBuilder:
         state: JSON,
         memory: Sequence[JSON] = (),
         deferred: Sequence[Omission] = (),
+        catalogue: bool = False,
     ) -> ContextPacket:
         spec = agent.context
         max_chars = getattr(provider, "max_input_chars", None)
@@ -161,6 +267,13 @@ class ContextBuilder:
             "sources": [],
             "messages": [],
         }
+        if catalogue:
+            # The Chief plans with every registered tool; its own are in tool_schemas.
+            payload["catalogue"] = [
+                t.model_dump(mode="json")
+                for t in self.registry.definitions()
+                if t.grant not in agent.tools
+            ]
         refs: list[Ref] = []
         for ref in spec.pinned:
             snapshot = self.store.resolve(ref, current=True)
@@ -179,8 +292,40 @@ class ContextBuilder:
             raise ContextOverflow(
                 f"Pinned context and contracts require {count} input tokens; budget is {spec.max_input_tokens}"
             )
+
+        def admit(target: list, entries: Sequence) -> set[int]:
+            """Append entries in priority order while the prompt fits; return the rest.
+
+            A run of entries is measured whole and bisected only when it overflows,
+            so a context that fits costs one count instead of one per entry.
+            """
+            nonlocal count
+            rejected: set[int] = set()
+            start, base = 0, len(target)
+            while start < len(entries):
+                # entries[start:fit] fits; nothing longer than entries[start:cap] can.
+                fit, cap, probe = start, len(entries), len(entries)
+                while fit < cap:
+                    target[base:] = entries[start:probe]
+                    prompt = encode_context(payload)
+                    measured = (
+                        None
+                        if max_chars is not None and len(prompt) > max_chars
+                        else count_tokens(prompt)
+                    )
+                    if measured is not None and measured <= spec.max_input_tokens:
+                        fit, count = probe, measured
+                    else:
+                        cap = probe - 1
+                    probe = (fit + cap + 1) // 2
+                target[base:] = entries[start:fit]
+                base += fit - start
+                if fit < len(entries):
+                    rejected.add(fit)
+                start = fit + 1
+            return rejected
+
         omissions = list(deferred)
-        messages: list[str] = []
         # New messages first. Inclusion is never acknowledgement.
         entries = sorted(
             self.activity.inbox(agent.id),
@@ -190,44 +335,41 @@ class ContextBuilder:
                 e.message.created_at,
             ),
         )
-        for entry in entries:
-            # An answered message is settled even if never acknowledged; showing it
-            # again made agents reply to it again.
-            if (
-                entry.delivered_at is None
-                or entry.acknowledged_at is not None
-                or entry.response_message_id is not None
-            ):
-                continue
-            payload["messages"].append(entry.message.model_dump(mode="json"))
-            prompt = encode_context(payload)
-            measured = count_tokens(prompt)
-            if measured <= spec.max_input_tokens and (
-                max_chars is None or len(prompt) <= max_chars
-            ):
-                count = measured
-                messages.append(entry.message.id)
-            else:
-                payload["messages"].pop()
-                if entry.message.sender.startswith("human:"):
-                    raise ContextOverflow(
-                        "Human input exceeds the context budget or provider input limit; "
-                        "reduce context before continuing"
-                    )
-                omissions.append(
-                    Omission(
-                        item=entry.message.id,
-                        reason="Inbox message exceeds remaining input budget or provider input limit; remains pending",
-                    )
+        # An answered message is settled even if never acknowledged; showing it
+        # again made agents reply to it again.
+        pending = [
+            e
+            for e in entries
+            if e.delivered_at is not None
+            and e.acknowledged_at is None
+            and e.response_message_id is None
+        ]
+        rejected = admit(
+            payload["messages"], [e.message.model_dump(mode="json") for e in pending]
+        )
+        for index in sorted(rejected):
+            if pending[index].message.sender.startswith("human:"):
+                raise ContextOverflow(
+                    "Human input exceeds the context budget or provider input limit; "
+                    "reduce context before continuing"
                 )
+            omissions.append(
+                Omission(
+                    item=pending[index].message.id,
+                    reason="Inbox message exceeds remaining input budget or provider input limit; remains pending",
+                )
+            )
+        messages = [e.message.id for i, e in enumerate(pending) if i not in rejected]
         selected = (
             *spec.selected,
             *spec.summaries,
             *self.search(spec.search, spec.max_search_results),
         )
+        seen = {(r.kind, r.id) for r in refs}
+        candidates: list[tuple[Ref, JSON]] = []
         for ref in selected:
             # A current pinned revision supersedes an older selected version.
-            if any((r.kind, r.id) == (ref.kind, ref.id) for r in refs):
+            if (ref.kind, ref.id) in seen:
                 continue
             try:
                 snapshot = self.store.resolve(ref, current=True)
@@ -239,57 +381,52 @@ class ContextBuilder:
                     )
                 )
                 continue
-            payload["sources"].append(
-                snapshot.model_dump(mode="json") | {"locator": ref.locator}
+            seen.add((ref.kind, ref.id))
+            candidates.append(
+                (ref, snapshot.model_dump(mode="json") | {"locator": ref.locator})
             )
-            prompt = encode_context(payload)
-            measured = count_tokens(prompt)
-            if measured <= spec.max_input_tokens and (
-                max_chars is None or len(prompt) <= max_chars
-            ):
-                count = measured
-                refs.append(ref)
-            else:
-                payload["sources"].pop()
+        rejected = admit(payload["sources"], [data for _, data in candidates])
+        for index, (ref, _) in enumerate(candidates):
+            if index in rejected:
                 omissions.append(
                     Omission(
                         item=f"{ref.kind}:{ref.id}@{ref.revision}",
                         reason="Selected source exceeds remaining input budget or provider input limit",
                     )
                 )
-        # Middleware recall is the lowest-priority optional material.
-        recalled: list[JSON] = []
-        if memory:
-            payload["memory"] = recalled
-        for item in memory:
-            recalled.append(item)
-            prompt = encode_context(payload)
-            measured = count_tokens(prompt)
-            if measured <= spec.max_input_tokens and (
-                max_chars is None or len(prompt) <= max_chars
-            ):
-                count = measured
             else:
-                recalled.pop()
-                omissions.append(
-                    Omission(
-                        item=f"memory:{item.get('source')}:{item.get('id')}",
-                        reason="Recalled memory exceeds remaining input budget or provider input limit",
-                    )
+                refs.append(ref)
+        # Middleware recall is the lowest-priority optional material.
+        if memory:
+            recalled: list[JSON] = []
+            payload["memory"] = recalled
+            rejected = admit(recalled, memory)
+            if not recalled:
+                del payload["memory"]  # Keep the prompt the one last measured.
+            omissions.extend(
+                Omission(
+                    item=f"memory:{memory[i].get('source')}:{memory[i].get('id')}",
+                    reason="Recalled memory exceeds remaining input budget or provider input limit",
                 )
+                for i in sorted(rejected)
+            )
+        data = _referenced(payload)
+        prompt, breakpoints = _render(data)
         packet = ContextPacket(
             agent_id=agent.id,
             invocation_id=uid(),
             request_id=request_id,
             provider=provider.name,
             model=provider.model,
-            prompt=encode_context(payload),
+            prompt=prompt,
             input_tokens=count,
             token_count_method=getattr(provider, "token_count_method", "exact"),
             reserved_output_tokens=spec.reserved_output_tokens,
             sources=tuple(refs),
             message_ids=tuple(messages),
             deferred=tuple(omissions),
+            cache_breakpoints=breakpoints,
+            components=_components(data, len(spec.pinned)),
         )
         return packet
 

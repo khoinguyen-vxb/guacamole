@@ -10,7 +10,7 @@ import litellm
 from pydantic import JsonValue, ValidationError
 
 from ..context import ProviderError
-from ..contracts import AgentTurn, ContextPacket
+from ..contracts import JSON, AgentTurn, ContextPacket, Usage
 from .claude import _strip_fence
 
 _INSTRUCTIONS = (
@@ -45,9 +45,15 @@ class LiteLLMReasoning:
         context_capacity_tokens: int | None = None,
         effort: str | None = None,
         timeout_s: float = 600.0,
+        prompt_caching: bool | None = None,
         **options: JsonValue,
     ) -> None:
-        """options pass through to litellm.acompletion (api_base, num_retries, ...)."""
+        """options pass through to litellm.acompletion (api_base, num_retries, ...).
+
+        prompt_caching marks the packet's stable prefixes with cache_control. None
+        enables it for Claude models, which cache only marked prefixes; OpenAI caches
+        prefixes by itself, and Gemini would create billed cache resources.
+        """
         try:
             info = litellm.get_model_info(model)
         except Exception:  # noqa: BLE001 -- unmapped models raise a bare Exception
@@ -61,6 +67,11 @@ class LiteLLMReasoning:
         self.context_capacity_tokens = capacity
         self.max_output_tokens = info.get("max_output_tokens")
         self.effort, self.timeout_s, self.options = effort, timeout_s, options
+        self.prompt_caching = (
+            "claude" in model.casefold() and bool(info.get("supports_prompt_caching"))
+            if prompt_caching is None
+            else prompt_caching
+        )
 
     async def count_tokens(self, prompt: str) -> int:
         # ponytail: local tokenizer plus headroom; litellm.acount_tokens is exact for
@@ -80,12 +91,21 @@ class LiteLLMReasoning:
             packet.reserved_output_tokens > self.max_output_tokens
         ):
             raise ValueError(f"Requested output exceeds {self.model}'s output limit")
+        content: str | list[JSON] = packet.prompt
+        if self.prompt_caching and packet.cache_breakpoints:
+            # One block per stable prefix, each marked for caching.
+            ends = (*packet.cache_breakpoints, len(packet.prompt))
+            content = [
+                {"type": "text", "text": packet.prompt[start:end]}
+                | ({"cache_control": {"type": "ephemeral"}} if end in ends[:-1] else {})
+                for start, end in zip((0, *ends), ends, strict=False)
+            ]
         try:
             response = await litellm.acompletion(
                 model=self.model,
                 messages=[
                     {"role": "system", "content": _INSTRUCTIONS},
-                    {"role": "user", "content": packet.prompt},
+                    {"role": "user", "content": content},
                 ],
                 max_tokens=packet.reserved_output_tokens,
                 reasoning_effort=self.effort,
@@ -136,5 +156,26 @@ class LiteLLMReasoning:
                 "provider_request_id": response.id,
                 "provider_summary": getattr(choice.message, "reasoning_content", None)
                 or None,
+                "usage": _usage(response),
             }
         )
+
+
+def _usage(response: litellm.ModelResponse) -> Usage:
+    """LiteLLM's OpenAI-style usage, with cached tokens split from the full-price rest."""
+    usage = getattr(response, "usage", None)
+    if usage is None:
+        return Usage()
+    details = usage.prompt_tokens_details
+    read = (details.cached_tokens or 0) if details else 0
+    written = (getattr(details, "cache_write_tokens", None) or 0) if details else 0
+    cost = getattr(response, "_hidden_params", {}).get("response_cost")
+    return Usage(
+        input_tokens=max(usage.prompt_tokens - read - written, 0),
+        cache_read_input_tokens=read,
+        cache_creation_input_tokens=written,
+        output_tokens=usage.completion_tokens,
+        cost_usd=cost
+        if isinstance(cost, int | float) and not isinstance(cost, bool)
+        else None,
+    )

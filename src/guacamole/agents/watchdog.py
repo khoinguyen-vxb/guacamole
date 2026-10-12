@@ -27,6 +27,7 @@ from ..contracts import (
     Ref,
     RequestRecord,
     Send,
+    Usage,
     Wait,
 )
 from ..storage import Store
@@ -144,6 +145,13 @@ class Watchdog:
         self.notes: Counter[str] = Counter()
         self.recent: list[str] = []
         self.tokens = 0
+        # Token audit: estimated input sent per agent, characters per prompt
+        # component, provider-reported usage, and input spent on rejected turns.
+        self.sent: Counter[str] = Counter()
+        self.components: Counter[str] = Counter()
+        self.billed: dict[str, Usage] = {}
+        self.rejected = 0
+        self.own_sent, self.own_usage = 0, Usage()  # The watchdog's own calls
         self.request = project.activity.request(
             RequestRecord(
                 run_id=runtime.run_id,
@@ -200,21 +208,37 @@ class Watchdog:
                 packet = str(details["packet_id"])
                 self.usage[event.actor] = (used, limit, deferred, packet)
                 self.tokens += used
+                self.sent[event.actor] += used
+                components = details.get("components")
+                if isinstance(components, dict):
+                    self.components.update(
+                        {k: v for k, v in components.items() if type(v) is int}
+                    )
             elif event.type == "provider.responded":
                 turn = store.model("agent_turn", event.entity_id, AgentTurn)
                 self.objectives[event.actor] = turn.rationale.objective
                 self.turns[event.actor].append((event.entity_id, turn, None))
-            elif (
-                event.type == "action.rejected"
-                and details.get("phase") in {"action", "rationale"}
-                and self.turns[event.entity_id]
-            ):
-                invocation, turn, _ = self.turns[event.entity_id][-1]
-                self.turns[event.entity_id][-1] = (
-                    invocation,
-                    turn,
-                    str(details.get("detail")),
-                )
+                if turn.usage is not None:
+                    self.billed[event.actor] = (
+                        self.billed.get(event.actor, Usage()) + turn.usage
+                    )
+            elif event.type == "action.rejected":
+                # A rejected turn's prompt bought nothing; context failures send none.
+                if (
+                    details.get("phase") in {"provider", "rationale", "action"}
+                    and event.entity_id in self.usage
+                ):
+                    self.rejected += self.usage[event.entity_id][0]
+                if (
+                    details.get("phase") in {"action", "rationale"}
+                    and self.turns[event.entity_id]
+                ):
+                    invocation, turn, _ = self.turns[event.entity_id][-1]
+                    self.turns[event.entity_id][-1] = (
+                        invocation,
+                        turn,
+                        str(details.get("detail")),
+                    )
 
     def _status(self, agent_id: str) -> str:
         state = self.runtime.project.store.maybe("agent_state", agent_id)
@@ -337,6 +361,8 @@ class Watchdog:
                 },
             )
             turn = AgentTurn.model_validate(await provider.respond(packet))
+            self.own_sent += packet.input_tokens
+            self.own_usage += turn.usage or Usage()
             context = store.get("context", packet.id).ref
             store.put(
                 "agent_turn",
@@ -421,6 +447,10 @@ class Watchdog:
                     "input_tokens": used,
                     "max_input_tokens": limit,
                     "deferred_items": deferred,
+                    "input_tokens_sent": self.sent[agent.id],
+                    "usage": self.billed[agent.id].model_dump(mode="json")
+                    if agent.id in self.billed
+                    else None,
                     "objective": self.objectives.get(agent.id, ""),
                 }
             )
@@ -428,7 +458,8 @@ class Watchdog:
                 f"- {agent.task_id} [{state.status}] steps {state.steps}/"
                 f"{agent.budget.max_steps}, tool calls {state.tool_calls}/"
                 f"{agent.budget.max_tool_calls}, context {used:,}/{limit:,} "
-                f"({used / limit:.0%}, {deferred} deferred)"
+                f"({used / limit:.0%}, {deferred} deferred), "
+                f"{self.sent[agent.id]:,} input tokens sent"
                 + (
                     f": {self.objectives[agent.id]}"
                     if agent.id in self.objectives
@@ -453,6 +484,7 @@ class Watchdog:
             f"{self.tokens:,} input tokens dispatched; "
             f"interventions: {', '.join(self.recent) or 'none'}"
         )
+        audit, audit_lines = self._audit()
         details: JSON = {
             "run_id": runtime.run_id,
             "elapsed_s": round(minutes * 60, 1),
@@ -461,8 +493,9 @@ class Watchdog:
             "open_items": open_items,
             "reviews": [*reviews],
             "input_tokens_dispatched": self.tokens,
+            "tokens": audit,
             "interventions": [*self.recent],
-            "text": "\n".join((header, *lines)),
+            "text": "\n".join((header, *lines, *audit_lines)),
         }
         self.recent = []
         store.event(
@@ -473,3 +506,46 @@ class Watchdog:
             request_id=self.request.id,
         )
         return details
+
+    def _audit(self) -> tuple[JSON, list[str]]:
+        """Where this run's input tokens went, from dispatch events and responses."""
+        billed = sum(self.billed.values(), Usage())
+        total = sum(self.components.values())
+        shares = {k: chars / total for k, chars in self.components.most_common()}
+        audit: JSON = {
+            "input_tokens_sent": self.tokens,
+            "input_tokens_on_rejected_turns": self.rejected,
+            # Provider-reported; None where no provider reports a field.
+            "usage": billed.model_dump(mode="json"),
+            "component_share": {k: round(v, 4) for k, v in shares.items()},
+            "watchdog": {
+                "input_tokens_sent": self.own_sent,
+                "usage": self.own_usage.model_dump(mode="json"),
+            },
+        }
+        lines = [
+            (
+                f"Tokens: {self.tokens:,} input sent (budget estimate), "
+                f"{self.rejected:,} of it on rejected turns"
+            )
+        ]
+        counted = (
+            billed.input_tokens,
+            billed.cache_read_input_tokens,
+            billed.cache_creation_input_tokens,
+        )
+        if any(n is not None for n in counted):
+            uncached, read, written = (n or 0 for n in counted)
+            lines.append(
+                f"Provider reported: {uncached + read + written:,} input "
+                f"({read:,} cache reads, {written:,} cache writes, "
+                f"{read / max(uncached + read + written, 1):.0%} from cache), "
+                f"{billed.output_tokens or 0:,} output"
+                + (f", ${billed.cost_usd:,.2f}" if billed.cost_usd is not None else "")
+            )
+        if shares:
+            lines.append(
+                "Prompt share: "
+                + ", ".join(f"{k} {v:.0%}" for k, v in list(shares.items())[:6])
+            )
+        return audit, lines

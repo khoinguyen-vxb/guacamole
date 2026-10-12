@@ -9,8 +9,8 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from guacamole import ContextSpec, Project, ProjectRequest
-from guacamole.context import ProviderError
+from guacamole import ContextSpec, Project, ProjectRequest, Usage
+from guacamole.context import CONTINUED, ProviderError
 from guacamole.contracts import ContextPacket, Wait
 from guacamole.providers.codex import CodexReasoning
 
@@ -31,13 +31,18 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
             "attempt = json.loads(capture.read_text())['attempt'] + 1 if capture.exists() else 1\n"
             "config = next(x for x in sys.argv if x.startswith('model_instructions_file='))\n"
             "instructions = Path(json.loads(config.split('=', 1)[1])).read_text()\n"
+            "stdin = prompt\n"
+            f"marker = {CONTINUED!r}\n"
+            "if marker in instructions: prompt = instructions.split(marker, 1)[1] + prompt\n"
             "temporary = capture.with_suffix('.tmp')\n"
             "temporary.write_text(json.dumps({\n"
             "    'prompt': prompt, 'argv': sys.argv[1:], 'cwd': os.getcwd(),\n"
             "    'pid': os.getpid(), 'environment': list(os.environ),\n"
-            "    'attempt': attempt, 'instructions': instructions,\n"
+            "    'attempt': attempt, 'instructions': instructions, 'stdin': stdin,\n"
             "}))\n"
             "temporary.replace(capture)\n"
+            "usage = {'input_tokens': 1000, 'cached_input_tokens': 600, 'output_tokens': 50}\n"
+            "print(json.dumps({'type': 'turn.completed', 'usage': usage}))\n"
             "packet, end = json.JSONDecoder().raw_decode(prompt)\n"
             "mode = packet.get('mode', 'ok')\n"
             "feedback = json.loads(prompt[end:].split('validation_feedback:\\n', 1)[1]) if prompt[end:].strip() else None\n"
@@ -111,6 +116,42 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(
                 packet["input_tokens"], await self.provider.count_tokens(packet["prompt"])
             )
+
+    async def test_stable_prefix_rides_in_instructions_and_usage_is_reported(self):
+        prompt = '{"instructions":"stable","mode":"ok"}'
+        stable = prompt.index('"mode"')
+        packet = self.packet.model_copy(
+            update={"prompt": prompt, "cache_breakpoints": (stable,)}
+        )
+        result = await self.provider.respond(packet)
+        self.assertEqual(result.action, Wait(reason="fixture"))
+        capture = json.loads(self.capture.read_text())
+        self.assertTrue(capture["instructions"].endswith(CONTINUED + prompt[:stable]))
+        self.assertEqual(capture["stdin"], prompt[stable:])
+        self.assertIn("--json", capture["argv"])
+        # OpenAI counts cached input inside input_tokens.
+        self.assertEqual(
+            result.usage,
+            Usage(input_tokens=400, cache_read_input_tokens=600, output_tokens=50),
+        )
+        # A corrected retry resends only the rest, and both attempts count.
+        self.capture.unlink()
+        retry = packet.model_copy(
+            update={"prompt": prompt.replace('"ok"', '"invalid_once"')}
+        )
+        with self.assertLogs("guacamole.providers.codex", level="WARNING"):
+            result = await self.provider.respond(retry)
+        capture = json.loads(self.capture.read_text())
+        self.assertEqual(capture["attempt"], 2)
+        self.assertTrue(
+            capture["stdin"].startswith(
+                retry.prompt[stable:] + "\n\nvalidation_feedback:\n"
+            )
+        )
+        self.assertEqual(
+            result.usage,
+            Usage(input_tokens=800, cache_read_input_tokens=1200, output_tokens=100),
+        )
 
     async def test_token_count_compresses_text_and_accepts_literal_special_tokens(self):
         prompt = "Hopper engineering evidence: mass and inertia. " * 1000

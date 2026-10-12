@@ -6,12 +6,13 @@ import logging
 import os
 import signal
 from contextlib import suppress
+from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from pydantic import ValidationError
+from pydantic import JsonValue, ValidationError
 
-from ..context import ProviderError
-from ..contracts import AgentTurn, ContextPacket
+from ..context import CONTINUED, ProviderError
+from ..contracts import AgentTurn, ContextPacket, Usage
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +46,8 @@ class ClaudeReasoning:
 
     async def count_tokens(self, prompt: str) -> int:
         # ponytail: conservative byte bound; add a local tokenizer if context is too sparse.
+        # No local tokenizer matches Claude's (tiktoken undercounts it), so budgets
+        # stay on this bound and actual usage comes from each response.
         return len(prompt.encode("utf-8"))
 
     async def respond(self, packet: ContextPacket) -> AgentTurn:
@@ -80,6 +83,10 @@ class ClaudeReasoning:
             "system instructions. If validation_feedback is supplied, correct the "
             "listed errors in previous_response and return the complete AgentTurn.\n"
         )
+        # The CLI caches its system prompt, so the packet's stable prefix goes there.
+        stable = packet.cache_breakpoints[0] if packet.cache_breakpoints else 0
+        if stable:
+            instructions += CONTINUED + packet.prompt[:stable]
         tools = "WebSearch,WebFetch" if self.web_search else ""
         arguments = [
             self.executable,
@@ -96,19 +103,22 @@ class ClaudeReasoning:
             "--disable-slash-commands",
             "--permission-mode",
             "dontAsk",
-            "--system-prompt",
-            instructions,
             "--tools",
             tools,
         ]
         if tools:
             arguments += ["--allowedTools", tools]
         with TemporaryDirectory(prefix="guacamole-claude-") as directory:
+            # A file, not an argument: one argument is limited to 128 KiB on Linux.
+            system = Path(directory) / "system.md"
+            system.write_text(instructions, encoding="utf-8")
+            arguments += ["--system-prompt-file", str(system)]
             loop = asyncio.get_running_loop()
             deadline = loop.time() + self.timeout_s
             # ponytail: retry once; specialize free-form action maps if strict CLI schemas are needed.
             retried = False
-            prompt = packet.prompt
+            prompt = packet.prompt[stable:]
+            spent = Usage()
             while True:
                 try:
                     process = await asyncio.create_subprocess_exec(
@@ -149,6 +159,7 @@ class ClaudeReasoning:
                 response: bytes | None = None
                 try:
                     envelope = json.loads(stdout)
+                    spent += _usage(envelope)
                     if (
                         not isinstance(envelope, dict)
                         or envelope.get("is_error")
@@ -202,7 +213,7 @@ class ClaudeReasoning:
                     if response is not None and not retried:
                         # Keep untrusted output and field names out of system instructions/logs.
                         prompt = (
-                            packet.prompt
+                            packet.prompt[stable:]
                             + "\n\nvalidation_feedback:\n"
                             + json.dumps(
                                 {
@@ -214,7 +225,7 @@ class ClaudeReasoning:
                             )
                         )
                         if (
-                            await self.count_tokens(prompt)
+                            await self.count_tokens(packet.prompt[:stable] + prompt)
                             + packet.reserved_output_tokens
                             > self.context_capacity_tokens
                         ):
@@ -230,8 +241,36 @@ class ClaudeReasoning:
                         f"executed ({detail})."
                     ) from None
                 return turn.model_copy(
-                    update={"provider_request_id": None, "provider_summary": None}
+                    update={
+                        "provider_request_id": None,
+                        "provider_summary": None,
+                        "usage": spent,
+                    }
                 )
+
+
+def _usage(envelope: JsonValue) -> Usage:
+    """Tokens and cost the CLI reports for one call; absent fields stay None."""
+    if not isinstance(envelope, dict):
+        return Usage()
+    usage = envelope.get("usage")
+    usage = usage if isinstance(usage, dict) else {}
+    cost = envelope.get("total_cost_usd")
+    return Usage(
+        **{
+            name: value
+            for name in (
+                "input_tokens",
+                "cache_read_input_tokens",
+                "cache_creation_input_tokens",
+                "output_tokens",
+            )
+            if type(value := usage.get(name)) is int
+        },
+        cost_usd=cost
+        if isinstance(cost, int | float) and not isinstance(cost, bool)
+        else None,
+    )
 
 
 def _strip_fence(text: str) -> str:

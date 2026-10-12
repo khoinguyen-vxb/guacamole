@@ -34,6 +34,7 @@ from .contracts import (
     TaskAuthorization,
     TaskReport,
     ToolGrant,
+    Usage,
     VerificationResult,
     WorkPlan,
 )
@@ -80,6 +81,7 @@ __all__ = [
     "Tool",
     "ToolGrant",
     "ToolRegistry",
+    "Usage",
     "VerificationResult",
     "Watchdog",
     "WorkPlan",

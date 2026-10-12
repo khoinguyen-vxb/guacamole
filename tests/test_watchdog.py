@@ -11,6 +11,7 @@ from guacamole import (
     Note,
     Project,
     ProjectRequest,
+    Usage,
     Watchdog,
 )
 from guacamole.contracts import Rationale, Read, Send, Wait
@@ -54,6 +55,9 @@ class WatchdogTests(unittest.IsolatedAsyncioTestCase):
                     action=Wait(reason="Following watchdog note")
                     if "watchdog" in senders
                     else Read(refs=(self.stale,)),
+                    usage=Usage(
+                        input_tokens=10, cache_read_input_tokens=90, output_tokens=5
+                    ),
                 )
 
         with tempfile.TemporaryDirectory() as directory:
@@ -98,6 +102,28 @@ class WatchdogTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(len(reports), 1)
                 self.assertIn("chief [waiting]", reports[0].details["text"])
                 self.assertIn("chief (loop)", reports[0].details["text"])
+                # Token audit: provider usage of all five turns, the prompts of
+                # the four rejected reads, and where prompt characters went.
+                tokens = reports[0].details["tokens"]
+                self.assertEqual(
+                    tokens["usage"],
+                    Usage(
+                        input_tokens=50, cache_read_input_tokens=450, output_tokens=25
+                    ).model_dump(mode="json"),
+                )
+                sent = [p.input_tokens for p in provider.packets]
+                self.assertEqual(tokens["input_tokens_sent"], sum(sent))
+                self.assertEqual(
+                    tokens["input_tokens_on_rejected_turns"], sum(sent[:4])
+                )
+                self.assertAlmostEqual(sum(tokens["component_share"].values()), 1, 2)
+                self.assertIn("sources.selected", tokens["component_share"])
+                self.assertGreater(tokens["watchdog"]["input_tokens_sent"], 0)
+                self.assertIn(
+                    "(450 cache reads, 0 cache writes, 90% from cache)",
+                    reports[0].details["text"],
+                )
+                self.assertIn("Prompt share: ", reports[0].details["text"])
                 self.assertEqual(
                     project.requests(agent="watchdog")[0].status, "completed"
                 )

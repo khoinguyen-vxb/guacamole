@@ -113,11 +113,28 @@ actions. Pass `CodexReasoning(web_search=True)` to enable built-in live web
 research; the Electronic Hopper launcher enables it for component sourcing.
 Timeouts and cancellation stop the child process group.
 
-Codex input budgeting uses a conservative UTF-8 byte upper bound, recorded as
-`token_count_method="utf8_upper_bound"`; it makes no API token-count calls.
-This may defer more optional source material than an exact tokenizer.
-`reserved_output_tokens` reserves context headroom; the CLI controls generation
-limits and its own prompt overhead. See [Codex non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode).
+Codex input budgeting uses a local `o200k_base` estimate plus 10% and 1,024 tokens
+of headroom (`token_count_method="tiktoken_o200k_base_estimate_10pct_plus_1024"`);
+`guacamole.providers.claude.ClaudeReasoning` uses a conservative UTF-8 byte upper
+bound (`utf8_upper_bound`), since no local tokenizer matches Claude's. Neither makes
+API token-count calls, and the byte bound may defer more optional source material
+than an exact tokenizer. `reserved_output_tokens` reserves context headroom; the CLI
+controls generation limits and its own prompt overhead. See [Codex non-interactive mode](https://learn.chatgpt.com/docs/non-interactive-mode).
+
+Those counts are budget estimates. What a provider actually used comes back on
+`AgentTurn.usage` (stored with each `agent_turn` record): full-price input, cache
+reads, cache writes, output and, where reported, cost. The Claude CLI reports all
+of them, `codex exec --json` its input, cached input and output, and LiteLLM the
+provider's usage plus its own cost estimate.
+
+Prompts lead with the fields that change least: instructions and schemas, then
+the agent and its sources, then inbox messages and per-turn `state`.
+`ContextPacket.cache_breakpoints` marks where the first two prefixes end. The CLI
+providers send the first prefix with their system instructions, which each CLI
+caches, and the rest as the user message; `LiteLLMReasoning` marks both prefixes
+with `cache_control` for Claude models (`prompt_caching=` overrides; OpenAI caches
+prefixes without markers). `ContextPacket.components` records the characters each
+part of a prompt takes.
 
 For API access, `guacamole.providers.litellm.LiteLLMReasoning` reaches any
 [LiteLLM provider](https://docs.litellm.ai/docs/providers) (`uv sync --extra litellm`).
@@ -181,7 +198,12 @@ capacity) and records `agent.budget_raised`; beyond that, the invocation blocks.
 Optional excerpts and inbox messages that do not fit have explicit deferral records.
 Summaries cite their original revisions. Each prompt's `state` lists current
 records and unfinished, failed or interrupted requests; stale records and completed
-or cancelled requests stay in history but are left out. Binary or large documents require a supplied reader
+or cancelled requests stay in history but are left out, as are records already
+pinned among the agent's sources. Workers see only their own tool records and the
+requests they made or received; the Chief sees all of them. An agent's last 8 tool
+calls repeat as bounded previews (about 1,000 characters of arguments and 2,000 of
+result, cut with a marker) with the `tool_result` ref to read for the full value;
+the latest result arrives whole. Binary or large documents require a supplied reader
 returning `SourceExcerpt`; originals remain available and unparsed inputs stay open.
 
 PDR and CDR packages contain manifests, copied editable artifacts, record snapshots,
@@ -234,8 +256,12 @@ revisions), and the agent's largest optional sources. It then sends that agent a
 helped it is instructed to ask the human a non-blocking question instead. Agents compact their own context in
 response; pinned material is never dropped. Every `report_interval_s` and at the end
 of each run it emits a `watchdog.report` event with per-agent status, steps,
-context use, deferred items and objective, plus pending human requests, open items,
-reviews, dispatched input tokens and interventions. `details["text"]` is a readable
+context use, deferred items, input sent and objective, plus pending human requests,
+open items, reviews, dispatched input tokens and interventions. `details["tokens"]`
+audits the run's tokens: estimated input sent and how much of it went to rejected
+turns, provider-reported usage with its cache hit rate, the share of prompt
+characters per component (such as `state.recent_tool_calls` or `sources.selected`),
+and the watchdog's own calls. `details["text"]` is a readable
 summary; the Electronic Hopper and Kookaburra launchers print it. Watchdog failures
 are recorded as `watchdog.failed` events and never stop the run. Pass the request
 from `project.requests(agent="watchdog")` to `project.trace` for its packets, turns and notes.
