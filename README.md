@@ -240,6 +240,68 @@ summary; the Electronic Hopper and Kookaburra launchers print it. Watchdog failu
 are recorded as `watchdog.failed` events and never stop the run. Pass the request
 from `project.requests(agent="watchdog")` to `project.trace` for its packets, turns and notes.
 
+## Systems engineer and SysML truth
+
+Pass a `SystemsEngineer` to make a SysML v2 model the project's deterministic
+source of truth for every agent and decision:
+
+```python
+from guacamole import SystemsEngineer
+
+project = Project(
+    workspace, sandbox=Path("results/project"), tools=tools,
+    reasoning=CodexReasoning(),
+    systems_engineer=SystemsEngineer(),
+)
+```
+
+Every run then starts a Systems Engineer agent beside the Chief. It writes the model
+as SysML v2 text through a `model` action that cites the records the revision reflects.
+A revision is recorded only after the
+[SysML Toolkit](https://github.com/Open-MBEE/sysml-sdk) (the `sysml` package) parses
+it and these checks pass:
+
+- references resolve and qualified names are unique;
+- each current recorded requirement is a SysML requirement with its ID
+  (`requirement <'R1'> liftoffMass { ... }`), and each top-level SysML requirement is
+  recorded; derived requirements are nested in the requirement they refine;
+- each recorded `Constraint` appears exactly as a `require constraint`, for example
+  `{ v.mass <= 50 [kg] }`, on a feature named as its metric, in the same unit;
+- each `satisfy R by X` holds for the values `X` declares.
+
+A rejected revision returns its full report to the agent. The current revision is
+mirrored to `sandbox/sysml/` with `report.json`; history stays in the `system_model`
+record. While the model is missing, stale (a cited record or a requirement changed)
+or lacks a recorded requirement, every `decide` is blocked. Candidates whose `metrics`
+contradict a modeled bound are ineligible; a metric key is the bounded feature's name
+or qualified name, reported in the model's unit. Each new revision invalidates current
+decisions it contradicts and notifies their authors. Decision records keep the model
+revision they were validated against. Every prompt's `state.system_model` shows the
+revision, status, bounds and amendments, and any worker can message the Systems
+Engineer directly.
+
+Changes that current records do not authorize go through amendments. The Systems
+Engineer proposes changed files with `amend`; the runtime validates them, records the
+requirement, bound, element and text differences, and notifies the Chief. A Chief
+`decide` whose selected candidate cites the amendment adopts it, and selecting another
+candidate rejects it; the Systems Engineer then implements exactly the adopted change.
+Amendments that change requirements cannot be adopted until requirement records with
+human-sourced quotes agree. An unusable model or an undecided or unimplemented
+amendment keeps PDR/CDR packages from becoming ready. Packages include the reviewed
+model, acceptance requires that revision to be current, and refining the model later
+does not withdraw an accepted review.
+
+Scripts use the same API without the agent: `await project.sysml.commit(summary=...,
+files={...}, derived_from=(ref,))`, `await project.sysml.amend(Amendment(...))`,
+`project.sysml.status(amendment_id)` and `await project.sysml.validate(files)`. A
+project with neither a systems engineer nor a committed model behaves as before.
+Existing `.sysml` and `.kerml` files supplied through `ProjectRequest.documents` are
+ingested as text. `SystemsEngineer(budget=..., context=...)` overrides the run's budget
+and the Chief's context. The first validation in a process loads the SysML standard
+library (seconds); later ones take milliseconds. Only comparisons of a feature with a
+literal or valued quantity, joined by `and`, are machine-checked; other constraints
+are reported as unchecked warnings. Units are compared as written, without conversion.
+
 ## Context middleware
 
 Pass middleware to run around every Chief and worker invocation. Install the extras

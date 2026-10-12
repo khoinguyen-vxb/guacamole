@@ -341,6 +341,7 @@ class Humans:
                         arguments=chief.model_dump(mode="json"),
                         purpose="Incorporate human corrections and replan",
                         parent_id=state.request_id,
+                        required=project.activity.get(state.request_id).required,
                     )
                 )
                 store.put(

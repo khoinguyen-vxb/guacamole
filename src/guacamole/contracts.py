@@ -271,6 +271,7 @@ class DecisionRecord(Model):
     request: DecisionRequest
     result: DecisionResult
     author: str
+    model: Ref | None = None  # SysML model revision the choice was validated against
 
 
 class Rationale(Model):
@@ -455,6 +456,92 @@ class ReviewManifest(Model):
     status: Literal["generated", "ready", "accepted", "rejected"] = "generated"
     human: str | None = None
     disposition: str | None = None
+    model: Ref | None = None  # SysML model revision under review
+
+
+class ModelIssue(Model):
+    severity: Literal["error", "warning"]
+    code: str
+    element: str
+    detail: str
+
+
+class ModelBound(Model):
+    """A machine-checkable requirement bound read from the SysML model."""
+
+    requirement: str
+    metric: str  # Qualified name of the constrained feature
+    name: str  # Also a metric key while no other bounded feature shares it
+    unit: str  # Unit symbol as written, e.g. "kg" or "m/s^2"; "" is dimensionless
+    minimum: float | None = None
+    maximum: float | None = None
+    exclusive_minimum: bool = False
+    exclusive_maximum: bool = False
+
+
+class ModeledRequirement(Model):
+    id: str
+    element: str
+    text: str
+    parent: str | None = None  # Requirement a derived requirement is nested in
+
+
+class Satisfaction(Model):
+    requirement: str
+    element: str
+    status: Literal["satisfied", "violated", "unverified"]
+    detail: str
+
+
+class ModelReport(Model):
+    """Deterministic SysML Toolkit validation of one model revision."""
+
+    valid: bool
+    digest: str
+    elements: int = 0
+    requirements: tuple[ModeledRequirement, ...] = ()
+    bounds: tuple[ModelBound, ...] = ()
+    satisfactions: tuple[Satisfaction, ...] = ()
+    issues: tuple[ModelIssue, ...] = ()
+
+
+class SystemModel(Model):
+    """One committed revision of the authoritative SysML v2 model."""
+
+    files: dict[str, str] = Field(min_length=1)
+    summary: str = Field(min_length=1)
+    derived_from: tuple[Ref, ...] = ()
+    implements: str | None = None
+    report: ModelReport
+    author: str
+
+
+class Amendment(Model):
+    """A proposed model change that current records do not yet authorize."""
+
+    id: str = Field(min_length=1)
+    title: str = Field(min_length=1)
+    rationale: str = Field(min_length=1)
+    files: dict[str, str] = Field(default_factory=dict)
+    remove: tuple[str, ...] = ()
+    evidence: tuple[Ref, ...] = ()
+    supersedes: tuple[str, ...] = ()
+
+
+class ModelChanges(Model):
+    files: tuple[str, ...] = ()
+    requirements: tuple[str, ...] = ()
+    elements_added: tuple[str, ...] = ()
+    elements_removed: tuple[str, ...] = ()
+    diff: str = ""
+
+
+class AmendmentRecord(Model):
+    amendment: Amendment
+    base: Ref
+    report: ModelReport
+    changes: ModelChanges
+    author: str
 
 
 class ProjectRequest(Model):
@@ -587,6 +674,20 @@ class Retry(Model):
     reason: str = Field(min_length=1)
 
 
+class UpdateModel(Model):
+    kind: Literal["model"] = "model"
+    summary: str = Field(min_length=1)
+    files: dict[str, str] = Field(default_factory=dict)  # Changed files, full text
+    remove: tuple[str, ...] = ()
+    derived_from: tuple[Ref, ...] = ()
+    implements: str | None = None
+
+
+class Amend(Model):
+    kind: Literal["amend"] = "amend"
+    amendment: Amendment
+
+
 type Action = Annotated[
     ToolCall
     | Send
@@ -604,7 +705,9 @@ type Action = Annotated[
     | Compact
     | Finish
     | Wait
-    | Retry,
+    | Retry
+    | UpdateModel
+    | Amend,
     Field(discriminator="kind"),
 ]
 

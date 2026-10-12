@@ -1,30 +1,3 @@
-# /// script
-# requires-python = ">=3.13.3"
-# dependencies = [
-#   "guacamole-engineering[sounding-rocket,langchain,graphiti,mem0]",
-# ]
-# [tool.uv.sources]
-# guacamole-engineering = { path = "../..", editable = true }
-# ///
-"""Run with: uv run examples/sounding_rocket/kookaburra.py
-
-Or: uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra mem0
-    .venv/bin/python -m examples.sounding_rocket.kookaburra
-
-Edit the configuration below; this script has no command-line arguments.
-Install Codex CLI and run codex login with your ChatGPT account before running.
-Reasoning uses a local codex exec process with GPT-6 Astra; no API key is needed.
-Optional OPENAI_API_KEY adds context summarization and Graphiti/mem0 memory.
-uv installs this script's document readers; backend installations are separate.
-See https://docs.astral.sh/uv/guides/scripts/ for inline dependency metadata.
-
-The authenticated loopback WebSocket stays available during work and human waits.
-Use human_inbox/reply_human/interject/review_disposition commands from README.md.
-Ctrl-C stops the host; rerunning resumes this workspace's saved run.
-Tool processes have the user's OS permissions; the output directory is not an
-OS sandbox. Source checkouts are available for inspection, not assumed installed.
-"""
-
 import asyncio
 import importlib.util
 import json
@@ -66,7 +39,6 @@ DOCUMENTS = ROOT / "technical_documents"
 TOOLING = ROOT / "tooling"
 WORKSPACE = ROOT / ".guacamole"
 SANDBOX = ROOT / "results"
-EXTRA_TOOLS = (ROOT.parents[1] / "Parachute-Opening-Shock",)
 RESUME_RUN_ID: str | None = None  # None automatically resumes a single saved run.
 CONTROL_PORT = 8765
 CONTEXT = ContextSpec(max_input_tokens=12800000, reserved_output_tokens=20000)
@@ -76,29 +48,25 @@ WATCHDOG_REPORT_S = 600.0
 BUDGET = Budget(
     max_steps=20000, max_tool_calls=15000, max_seconds=720000, max_agents=24
 )
-
-# Context middleware, README "Context middleware". Context editing always runs and
-# needs no API key. With OPENAI_API_KEY set, older sources are also summarized and
-# every agent turn feeds a Graphiti knowledge graph and mem0 memory (billed usage).
 SUMMARY_MODEL = "openai/gpt-6-luna"  # 922k-token input holds untrimmed sources.
 SUMMARIZE_AT_TOKENS = 150_000  # Optional sources above this are compacted.
 CLEAR_AT_TOKENS = 80_000  # Above this, reads beyond the latest 8 are hidden per call.
-
-# Optional interpreter overrides, e.g. {"candlebark": Path("/path/to/python3.10")}.
-# Otherwise use the repository's .venv/bin/python if present, then this interpreter.
 PYTHON_EXECUTABLES: dict[str, Path] = {}
 
-DESCRIPTION = """Project Kookaburra: I want to build a 30,000ft sounding rocket
-(+- 2000ft) with active airbrakes control whilst carrying a 3U 2kg payload.
-Prepare PDR and CDR and the required editable CAD/drawings, electronics/PCB,
-analyses/simulations, flight software, ground station, recovery systems, GSE,
-fluids, interfaces, builds, verification evidence, and operating/test procedures.
-Use the supplied previous designs, requirements, drawings, reports, OpenRocket
-models and experimental context as reference evidence. Establish applicability
-to Kookaburra; historical designs do not silently become new requirements.
-Ask the human about unresolved requirements, including altitude datum, payload
-interfaces, launch conditions and project constraints. Keep assumptions explicit.
+DESCRIPTION = """Project Kookaburra: 
+Hello friend, I want to build a sounding rocket with a custom made hybrid rocket engine. 
+
+The rocket's mission profile is to carry a 3U 2kg payload to a 30,000ft AGL altitude, launching from Spaceport Midland Texas during July 2027. You need
+to design a tolerance for 
+
 """
+
+
+
+
+
+
+
 
 INSTRUCTIONS = """Start by inspecting the supplied inventory, tool documentation,
 and relevant historical design documents. Use list_files, read_text and read_document
@@ -161,9 +129,6 @@ def tool_paths() -> dict[str, Path]:
         for p in sorted(TOOLING.iterdir())
         if not p.name.startswith(".") and (p.is_dir() or p.suffix == ".py")
     }
-    for path in EXTRA_TOOLS:
-        if path.exists():
-            paths.setdefault(path.name, path.resolve())
     return paths
 
 

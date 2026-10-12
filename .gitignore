@@ -7,3 +7,4 @@ __pycache__/
 .guacamole/
 dist/
 *.egg-info/
+examples/kookaburra/technical_documentation/*

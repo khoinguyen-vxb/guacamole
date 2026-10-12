@@ -734,6 +734,7 @@ dependencies = [
     { name = "mcp" },
     { name = "pydantic" },
     { name = "pytest" },
+    { name = "sysml" },
     { name = "tiktoken" },
 ]
 
@@ -780,6 +781,7 @@ requires-dist = [
     { name = "pypdf", marker = "extra == 'sounding-rocket'", specifier = ">=6,<7" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "python-pptx", marker = "extra == 'sounding-rocket'", specifier = ">=1,<2" },
+    { name = "sysml", specifier = ">=0.1.0" },
     { name = "tiktoken", specifier = ">=0.12,<1" },
     { name = "websockets", marker = "extra == 'sounding-rocket'", specifier = ">=15,<17" },
     { name = "websockets", marker = "extra == 'websocket'", specifier = ">=15,<17" },
@@ -865,8 +867,8 @@ name = "httpcore2"
 version = "2.13.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "h11" },
-    { name = "truststore" },
+    { name = "h11", marker = "sys_platform != 'emscripten'" },
+    { name = "truststore", marker = "sys_platform != 'emscripten'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/cb/f3/1db7aa2bc2524062192bb0e0323969492d1883152a232fe36eea65f4e35c/httpcore2-2.13.1.tar.gz", hash = "sha256:e0aa977abe17e69a3b820a24542a6fa88702676d83880b8d194dcd18408e5103", size = 68071, upload-time = "2026-09-23T07:47:22.372Z" }
 wheels = [
@@ -2735,6 +2737,18 @@ wheels = [
 ]
 
 [[package]]
+name = "sysml"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f1/12/c77a4c9b9c17d878c719aef895805e2292a97094bf0145f305360a9e10e9/sysml-0.1.0.tar.gz", hash = "sha256:19672b0c957132dfe83e850b4090f3169fc4ca0b0e7b832a9359d007c8cb73aa", size = 92480, upload-time = "2026-10-05T00:39:47.028Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/39/8f/f876fc8d7500080a77bd95dd88d1b1b6b8f205c23d53a18f1db4cead25c9/sysml-0.1.0-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:a4ddf16669afbc856d9ba539e2c876cc925482faea9e6b83a634b4f87ca70057", size = 3052585, upload-time = "2026-10-05T00:39:38.981Z" },
+    { url = "https://files.pythonhosted.org/packages/3f/d4/3989e3df3d63b24cddcfc8ad31e789bebc506c5410bced598d06b3343e41/sysml-0.1.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:5a74cbd0f58d59c64f09d6b967f7da48e56b089076ffe7d1cf575138707ccfdb", size = 2883375, upload-time = "2026-10-05T00:39:41.031Z" },
+    { url = "https://files.pythonhosted.org/packages/ac/b8/f7cb59a75d434dd062a884f0f0e6f81ad61c3cfdd4e89f7cb4ba0f429e52/sysml-0.1.0-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:6a7e7a51108eff53dba45eb8986b445bdbd63df49b7397bc12af24dd9b2e3f55", size = 3018713, upload-time = "2026-10-05T00:39:43.074Z" },
+    { url = "https://files.pythonhosted.org/packages/70/56/02992f2ae419f176e0fada72ee1c1c8e5623e2c237ef3a93fd6b14f1b201/sysml-0.1.0-py3-none-win_amd64.whl", hash = "sha256:630b155f7637ce4dc9f782a460eace1e95d7511e269d2accc308f7b97ea624be", size = 2895131, upload-time = "2026-10-05T00:39:44.971Z" },
+]
+
+[[package]]
 name = "tenacity"
 version = "9.2.1"
 source = { registry = "https://pypi.org/simple" }
@@ -2957,8 +2971,8 @@ name = "uvicorn"
 version = "0.54.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "click" },
-    { name = "h11" },
+    { name = "click", marker = "sys_platform != 'emscripten'" },
+    { name = "h11", marker = "sys_platform != 'emscripten'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/da/34/30e9280707135d2cfc589dfff3cb796bd07a3aeb1a3e415ba09dd89d7bb4/uvicorn-0.54.0.tar.gz", hash = "sha256:a2e33cbfaa0306f8e6b0c13e0cb89d7d7a2da3e62b90c66e18c33d9807b28620", size = 112283, upload-time = "2026-09-25T06:52:37.601Z" }
 wheels = [
