@@ -1,9 +1,11 @@
 """Local scripting API. Importing this package loads no engineering backends."""
 
+from .agents.systems_engineer import SystemsEngineer
 from .agents.watchdog import Watchdog
 from .contracts import (
     AgentSpec,
     AgentTurn,
+    Amendment,
     ArtifactRecord,
     AskHuman,
     Budget,
@@ -18,6 +20,7 @@ from .contracts import (
     Evidence,
     HumanInput,
     Model,
+    ModelReport,
     Note,
     OpenItem,
     ProducedFile,
@@ -27,6 +30,7 @@ from .contracts import (
     Ref,
     Requirement,
     SourceExcerpt,
+    SystemModel,
     TaskAuthorization,
     TaskReport,
     ToolGrant,
@@ -41,6 +45,7 @@ from .tools.registry import Tool, ToolRegistry
 __all__ = [
     "AgentSpec",
     "AgentTurn",
+    "Amendment",
     "ArtifactRecord",
     "AskHuman",
     "Budget",
@@ -57,6 +62,7 @@ __all__ = [
     "HumanInput",
     "Job",
     "Model",
+    "ModelReport",
     "Note",
     "OpenItem",
     "ProducedFile",
@@ -67,6 +73,8 @@ __all__ = [
     "Ref",
     "Requirement",
     "SourceExcerpt",
+    "SystemModel",
+    "SystemsEngineer",
     "TaskAuthorization",
     "TaskReport",
     "Tool",

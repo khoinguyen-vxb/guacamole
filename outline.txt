@@ -44,8 +44,16 @@ guacamole/
 │       │   └── mcp.py               # Generated MCP exposure from that registry
 │       │
 │       ├── agents/
-│       │   ├── chief.py             # Only predefined role; planning and delegation
+│       │   ├── chief.py             # Chief Engineer prompts; planning and delegation
+│       │   ├── systems_engineer.py  # Owner of the authoritative SysML model
+│       │   ├── watchdog.py          # Loop, context-budget and status supervision
 │       │   └── runtime.py           # Spawner, context budgets, grants, provider boundary
+│       │
+│       ├── integrations/
+│       │   └── sysml/
+│       │       ├── adapter.py       # SysML Toolkit reads: requirements, bounds, satisfy
+│       │       ├── validator.py     # Deterministic truth checks, bound checks, diffs
+│       │       └── registry.py      # Model revisions, amendments, decision gate
 │       │
 │       ├── providers/
 │       │   ├── codex.py             # Codex CLI reasoning with a ChatGPT login
@@ -66,6 +74,7 @@ guacamole/
     ├── test_runtime.py              # Choices, agents, context, inbox/recovery and grants
     ├── test_human.py                # Human input, restart, superseded calls and controls
     ├── test_middleware.py           # Summarization, context editing and memory hooks
+    ├── test_systems_engineer.py     # SysML truth checks, decision gates, amendments
     ├── test_sounding_rocket.py       # Example tool execution, document readers and launch guard
     └── test_project_workflow.py     # Source evidence, artifacts, PDR/CDR, invalidation
 

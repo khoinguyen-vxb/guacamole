@@ -280,7 +280,12 @@ class Activity:
 
     def allow_peer(self, sender: AgentSpec, recipient_id: str) -> None:
         recipient = self.store.model("agent", recipient_id, AgentSpec)
-        if sender.parent_id is None or recipient.id == sender.parent_id:
+        # Root agents (the Chief and the Systems Engineer) talk with every agent.
+        if (
+            sender.parent_id is None
+            or recipient.parent_id is None
+            or recipient.id == sender.parent_id
+        ):
             return
         if (
             recipient.parent_id != sender.parent_id

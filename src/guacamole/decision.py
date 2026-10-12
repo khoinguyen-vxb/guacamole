@@ -16,6 +16,7 @@ from .contracts import (
 
 if TYPE_CHECKING:
     from .project import Project
+    from .storage import Snapshot
 
 
 class DecisionBlocked(RuntimeError):
@@ -69,7 +70,10 @@ class Decisions:
             )
 
     def _eligible(
-        self, candidate: Candidate, request: DecisionRequest
+        self,
+        candidate: Candidate,
+        request: DecisionRequest,
+        model: "Snapshot | None" = None,
     ) -> tuple[Ref, ...]:
         if request.kind == "work_plan":
             if candidate.plan is None:
@@ -95,6 +99,8 @@ class Decisions:
                 refs += self.project.reviews.accepted("PDR")
         for ref in refs:
             self.project.store.resolve(ref, current=True)
+        if model is not None:
+            self.project.sysml.check(candidate, model)
         return refs
 
     async def choose(
@@ -131,11 +137,17 @@ class Decisions:
                 required=False,
             )
         )
+        try:
+            # The authoritative SysML model must be usable before any choice.
+            model = self.project.sysml.gate()
+        except DecisionBlocked as exc:
+            activity.transition(record.id, "blocked", actor="runtime", reason=str(exc))
+            raise
         candidates, references = [], list(self.project.human.references(run_id))
         rejected: dict[str, str] = {}
         for candidate in request.candidates:
             try:
-                references.extend(self._eligible(candidate, request))
+                references.extend(self._eligible(candidate, request, model))
                 candidates.append(candidate)
             except (ValueError, KeyError) as exc:
                 rejected[candidate.id] = str(exc)
@@ -179,6 +191,7 @@ class Decisions:
                     ),
                     result=result,
                     author=actor,
+                    model=model.ref if model is not None else None,
                 )
                 store.put(
                     "decision",

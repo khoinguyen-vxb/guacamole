@@ -15,10 +15,13 @@ from ..contracts import (
     AgentSpec,
     AgentState,
     AgentTurn,
+    Amend,
+    AmendmentRecord,
     AskHuman,
     Compact,
     ContextPacket,
     Decide,
+    DecisionRecord,
     Deliver,
     Deliverable,
     Extract,
@@ -33,6 +36,7 @@ from ..contracts import (
     RationaleRecord,
     Read,
     Record,
+    Ref,
     RequestRecord,
     Requirement,
     Retry,
@@ -41,16 +45,19 @@ from ..contracts import (
     Spawn,
     TaskReport,
     ToolCall,
+    UpdateModel,
     Verify,
     Wait,
     now,
     uid,
 )
 from ..decision import DecisionBlocked
+from ..integrations.sysml.registry import ModelRejected
 from ..middleware import ContextMiddleware, Invocation
 from ..project import Project
 from ..tools.registry import encode
 from .chief import CHIEF, COMMON
+from .systems_engineer import SYSTEMS_ENGINEER
 
 
 class Runtime:
@@ -59,6 +66,7 @@ class Runtime:
         self.calls = asyncio.Semaphore(project.max_concurrent_calls)
         self.run_id = ""
         self.chief_id = ""
+        self.engineer_id = ""
         self.request: ProjectRequest
 
     def _agents(self) -> tuple[AgentSpec, ...]:
@@ -145,7 +153,9 @@ class Runtime:
             for entry in self.project.human.inbox(run_id=self.run_id)
         )
 
-    def _add_agent(self, agent: AgentSpec, *, parent_request: str | None) -> None:
+    def _add_agent(
+        self, agent: AgentSpec, *, parent_request: str | None, required: bool = True
+    ) -> None:
         store = self.project.store
         with store.atomic():
             request = self.project.activity.request(
@@ -158,6 +168,7 @@ class Runtime:
                     purpose=agent.objective,
                     parent_id=parent_request,
                     decision_id=agent.decision_id,
+                    required=required,
                 )
             )
             store.put(
@@ -225,17 +236,27 @@ class Runtime:
                 budget=request.budget,
             )
             self.chief_id = chief.id
+            engineer = (
+                self.project.systems_engineer.spec(chief, request.budget)
+                if self.project.systems_engineer is not None
+                else None
+            )
+            self.engineer_id = engineer.id if engineer else ""
             store.put(
                 "run",
                 self.run_id,
                 {
                     "request": request.model_dump(mode="json"),
                     "chief_id": chief.id,
+                    "engineer_id": self.engineer_id,
                     "status": "running",
                 },
                 actor="script",
             )
             self._add_agent(chief, parent_request=None)
+            if engineer is not None:
+                # It serves the whole run and never finishes: not a required request.
+                self._add_agent(engineer, parent_request=None, required=False)
         else:
             if request is not None:
                 raise ValueError(
@@ -245,6 +266,7 @@ class Runtime:
             run = store.get("run", resume).data
             self.request = ProjectRequest.model_validate_json(encode(run["request"]))
             self.chief_id = str(run["chief_id"])
+            self.engineer_id = str(run.get("engineer_id") or "")
             for agent in self._agents():
                 state = store.model("agent_state", agent.id, AgentState)
                 if state.status == "superseded":
@@ -268,6 +290,15 @@ class Runtime:
                     self._adopt_plan(chief)
                 except (ValueError, KeyError, DecisionBlocked):
                     pass  # An invalid chief plan is the chief's to replace first.
+            if not self.engineer_id and self.project.systems_engineer is not None:
+                engineer = self.project.systems_engineer.spec(
+                    chief, self.request.budget
+                )
+                self.engineer_id = engineer.id
+                store.put(
+                    "run", resume, {**run, "engineer_id": engineer.id}, actor="script"
+                )
+                self._add_agent(engineer, parent_request=None, required=False)
         start = time.monotonic()
         self.deadline = start + self.request.budget.max_seconds
         watchdog = self.project.watchdog
@@ -336,9 +367,11 @@ class Runtime:
             for s in store.list("open_item")
             if not s.data["resolved_by"] or s.stale
         ]
+        open_items.extend(self.project.sysml.review_issues())
         for agent in self._agents():
             state = store.model("agent_state", agent.id, AgentState)
-            if state.status not in {"completed", "superseded"}:
+            idle = agent.id == self.engineer_id and state.status == "waiting"
+            if state.status not in {"completed", "superseded"} and not idle:
                 open_items.append(
                     f"{agent.task_id}: {state.status}: {encode(state.observation)}"
                 )
@@ -368,6 +401,7 @@ class Runtime:
             {
                 "request": self.request.model_dump(mode="json"),
                 "chief_id": self.chief_id,
+                "engineer_id": self.engineer_id,
                 "status": result.status,
                 "result": result.model_dump(mode="json"),
             },
@@ -395,7 +429,7 @@ class Runtime:
             ),
             key=lambda r: r.created_at,
         )[-8:]
-        return {
+        context: JSON = {
             "run_id": self.run_id,
             "workspace": str(store.directory),
             "sandbox": str(self.project.sandbox),
@@ -437,6 +471,8 @@ class Runtime:
                     "summary",
                     "tool_result",
                     "job_inputs",
+                    "system_model",
+                    "amendment",
                 )
                 if not s.stale
             ],
@@ -478,6 +514,11 @@ class Runtime:
                 for s in store.list("review")
             ],
         }
+        if self.project.sysml.active:
+            context["system_model"] = self.project.sysml.state(
+                engineer=agent.id == self.engineer_id
+            )
+        return context
 
     async def _hook(
         self,
@@ -580,7 +621,11 @@ class Runtime:
                             spec,
                             state.request_id,
                             self.provider,
-                            instructions=CHIEF if agent.id == self.chief_id else COMMON,
+                            instructions=CHIEF
+                            if agent.id == self.chief_id
+                            else SYSTEMS_ENGINEER
+                            if agent.id == self.engineer_id
+                            else COMMON,
                             state=context_state,
                             memory=call.memory,
                             omissions=call.omissions,
@@ -799,6 +844,12 @@ class Runtime:
                         "phase": phase,
                         "detail": detail,
                     }
+                    # Every issue of a rejected model, beyond the detail's length cap.
+                    | (
+                        {"report": exc.report.model_dump(mode="json")}
+                        if isinstance(exc, ModelRejected)
+                        else {}
+                    )
                 }
             )
             if phase != "action" and not invalid_rationale:
@@ -831,6 +882,13 @@ class Runtime:
                 for e in activity.inbox(agent.id)
             ):
                 self._wake(agent, changed, "Message arrived during its turn")
+            # Likewise the records that change what the SysML model must say.
+            elif (
+                changed.status == "waiting"
+                and agent.id == self.engineer_id
+                and self.project.sysml.changed_since(since)
+            ):
+                self._wake(agent, changed, "Project truth changed during its turn")
 
     async def act(
         self,
@@ -843,8 +901,13 @@ class Runtime:
         action, project = turn.action, self.project
         store, activity = project.store, project.activity
         is_chief = agent.id == self.chief_id
+        is_engineer = agent.id == self.engineer_id
         if isinstance(action, (Decide, Spawn, Record, Review)) and not is_chief:
             raise PermissionError("Only the Chief has this operation")
+        if isinstance(action, (UpdateModel, Amend)) and not is_engineer:
+            raise PermissionError("Only the systems engineer changes the SysML model")
+        if isinstance(action, Finish) and is_engineer:
+            raise PermissionError("The systems engineer serves the whole run; use wait")
         match action:
             case AskHuman():
                 request_id = project.human.ask(
@@ -928,6 +991,7 @@ class Runtime:
                         event="agent.plan_assigned",
                     )
                     self._adopt_plan(updated)
+                self._wake_waiting(self.engineer_id, "Decision recorded")
                 return {
                     "decision_id": decision,
                     "ref": store.get("decision", decision).ref.model_dump(mode="json"),
@@ -936,7 +1000,9 @@ class Runtime:
                 plan = project.decisions.plan(action.decision_id)
                 task = next(t for t in plan.tasks if t.id == action.task_id)
                 agents = self._agents()
-                if len(agents) - 1 >= self.request.budget.max_agents:
+                if sum(a.parent_id is not None for a in agents) >= (
+                    self.request.budget.max_agents
+                ):
                     raise PermissionError("Project agent limit reached")
                 if any(
                     a.task_id == task.id and a.decision_id == action.decision_id
@@ -1058,11 +1124,7 @@ class Runtime:
                         )
                     # A reply to a reply is a follow-up; the request it shares is
                     # already closed, and closing it again rejected the send.
-                    if (
-                        parent_message
-                        and request_id
-                        and parent_message.kind != "reply"
-                    ):
+                    if parent_message and request_id and parent_message.kind != "reply":
                         pending = activity.get(request_id)
                         if pending.kind != "peer":
                             raise ValueError(
@@ -1107,6 +1169,7 @@ class Runtime:
                     ref = project.record_requirement(action.record, actor=agent.id)
                 else:
                     ref = project.record_open_item(action.record, actor=agent.id)
+                self._wake_waiting(self.engineer_id, "Record changed")
                 return {"ref": ref.model_dump(mode="json")}, "active"
             case Read():
                 refs = (*action.refs, *project.contexts.search(action.search))
@@ -1151,6 +1214,7 @@ class Runtime:
                 return {"ref": ref.model_dump(mode="json")}, "active"
             case Verify():
                 ref = project.evidence(action.evidence, actor=agent.id)
+                self._wake_waiting(self.engineer_id, "Evidence recorded")
                 return {"ref": ref.model_dump(mode="json")}, "active"
             case Deliver():
                 if agent.decision_id is None:
@@ -1247,4 +1311,96 @@ class Runtime:
                 return {"result": action.result}, "completed"
             case Wait():
                 return {"reason": action.reason}, "waiting"
+            case UpdateModel():
+                usable = self._model_usable()
+                ref, invalidated = await project.sysml.commit(
+                    summary=action.summary,
+                    files=action.files,
+                    remove=action.remove,
+                    derived_from=action.derived_from,
+                    implements=action.implements,
+                    actor=agent.id,
+                )
+                members = {a.id for a in self._agents()}
+                for decision_id, reason in invalidated.items():
+                    author = store.model("decision", decision_id, DecisionRecord).author
+                    if author in members:
+                        self._note(
+                            agent,
+                            author,
+                            f"Decision {decision_id} is stale. {reason}. Decide again "
+                            "within the model's bounds.",
+                            (ref,),
+                        )
+                if not usable and self._model_usable():
+                    self._wake_waiting(self.chief_id, "SysML model is usable")
+                return {
+                    "ref": ref.model_dump(mode="json"),
+                    "invalidated_decisions": [*invalidated],
+                }, "active"
+            case Amend():
+                ref = await project.sysml.amend(action.amendment, actor=agent.id)
+                record = store.model("amendment", ref.id, AmendmentRecord)
+                status, _ = project.sysml.status(ref.id)
+                if status == "withdrawal":
+                    withdrawn = ", ".join(record.amendment.supersedes)
+                    text = f"Amendment {ref.id} withdraws {withdrawn}."
+                else:
+                    changes = record.changes.requirements or record.changes.files
+                    text = (
+                        f"Amendment {ref.id} proposed: {record.amendment.title}. "
+                        f"Changes: {'; '.join(changes)}. "
+                        + (
+                            ""
+                            if record.report.valid
+                            else "It changes requirements, so their records must "
+                            "change first. "
+                        )
+                        + "A decide whose selected candidate cites this amendment in "
+                        "its evidence adopts it; selecting another candidate of that "
+                        "decision rejects it."
+                    )
+                self._note(agent, self.chief_id, text, (ref,))
+                return {
+                    "ref": ref.model_dump(mode="json"),
+                    "status": status,
+                    "report": record.report.model_dump(mode="json"),
+                    "changes": record.changes.model_dump(mode="json"),
+                }, "active"
         raise TypeError("Unsupported action")
+
+    def _model_usable(self) -> bool:
+        try:
+            self.project.sysml.gate()
+        except DecisionBlocked:
+            return False
+        return True
+
+    def _wake_waiting(self, agent_id: str, reason: str) -> None:
+        if not agent_id:
+            return
+        state = self.project.store.model("agent_state", agent_id, AgentState)
+        if state.status == "waiting":
+            agent = self.project.store.model("agent", agent_id, AgentSpec)
+            self._wake(agent, state, reason)
+
+    def _note(
+        self, sender: AgentSpec, recipient: str, text: str, evidence: tuple[Ref, ...]
+    ) -> None:
+        """Deliver a runtime-composed finding from sender and wake its recipient."""
+        store = self.project.store
+        self.project.activity.deliver(
+            MessageEnvelope(
+                project_id=store.project_id,
+                run_id=self.run_id,
+                sender=sender.id,
+                recipient=recipient,
+                kind="finding",
+                schema_id="Note@1",
+                payload=Note(text=text, evidence=evidence).model_dump(mode="json"),
+                parent_request_id=store.model(
+                    "agent_state", sender.id, AgentState
+                ).request_id,
+            )
+        )
+        self._wake_waiting(recipient, f"Finding from {sender.task_id}")

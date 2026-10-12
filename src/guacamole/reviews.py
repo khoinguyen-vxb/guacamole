@@ -14,6 +14,7 @@ from .contracts import (
     Requirement,
     ReviewManifest,
     ReviewStage,
+    SystemModel,
 )
 from .tools.registry import encode
 
@@ -138,12 +139,16 @@ class Reviews:
         store = self.project.store
         plan = self.project.decisions.plan(plan_decision)
         deliverables, baseline, issues = self.checks(plan_decision)
+        # The model revision is reviewed but kept out of the baseline, so refining
+        # the model after acceptance does not withdraw an accepted review.
+        model = self.project.sysml.current() if self.project.sysml.active else None
         manifest = ReviewManifest(
             stage=plan.stage,
             plan_decision=plan_decision,
             baseline=baseline,
             deliverables=deliverables,
-            open_items=issues,
+            open_items=(*issues, *self.project.sysml.review_issues()),
+            model=model.ref if model is not None else None,
         )
         ref = store.put(
             "review",
@@ -154,7 +159,7 @@ class Reviews:
             event="review.generated",
         )
         self._export(manifest)
-        if issues:
+        if manifest.open_items:
             return ref
         manifest = manifest.model_copy(update={"status": "ready"})
         ref = store.put(
@@ -197,6 +202,11 @@ class Reviews:
         _, baseline, issues = self.checks(manifest.plan_decision)
         if issues or baseline != manifest.baseline:
             raise ValueError("Review baseline is no longer current or complete")
+        model = self.project.sysml.current() if manifest.model else None
+        if self.project.sysml.review_issues() or (
+            model is not None and model.ref != manifest.model
+        ):
+            raise ValueError("The SysML model changed or is unusable since this review")
         changed = manifest.model_copy(
             update={
                 "status": "accepted" if accepted else "rejected",
@@ -256,6 +266,17 @@ class Reviews:
                 artifacts.append(
                     f"- {artifact.kind}: [{artifact.file.name}]({target.relative_to(package).as_posix()})"
                 )
+        model = []
+        if manifest.model is not None:
+            system = SystemModel.model_validate_json(
+                encode(self.project.store.resolve(manifest.model).data)
+            )
+            for name, content in sorted(system.files.items()):
+                target = output(package / "sysml" / name)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(content, encoding="utf-8")
+                model.append(f"- [{name}]({target.relative_to(package).as_posix()})")
+            model.insert(0, f"Revision {manifest.model.revision}: {system.summary}\n")
         plan = self.project.decisions.plan(manifest.plan_decision)
         criteria = [
             f"- {spec.title}: {'; '.join(spec.acceptance_criteria)}"
@@ -264,6 +285,7 @@ class Reviews:
         text = (
             f"# {manifest.stage} — {manifest.status}\n\nBaseline: {manifest.id}, revision {revision}.\n\n## Artifacts\n\n"
             + "\n".join(artifacts)
+            + ("\n\n## SysML model\n\n" + "\n".join(model) if model else "")
             + "\n\n## Acceptance criteria\n\n"
             + "\n".join(criteria)
             + "\n\n## Open items\n\n"

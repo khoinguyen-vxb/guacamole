@@ -39,6 +39,7 @@ from .contracts import (
 )
 from .decision import Decisions
 from .human import Humans
+from .integrations.sysml.registry import SysMLRegistry
 from .reviews import Reviews
 from .storage import Store
 from .tools.execution import Executor, Job
@@ -46,6 +47,7 @@ from .tools.registry import Tool, ToolRegistry, encode
 
 if TYPE_CHECKING:
     from .agents.runtime import Runtime
+    from .agents.systems_engineer import SystemsEngineer
     from .agents.watchdog import Watchdog
     from .middleware import ContextMiddleware
 
@@ -59,6 +61,7 @@ class Project:
         tools: ToolRegistry | None = None,
         reasoning: ReasoningProvider | None = None,
         watchdog: "Watchdog | None" = None,
+        systems_engineer: "SystemsEngineer | None" = None,
         middleware: "Sequence[ContextMiddleware]" = (),
         max_concurrent_calls: int = 4,
         read_only: bool = False,
@@ -115,6 +118,7 @@ class Project:
                     self.tools.schema(name, annotation)
             self.reasoning = reasoning
             self.watchdog = watchdog
+            self.systems_engineer = systems_engineer
             self.middleware = tuple(middleware)
             # Agents' model calls in flight at once; the rest queue (provider rate limits).
             self.max_concurrent_calls = max_concurrent_calls
@@ -124,6 +128,7 @@ class Project:
             self.decisions = Decisions(self)
             self.reviews = Reviews(self)
             self.executor = Executor(self)
+            self.sysml = SysMLRegistry(self)
             self.runtime: Runtime | None = None
             if not read_only:
                 self.activity.recover()
@@ -197,7 +202,18 @@ class Project:
         # ponytail: bounded UTF-8 intake; use supplied readers for large/native formats.
         if len(data) <= 256_000 and (
             media.startswith("text/")
-            or path.suffix in {".json", ".toml", ".py", ".md", ".yaml", ".yml", ".csv"}
+            or path.suffix
+            in {
+                ".json",
+                ".toml",
+                ".py",
+                ".md",
+                ".yaml",
+                ".yml",
+                ".csv",
+                ".sysml",
+                ".kerml",
+            }
         ):
             try:
                 text = data.decode("utf-8")
