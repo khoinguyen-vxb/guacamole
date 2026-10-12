@@ -7,7 +7,7 @@ from pathlib import Path
 from types import CoroutineType
 from typing import Any
 
-from ..context import ContextOverflow, ProviderError, ReasoningProvider
+from ..context import ContextOverflow, ProviderError, ReasoningProvider, preview
 from ..contracts import (
     JSON,
     TERMINAL,
@@ -409,15 +409,20 @@ class Runtime:
         )
         return result
 
-    def _context_state(self, agent: AgentSpec, state: AgentState) -> JSON:
+    def _context_state(
+        self, agent: AgentSpec, state: AgentState, pinned: tuple[Ref, ...] = ()
+    ) -> JSON:
         store = self.project.store
+        is_chief = agent.id == self.chief_id
         requests = [
             r for r in self.project.activity.requests() if r.run_id == self.run_id
         ]
+        own = {r.id for r in requests if r.requester == agent.id}
+        pins = {(r.kind, r.id, r.revision) for r in pinned}
         # last_observation holds only the latest result, so without this agents
         # re-ran reads they had made one call earlier.
-        # ponytail: fixed window of 8 calls (tool results run to ~18k chars each);
-        # older results stay reachable through read on their tool_result refs.
+        # ponytail: fixed window of 8 calls; results run to ~18k chars each, so
+        # only previews repeat every turn and the full value stays one read away.
         recent = sorted(
             (
                 r
@@ -429,6 +434,11 @@ class Runtime:
             ),
             key=lambda r: r.created_at,
         )[-8:]
+        results = {
+            r.id: snapshot.ref.model_dump(mode="json")
+            for r in recent
+            if (snapshot := store.maybe("tool_result", r.id)) and not snapshot.stale
+        }
         context: JSON = {
             "run_id": self.run_id,
             "workspace": str(store.directory),
@@ -457,6 +467,9 @@ class Runtime:
             ],
             # Stale records cannot be read or cited, and finished requests stay
             # reachable through their results; listing them grew every prompt.
+            # So did pinned records, which arrive whole among the sources, and other
+            # agents' tool records, one pair per call in the run; only the Chief,
+            # which weighs everyone's results, keeps their tool_result refs.
             "records": [
                 s.ref.model_dump(mode="json")
                 for s in store.list(
@@ -475,6 +488,12 @@ class Runtime:
                     "amendment",
                 )
                 if not s.stale
+                and (s.ref.kind, s.ref.id, s.ref.revision) not in pins
+                and (
+                    s.ref.kind not in {"tool_result", "job_inputs"}
+                    or s.ref.id in own
+                    or (is_chief and s.ref.kind == "tool_result")
+                )
             ],
             "requests": [
                 {
@@ -487,23 +506,20 @@ class Runtime:
                 }
                 for r in requests
                 if r.status not in {"completed", "cancelled"}
+                and (is_chief or agent.id in {r.requester, r.target})
             ],
             "recent_tool_calls": [
                 {
                     "request_id": r.id,
                     "tool": r.target,
-                    "arguments": r.arguments,
+                    "arguments": preview(r.arguments, 1_000),
                     "status": r.status,
-                    "result": r.result,
+                    "result": preview(r.result, 2_000),
                     "reason": r.reason,
                 }
+                | ({"ref": results[r.id]} if r.id in results else {})
                 for r in recent
             ],
-            "catalogue": [
-                t.model_dump(mode="json") for t in self.project.tools.definitions()
-            ]
-            if agent.id == self.chief_id
-            else [],
             "reviews": [
                 {
                     "ref": s.ref.model_dump(mode="json"),
@@ -614,7 +630,9 @@ class Runtime:
                 # Queue before assembly so the prompt is current when it is sent;
                 # the slot is released before the action runs tools.
                 async with self.calls:
-                    context_state = self._context_state(agent, state)
+                    context_state = self._context_state(
+                        agent, state, call.agent.context.pinned
+                    )
 
                     def build(spec: AgentSpec) -> Awaitable[ContextPacket]:
                         return self.project.contexts.build(
@@ -629,6 +647,7 @@ class Runtime:
                             state=context_state,
                             memory=call.memory,
                             omissions=call.omissions,
+                            catalogue=agent.id == self.chief_id,
                         )
 
                     try:
@@ -687,6 +706,7 @@ class Runtime:
                             "input_tokens": packet.input_tokens,
                             "max_input_tokens": call.agent.context.max_input_tokens,
                             "deferred": len(packet.deferred),
+                            "components": {**packet.components},
                         },
                         request_id=state.request_id,
                     )

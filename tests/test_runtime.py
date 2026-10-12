@@ -22,10 +22,12 @@ from guacamole import (
     Project,
     ProjectRequest,
     Quantity,
+    Ref,
     Requirement,
     TaskAuthorization,
     TaskReport,
     ToolRegistry,
+    Usage,
 )
 from guacamole.agents.runtime import Runtime
 from guacamole.context import (
@@ -33,6 +35,7 @@ from guacamole.context import (
     ContextOverflow,
     ProviderError,
     encode_context,
+    preview,
 )
 from guacamole.contracts import (
     Acknowledge,
@@ -52,6 +55,7 @@ from guacamole.contracts import (
 )
 from guacamole.decision import DecisionBlocked
 from guacamole.providers.litellm import LiteLLMReasoning
+from guacamole.providers.litellm import _usage as litellm_usage
 
 
 class RuntimeTests(unittest.IsolatedAsyncioTestCase):
@@ -111,6 +115,116 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 await project.contexts.build(
                     pinned, "request", Limited(), instructions="test", state={},
                 )
+
+    async def test_prompt_leads_with_stable_fields_and_marks_cacheable_prefixes(self):
+        def probe(text: str) -> str:
+            return text
+
+        def other(text: str) -> str:
+            return text
+
+        tools = ToolRegistry()
+        granted, _ = (tools.register(f, requires_plan=False) for f in (probe, other))
+        with tempfile.TemporaryDirectory() as directory, Project(
+            Path(directory), tools=tools
+        ) as project:
+            source = Path(directory) / "source.txt"
+            source.write_text("pinned evidence")
+            agent = AgentSpec(
+                id="chief", task_id="chief", parent_id=None, objective="Plan",
+                context=ContextSpec(
+                    pinned=(project.ingest(source),), max_input_tokens=100_000
+                ),
+                decision_id=None, tools=(granted.definition.grant,),
+            )
+            packets = [
+                await project.contexts.build(
+                    agent, "request", TestReasoning(), instructions="test",
+                    state={"turn": turn}, catalogue=True,
+                )
+                for turn in (1, 2)
+            ]
+        first, second = packets
+        data = json.loads(first.prompt)
+        self.assertEqual(list(data)[:3], ["instructions", "response_schema", "result_schema"])
+        self.assertEqual(list(data)[-2:], ["messages", "state"])
+        # The Chief's own tools are in tool_schemas; the catalogue lists the rest.
+        self.assertEqual([t["grant"]["name"] for t in data["tool_schemas"]], ["probe"])
+        self.assertEqual([t["grant"]["name"] for t in data["catalogue"]], ["other"])
+        stable, semi = first.cache_breakpoints
+        self.assertTrue(first.prompt[stable:].startswith('"agent":'))
+        self.assertTrue(first.prompt[semi:].startswith('"messages":'))
+        # Only the per-turn tail differs between turns.
+        self.assertEqual(first.prompt[:semi], second.prompt[:semi])
+        self.assertNotEqual(first.prompt[semi:], second.prompt[semi:])
+        self.assertEqual(first.components["state.turn"], 1)
+        self.assertGreater(first.components["sources.pinned"], 0)
+        self.assertEqual(first.components["sources.selected"], 0)
+        self.assertGreater(first.components["response_schema"], 1_000)
+
+    async def test_context_counts_tokens_once_when_optional_material_fits(self):
+        class Counting(TestReasoning):
+            calls = 0
+
+            async def count_tokens(self, prompt):
+                Counting.calls += 1
+                return len(prompt.encode())
+
+        with tempfile.TemporaryDirectory() as directory, Project(Path(directory)) as project:
+            refs = []
+            for index, size in enumerate((1_000, 1_000, 1_000, 5_000, 500)):
+                path = Path(directory) / f"source{index}.txt"
+                path.write_text("x" * size)
+                refs.append(project.ingest(path))
+
+            async def build(budget):
+                agent = AgentSpec(
+                    id="worker", task_id="task", parent_id="chief", objective="Read",
+                    context=ContextSpec(selected=tuple(refs), max_input_tokens=budget),
+                    decision_id=None,
+                )
+                Counting.calls = 0
+                return await project.contexts.build(
+                    agent, "request", Counting(), instructions="test", state={}
+                )
+
+            packet = await build(100_000)
+            self.assertEqual(packet.sources, tuple(refs))
+            self.assertEqual(Counting.calls, 2)  # The pinned base, then all sources at once
+            self.assertEqual(packet.input_tokens, len(packet.prompt.encode()))
+            # 2,000 short: the large fourth source no longer fits, the small fifth does.
+            packet = await build(len(packet.prompt.encode()) - 2_000)
+            self.assertEqual(packet.sources, (*refs[:3], refs[4]))
+            self.assertEqual(
+                [o.item for o in packet.deferred],
+                [f"source:{refs[3].id}@1"],
+            )
+            self.assertEqual(packet.input_tokens, len(packet.prompt.encode()))
+            self.assertLess(Counting.calls, 8)
+
+    def test_preview_bounds_large_values_and_keeps_short_fields(self):
+        result = {
+            "status": "converged",
+            "residual": 0.0021,
+            "log": "iteration " * 5_000,
+            "cells": list(range(5_000)),
+        }
+        def size(value):
+            return len(json.dumps(value, ensure_ascii=False, separators=(",", ":")))
+
+        shown = preview(result, 2_000)
+        self.assertLessEqual(size(shown), 2_000)
+        self.assertEqual(shown["status"], "converged")
+        self.assertEqual(shown["residual"], 0.0021)
+        self.assertRegex(shown["log"], r"…\[\d+ more chars\]$")
+        self.assertRegex(shown["cells"][-1], r"…\[\d+ more items\]")
+        self.assertEqual(shown["cells"][:3], [0, 1, 2])
+        self.assertEqual(preview(result["status"], 2_000), "converged")
+        many = {f"field{i}": "value" * 20 for i in range(200)}
+        cut = preview(many, 1_000)
+        self.assertLessEqual(size(cut), 1_000)
+        self.assertIn("field0", cut)
+        self.assertRegex(cut["…"], r"\[\d+ more fields\]")
 
     async def test_invalid_reads_do_not_poison_context_and_can_be_corrected(self):
         class Reader(TestReasoning):
@@ -323,6 +437,55 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             [("call 1", "CALL 1"), ("call 2", "CALL 2")],
         )
 
+    async def test_large_tool_results_repeat_as_previews_until_read(self):
+        def solve(case: str) -> dict[str, str]:
+            return {"status": "converged", "log": f"{case} residual\n" * 2_000}
+
+        class Solver(TestReasoning):
+            def __init__(self):
+                self.packets = []
+
+            async def respond(self, packet):
+                self.packets.append(packet)
+                state = json.loads(packet.prompt)["state"]
+                action = (
+                    ToolCall(
+                        tool=tool.definition.grant,
+                        arguments={"case": f"case {len(self.packets)}"},
+                    )
+                    if len(self.packets) <= 2
+                    else Read(refs=(Ref(**state["recent_tool_calls"][0]["ref"]),))
+                    if len(self.packets) == 3
+                    else Wait(reason="Fixture finished")
+                )
+                return AgentTurn(
+                    rationale=Rationale(objective="Fixture", explanation="Fixture"),
+                    action=action,
+                )
+
+        tools = ToolRegistry()
+        tool = tools.register(solve, requires_plan=False)
+        with tempfile.TemporaryDirectory() as directory:
+            provider = Solver()
+            with Project(Path(directory), tools=tools, reasoning=provider) as project:
+                await project.run(
+                    ProjectRequest(
+                        description="Large result fixture",
+                        context=ContextSpec(max_input_tokens=200_000),
+                    )
+                )
+                calls = [r for r in project.requests() if r.kind == "tool"]
+                first = project.store.get("tool_result", calls[0].id)
+        state = json.loads(provider.packets[2].prompt)["state"]
+        self.assertEqual(state["last_observation"]["result"]["log"].count("\n"), 2_000)
+        (call,) = state["recent_tool_calls"]
+        self.assertEqual(call["result"]["status"], "converged")
+        self.assertRegex(call["result"]["log"], r"…\[\d+ more chars\]$")
+        self.assertEqual(call["ref"], first.ref.model_dump(mode="json"))
+        self.assertLess(len(json.dumps(call)), 3_000)
+        # Reading the ref brings the whole result back as a source.
+        self.assertIn(first.ref, provider.packets[3].sources)
+
     async def test_invalid_rationale_references_can_be_corrected(self):
         class Correcting(TestReasoning):
             def __init__(self, bad, current):
@@ -422,6 +585,69 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn("tools", sent)
         with self.assertRaisesRegex(ValueError, "context_capacity_tokens"):
             LiteLLMReasoning("fixture/unmapped-model")
+
+    async def test_litellm_marks_stable_prefixes_for_claude_and_reports_usage(self):
+        expected = AgentTurn(
+            rationale=Rationale(objective="fixture", explanation="No engineering claim"),
+            action=Wait(reason="await inputs"),
+        )
+        prompt = '{"instructions":"stable","agent":{},"state":{"turn":1}}'
+        breakpoints = (prompt.index('"agent"'), prompt.index('"state"'))
+        for model, marked in (
+            ("anthropic/claude-opus-5-5", True),
+            ("openai/gpt-6-astra", False),  # OpenAI caches prefixes without markers
+        ):
+            provider = LiteLLMReasoning(model, mock_response=expected.model_dump_json())
+            packet = ContextPacket(
+                agent_id="fixture",
+                invocation_id="one",
+                request_id="request",
+                provider=provider.name,
+                model=provider.model,
+                prompt=prompt,
+                input_tokens=await provider.count_tokens(prompt),
+                token_count_method=provider.token_count_method,
+                reserved_output_tokens=1000,
+                cache_breakpoints=breakpoints,
+            )
+            with (
+                self.subTest(model=model),
+                patch.object(
+                    litellm, "acompletion", wraps=litellm.acompletion
+                ) as completion,
+            ):
+                result = await provider.respond(packet)
+                content = completion.call_args.kwargs["messages"][-1]["content"]
+                if marked:
+                    self.assertEqual("".join(b["text"] for b in content), prompt)
+                    self.assertEqual(
+                        [b.get("cache_control") for b in content],
+                        [{"type": "ephemeral"}, {"type": "ephemeral"}, None],
+                    )
+                else:
+                    self.assertEqual(content, prompt)
+                # LiteLLM's mock reports 10 prompt and 20 completion tokens.
+                self.assertEqual(result.usage.input_tokens, 10)
+                self.assertEqual(result.usage.output_tokens, 20)
+                self.assertGreater(result.usage.cost_usd, 0)
+        # Anthropic counts cache reads and writes inside LiteLLM's prompt_tokens.
+        response = litellm.ModelResponse(
+            usage=litellm.Usage(
+                prompt_tokens=1_000,
+                completion_tokens=50,
+                cache_read_input_tokens=600,
+                cache_creation_input_tokens=300,
+            )
+        )
+        self.assertEqual(
+            litellm_usage(response),
+            Usage(
+                input_tokens=100,
+                cache_read_input_tokens=600,
+                cache_creation_input_tokens=300,
+                output_tokens=50,
+            ),
+        )
 
     async def test_provider_diagnostics_survive_without_server_text(self):
         secret = "fixture-secret-must-not-persist"
@@ -629,12 +855,29 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             project.store.invalidate(refs[1], actor="script", reason="Fixture")
             runtime = Runtime(project, TestReasoning())
             runtime.run_id = "fixture-run"
+            chief, worker = (
+                AgentSpec(
+                    task_id=task,
+                    parent_id=None,
+                    objective="fixture",
+                    context=ContextSpec(),
+                    decision_id=None,
+                )
+                for task in ("chief", "worker")
+            )
+            runtime.chief_id = chief.id
             ids = {}
-            for status in ("completed", "cancelled", "failed"):
+            for requester, status in (
+                ("script", "completed"),
+                ("script", "cancelled"),
+                ("script", "failed"),
+                (worker.id, "completed"),
+                (worker.id, "failed"),
+            ):
                 record = project.activity.request(
                     RequestRecord(
                         run_id="fixture-run",
-                        requester="script",
+                        requester=requester,
                         target="fixture",
                         kind="tool",
                         arguments={},
@@ -643,17 +886,35 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 )
                 for step in ("dispatched", "running", status):
                     project.activity.transition(record.id, step, actor="script")
-                ids[status] = record.id
-            agent = AgentSpec(
-                task_id="fixture",
-                parent_id=None,
-                objective="fixture",
-                context=ContextSpec(),
-                decision_id=None,
+                ids[requester, status] = record.id
+            results = {
+                requester: project.store.put(
+                    "tool_result",
+                    ids[requester, "completed"],
+                    {"value": requester},
+                    actor="runtime",
+                ).model_dump(mode="json")
+                for requester in ("script", worker.id)
+            }
+            current = refs[0].model_dump(mode="json")
+            # The Chief sees every open request and every agent's tool results.
+            state = runtime._context_state(chief, AgentState(request_id="chief"))
+            self.assertCountEqual(
+                state["records"], [current, results["script"], results[worker.id]]
             )
-            state = runtime._context_state(agent, AgentState(request_id=ids["failed"]))
-            self.assertEqual(state["records"], [refs[0].model_dump(mode="json")])
-            self.assertEqual([r["id"] for r in state["requests"]], [ids["failed"]])
+            self.assertCountEqual(
+                [r["id"] for r in state["requests"]],
+                [ids["script", "failed"], ids[worker.id, "failed"]],
+            )
+            # A worker sees its own requests and tool records; pinned records
+            # already arrive among its sources.
+            state = runtime._context_state(
+                worker, AgentState(request_id="worker"), (refs[0],)
+            )
+            self.assertEqual(state["records"], [results[worker.id]])
+            self.assertEqual(
+                [r["id"] for r in state["requests"]], [ids[worker.id, "failed"]]
+            )
 
     async def test_required_context_raises_a_small_budget_to_the_run_limit(self):
         class Waiting(TestReasoning):

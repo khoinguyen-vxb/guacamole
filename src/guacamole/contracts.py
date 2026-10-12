@@ -6,6 +6,7 @@ from typing import Annotated, Literal
 from uuid import uuid4
 
 from pydantic import BaseModel, ConfigDict, Field, JsonValue, model_validator
+from pydantic.json_schema import SkipJsonSchema
 
 type JSON = dict[str, JsonValue]
 type ReviewStage = Literal["PDR", "CDR"]
@@ -145,7 +146,31 @@ class ContextPacket(Model):
     sources: tuple[Ref, ...] = ()
     message_ids: tuple[str, ...] = ()
     deferred: tuple[Omission, ...] = ()
+    # Prompt prefix lengths, in characters, that stay identical across turns;
+    # providers may cache them. Later prefixes change more often.
+    cache_breakpoints: tuple[int, ...] = ()
+    # Characters each prompt component takes, to find what dominates input.
+    components: dict[str, int] = Field(default_factory=dict)
     created_at: str = Field(default_factory=now)
+
+
+class Usage(Model):
+    """Provider-reported tokens for invocations; None where a provider reports none."""
+
+    input_tokens: int | None = None  # Neither read from nor written to a cache
+    cache_read_input_tokens: int | None = None
+    cache_creation_input_tokens: int | None = None
+    output_tokens: int | None = None  # Includes reasoning
+    cost_usd: float | None = None
+
+    def __add__(self, other: "Usage") -> "Usage":
+        totals: JSON = {}
+        for name in Usage.model_fields:
+            values = [
+                v for v in (getattr(self, name), getattr(other, name)) if v is not None
+            ]
+            totals[name] = sum(values) if values else None
+        return Usage.model_validate(totals)
 
 
 class Budget(Model):
@@ -717,3 +742,5 @@ class AgentTurn(Model):
     action: Action
     provider_request_id: str | None = None
     provider_summary: str | None = None
+    # Filled by the provider after the call; hidden from the response schema.
+    usage: SkipJsonSchema[Usage | None] = None

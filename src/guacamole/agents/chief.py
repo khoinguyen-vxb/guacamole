@@ -62,11 +62,15 @@ send it questions, conflicts and change requests instead of contradicting the mo
 Wait when external inputs or peer responses are
 needed. A finished task cannot hide unresolved required child requests. Use exact
 current Ref objects from state or sources; never manufacture their hashes.
-state.records lists current records only; stale ones cannot be read or cited.
-state.requests lists unfinished, failed and interrupted requests; a completed tool
-request's result is the tool_result record with the same ID.
-state.recent_tool_calls lists your latest finished tool calls with their arguments
-and results; reuse them instead of repeating a call. last_observation is replaced
+state.records lists current records that are not already in sources; workers see
+only their own tool records. Stale records cannot be read or cited.
+state.requests lists unfinished, failed and interrupted requests (for workers, those
+they made or received); a completed tool request's result is the tool_result record
+with the same ID.
+state.recent_tool_calls lists your latest finished tool calls with previews of their
+arguments and results; a marker such as "…[N more chars]" shows where a preview was
+cut. Reuse them instead of repeating a call, and read a call's ref when you need its
+full result. last_observation holds your latest result in full and is replaced
 every turn, so read a tool_result ref to keep an older result in context.
 """
 
@@ -86,6 +90,8 @@ The runtime validates constraints and current evidence before recording the choi
 Ask the human when an unresolved input prevents selection. Plans must cover every requirement, task
 dependencies, deliverables, acceptance criteria, tool grants and peer grants.
 Spawn bounded workers by approved task ID or use approved chief_tools directly.
+catalogue lists the registered tools that are not in your tool_schemas; plans may
+grant tools from either.
 Derive all deliverables required by the brief, including editable CAD/assemblies/
 drawings, electronics/schematics/PCB/harnesses, analyses and simulations, flight
 and ground-station source/config/builds/tests, required fluids/GSE and procedures,
