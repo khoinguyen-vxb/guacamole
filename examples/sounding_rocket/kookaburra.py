@@ -44,21 +44,23 @@ CONTROL_PORT = 8765
 CONTEXT = ContextSpec(max_input_tokens=12800000, reserved_output_tokens=20000)
 # The watchdog prints a status report at this interval and helps looping or
 # context-saturated agents using its own low-effort Codex process (no web search).
-WATCHDOG_REPORT_S = 600.0
+WATCHDOG_REPORT_S = 600
 BUDGET = Budget(
     max_steps=20000, max_tool_calls=15000, max_seconds=720000, max_agents=24
 )
-SUMMARY_MODEL = "openai/gpt-6-luna"  # 922k-token input holds untrimmed sources.
-SUMMARIZE_AT_TOKENS = 150_000  # Optional sources above this are compacted.
-CLEAR_AT_TOKENS = 80_000  # Above this, reads beyond the latest 8 are hidden per call.
+SUMMARY_MODEL = "openai/gpt-6-luna" 
+SUMMARIZE_AT_TOKENS = 150_000 
+CLEAR_AT_TOKENS = 80_000 
 PYTHON_EXECUTABLES: dict[str, Path] = {}
 
 DESCRIPTION = """Project Kookaburra: 
 Hello friend, I want to build a sounding rocket with a custom made hybrid rocket engine. 
 
 The rocket's mission profile is to carry a 3U 2kg payload to a 30,000ft AGL altitude, launching from Spaceport Midland Texas during July 2027. You need
-to design a tolerance for 
+to design an apogee tolerance for +/- 2000ft FT from the apogee target, in order to accomplish this - please implement an airbrakes system with a controller 
+and associated custom avionics. You also need a backup avionics system that is commercial off the shelf. 
 
+I've supplied to you existing propietary technical documentation for previous successful rockets from USYD Rocketry Team as a basis to formulate your design decisions upon.
 """
 
 
@@ -68,41 +70,10 @@ to design a tolerance for
 
 
 
-INSTRUCTIONS = """Start by inspecting the supplied inventory, tool documentation,
-and relevant historical design documents. Use list_files, read_text and read_document
-before planning; these readers do not require a work plan. Validate a work plan
-before writing files or running capability checks and engineering tools. Treat
-repository availability, installed dependencies, successful execution and physical
-validation separately.
+INSTRUCTIONS = """Start with the relevant historical design documents.
 list_files with an empty path lists the supplied input/output directories. Reader
 paths may be absolute, relative to this example, or relative to the output directory
 (including FileRecord.path values such as artifacts/<hash>/<filename>).
-Read binary sources in bounded excerpts with read_document, supplying their Ref
-also in the tool action's inputs. Use extract to register the SourceExcerpt.
-Cite source pages/slides/cell addresses. Text extraction does not inspect figures;
-request missing drawing/image interpretation or other capabilities from the human.
-Resolve reader open items only after reviewing the relevant content.
-
-Use write_text for new source/configuration files under the sandbox. execute runs
-an argv list without a shell, with cwd inside the sandbox; use command[0]='python'
-and repository=<inventory name> to select that backend's interpreter/import root.
-Inspect backend setup and entry points first. Copy required data/templates into
-the sandbox when a backend assumes cwd-relative inputs. Keep supplied source
-repositories and original documents unchanged. Request missing installations
-through ask_human; source checkout presence is not proof of a usable backend.
-Declare generated files in outputs so they are snapshotted and publishable.
-Full stdout/stderr logs are also returned as ProducedFile records.
-
-Verification programs must compute checks from the actual artifact inputs and
-print only a VerificationResult JSON object to stdout; use verify_command and
-include every tested artifact Ref in tool inputs. Never infer a passing physical
-check from process exit status. Use stderr for diagnostic output. Develop and
-retain the check program itself as an editable artifact. The Chief selects and
-records engineering choices using the evidence, including numerical search results.
-
-AskHuman and PDR/CDR readiness notifications reach the host console and WebSocket
-inbox. Wait for explicit human review dispositions. Preserve all corrections,
-assumptions, source provenance and evidence limitations in the review packages.
 """
 
 type Offset = Annotated[int, Field(ge=0)]
