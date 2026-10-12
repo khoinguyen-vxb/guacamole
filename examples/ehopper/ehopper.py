@@ -118,27 +118,7 @@ Use context/brief.md as the current project brief. Ask focused questions where
 missing requirements block selection; keep provisional assumptions explicit.
 """
 
-INSTRUCTIONS = """Start by inspecting the supplied inventory, tool documentation,
-and the hopper brief. Use list_files, read_text and read_document
-before planning; these readers do not require a work plan. Validate a work plan
-before writing files or running capability checks and engineering tools. Treat
-repository availability, installed dependencies, successful execution and physical
-validation separately.
-Read binary sources in bounded excerpts with read_document, supplying their Ref
-also in the tool action's inputs. Use extract to register the SourceExcerpt.
-Cite source pages/slides/cell addresses. Text extraction does not inspect figures;
-request missing drawing/image interpretation or other capabilities from the human.
-Resolve reader open items only after reviewing the relevant content.
-
-Use write_text for new source/configuration files under the sandbox. execute runs
-an argv list without a shell, with cwd inside the sandbox; use command[0]='python'
-and repository=<inventory name> to select that backend's interpreter/import root.
-Inspect backend setup and entry points first. Copy required data/templates into
-the sandbox when a backend assumes cwd-relative inputs. Keep supplied source
-repositories and original documents unchanged. Request missing installations
-through ask_human; source checkout presence is not proof of a usable backend.
-Declare generated files in outputs so they are snapshotted and publishable.
-Full stdout/stderr logs are also returned as ProducedFile records.
+INSTRUCTIONS = """Start with the hopper brief.
 
 Use built-in live web search for current manufacturer/supplier prices, motor
 dimensions, mounting drawings, thrust data, ESC ratings and battery specifications.
@@ -180,17 +160,6 @@ touchdown rates, thrust/current/energy and budget margins. Preserve original
 source checkouts; publish a runnable modified copy/patch under results/software.
 Stay within propulsion, CAD and simulated PID integration; the pendulum reference
 does not add Gazebo, ROS, MPC or machine-learning work to this project.
-
-Verification programs must compute checks from the actual artifact inputs and
-print only a VerificationResult JSON object to stdout; use verify_command and
-include every tested artifact Ref in tool inputs. Never infer a passing physical
-check from process exit status. Use stderr for diagnostic output. Develop and
-retain the check program itself as an editable artifact. The Chief selects and
-records engineering choices using the evidence, including numerical search results.
-
-AskHuman and PDR/CDR readiness notifications reach the host console and WebSocket
-inbox. Wait for explicit human review dispositions. Preserve all corrections,
-assumptions, source provenance and evidence limitations in the review packages.
 """
 
 type Offset = Annotated[int, Field(ge=0)]
