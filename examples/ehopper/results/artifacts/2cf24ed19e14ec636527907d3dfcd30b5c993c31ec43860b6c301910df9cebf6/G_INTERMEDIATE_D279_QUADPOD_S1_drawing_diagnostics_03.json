@@ -1,0 +1,5206 @@
+{
+  "schema": "hopper_edge_projection_diagnostics/1",
+  "candidate_id": "G_INTERMEDIATE_D279_QUADPOD_S1",
+  "generated_at_UTC": "2026-10-13T12:52:36.245445+00:00",
+  "units": "mm",
+  "geometry_modified_by_renderer": false,
+  "accuracy_verified": false,
+  "degeneracy_diagnosis": "None. Failed or point-like edges are unresolved, not automatically classified as degenerate.",
+  "fallback_point_count": 81,
+  "plot_span_tolerance_mm": 1e-09,
+  "tolerance_scope": "Rendering diagnostic only; not a geometry or clearance acceptance tolerance.",
+  "edge_records": [
+    {
+      "object_name": "MainLeg_01",
+      "object_label": "MainLeg_01",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 462.04072210600685,
+      "parameter_range": [
+        0.0,
+        462.04072210600685
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          85.86176807559552,
+          81.86176807559548,
+          380.14912077544426
+        ],
+        [
+          285.41866428600156,
+          281.41866428600156,
+          14.31347566417461
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_01",
+      "object_label": "MainLeg_01",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          85.86176807559552,
+          81.86176807559548,
+          380.14912077544426
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_01",
+      "object_label": "MainLeg_01",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          285.41866428600156,
+          281.41866428600156,
+          14.31347566417461
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_01",
+      "object_label": "MainLeg_01",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          85.75765920337724,
+          82.75765920337722,
+          380.58102403994616
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_01",
+      "object_label": "MainLeg_01",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          285.31455541378335,
+          282.31455541378335,
+          14.745378928676518
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_01",
+      "object_label": "MainLeg_01",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 462.04072210600685,
+      "parameter_range": [
+        1.0,
+        463.04072210600685
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          85.75765920337724,
+          82.75765920337722,
+          380.58102403994616
+        ],
+        [
+          285.31455541378335,
+          282.31455541378335,
+          14.745378928676518
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Plus",
+      "object_label": "Brace_01_Plus",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 389.1075352193249,
+      "parameter_range": [
+        0.0,
+        389.1075352193249
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.6397234327702297,
+          127.35695442175404,
+          367.4849220418962
+        ],
+        [
+          243.01922285777525,
+          242.01590071229938,
+          87.48492204189617
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Plus",
+      "object_label": "Brace_01_Plus",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.6397234327702297,
+          127.35695442175404,
+          367.4849220418962
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Plus",
+      "object_label": "Brace_01_Plus",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          243.01922285777525,
+          242.01590071229938,
+          87.48492204189617
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Plus",
+      "object_label": "Brace_01_Plus",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.229792574577679,
+          128.0177158163155,
+          368.1136915314221
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Plus",
+      "object_label": "Brace_01_Plus",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          243.4291537159678,
+          242.67666210686085,
+          88.11369153142208
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Plus",
+      "object_label": "Brace_01_Plus",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 389.1075352193249,
+      "parameter_range": [
+        1.0,
+        390.1075352193249
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.229792574577679,
+          128.0177158163155,
+          368.1136915314221
+        ],
+        [
+          243.4291537159678,
+          242.67666210686085,
+          88.11369153142208
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Minus",
+      "object_label": "Brace_01_Minus",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 389.10753521932486,
+      "parameter_range": [
+        0.0,
+        389.10753521932486
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          132.76134175514812,
+          -2.6430455782459013,
+          368.82131353507816
+        ],
+        [
+          247.42028804569364,
+          242.0159007122995,
+          88.821313535078
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Minus",
+      "object_label": "Brace_01_Minus",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          132.76134175514812,
+          -2.6430455782459013,
+          368.82131353507816
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Minus",
+      "object_label": "Brace_01_Minus",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          247.42028804569364,
+          242.0159007122995,
+          88.821313535078
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Minus",
+      "object_label": "Brace_01_Minus",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          132.07100631636112,
+          -1.9822841836844236,
+          369.1159851513087
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Minus",
+      "object_label": "Brace_01_Minus",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          246.7299526069066,
+          242.67666210686096,
+          89.11598515130852
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_01_Minus",
+      "object_label": "Brace_01_Minus",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 389.10753521932486,
+      "parameter_range": [
+        1.0,
+        390.10753521932486
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          132.07100631636112,
+          -1.9822841836844236,
+          369.1159851513087
+        ],
+        [
+          246.7299526069066,
+          242.67666210686096,
+          89.11598515130852
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_02",
+      "object_label": "MainLeg_02",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 462.04072210600685,
+      "parameter_range": [
+        0.0,
+        462.04072210600685
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -85.02889709784937,
+          89.0288970978494,
+          383.60434689145956
+        ],
+        [
+          -284.58579330825546,
+          288.5857933082555,
+          17.76870178018993
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_02",
+      "object_label": "MainLeg_02",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -85.02889709784937,
+          89.0288970978494,
+          383.60434689145956
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_02",
+      "object_label": "MainLeg_02",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -284.58579330825546,
+          288.5857933082555,
+          17.76870178018993
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_02",
+      "object_label": "MainLeg_02",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -85.13300597006763,
+          88.13300597006766,
+          383.17244362695766
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_02",
+      "object_label": "MainLeg_02",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -284.6899021804737,
+          287.6899021804738,
+          17.33679851568802
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_02",
+      "object_label": "MainLeg_02",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 462.04072210600685,
+      "parameter_range": [
+        1.0,
+        463.04072210600685
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -85.13300597006763,
+          88.13300597006766,
+          383.17244362695766
+        ],
+        [
+          -284.6899021804737,
+          287.6899021804738,
+          17.33679851568802
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Plus",
+      "object_label": "Brace_02_Plus",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 389.1075352193249,
+      "parameter_range": [
+        0.0,
+        389.1075352193249
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -127.23865824485185,
+          2.6430455782459212,
+          371.17868646492195
+        ],
+        [
+          -241.89760453539733,
+          247.30199186879148,
+          91.17868646492181
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Plus",
+      "object_label": "Brace_02_Plus",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -127.23865824485185,
+          2.6430455782459212,
+          371.17868646492195
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Plus",
+      "object_label": "Brace_02_Plus",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -241.89760453539733,
+          247.30199186879148,
+          91.17868646492181
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Plus",
+      "object_label": "Brace_02_Plus",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -127.92899368363888,
+          1.9822841836844445,
+          370.88401484869144
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Plus",
+      "object_label": "Brace_02_Plus",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -242.58793997418437,
+          246.64123047422999,
+          90.8840148486913
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Plus",
+      "object_label": "Brace_02_Plus",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 389.1075352193249,
+      "parameter_range": [
+        1.0,
+        390.1075352193249
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -127.92899368363888,
+          1.9822841836844445,
+          370.88401484869144
+        ],
+        [
+          -242.58793997418437,
+          246.64123047422999,
+          90.8840148486913
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Minus",
+      "object_label": "Brace_02_Minus",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 389.10753521932486,
+      "parameter_range": [
+        0.0,
+        389.10753521932486
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.6397234327701666,
+          132.64304557824588,
+          372.51507795810375
+        ],
+        [
+          -246.29866972331553,
+          247.3019918687913,
+          92.5150779581037
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Minus",
+      "object_label": "Brace_02_Minus",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.6397234327701666,
+          132.64304557824588,
+          372.51507795810375
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Minus",
+      "object_label": "Brace_02_Minus",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -246.29866972331553,
+          247.3019918687913,
+          92.5150779581037
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Minus",
+      "object_label": "Brace_02_Minus",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.2297925745776161,
+          131.9822841836844,
+          371.88630846857785
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Minus",
+      "object_label": "Brace_02_Minus",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -245.88873886512297,
+          246.64123047422984,
+          91.8863084685778
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_02_Minus",
+      "object_label": "Brace_02_Minus",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 389.10753521932486,
+      "parameter_range": [
+        1.0,
+        390.10753521932486
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.2297925745776161,
+          131.9822841836844,
+          371.88630846857785
+        ],
+        [
+          -245.88873886512297,
+          246.64123047422984,
+          91.8863084685778
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_03",
+      "object_label": "MainLeg_03",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 462.04072210600685,
+      "parameter_range": [
+        0.0,
+        462.04072210600685
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -85.02889709784942,
+          -89.0288970978494,
+          383.6043468914596
+        ],
+        [
+          -284.5857933082555,
+          -288.58579330825546,
+          17.768701780190014
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_03",
+      "object_label": "MainLeg_03",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -85.02889709784942,
+          -89.0288970978494,
+          383.6043468914596
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_03",
+      "object_label": "MainLeg_03",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -284.5857933082555,
+          -288.58579330825546,
+          17.768701780190014
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_03",
+      "object_label": "MainLeg_03",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -85.13300597006769,
+          -88.13300597006766,
+          383.1724436269577
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_03",
+      "object_label": "MainLeg_03",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -284.6899021804738,
+          -287.6899021804737,
+          17.33679851568811
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_03",
+      "object_label": "MainLeg_03",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 462.04072210600685,
+      "parameter_range": [
+        1.0,
+        463.04072210600685
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -85.13300597006769,
+          -88.13300597006766,
+          383.1724436269577
+        ],
+        [
+          -284.6899021804738,
+          -287.6899021804737,
+          17.33679851568811
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Plus",
+      "object_label": "Brace_03_Plus",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 389.1075352193249,
+      "parameter_range": [
+        0.0,
+        389.1075352193249
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.6397234327701824,
+          -132.6430455782459,
+          372.5150779581038
+        ],
+        [
+          -246.29866972331567,
+          -247.3019918687912,
+          92.5150779581037
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Plus",
+      "object_label": "Brace_03_Plus",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.6397234327701824,
+          -132.6430455782459,
+          372.5150779581038
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Plus",
+      "object_label": "Brace_03_Plus",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -246.29866972331567,
+          -247.3019918687912,
+          92.5150779581037
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Plus",
+      "object_label": "Brace_03_Plus",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.2297925745776312,
+          -131.98228418368444,
+          371.8863084685779
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Plus",
+      "object_label": "Brace_03_Plus",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -245.88873886512312,
+          -246.6412304742297,
+          91.88630846857774
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Plus",
+      "object_label": "Brace_03_Plus",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 389.1075352193249,
+      "parameter_range": [
+        1.0,
+        390.1075352193249
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.2297925745776312,
+          -131.98228418368444,
+          371.8863084685779
+        ],
+        [
+          -245.88873886512312,
+          -246.6412304742297,
+          91.88630846857774
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Minus",
+      "object_label": "Brace_03_Minus",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 389.1075352193249,
+      "parameter_range": [
+        0.0,
+        389.1075352193249
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -127.23865824485193,
+          -2.6430455782458315,
+          371.17868646492207
+        ],
+        [
+          -241.89760453539753,
+          -247.30199186879122,
+          91.17868646492195
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Minus",
+      "object_label": "Brace_03_Minus",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -127.23865824485193,
+          -2.6430455782458315,
+          371.17868646492207
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Minus",
+      "object_label": "Brace_03_Minus",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -241.89760453539753,
+          -247.30199186879122,
+          91.17868646492195
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Minus",
+      "object_label": "Brace_03_Minus",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -127.92899368363896,
+          -1.9822841836843546,
+          370.88401484869155
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Minus",
+      "object_label": "Brace_03_Minus",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -242.58793997418454,
+          -246.64123047422973,
+          90.88401484869144
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_03_Minus",
+      "object_label": "Brace_03_Minus",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 389.1075352193249,
+      "parameter_range": [
+        1.0,
+        390.1075352193249
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -127.92899368363896,
+          -1.9822841836843546,
+          370.88401484869155
+        ],
+        [
+          -242.58793997418454,
+          -246.64123047422973,
+          90.88401484869144
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_04",
+      "object_label": "MainLeg_04",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 462.0407221060069,
+      "parameter_range": [
+        0.0,
+        462.0407221060069
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          85.8617680755955,
+          -81.86176807559555,
+          380.14912077544443
+        ],
+        [
+          285.4186642860017,
+          -281.41866428600173,
+          14.313475664174831
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_04",
+      "object_label": "MainLeg_04",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          85.8617680755955,
+          -81.86176807559555,
+          380.14912077544443
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_04",
+      "object_label": "MainLeg_04",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718345,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          285.4186642860017,
+          -281.41866428600173,
+          14.313475664174831
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_04",
+      "object_label": "MainLeg_04",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          85.75765920337723,
+          -82.75765920337729,
+          380.5810240399463
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_04",
+      "object_label": "MainLeg_04",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.84955592153876,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          285.3145554137834,
+          -282.31455541378347,
+          14.745378928676738
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "MainLeg_04",
+      "object_label": "MainLeg_04",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 462.0407221060069,
+      "parameter_range": [
+        1.0,
+        463.0407221060069
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          85.75765920337723,
+          -82.75765920337729,
+          380.5810240399463
+        ],
+        [
+          285.3145554137834,
+          -282.31455541378347,
+          14.745378928676738
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Plus",
+      "object_label": "Brace_04_Plus",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 389.107535219325,
+      "parameter_range": [
+        0.0,
+        389.107535219325
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          132.76134175514804,
+          2.6430455782458875,
+          368.82131353507805
+        ],
+        [
+          247.4202880456935,
+          -242.0159007122997,
+          88.82131353507795
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Plus",
+      "object_label": "Brace_04_Plus",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          132.76134175514804,
+          2.6430455782458875,
+          368.82131353507805
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Plus",
+      "object_label": "Brace_04_Plus",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          247.4202880456935,
+          -242.0159007122997,
+          88.82131353507795
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Plus",
+      "object_label": "Brace_04_Plus",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          132.07100631636104,
+          1.9822841836844103,
+          369.11598515130856
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Plus",
+      "object_label": "Brace_04_Plus",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          246.72995260690647,
+          -242.67666210686116,
+          89.11598515130846
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Plus",
+      "object_label": "Brace_04_Plus",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 389.107535219325,
+      "parameter_range": [
+        1.0,
+        390.107535219325
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          132.07100631636104,
+          1.9822841836844103,
+          369.11598515130856
+        ],
+        [
+          246.72995260690647,
+          -242.67666210686116,
+          89.11598515130846
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Minus",
+      "object_label": "Brace_04_Minus",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 389.1075352193249,
+      "parameter_range": [
+        0.0,
+        389.1075352193249
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.6397234327702235,
+          -127.35695442175417,
+          367.48492204189654
+        ],
+        [
+          243.0192228577752,
+          -242.01590071229978,
+          87.48492204189631
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Minus",
+      "object_label": "Brace_04_Minus",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.6397234327702235,
+          -127.35695442175417,
+          367.48492204189654
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Minus",
+      "object_label": "Brace_04_Minus",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 25.132741228718352,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          243.0192228577752,
+          -242.01590071229978,
+          87.48492204189631
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Minus",
+      "object_label": "Brace_04_Minus",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.2297925745776728,
+          -128.01771581631564,
+          368.11369153142243
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Minus",
+      "object_label": "Brace_04_Minus",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 18.849555921538766,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          243.42915371596774,
+          -242.67666210686124,
+          88.11369153142222
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Brace_04_Minus",
+      "object_label": "Brace_04_Minus",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 389.1075352193249,
+      "parameter_range": [
+        1.0,
+        390.1075352193249
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -1.2297925745776728,
+          -128.01771581631564,
+          368.11369153142243
+        ],
+        [
+          243.42915371596774,
+          -242.67666210686124,
+          88.11369153142222
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Spine_01",
+      "object_label": "Spine_01",
+      "category": "physical",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 300.0,
+      "parameter_range": [
+        0.0,
+        300.0
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          7.0,
+          -1.7145055188062944e-15,
+          390.0
+        ],
+        [
+          7.0,
+          -1.7145055188062944e-15,
+          690.0
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Spine_01",
+      "object_label": "Spine_01",
+      "category": "physical",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 43.982297150257104,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          7.0,
+          -1.7145055188062944e-15,
+          390.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Spine_01",
+      "object_label": "Spine_01",
+      "category": "physical",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 43.982297150257104,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          7.0,
+          -1.7145055188062944e-15,
+          690.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Spine_01",
+      "object_label": "Spine_01",
+      "category": "physical",
+      "edge_index_1_based": 4,
+      "inspection_errors": {},
+      "length_mm": 37.69911184307752,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          6.0,
+          -1.4695761589768238e-15,
+          390.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Spine_01",
+      "object_label": "Spine_01",
+      "category": "physical",
+      "edge_index_1_based": 5,
+      "inspection_errors": {},
+      "length_mm": 37.69911184307752,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          6.0,
+          -1.4695761589768238e-15,
+          690.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "Spine_01",
+      "object_label": "Spine_01",
+      "category": "physical",
+      "edge_index_1_based": 6,
+      "inspection_errors": {},
+      "length_mm": 300.0,
+      "parameter_range": [
+        1.0,
+        301.0
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          6.0,
+          -1.4695761589768238e-15,
+          390.0
+        ],
+        [
+          6.0,
+          -1.4695761589768238e-15,
+          690.0
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_01",
+      "object_label": "JointEnvelope_01",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          9.184850993605149e-15,
+          130.0,
+          390.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_01",
+      "object_label": "JointEnvelope_01",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          9.184850993605149e-15,
+          130.0,
+          390.0
+        ],
+        [
+          9.184850993605149e-15,
+          130.0,
+          350.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_01",
+      "object_label": "JointEnvelope_01",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          9.184850993605149e-15,
+          130.0,
+          350.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_02",
+      "object_label": "JointEnvelope_02",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          130.0,
+          -2.9995195653237157e-31,
+          390.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_02",
+      "object_label": "JointEnvelope_02",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          130.0,
+          -2.9995195653237157e-31,
+          390.0
+        ],
+        [
+          130.0,
+          -2.9995195653237157e-31,
+          350.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_02",
+      "object_label": "JointEnvelope_02",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          130.0,
+          -2.9995195653237157e-31,
+          350.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_03",
+      "object_label": "JointEnvelope_03",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          91.92388155425118,
+          91.92388155425117,
+          390.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_03",
+      "object_label": "JointEnvelope_03",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          91.92388155425118,
+          91.92388155425117,
+          390.0
+        ],
+        [
+          91.92388155425118,
+          91.92388155425117,
+          350.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_03",
+      "object_label": "JointEnvelope_03",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          91.92388155425118,
+          91.92388155425117,
+          350.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_04",
+      "object_label": "JointEnvelope_04",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          244.65894629054546,
+          244.65894629054537,
+          110.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_04",
+      "object_label": "JointEnvelope_04",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          244.65894629054546,
+          244.65894629054537,
+          110.0
+        ],
+        [
+          244.65894629054546,
+          244.65894629054537,
+          70.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_04",
+      "object_label": "JointEnvelope_04",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          244.65894629054546,
+          244.65894629054537,
+          70.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_05",
+      "object_label": "JointEnvelope_05",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.842712474619,
+          282.84271247461896,
+          40.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_05",
+      "object_label": "JointEnvelope_05",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.842712474619,
+          282.84271247461896,
+          40.0
+        ],
+        [
+          282.842712474619,
+          282.84271247461896,
+          0.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_05",
+      "object_label": "JointEnvelope_05",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.842712474619,
+          282.84271247461896,
+          0.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_06",
+      "object_label": "JointEnvelope_06",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -130.0,
+          1.592040838891559e-14,
+          390.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_06",
+      "object_label": "JointEnvelope_06",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -130.0,
+          1.592040838891559e-14,
+          390.0
+        ],
+        [
+          -130.0,
+          1.592040838891559e-14,
+          350.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_06",
+      "object_label": "JointEnvelope_06",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -130.0,
+          1.592040838891559e-14,
+          350.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_07",
+      "object_label": "JointEnvelope_07",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -91.92388155425117,
+          91.92388155425118,
+          390.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_07",
+      "object_label": "JointEnvelope_07",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -91.92388155425117,
+          91.92388155425118,
+          390.0
+        ],
+        [
+          -91.92388155425117,
+          91.92388155425118,
+          350.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_07",
+      "object_label": "JointEnvelope_07",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -91.92388155425117,
+          91.92388155425118,
+          350.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_08",
+      "object_label": "JointEnvelope_08",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -244.65894629054537,
+          244.65894629054546,
+          110.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_08",
+      "object_label": "JointEnvelope_08",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -244.65894629054537,
+          244.65894629054546,
+          110.0
+        ],
+        [
+          -244.65894629054537,
+          244.65894629054546,
+          70.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_08",
+      "object_label": "JointEnvelope_08",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -244.65894629054537,
+          244.65894629054546,
+          70.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_09",
+      "object_label": "JointEnvelope_09",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.84271247461896,
+          282.842712474619,
+          40.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_09",
+      "object_label": "JointEnvelope_09",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.84271247461896,
+          282.842712474619,
+          40.0
+        ],
+        [
+          -282.84271247461896,
+          282.842712474619,
+          0.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_09",
+      "object_label": "JointEnvelope_09",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.84271247461896,
+          282.842712474619,
+          0.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_10",
+      "object_label": "JointEnvelope_10",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -2.265596578422603e-14,
+          -130.0,
+          390.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_10",
+      "object_label": "JointEnvelope_10",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -2.265596578422603e-14,
+          -130.0,
+          390.0
+        ],
+        [
+          -2.265596578422603e-14,
+          -130.0,
+          350.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_10",
+      "object_label": "JointEnvelope_10",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -2.265596578422603e-14,
+          -130.0,
+          350.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_11",
+      "object_label": "JointEnvelope_11",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -91.9238815542512,
+          -91.92388155425117,
+          390.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_11",
+      "object_label": "JointEnvelope_11",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -91.9238815542512,
+          -91.92388155425117,
+          390.0
+        ],
+        [
+          -91.9238815542512,
+          -91.92388155425117,
+          350.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_11",
+      "object_label": "JointEnvelope_11",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -91.9238815542512,
+          -91.92388155425117,
+          350.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_12",
+      "object_label": "JointEnvelope_12",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -244.65894629054554,
+          -244.65894629054537,
+          110.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_12",
+      "object_label": "JointEnvelope_12",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -244.65894629054554,
+          -244.65894629054537,
+          110.0
+        ],
+        [
+          -244.65894629054554,
+          -244.65894629054537,
+          70.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_12",
+      "object_label": "JointEnvelope_12",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -244.65894629054554,
+          -244.65894629054537,
+          70.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_13",
+      "object_label": "JointEnvelope_13",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.8427124746191,
+          -282.84271247461896,
+          40.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_13",
+      "object_label": "JointEnvelope_13",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.8427124746191,
+          -282.84271247461896,
+          40.0
+        ],
+        [
+          -282.8427124746191,
+          -282.84271247461896,
+          0.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_13",
+      "object_label": "JointEnvelope_13",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.8427124746191,
+          -282.84271247461896,
+          0.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_14",
+      "object_label": "JointEnvelope_14",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          91.92388155425115,
+          -91.9238815542512,
+          390.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_14",
+      "object_label": "JointEnvelope_14",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          91.92388155425115,
+          -91.9238815542512,
+          390.0
+        ],
+        [
+          91.92388155425115,
+          -91.9238815542512,
+          350.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_14",
+      "object_label": "JointEnvelope_14",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          91.92388155425115,
+          -91.9238815542512,
+          350.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_15",
+      "object_label": "JointEnvelope_15",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          244.6589462905454,
+          -244.65894629054554,
+          110.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_15",
+      "object_label": "JointEnvelope_15",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          244.6589462905454,
+          -244.65894629054554,
+          110.0
+        ],
+        [
+          244.6589462905454,
+          -244.65894629054554,
+          70.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_15",
+      "object_label": "JointEnvelope_15",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          244.6589462905454,
+          -244.65894629054554,
+          70.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_16",
+      "object_label": "JointEnvelope_16",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.84271247461896,
+          -282.8427124746191,
+          40.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_16",
+      "object_label": "JointEnvelope_16",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.84271247461896,
+          -282.8427124746191,
+          40.0
+        ],
+        [
+          282.84271247461896,
+          -282.8427124746191,
+          0.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_16",
+      "object_label": "JointEnvelope_16",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.84271247461896,
+          -282.8427124746191,
+          0.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_17",
+      "object_label": "JointEnvelope_17",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          1.2246467991473533e-15,
+          -2.9995195653237157e-31,
+          410.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "JointEnvelope_17",
+      "object_label": "JointEnvelope_17",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 62.83185307179586,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          1.2246467991473533e-15,
+          -2.9995195653237157e-31,
+          410.0
+        ],
+        [
+          1.2246467991473533e-15,
+          -2.9995195653237157e-31,
+          370.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "JointEnvelope_17",
+      "object_label": "JointEnvelope_17",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 7.69468277488716e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          1.2246467991473533e-15,
+          -2.9995195653237157e-31,
+          370.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "ContactMarker_01",
+      "object_label": "ContactMarker_01",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 1.92367069372179e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.842712474619,
+          282.84271247461896,
+          10.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "ContactMarker_01",
+      "object_label": "ContactMarker_01",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 15.707963267948966,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.842712474619,
+          282.84271247461896,
+          10.0
+        ],
+        [
+          282.842712474619,
+          282.84271247461896,
+          0.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "ContactMarker_01",
+      "object_label": "ContactMarker_01",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 1.92367069372179e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.842712474619,
+          282.84271247461896,
+          0.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "ContactMarker_02",
+      "object_label": "ContactMarker_02",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 1.92367069372179e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.84271247461896,
+          282.842712474619,
+          10.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "ContactMarker_02",
+      "object_label": "ContactMarker_02",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 15.707963267948966,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.84271247461896,
+          282.842712474619,
+          10.0
+        ],
+        [
+          -282.84271247461896,
+          282.842712474619,
+          0.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "ContactMarker_02",
+      "object_label": "ContactMarker_02",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 1.92367069372179e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.84271247461896,
+          282.842712474619,
+          0.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "ContactMarker_03",
+      "object_label": "ContactMarker_03",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 1.92367069372179e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.8427124746191,
+          -282.84271247461896,
+          10.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "ContactMarker_03",
+      "object_label": "ContactMarker_03",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 15.707963267948966,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.8427124746191,
+          -282.84271247461896,
+          10.0
+        ],
+        [
+          -282.8427124746191,
+          -282.84271247461896,
+          0.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "ContactMarker_03",
+      "object_label": "ContactMarker_03",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 1.92367069372179e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -282.8427124746191,
+          -282.84271247461896,
+          0.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "ContactMarker_04",
+      "object_label": "ContactMarker_04",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 1.92367069372179e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.84271247461896,
+          -282.8427124746191,
+          10.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "ContactMarker_04",
+      "object_label": "ContactMarker_04",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 15.707963267948966,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.84271247461896,
+          -282.8427124746191,
+          10.0
+        ],
+        [
+          282.84271247461896,
+          -282.8427124746191,
+          0.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "ContactMarker_04",
+      "object_label": "ContactMarker_04",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 1.92367069372179e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          282.84271247461896,
+          -282.8427124746191,
+          0.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "AttachmentRingGuide",
+      "object_label": "AttachmentRingGuide",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 816.8140899333462,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          130.0,
+          0.0,
+          370.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "upper_rotor",
+      "object_label": "upper_rotor",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 20.0,
+      "parameter_range": [
+        0.0,
+        20.0
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          139.7,
+          -3.421663156817705e-14,
+          220.0
+        ],
+        [
+          139.7,
+          -3.421663156817705e-14,
+          240.0
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "upper_rotor",
+      "object_label": "upper_rotor",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 877.7609874129881,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          139.7,
+          -3.421663156817705e-14,
+          220.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "upper_rotor",
+      "object_label": "upper_rotor",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 877.7609874129881,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          139.7,
+          -3.421663156817705e-14,
+          240.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "lower_rotor",
+      "object_label": "lower_rotor",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 20.0,
+      "parameter_range": [
+        0.0,
+        20.0
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          139.7,
+          -3.421663156817705e-14,
+          100.0
+        ],
+        [
+          139.7,
+          -3.421663156817705e-14,
+          120.0
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "lower_rotor",
+      "object_label": "lower_rotor",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 877.7609874129881,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          139.7,
+          -3.421663156817705e-14,
+          100.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "lower_rotor",
+      "object_label": "lower_rotor",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 877.7609874129881,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          139.7,
+          -3.421663156817705e-14,
+          120.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_01",
+      "object_label": "YokeEnvelope_01",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 339.4,
+      "parameter_range": [
+        0.0,
+        339.4
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -169.7,
+          -1.7145055188062944e-15,
+          333.0
+        ],
+        [
+          169.7,
+          -1.7145055188062944e-15,
+          333.00000000000006
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_01",
+      "object_label": "YokeEnvelope_01",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 43.982297150257104,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -169.7,
+          -1.7145055188062944e-15,
+          333.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_01",
+      "object_label": "YokeEnvelope_01",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 43.982297150257104,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          169.7,
+          -1.7145055188062944e-15,
+          333.00000000000006
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_02",
+      "object_label": "YokeEnvelope_02",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 339.4,
+      "parameter_range": [
+        0.0,
+        339.4
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -169.7,
+          -1.7145055188062944e-15,
+          163.0
+        ],
+        [
+          169.7,
+          -1.7145055188062944e-15,
+          163.00000000000009
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_02",
+      "object_label": "YokeEnvelope_02",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 43.982297150257104,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -169.7,
+          -1.7145055188062944e-15,
+          163.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_02",
+      "object_label": "YokeEnvelope_02",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 43.982297150257104,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          169.7,
+          -1.7145055188062944e-15,
+          163.00000000000009
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_03",
+      "object_label": "YokeEnvelope_03",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 170.0,
+      "parameter_range": [
+        0.0,
+        170.0
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -176.7,
+          -1.7145055188062944e-15,
+          340.0
+        ],
+        [
+          -176.7,
+          -1.7145055188062944e-15,
+          170.0
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_03",
+      "object_label": "YokeEnvelope_03",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 43.982297150257104,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -176.7,
+          -1.7145055188062944e-15,
+          340.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_03",
+      "object_label": "YokeEnvelope_03",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 43.982297150257104,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -176.7,
+          -1.7145055188062944e-15,
+          170.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_04",
+      "object_label": "YokeEnvelope_04",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {},
+      "length_mm": 170.0,
+      "parameter_range": [
+        0.0,
+        170.0
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          162.7,
+          -1.7145055188062944e-15,
+          340.0
+        ],
+        [
+          162.7,
+          -1.7145055188062944e-15,
+          170.0
+        ]
+      ],
+      "curve_type": "Line",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_04",
+      "object_label": "YokeEnvelope_04",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 43.982297150257104,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          162.7,
+          -1.7145055188062944e-15,
+          340.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEnvelope_04",
+      "object_label": "YokeEnvelope_04",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {},
+      "length_mm": 43.982297150257104,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          162.7,
+          -1.7145055188062944e-15,
+          170.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEndEnvelope_01",
+      "object_label": "YokeEndEnvelope_01",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 2.693138971210506e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -169.7,
+          -1.0498318478633003e-31,
+          347.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "YokeEndEnvelope_01",
+      "object_label": "YokeEndEnvelope_01",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 21.991148575128552,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -169.7,
+          -1.0498318478633003e-31,
+          347.0
+        ],
+        [
+          -169.7,
+          -1.0498318478633003e-31,
+          333.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEndEnvelope_01",
+      "object_label": "YokeEndEnvelope_01",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 2.693138971210506e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -169.7,
+          -1.0498318478633003e-31,
+          333.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "YokeEndEnvelope_02",
+      "object_label": "YokeEndEnvelope_02",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 2.693138971210506e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          169.7,
+          -1.0498318478633003e-31,
+          347.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "YokeEndEnvelope_02",
+      "object_label": "YokeEndEnvelope_02",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 21.991148575128552,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          169.7,
+          -1.0498318478633003e-31,
+          347.0
+        ],
+        [
+          169.7,
+          -1.0498318478633003e-31,
+          333.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEndEnvelope_02",
+      "object_label": "YokeEndEnvelope_02",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 2.693138971210506e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          169.7,
+          -1.0498318478633003e-31,
+          333.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "YokeEndEnvelope_03",
+      "object_label": "YokeEndEnvelope_03",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 2.693138971210506e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -169.7,
+          -1.0498318478633003e-31,
+          177.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "YokeEndEnvelope_03",
+      "object_label": "YokeEndEnvelope_03",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 21.991148575128552,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -169.7,
+          -1.0498318478633003e-31,
+          177.0
+        ],
+        [
+          -169.7,
+          -1.0498318478633003e-31,
+          163.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEndEnvelope_03",
+      "object_label": "YokeEndEnvelope_03",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 2.693138971210506e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          -169.7,
+          -1.0498318478633003e-31,
+          163.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "YokeEndEnvelope_04",
+      "object_label": "YokeEndEnvelope_04",
+      "category": "reference",
+      "edge_index_1_based": 1,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 2.693138971210506e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          169.7,
+          -1.0498318478633003e-31,
+          177.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    },
+    {
+      "object_name": "YokeEndEnvelope_04",
+      "object_label": "YokeEndEnvelope_04",
+      "category": "reference",
+      "edge_index_1_based": 2,
+      "inspection_errors": {},
+      "length_mm": 21.991148575128552,
+      "parameter_range": [
+        4.71238898038469,
+        7.853981633974483
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          169.7,
+          -1.0498318478633003e-31,
+          177.0
+        ],
+        [
+          169.7,
+          -1.0498318478633003e-31,
+          163.0
+        ]
+      ],
+      "curve_type": "Circle",
+      "status": "rendered_number_samples",
+      "sample_count": 20
+    },
+    {
+      "object_name": "YokeEndEnvelope_04",
+      "object_label": "YokeEndEnvelope_04",
+      "category": "reference",
+      "edge_index_1_based": 3,
+      "inspection_errors": {
+        "curve_type": "TypeError: undefined curve type"
+      },
+      "length_mm": 2.693138971210506e-15,
+      "parameter_range": [
+        0.0,
+        6.283185307179586
+      ],
+      "vertex_points_CAD_mm": [
+        [
+          169.7,
+          -1.0498318478633003e-31,
+          163.0
+        ]
+      ],
+      "curve_type": null,
+      "discretize_error": "OCCError: Discretization of edge failed",
+      "fallback_error": "ValueError: Point-like sampled edge; degeneracy is not established by samples",
+      "status": "unresolved_edge_omitted",
+      "sample_count": 0
+    }
+  ],
+  "object_errors": [],
+  "object_records": [
+    {
+      "name": "MainLeg_01",
+      "label": "MainLeg_01",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          81.83765284458879,
+          288.6099085392621
+        ],
+        [
+          81.83765284458876,
+          288.6099085392621
+        ],
+        [
+          13.597874905015033,
+          384.31994765061916
+        ]
+      ]
+    },
+    {
+      "name": "Brace_01_Plus",
+      "label": "Brace_01_Plus",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          -3.110366998387999,
+          247.76931328893338
+        ],
+        [
+          126.17760569571769,
+          248.48134059482763
+        ],
+        [
+          87.2224257133373,
+          372.77757428666257
+        ]
+      ]
+    },
+    {
+      "name": "Brace_01_Minus",
+      "label": "Brace_01_Minus",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          126.17760569571772,
+          248.48134059482777
+        ],
+        [
+          -3.110366998387959,
+          247.7693132889334
+        ],
+        [
+          87.22242571333743,
+          372.77757428666274
+        ]
+      ]
+    },
+    {
+      "name": "MainLeg_02",
+      "label": "MainLeg_02",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          -288.6099085392621,
+          -81.83765284458877
+        ],
+        [
+          81.8376528445888,
+          288.60990853926216
+        ],
+        [
+          13.597874905015033,
+          384.31994765061916
+        ]
+      ]
+    },
+    {
+      "name": "Brace_02_Plus",
+      "label": "Brace_02_Plus",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          -248.4813405948277,
+          -126.17760569571769
+        ],
+        [
+          -3.1103669983879514,
+          247.76931328893346
+        ],
+        [
+          87.2224257133372,
+          372.77757428666257
+        ]
+      ]
+    },
+    {
+      "name": "Brace_02_Minus",
+      "label": "Brace_02_Minus",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          -247.76931328893332,
+          3.110366998387979
+        ],
+        [
+          126.17760569571772,
+          248.48134059482774
+        ],
+        [
+          87.22242571333743,
+          372.7775742866627
+        ]
+      ]
+    },
+    {
+      "name": "MainLeg_03",
+      "label": "MainLeg_03",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          -288.60990853926216,
+          -81.83765284458879
+        ],
+        [
+          -288.6099085392621,
+          -81.83765284458877
+        ],
+        [
+          13.59787490501511,
+          384.31994765061927
+        ]
+      ]
+    },
+    {
+      "name": "Brace_03_Plus",
+      "label": "Brace_03_Plus",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          -247.7693132889334,
+          3.1103669983879807
+        ],
+        [
+          -248.48134059482763,
+          -126.17760569571774
+        ],
+        [
+          87.22242571333732,
+          372.7775742866627
+        ]
+      ]
+    },
+    {
+      "name": "Brace_03_Minus",
+      "label": "Brace_03_Minus",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          -248.48134059482794,
+          -126.1776056957178
+        ],
+        [
+          -247.76931328893332,
+          3.1103669983880278
+        ],
+        [
+          87.22242571333732,
+          372.7775742866627
+        ]
+      ]
+    },
+    {
+      "name": "MainLeg_04",
+      "label": "MainLeg_04",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          81.83765284458883,
+          288.6099085392623
+        ],
+        [
+          -288.6099085392623,
+          -81.83765284458885
+        ],
+        [
+          13.597874905015319,
+          384.3199476506194
+        ]
+      ]
+    },
+    {
+      "name": "Brace_04_Plus",
+      "label": "Brace_04_Plus",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          126.17760569571769,
+          248.4813405948277
+        ],
+        [
+          -247.76931328893355,
+          3.110366998387928
+        ],
+        [
+          87.22242571333726,
+          372.7775742866626
+        ]
+      ]
+    },
+    {
+      "name": "Brace_04_Minus",
+      "label": "Brace_04_Minus",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          -3.110366998387999,
+          247.76931328893335
+        ],
+        [
+          -248.48134059482788,
+          -126.17760569571777
+        ],
+        [
+          87.22242571333743,
+          372.7775742866628
+        ]
+      ]
+    },
+    {
+      "name": "Spine_01",
+      "label": "Spine_01",
+      "category": "physical",
+      "edge_count": 6,
+      "bounding_box_CAD_mm": [
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          390.0,
+          690.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_01",
+      "label": "JointEnvelope_01",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -19.999999999999993,
+          20.000000000000007
+        ],
+        [
+          110.0,
+          150.0
+        ],
+        [
+          350.0,
+          390.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_02",
+      "label": "JointEnvelope_02",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          110.0,
+          150.0
+        ],
+        [
+          -20.0,
+          20.0
+        ],
+        [
+          350.0,
+          390.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_03",
+      "label": "JointEnvelope_03",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          71.92388155425118,
+          111.92388155425118
+        ],
+        [
+          71.92388155425117,
+          111.92388155425117
+        ],
+        [
+          350.0,
+          390.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_04",
+      "label": "JointEnvelope_04",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          224.65894629054546,
+          264.6589462905455
+        ],
+        [
+          224.65894629054537,
+          264.6589462905454
+        ],
+        [
+          70.0,
+          110.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_05",
+      "label": "JointEnvelope_05",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          262.842712474619,
+          302.842712474619
+        ],
+        [
+          262.84271247461896,
+          302.84271247461896
+        ],
+        [
+          0.0,
+          40.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_06",
+      "label": "JointEnvelope_06",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -150.0,
+          -110.0
+        ],
+        [
+          -19.999999999999986,
+          20.000000000000014
+        ],
+        [
+          350.0,
+          390.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_07",
+      "label": "JointEnvelope_07",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -111.92388155425117,
+          -71.92388155425117
+        ],
+        [
+          71.92388155425118,
+          111.92388155425118
+        ],
+        [
+          350.0,
+          390.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_08",
+      "label": "JointEnvelope_08",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -264.6589462905454,
+          -224.65894629054537
+        ],
+        [
+          224.65894629054546,
+          264.6589462905455
+        ],
+        [
+          70.0,
+          110.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_09",
+      "label": "JointEnvelope_09",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -302.84271247461896,
+          -262.84271247461896
+        ],
+        [
+          262.842712474619,
+          302.842712474619
+        ],
+        [
+          0.0,
+          40.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_10",
+      "label": "JointEnvelope_10",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -20.000000000000025,
+          19.999999999999975
+        ],
+        [
+          -150.0,
+          -110.0
+        ],
+        [
+          350.0,
+          390.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_11",
+      "label": "JointEnvelope_11",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -111.9238815542512,
+          -71.9238815542512
+        ],
+        [
+          -111.92388155425117,
+          -71.92388155425117
+        ],
+        [
+          350.0,
+          390.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_12",
+      "label": "JointEnvelope_12",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -264.65894629054554,
+          -224.65894629054554
+        ],
+        [
+          -264.6589462905454,
+          -224.65894629054537
+        ],
+        [
+          70.0,
+          110.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_13",
+      "label": "JointEnvelope_13",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -302.8427124746191,
+          -262.8427124746191
+        ],
+        [
+          -302.84271247461896,
+          -262.84271247461896
+        ],
+        [
+          0.0,
+          40.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_14",
+      "label": "JointEnvelope_14",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          71.92388155425115,
+          111.92388155425115
+        ],
+        [
+          -111.9238815542512,
+          -71.9238815542512
+        ],
+        [
+          350.0,
+          390.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_15",
+      "label": "JointEnvelope_15",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          224.6589462905454,
+          264.6589462905454
+        ],
+        [
+          -264.65894629054554,
+          -224.65894629054554
+        ],
+        [
+          70.0,
+          110.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_16",
+      "label": "JointEnvelope_16",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          262.84271247461896,
+          302.84271247461896
+        ],
+        [
+          -302.8427124746191,
+          -262.8427124746191
+        ],
+        [
+          0.0,
+          40.0
+        ]
+      ]
+    },
+    {
+      "name": "JointEnvelope_17",
+      "label": "JointEnvelope_17",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -20.0,
+          20.0
+        ],
+        [
+          -20.0,
+          20.0
+        ],
+        [
+          370.0,
+          410.0
+        ]
+      ]
+    },
+    {
+      "name": "ContactMarker_01",
+      "label": "ContactMarker_01",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          277.842712474619,
+          287.842712474619
+        ],
+        [
+          277.84271247461896,
+          287.84271247461896
+        ],
+        [
+          0.0,
+          10.0
+        ]
+      ]
+    },
+    {
+      "name": "ContactMarker_02",
+      "label": "ContactMarker_02",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -287.84271247461896,
+          -277.84271247461896
+        ],
+        [
+          277.842712474619,
+          287.842712474619
+        ],
+        [
+          0.0,
+          10.0
+        ]
+      ]
+    },
+    {
+      "name": "ContactMarker_03",
+      "label": "ContactMarker_03",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -287.8427124746191,
+          -277.8427124746191
+        ],
+        [
+          -287.84271247461896,
+          -277.84271247461896
+        ],
+        [
+          0.0,
+          10.0
+        ]
+      ]
+    },
+    {
+      "name": "ContactMarker_04",
+      "label": "ContactMarker_04",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          277.84271247461896,
+          287.84271247461896
+        ],
+        [
+          -287.8427124746191,
+          -277.8427124746191
+        ],
+        [
+          0.0,
+          10.0
+        ]
+      ]
+    },
+    {
+      "name": "AttachmentRingGuide",
+      "label": "AttachmentRingGuide",
+      "category": "reference",
+      "edge_count": 1,
+      "bounding_box_CAD_mm": [
+        [
+          -130.0,
+          130.0
+        ],
+        [
+          -130.0,
+          130.0
+        ],
+        [
+          370.0,
+          370.0
+        ]
+      ]
+    },
+    {
+      "name": "upper_rotor",
+      "label": "upper_rotor",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -139.7,
+          139.7
+        ],
+        [
+          -139.7,
+          139.7
+        ],
+        [
+          220.0,
+          240.0
+        ]
+      ]
+    },
+    {
+      "name": "lower_rotor",
+      "label": "lower_rotor",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -139.7,
+          139.7
+        ],
+        [
+          -139.7,
+          139.7
+        ],
+        [
+          100.0,
+          120.0
+        ]
+      ]
+    },
+    {
+      "name": "YokeEnvelope_01",
+      "label": "YokeEnvelope_01",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -169.7,
+          169.7
+        ],
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          333.0,
+          347.00000000000006
+        ]
+      ]
+    },
+    {
+      "name": "YokeEnvelope_02",
+      "label": "YokeEnvelope_02",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -169.7,
+          169.7
+        ],
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          163.0,
+          177.00000000000009
+        ]
+      ]
+    },
+    {
+      "name": "YokeEnvelope_03",
+      "label": "YokeEnvelope_03",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -176.7,
+          -162.7
+        ],
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          170.0,
+          340.0
+        ]
+      ]
+    },
+    {
+      "name": "YokeEnvelope_04",
+      "label": "YokeEnvelope_04",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          162.7,
+          176.7
+        ],
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          170.0,
+          340.0
+        ]
+      ]
+    },
+    {
+      "name": "YokeEndEnvelope_01",
+      "label": "YokeEndEnvelope_01",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -176.7,
+          -162.7
+        ],
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          333.0,
+          347.0
+        ]
+      ]
+    },
+    {
+      "name": "YokeEndEnvelope_02",
+      "label": "YokeEndEnvelope_02",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          162.7,
+          176.7
+        ],
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          333.0,
+          347.0
+        ]
+      ]
+    },
+    {
+      "name": "YokeEndEnvelope_03",
+      "label": "YokeEndEnvelope_03",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          -176.7,
+          -162.7
+        ],
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          163.0,
+          177.0
+        ]
+      ]
+    },
+    {
+      "name": "YokeEndEnvelope_04",
+      "label": "YokeEndEnvelope_04",
+      "category": "reference",
+      "edge_count": 3,
+      "bounding_box_CAD_mm": [
+        [
+          162.7,
+          176.7
+        ],
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          163.0,
+          177.0
+        ]
+      ]
+    }
+  ],
+  "omitted_edge_count": 50,
+  "fallback_edge_count": 0,
+  "all_enumerated_edges_represented": false,
+  "api_research": {
+    "url": "https://raw.githubusercontent.com/FreeCAD/FreeCAD/main/src/Mod/Part/App/TopoShapeEdgePyImp.cpp",
+    "access_date": "2026-10-13",
+    "sections": "discretize; valueAt; getLength; getParameterRange",
+    "currency": null,
+    "units": "CAD coordinates and lengths in mm; curve parameters use the edge parameterization",
+    "finding": "Upstream wrapper exposes these interfaces. Installed-version compatibility must be observed during execution.",
+    "limitation": "Mutable upstream main was inspected; no claim that it is the installed implementation or diagnoses the failed edge."
+  },
+  "svg": {
+    "path": "cad/pdr_r12_chief/braced_candidates_03/G_INTERMEDIATE_D279_QUADPOD_S1_arrangement.svg",
+    "sha256": "ab9760e9abe6fab410c33dcb54460f33857ba3b756aee652ccddfc72afad93cd"
+  },
+  "generator": {
+    "path": "cad/pdr_r12_chief/build_braced_candidates_03.py",
+    "sha256": "6e8e78493d292d5e7a639d671991ea3a665fbe0df0f59879aabfd0406ea48bbd"
+  }
+}

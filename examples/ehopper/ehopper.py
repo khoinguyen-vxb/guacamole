@@ -15,8 +15,8 @@ Or: uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra m
     .venv/bin/python -m examples.ehopper.ehopper
 
 Edit the configuration below; this script has no command-line arguments.
-Install the Claude Code CLI and run claude login with your Claude account before running.
-Reasoning uses a local claude --print process with Claude Opus 5.5; no API key is needed.
+Install the codex Code CLI and run codex login with your codex account before running.
+Reasoning uses a local codex --print process with codex Opus 5.5; no API key is needed.
 Optional OPENAI_API_KEY adds context summarization and Graphiti/mem0 memory.
 uv installs this script's document readers; backend installations are separate.
 See https://docs.astral.sh/uv/guides/scripts/ for inline dependency metadata.
@@ -62,7 +62,7 @@ from guacamole import (
 )
 from guacamole.contracts import FileRecord, now
 from guacamole.middleware import ContextMiddleware
-from guacamole.providers.claude import ClaudeReasoning
+from guacamole.providers.codex import CodexReasoning
 from guacamole.tools.mcp import ToolSession
 from guacamole.websocket import WebSocketBridge
 
@@ -79,9 +79,9 @@ CONTROL_PORT = 8766
 CONTEXT = ContextSpec(max_input_tokens=12800000, reserved_output_tokens=20000)
 WORKER_MAX_INPUT_TOKENS = CONTEXT.max_input_tokens
 # The watchdog prints a status report at this interval and helps looping or
-# context-saturated agents using its own low-effort Claude process (no web search).
+# context-saturated agents using its own low-effort codex process (no web search).
 WATCHDOG_REPORT_S = 600.0
-# Agent model calls running at once; others queue. Lower it if Claude rate-limits.
+# Agent model calls running at once; others queue. Lower it if codex rate-limits.
 MAX_CONCURRENT_CALLS = 4
 BUDGET = Budget(
     max_steps=200000, max_tool_calls=15000, max_seconds=720000, max_agents=24
@@ -678,7 +678,7 @@ def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
     lines.extend(("", "## Executables visible to this host (presence only)"))
     for name in (
         "uv",
-        "claude",
+        "codex",
         "freecad",
         "freecadcmd",
         "FreeCADCmd",
@@ -783,9 +783,9 @@ async def notifications(project: Project) -> None:
 
 
 async def main() -> None:
-    if shutil.which("claude") is None:
+    if shutil.which("codex") is None:
         raise SystemExit(
-            "Install the Claude Code CLI on PATH and run 'claude login' with your Claude account."
+            "Install the codex Code CLI on PATH and run 'codex login' with your codex account."
         )
     missing = [
         name
@@ -814,9 +814,9 @@ async def main() -> None:
         sandbox=SANDBOX,
         tools=ToolRegistry(),
         max_concurrent_calls=MAX_CONCURRENT_CALLS,
-        reasoning=ClaudeReasoning(web_search=True),
+        reasoning=CodexReasoning(web_search=True),
         watchdog=Watchdog(
-            ClaudeReasoning(web_search=False), report_interval_s=WATCHDOG_REPORT_S
+            CodexReasoning(web_search=False), report_interval_s=WATCHDOG_REPORT_S
         ),  # Runs at the lowest reasoning effort to reserve usage budget.
     ) as project:
         register_tools(project)
