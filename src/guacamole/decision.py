@@ -9,7 +9,6 @@ from .contracts import (
     DecisionRequest,
     DecisionResult,
     Ref,
-    ReferencedData,
     RequestRecord,
     WorkPlan,
 )
@@ -172,14 +171,13 @@ class Decisions:
         try:
             # No external invocation: validation and recording have no async gap.
             with store.atomic():
-                snapshots: dict[Ref, ReferencedData] = {}
+                context: dict[Ref, None] = {}
                 pending = list(references)
                 while pending:
                     ref = pending.pop()
-                    if ref not in snapshots:
-                        snapshot = store.resolve(ref, current=True)
-                        snapshots[ref] = ReferencedData(ref=ref, content=snapshot.data)
-                        pending.extend(snapshot.dependencies)
+                    if ref not in context:
+                        context[ref] = None
+                        pending.extend(store.resolve(ref, current=True).dependencies)
                 result = DecisionResult(
                     request_id=record.id,
                     selected=selected,
@@ -190,7 +188,7 @@ class Decisions:
                     request=request.model_copy(
                         update={
                             "candidates": tuple(candidates),
-                            "context": tuple(snapshots.values()),
+                            "context": tuple(context),
                         }
                     ),
                     result=result,

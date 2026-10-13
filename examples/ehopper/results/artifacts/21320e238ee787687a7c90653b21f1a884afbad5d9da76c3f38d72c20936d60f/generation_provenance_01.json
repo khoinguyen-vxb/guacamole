@@ -1,0 +1,321 @@
+{
+  "schema": "hopper_bounded_recovery_generation_provenance/1",
+  "generated_at_UTC": "2026-10-13T14:29:16.438650+00:00",
+  "authority": {
+    "work_plan": "66c7448f443f44ac9a016a1b384593a2 r1",
+    "development_decision": "43d5a1d12e424f9ca9f24ed2e7f1981d r1",
+    "vehicle_requirement": "REQ-VEHICLE-CONFIGURATION r3",
+    "placement_requirement": "REQ-PROPULSION-PLACEMENT r1",
+    "budget_requirement": "REQ-HARDWARE-BUDGET r5",
+    "cad_requirement": "REQ-CAD-ASSEMBLY r1",
+    "scope": "Implement the already recorded bounded CAD development route. No vehicle, material product, spine count, landing arrangement, travel limit or review baseline is selected."
+  },
+  "inputs": [
+    {
+      "path": "cad/pdr_r12_chief/build_braced_candidates_01.py",
+      "sha256": "dd275ef7747ca385671ad870169cb038921ead8357ec0d486612e55d40c054b7"
+    },
+    {
+      "path": "cad/pdr_r12_chief/build_braced_candidates_03.py",
+      "sha256": "6e8e78493d292d5e7a639d671991ea3a665fbe0df0f59879aabfd0406ea48bbd"
+    },
+    {
+      "path": "cad/pdr_r12_chief/fixed_structure_recovery_config_20261014_01.json",
+      "sha256": "2b6a62913891cdc60857936148a29d6ef499af19d73258c6aac6482acbeaf3af"
+    },
+    {
+      "path": "analysis/pdr_r12_chief/braced_leg_study_config_01.json",
+      "sha256": "8e5f5c75aea67512ffe8d4371c21d1915640b5aea06df2346d28df13eeadb048"
+    },
+    {
+      "path": "cad/pdr_r12_chief/build_fixed_structure_recovery_20261014_01.py",
+      "sha256": "8214c9bb23a2d0dde8c38e459a4b37d68301021aad877855dc79ce949b401871"
+    }
+  ],
+  "generator": {
+    "base_source": {
+      "path": "cad/pdr_r12_chief/build_braced_candidates_01.py",
+      "sha256": "dd275ef7747ca385671ad870169cb038921ead8357ec0d486612e55d40c054b7"
+    },
+    "renderer_source": {
+      "path": "cad/pdr_r12_chief/build_braced_candidates_03.py",
+      "sha256": "6e8e78493d292d5e7a639d671991ea3a665fbe0df0f59879aabfd0406ea48bbd"
+    },
+    "entry_point": {
+      "path": "cad/pdr_r12_chief/build_fixed_structure_recovery_20261014_02.py",
+      "sha256": "832528bc37713808a1d3746e25eb8b271e6dcf9493f56172f004c207248ea7be"
+    },
+    "substitutions": [
+      {
+        "kind": "retained_alias_repair",
+        "old": "R8",
+        "new": "TubeOuterRadiusEight",
+        "count": 2
+      },
+      {
+        "kind": "retained_alias_repair",
+        "old": "r8",
+        "new": "TubeBoreRadiusEight",
+        "count": 2
+      },
+      {
+        "kind": "retained_alias_repair",
+        "old": "R14",
+        "new": "TubeOuterRadiusFourteen",
+        "count": 2
+      },
+      {
+        "kind": "retained_alias_repair",
+        "old": "r14",
+        "new": "TubeBoreRadiusFourteen",
+        "count": 2
+      },
+      {
+        "kind": "identifier",
+        "description": "Append approved recovery-combination ID; leave geometry baseline ID unchanged."
+      },
+      {
+        "kind": "export_order",
+        "description": "Retain revision-03 native/STEP-before-rendering ordering."
+      },
+      {
+        "kind": "renderer",
+        "description": "Reuse inspected revision-03 diagnostic functions without executing their main."
+      }
+    ],
+    "executed_base_source_sha256": "d7ecac46e0ef728631637ed60e1c20777970cfc65246928476ff93f983bff904",
+    "main_functions_called": "This file main only; neither historical module main is called.",
+    "recovery_generator_revision02_correction": {
+      "retained_template": {
+        "path": "cad/pdr_r12_chief/build_fixed_structure_recovery_20261014_01.py",
+        "sha256": "8214c9bb23a2d0dde8c38e459a4b37d68301021aad877855dc79ce949b401871"
+      },
+      "entry_point": {
+        "path": "cad/pdr_r12_chief/build_fixed_structure_recovery_20261014_02.py",
+        "sha256": "832528bc37713808a1d3746e25eb8b271e6dcf9493f56172f004c207248ea7be"
+      },
+      "executed_recovery_template_sha256": "c9a6e35ac73f4187578f2af343cffd0be84367587b5e3384807267208425e3aa",
+      "template_text_substitution_count": 1,
+      "old_comparison": "require(config['geometry_baselines'] == parent['geometry_hypotheses'], 'Geometry baselines differ')",
+      "replacement_call": "validate_geometry_baselines(config, parent)",
+      "geometry_comparison": {
+        "method": "Exact dictionary equality after removing only separately validated parent_seed metadata from the comparison view; input dictionaries are not modified.",
+        "geometry_fields": [
+          "foot_contact_z_mm",
+          "foot_socket_radius_mm",
+          "foot_socket_z_mm",
+          "id",
+          "lower_rotor_neutral_hub_CAD_mm",
+          "neutral_outer_to_inner_origin_CAD_mm",
+          "outer_joint_origin_CAD_mm",
+          "ring_attachment_radius_mm",
+          "ring_attachment_z_mm",
+          "rotor_diameter_mm",
+          "upper_rotor_neutral_hub_CAD_mm"
+        ],
+        "geometry_order": [
+          "G_INTERMEDIATE_D279",
+          "G_WIDE_D330"
+        ],
+        "parent_seed_metadata": [
+          {
+            "geometry_id": "G_INTERMEDIATE_D279",
+            "parent_seed": "G_INTERMEDIATE"
+          },
+          {
+            "geometry_id": "G_WIDE_D330",
+            "parent_seed": "G_WIDE"
+          }
+        ],
+        "all_geometry_fields_equal": true,
+        "scope": "Configuration consistency, not CAD or physical acceptance."
+      },
+      "runtime_bindings": [
+        "THIS points to revision 02 for source identity.",
+        "Unchanged revision-01 template is included in before/after input hashing.",
+        "Generator provenance includes this correction and preserved parent_seed tags."
+      ],
+      "geometry_changes": [],
+      "configuration_file_changes": [],
+      "output_directory_change": false,
+      "candidate_matrix_change": false,
+      "prior_failure_status": "Identified by static comparison; no revision-01 execution failure is asserted.",
+      "scope": "Preflight implementation correction only. All physical integration gates and evidence limitations remain unchanged."
+    }
+  },
+  "expected_output_paths": [
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ000_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ000_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ000_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ000_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ060_B45.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ060_B45_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ060_B45_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ060_B45_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ060_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ060_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ060_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S1_DZ060_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ000_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ000_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ000_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ000_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ060_B45.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ060_B45_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ060_B45_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ060_B45_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ060_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ060_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ060_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_TRIPOD_S4_DZ060_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ000_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ000_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ000_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ000_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ060_B45.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ060_B45_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ060_B45_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ060_B45_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ060_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ060_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ060_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S1_DZ060_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ000_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ000_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ000_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ000_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ060_B45.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ060_B45_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ060_B45_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ060_B45_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ060_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ060_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ060_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_INTERMEDIATE_D279_QUADPOD_S4_DZ060_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ000_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ000_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ000_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ000_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ060_B45.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ060_B45_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ060_B45_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ060_B45_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ060_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ060_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ060_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S1_DZ060_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ000_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ000_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ000_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ000_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ060_B45.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ060_B45_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ060_B45_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ060_B45_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ060_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ060_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ060_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_TRIPOD_S4_DZ060_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ000_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ000_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ000_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ000_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ060_B45.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ060_B45_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ060_B45_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ060_B45_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ060_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ060_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ060_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S1_DZ060_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ000_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ000_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ000_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ000_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ060_B45.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ060_B45_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ060_B45_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ060_B45_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ060_B30.FCStd",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ060_B30_tubes.step",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ060_B30_arrangement.svg",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/G_WIDE_D330_QUADPOD_S4_DZ060_B30_drawing_diagnostics_03.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/cad_measurements_01.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/generation_provenance_01.json",
+    "cad/pdr_r12_chief/fixed_structure_recovery_20261014_01/output_manifest_01.json"
+  ],
+  "retained_baselines": [
+    {
+      "candidate_id": "G_INTERMEDIATE_D279_TRIPOD_S1_DZ000_B45",
+      "existing_baseline_id": "G_INTERMEDIATE_D279_TRIPOD_S1",
+      "directory": "cad/pdr_r12_chief/braced_candidates_03",
+      "treatment": "Reference only; not opened, regenerated or modified by this run."
+    },
+    {
+      "candidate_id": "G_INTERMEDIATE_D279_TRIPOD_S4_DZ000_B45",
+      "existing_baseline_id": "G_INTERMEDIATE_D279_TRIPOD_S4",
+      "directory": "cad/pdr_r12_chief/braced_candidates_03",
+      "treatment": "Reference only; not opened, regenerated or modified by this run."
+    },
+    {
+      "candidate_id": "G_INTERMEDIATE_D279_QUADPOD_S1_DZ000_B45",
+      "existing_baseline_id": "G_INTERMEDIATE_D279_QUADPOD_S1",
+      "directory": "cad/pdr_r12_chief/braced_candidates_03",
+      "treatment": "Reference only; not opened, regenerated or modified by this run."
+    },
+    {
+      "candidate_id": "G_INTERMEDIATE_D279_QUADPOD_S4_DZ000_B45",
+      "existing_baseline_id": "G_INTERMEDIATE_D279_QUADPOD_S4",
+      "directory": "cad/pdr_r12_chief/braced_candidates_03",
+      "treatment": "Reference only; not opened, regenerated or modified by this run."
+    },
+    {
+      "candidate_id": "G_WIDE_D330_TRIPOD_S1_DZ000_B45",
+      "existing_baseline_id": "G_WIDE_D330_TRIPOD_S1",
+      "directory": "cad/pdr_r12_chief/braced_candidates_03",
+      "treatment": "Reference only; not opened, regenerated or modified by this run."
+    },
+    {
+      "candidate_id": "G_WIDE_D330_TRIPOD_S4_DZ000_B45",
+      "existing_baseline_id": "G_WIDE_D330_TRIPOD_S4",
+      "directory": "cad/pdr_r12_chief/braced_candidates_03",
+      "treatment": "Reference only; not opened, regenerated or modified by this run."
+    },
+    {
+      "candidate_id": "G_WIDE_D330_QUADPOD_S1_DZ000_B45",
+      "existing_baseline_id": "G_WIDE_D330_QUADPOD_S1",
+      "directory": "cad/pdr_r12_chief/braced_candidates_03",
+      "treatment": "Reference only; not opened, regenerated or modified by this run."
+    },
+    {
+      "candidate_id": "G_WIDE_D330_QUADPOD_S4_DZ000_B45",
+      "existing_baseline_id": "G_WIDE_D330_QUADPOD_S4",
+      "directory": "cad/pdr_r12_chief/braced_candidates_03",
+      "treatment": "Reference only; not opened, regenerated or modified by this run."
+    }
+  ],
+  "geometry_changes": "Only approved ring elevation and brace-root phasing; spine bases follow ring. All rotor hubs, gimbal origins, feet and moving-yoke definitions remain fixed.",
+  "integration_completion_gate": {
+    "physical_ring_section": null,
+    "ring_to_gimbal_support_geometry": null,
+    "physical_joint_and_retention_geometry": null,
+    "rule": "Tube/reference candidates may be generated for the bounded comparison. Before an integrated comparison or structural down-selection, add explicit preliminary physical ring/support/joint hypotheses, material assignments and mass ownership in a fresh configuration, then assess their actual solids and clearances. Do not report the tube/reference stage as satisfying this gate.",
+    "raised_ring_consequence": "The 60 mm rise increases the ring-to-gimbal support span. Its stiffness, interfaces, mass and whole-purchase cost cannot be omitted or assumed unchanged.",
+    "remaining_missing_items": [
+      "Ring/plate, gimbal support load path and spine pedestals",
+      "Root and brace-junction fittings, inserts, adhesives and fasteners",
+      "Feet, compliant pads and positive retention",
+      "Bearings, pivots, actuators and linkages",
+      "Motors, propellers, ESCs, battery, avionics and harness"
+    ],
+    "overall_trade_alternatives_retained": [
+      "S2 and S3 spines",
+      "Aluminium versus CFRP spines",
+      "Larger-section unbraced legs"
+    ],
+    "complete_vehicle_mass_kg": null,
+    "complete_vehicle_cost_AUD": null,
+    "structural_selection": null
+  },
+  "acceptance": "Not assessed; generated tube/reference candidates are not an integrated vehicle."
+}

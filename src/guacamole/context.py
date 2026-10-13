@@ -103,20 +103,17 @@ def preview(value: JsonValue, limit: int) -> JsonValue:
 
 
 def _referenced(payload: dict) -> dict:
-    """Reference exact evidence already included as a source instead of embedding it twice."""
-    contents = {encode(s["ref"]): s["data"] for s in payload["sources"]}
+    """Show older decisions' embedded evidence snapshots as refs, as newer ones store.
+
+    A snapshot embeds earlier decisions with their own snapshots, so whole ones
+    outgrow provider input limits (one ehopper decision reached 1.5M characters).
+    """
     sources = []
     for source in payload["sources"]:
         data = source["data"]
         if source["ref"]["kind"] == "decision":
             request = data["request"]
-            context = [
-                entry | {"content": {"included_source": entry["ref"]}}
-                if encode(entry["ref"]) in contents
-                and contents[encode(entry["ref"])] == entry["content"]
-                else entry
-                for entry in request["context"]
-            ]
+            context = [entry.get("ref", entry) for entry in request["context"]]
             source = source | {
                 "data": data | {"request": request | {"context": context}}
             }

@@ -5,7 +5,14 @@ from pathlib import Path
 from typing import Annotated, Literal
 from uuid import uuid4
 
-from pydantic import BaseModel, ConfigDict, Field, JsonValue, model_validator
+from pydantic import (
+    BaseModel,
+    BeforeValidator,
+    ConfigDict,
+    Field,
+    JsonValue,
+    model_validator,
+)
 from pydantic.json_schema import SkipJsonSchema
 
 type JSON = dict[str, JsonValue]
@@ -296,9 +303,9 @@ class Candidate(Model):
     plan: WorkPlan | None = None
 
 
-class ReferencedData(Model):
-    ref: Ref
-    content: JSON
+def _context_ref(entry: object) -> object:
+    """Older decisions stored {ref, content} context entries; read them as their refs."""
+    return entry["ref"] if isinstance(entry, dict) and "ref" in entry else entry
 
 
 class DecisionRequest(Model):
@@ -309,7 +316,9 @@ class DecisionRequest(Model):
     criteria: tuple[str, ...] = Field(min_length=1)
     assumptions: tuple[str, ...] = ()
     evidence: tuple[Ref, ...] = ()
-    context: tuple[ReferencedData, ...] = ()
+    # Every record the choice transitively rests on. Refs, not copies: a copy nested
+    # earlier decisions' copies, so each decision outgrew the last (1.5 MB, 3.5 MB).
+    context: tuple[Annotated[Ref, BeforeValidator(_context_ref)], ...] = ()
 
 
 class DecisionResult(Model):
@@ -463,9 +472,13 @@ class HumanInputs(Model):
 
 
 class TaskReport(Model):
+    """unresolved: work this task still owes; finishing waits until it is done.
+    handoffs: open items owned by the parent or other tasks, returned with the report."""
+
     summary: str
     evidence: tuple[Ref, ...] = ()
     unresolved: tuple[str, ...] = ()
+    handoffs: tuple[str, ...] = ()
 
 
 class Note(Model):

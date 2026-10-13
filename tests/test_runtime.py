@@ -60,13 +60,17 @@ from guacamole.providers.litellm import _usage as litellm_usage
 
 
 class RuntimeTests(unittest.IsolatedAsyncioTestCase):
-    def test_context_references_only_identical_included_decision_evidence(self):
+    def test_context_shows_decision_evidence_snapshots_as_refs(self):
         ref = {"kind": "source", "id": "evidence", "revision": 1, "sha256": "hash"}
         content = {"text": "Historical engineering evidence " * 100}
+        nested = {"kind": "decision", "id": "earlier", "revision": 1, "sha256": "hash"}
+        current = {"kind": "artifact", "id": "current", "revision": 1, "sha256": "hash"}
         entries = [
             {"ref": ref, "content": content},
-            {"ref": ref | {"revision": 2}, "content": content},
-            {"ref": ref, "content": {"text": "Different historical content"}},
+            {"ref": nested, "content": {"request": {"context": [
+                {"ref": ref, "content": content}
+            ]}}},
+            current,  # Newer decisions store refs only.
         ]
         payload = {"sources": [
             {"ref": ref, "data": content},
@@ -79,12 +83,19 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         encoded = encode_context(payload)
         sources = json.loads(encoded)["sources"]
         context = sources[1]["data"]["request"]["context"]
-        self.assertEqual(context[0]["content"], {"included_source": ref})
-        self.assertEqual(context[1:], entries[1:])
+        self.assertEqual(context, [ref, nested, current])
         self.assertEqual(sources[0]["data"], content)
         self.assertEqual(sources[1]["data"]["result"], {"selected": "approved"})
         self.assertEqual(json.dumps(payload), original)
         self.assertLess(len(encoded), len(original))
+
+    def test_decisions_that_stored_evidence_copies_still_load_as_refs(self):
+        ref = Ref(kind="requirement", id="r", revision=1, sha256="0" * 64)
+        stored = plan_request(ref).model_dump(mode="json") | {
+            "context": [{"ref": ref.model_dump(mode="json"), "content": {"x": 1}}]
+        }
+        request = DecisionRequest.model_validate_json(json.dumps(stored))
+        self.assertEqual(request.context, (ref,))
 
     async def test_context_obeys_provider_character_limit_independently_of_tokens(self):
         class Limited(TestReasoning):
@@ -1342,7 +1353,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 if task != "chief":
                     await asyncio.wait_for(self.all_in_flight.wait(), 5)
                     action = Finish(
-                        result=TaskReport(summary=task).model_dump(mode="json")
+                        result=TaskReport(
+                            summary=task, handoffs=("Chief-owned input",)
+                        ).model_dump(mode="json")
                     )
                 else:
                     self.chief_seen.append(data)
@@ -1411,13 +1424,12 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             "['ghost']", provider.chief_seen[2]["state"]["last_observation"]["detail"]
         )
         self.assertEqual(states.count("completed"), 2)
-        # Woken after its mid-turn Wait, the Chief saw both worker replies.
-        self.assertEqual(
-            len(
-                [m for m in provider.chief_seen[6]["messages"] if m["kind"] == "reply"]
-            ),
-            2,
-        )
+        # Woken after its mid-turn Wait, the Chief saw both worker replies, and the
+        # handoffs that did not block their finish.
+        replies = [m for m in provider.chief_seen[6]["messages"] if m["kind"] == "reply"]
+        self.assertEqual(len(replies), 2)
+        for reply in replies:
+            self.assertEqual(reply["payload"]["handoffs"], ["Chief-owned input"])
 
     async def test_dynamic_workers_exchange_peer_subrequest_and_ping_human(self):
         class Conversation(TestReasoning):

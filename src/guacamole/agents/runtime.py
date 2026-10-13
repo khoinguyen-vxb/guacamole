@@ -1351,7 +1351,8 @@ class Runtime:
                         store.resolve(ref, current=True)
                     if validated.unresolved:
                         return {
-                            "reason": "Unresolved task work",
+                            "reason": "Unresolved task work; report items owned by "
+                            "the parent or other tasks as handoffs instead",
                             "items": list(validated.unresolved),
                         }, "waiting"
                 if is_chief and not all(

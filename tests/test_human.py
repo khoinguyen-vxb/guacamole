@@ -120,7 +120,7 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
                     explanation="Use corrected input",
                 )
                 decision = project.decisions.record(plan)
-                self.assertIn(source, [item.ref for item in decision.request.context])
+                self.assertIn(source, decision.request.context)
                 with self.assertRaises(ValueError):
                     project.human.reply(question_id, "duplicate", author="test human")
                 before = len(project.events())
