@@ -198,6 +198,33 @@ class TaskAuthorization(Model):
     peers: tuple[str, ...] = ()
     budget: Budget = Field(default_factory=Budget)
     depends_on: tuple[str, ...] = ()
+    # Kind of work, e.g. extraction or diagnosis; the runtime gives it the cheapest
+    # tier qualified for that family. tier overrides that choice: a Project.tiers
+    # key, where None leaves the choice to the family (the Chief's model if unqualified).
+    family: str | None = None
+    tier: str | None = None
+
+
+class Qualification(Model):
+    """Measured outcome of one reasoning profile on one task family."""
+
+    family: str
+    provider: str
+    model: str
+    effort: str | None = None
+    trials: int = Field(ge=1)
+    passed: int = Field(ge=0)  # Completed and independently verified
+    cost_usd: float | None = None  # Totals over all trials
+    seconds: float = 0.0
+    turns: int = 0
+    rejected_actions: int = 0
+    measured_at: str = Field(default_factory=now)
+
+    @model_validator(mode="after")
+    def bounded(self) -> "Qualification":
+        if self.passed > self.trials:
+            raise ValueError("More passes than trials")
+        return self
 
 
 class DeliverableSpec(Model):
@@ -409,6 +436,7 @@ class AgentSpec(Model):
     completion_criteria: tuple[str, ...] = ()
     peers: tuple[str, ...] = ()
     budget: Budget = Field(default_factory=Budget)
+    tier: str | None = None
 
 
 class AgentState(Model):

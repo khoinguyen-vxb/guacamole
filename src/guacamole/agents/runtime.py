@@ -33,6 +33,7 @@ from ..contracts import (
     ProjectRequest,
     ProjectResult,
     Publish,
+    Qualification,
     RationaleRecord,
     Read,
     Record,
@@ -43,6 +44,7 @@ from ..contracts import (
     Review,
     Send,
     Spawn,
+    TaskAuthorization,
     TaskReport,
     ToolCall,
     UpdateModel,
@@ -59,15 +61,72 @@ from ..tools.registry import encode
 from .chief import CHIEF, COMMON
 from .systems_engineer import SYSTEMS_ENGINEER
 
+# Share of its measured trials in a family a tier must pass to be routed that work.
+MIN_PASS_RATE = 0.8
+
 
 class Runtime:
     def __init__(self, project: Project, provider: ReasoningProvider) -> None:
         self.project, self.provider = project, provider
         self.calls = asyncio.Semaphore(project.max_concurrent_calls)
+        self.tier_menu = self._tier_menu()
         self.run_id = ""
         self.chief_id = ""
         self.engineer_id = ""
         self.request: ProjectRequest
+
+    def _records(self, provider: ReasoningProvider) -> tuple[Qualification, ...]:
+        profile = (provider.name, provider.model, getattr(provider, "effort", None))
+        return tuple(
+            q
+            for q in self.project.qualifications
+            if (q.provider, q.model, q.effort) == profile
+        )
+
+    def _route(self, task: TaskAuthorization) -> tuple[str | None, str]:
+        """The task's tier: the Chief's override, else the cheapest qualified one."""
+        if task.tier is not None:
+            return task.tier, "Chief-selected tier"
+        # Expected cost of one verified completion, retries on failure included.
+        ranked = sorted(
+            (q.cost_usd is None, (q.cost_usd or 0.0) / q.passed, key)
+            for key, provider in self.project.tiers.items()
+            for q in self._records(provider)
+            if q.family == task.family and q.passed >= MIN_PASS_RATE * q.trials
+        )
+        if not ranked:
+            return None, f"No tier qualified for family {task.family}; Chief's model"
+        return ranked[0][2], f"Cheapest tier qualified for family {task.family}"
+
+    def _tier_menu(self) -> str:
+        """Fixed per run so the Chief's instruction prefix stays cacheable."""
+        if not self.project.tiers:
+            return ""
+        lines = []
+        for key, p in self.project.tiers.items():
+            effort = getattr(p, "effort", None)
+            lines.append(
+                f"Worker reasoning tier {key}: {p.name} {p.model}"
+                + (f" effort {effort}" if effort else "")
+                + f", {p.context_capacity_tokens} context tokens."
+            )
+            for q in self._records(p):
+                lines.append(
+                    f"  {q.family}: {q.passed}/{q.trials} trials verified"
+                    + (
+                        f", ${q.cost_usd / q.passed:.3f} per verified completion"
+                        if q.passed and q.cost_usd is not None
+                        else ""
+                    )
+                    + ("" if q.passed >= MIN_PASS_RATE * q.trials else ", unqualified")
+                )
+        lines.append(
+            "Give each task a family naming its kind of work, reusing the families "
+            "above where they fit. The runtime runs it on the cheapest tier qualified "
+            "for that family, or on your model when none is; set a task's tier only "
+            "to override that choice."
+        )
+        return "\n" + "\n".join(lines)
 
     def _agents(self) -> tuple[AgentSpec, ...]:
         agents = (
@@ -136,6 +195,8 @@ class Runtime:
                         "peers": task.peers,
                         "result_schema": task.result_schema,
                         "completion_criteria": task.completion_criteria,
+                        # A replan is how the Chief escalates a running task's tier.
+                        "tier": self._route(task)[0],
                         "context": worker.context.model_copy(
                             update={"pinned": (*pins, decision)}
                         ),
@@ -592,6 +653,14 @@ class Runtime:
             else {}
         )
         try:
+            # A worker keeps its spawned tier; a tier dropped from config blocks it
+            # rather than silently moving it onto another model.
+            if agent.tier is None:
+                provider = self.provider
+            elif agent.tier in self.project.tiers:
+                provider = self.project.tiers[agent.tier]
+            else:
+                raise ProviderError(f"Reasoning tier {agent.tier} is not configured")
             # Explicit reads must arrive next turn or block, never be silently deferred.
             requested = Read.model_validate_json(
                 encode({"refs": state.observation.get("selected", [])})
@@ -638,8 +707,8 @@ class Runtime:
                         return self.project.contexts.build(
                             spec,
                             state.request_id,
-                            self.provider,
-                            instructions=CHIEF
+                            provider,
+                            instructions=CHIEF + self.tier_menu
                             if agent.id == self.chief_id
                             else SYSTEMS_ENGINEER
                             if agent.id == self.engineer_id
@@ -657,7 +726,7 @@ class Runtime:
                         # carries; required material may grow them to the run's limit.
                         limit = min(
                             self.request.context.max_input_tokens,
-                            self.provider.context_capacity_tokens
+                            provider.context_capacity_tokens
                             - call.agent.context.reserved_output_tokens,
                         )
                         previous = call.agent.context.max_input_tokens
@@ -701,8 +770,10 @@ class Runtime:
                         packet.invocation_id,
                         {
                             "packet_id": packet.id,
-                            "provider": self.provider.name,
-                            "model": self.provider.model,
+                            "provider": provider.name,
+                            "model": provider.model,
+                            "tier": agent.tier,
+                            "effort": getattr(provider, "effort", None),
                             "input_tokens": packet.input_tokens,
                             "max_input_tokens": call.agent.context.max_input_tokens,
                             "deferred": len(packet.deferred),
@@ -711,7 +782,7 @@ class Runtime:
                         request_id=state.request_id,
                     )
                     phase = "provider"
-                    turn = AgentTurn.model_validate(await self.provider.respond(packet))
+                    turn = AgentTurn.model_validate(await provider.respond(packet))
                 store.put(
                     "agent_turn",
                     packet.invocation_id,
@@ -1060,6 +1131,7 @@ class Runtime:
                         "pinned": tuple(dict.fromkeys(pins)),
                     }
                 )
+                tier, reason = self._route(task)
                 worker = AgentSpec(
                     task_id=task.id,
                     parent_id=agent.id,
@@ -1071,9 +1143,18 @@ class Runtime:
                     completion_criteria=task.completion_criteria,
                     peers=task.peers,
                     budget=task.budget,
+                    tier=tier,
                 )
                 self._add_agent(worker, parent_request=state.request_id)
-                return {"agent_id": worker.id}, "active"
+                routed = {"family": task.family, "tier": tier, "reason": reason}
+                store.event(
+                    "runtime",
+                    "agent.routed",
+                    worker.id,
+                    routed,
+                    request_id=state.request_id,
+                )
+                return {"agent_id": worker.id, **routed}, "active"
             case Send():
                 activity.allow_peer(agent, action.recipient)
                 project.tools.payload(action.schema_id, action.payload)

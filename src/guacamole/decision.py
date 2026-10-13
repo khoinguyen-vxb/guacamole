@@ -44,6 +44,10 @@ class Decisions:
                 )
             if task.result_schema not in self.project.tools.schemas:
                 raise ValueError("Unknown task result schema")
+            if task.tier is not None and task.tier not in self.project.tiers:
+                raise ValueError(
+                    f"Task {task.id} names an unconfigured reasoning tier: {task.tier}"
+                )
         tuple(
             TopologicalSorter({t.id: t.depends_on for t in plan.tasks}).static_order()
         )

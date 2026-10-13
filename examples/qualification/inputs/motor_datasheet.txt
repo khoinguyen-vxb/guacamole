@@ -1,0 +1,21 @@
+T-Drive MN3508 series brushless outrunner - datasheet rev C
+
+Variant table
+| Variant    | KV (rpm/V) | Max continuous current (A, 180 s) | Peak current (A, 10 s) | Internal resistance (mOhm) |
+| MN3508-380 | 380        | 18                                | 25                     | 145                        |
+| MN3508-580 | 580        | 26                                | 34                     | 82                         |
+| MN3508-700 | 700        | 30                                | 38                     | 64                         |
+
+Common data (all variants): stator 35 x 8 mm, 24N22P, 4 mm shaft, 6S maximum.
+Weight: 82 g motor only; 89 g including 600 mm silicone leads.
+
+Bench test, MN3508-580 on 6S (22.2 V) with a 15x5.5 carbon propeller, 25 degC:
+| Throttle | Current (A) | Thrust (gf) | Electrical power (W) | Efficiency (gf/W) |
+| 50%      | 6.1         | 1190        | 135                  | 8.81              |
+| 75%      | 14.8        | 2210        | 329                  | 6.72              |
+| 100%     | 25.9        | 3020        | 575                  | 5.25              |
+
+Bench test, MN3508-700 on 4S (14.8 V) with a 14x4.8 carbon propeller, 25 degC:
+| Throttle | Current (A) | Thrust (gf) | Electrical power (W) | Efficiency (gf/W) |
+| 50%      | 7.9         | 980         | 117                  | 8.38              |
+| 100%     | 29.6        | 2480        | 438                  | 5.66              |

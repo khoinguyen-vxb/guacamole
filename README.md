@@ -229,6 +229,58 @@ Supply project documents through `ProjectRequest.documents` as shown above.
 Actual rocket PDR/CDR delivery is **not yet validated**;
 the offline tests exercise orchestration with labelled fixtures.
 
+## Worker reasoning tiers
+
+`Project(tiers={...})` names further reasoning providers that workers may run on;
+the Chief and systems engineer always use `reasoning`. A work-plan task names its
+`family`, the kind of work, and the runtime spawns its worker on the cheapest tier
+qualified for that family. A `Qualification` record qualifies a tier when it passed
+at least `MIN_PASS_RATE` (80%) of its measured trials in the family; qualified tiers
+are ranked by measured cost per verified completion, so failed trials count against
+a cheap tier. Work no tier is qualified for runs on the Chief's model, and a task's
+`tier` overrides the choice. The Chief's instructions list each tier with its
+records. A worker keeps its tier on restart, and a tier dropped from the
+configuration blocks it rather than moving it to another model. A replacement plan
+reroutes running workers, which is how the Chief escalates a task. Each spawn
+records an `agent.routed` event with the reason; every `provider.dispatched` event
+records the tier, model and effort.
+
+```python
+from pydantic import TypeAdapter
+from guacamole import Project, Qualification
+from guacamole.providers.claude import ClaudeReasoning
+
+records = TypeAdapter(list[Qualification]).validate_json(
+    Path("examples/qualification/qualifications.json").read_bytes()
+)
+project = Project(
+    workspace,
+    reasoning=ClaudeReasoning(),
+    tiers={
+        "haiku-low": ClaudeReasoning(model="claude-haiku-5-5", effort="low",
+                                     context_capacity_tokens=1_000_000),
+        "sonnet-medium": ClaudeReasoning(model="claude-sonnet-5-5", effort="medium",
+                                         context_capacity_tokens=1_000_000),
+    },
+    qualifications=records,
+)
+```
+
+Records match a tier by provider, model and effort. They come from
+[qualify.py](examples/qualification/qualify.py): a scripted Chief, which makes no
+model calls, gives every tier the same extraction, simulation, implementation and
+diagnosis tasks, each tier and trial in its own project. A check the workers never
+see verifies each result, and the event log supplies turns, rejected actions, time
+and CLI-reported cost, including provider retries of malformed responses.
+
+```bash
+uv run python examples/qualification/qualify.py --trials 3
+```
+
+Records only qualify a profile on these four tasks with the current worker
+instructions; rerun the harness after changing either, and add tasks from real
+project work before relying on a family.
+
 ## Runtime watchdog
 
 Pass a `Watchdog` to start a supervisor beside the Chief for every run:

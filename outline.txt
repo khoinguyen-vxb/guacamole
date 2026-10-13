@@ -63,6 +63,9 @@ guacamole/
 │       └── websocket.py             # Optional local script control/events bridge
 │
 ├── examples/
+│   ├── qualification/
+│   │   ├── qualify.py                # Measures worker tiers on hidden-checked tasks
+│   │   └── inputs/                   # Task inputs copied into each trial's sandbox
 │   └── sounding_rocket/
 │       ├── kookaburra.py             # Script configuration, supplied tools/docs, human control
 │       ├── technical_documents/      # User-supplied historical project inputs

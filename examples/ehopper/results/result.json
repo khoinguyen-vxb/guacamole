@@ -4,7 +4,7 @@
   "reviews": [],
   "human_requests": [],
   "open_items": [
-    "chief: blocked: {\"detail\":\"Claude exited with status 1; run 'claude auth status' and check model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}",
-    "pdr_r12_preliminary_plant: blocked: {\"detail\":\"Claude exited with status 1; run 'claude auth status' and check model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}"
+    "chief: blocked: {\"detail\":\"Claude exited with status 1; run 'claude auth status' and check model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\",\"selected\":[{\"id\":\"d98b6ae42a7b49eb85d2a9cb5329c639\",\"kind\":\"job_inputs\",\"locator\":\"\",\"revision\":1,\"sha256\":\"bc8df2e850b93a233cc067b0588019dae3a80821dbbd20233eb05d9a13b9073a\"},{\"id\":\"2887b11e3e524693951e9696387bfa3a\",\"kind\":\"job_inputs\",\"locator\":\"\",\"revision\":1,\"sha256\":\"be581e05f1ebc9993395e6ffcf20d48506cc40b7afd5e7244cd8ef500b0e147b\"}]}",
+    "pdr_r12_preliminary_plant: blocked: {\"detail\":\"Claude exited with status 1; run 'claude auth status' and check model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\",\"selected\":[{\"id\":\"0c1854f6050d4d109d0c1dbbb9f245ab\",\"kind\":\"tool_result\",\"locator\":\"\",\"revision\":1,\"sha256\":\"59d5e0fa05babbaf310bbd84657733f9a509f15453d1654a445babf1d36db628\"},{\"id\":\"fbe241125f2f4824a6872d6785b39f9e\",\"kind\":\"tool_result\",\"locator\":\"\",\"revision\":1,\"sha256\":\"a258a7b1bc642588a88503fb42c6d4c36b5c76f2eeda24400dc6d1e591f17782\"}]}"
   ]
 }

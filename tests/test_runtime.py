@@ -21,6 +21,7 @@ from guacamole import (
     Note,
     Project,
     ProjectRequest,
+    Qualification,
     Quantity,
     Ref,
     Requirement,
@@ -781,6 +782,137 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         # Turn 1 ran under the uncovered first plan; a later turn under the replacement.
         self.assertEqual(provider.worker_results[1]["phase"], "action")
         self.assertIn("ok", [r.get("result") for r in provider.worker_results])
+
+    async def test_workers_reason_on_their_task_tier(self):
+        seen = []
+
+        class Tiered(TestReasoning):
+            def __init__(self, model):
+                self.model, self.effort = model, "low"
+
+            async def respond(self, packet):
+                data = json.loads(packet.prompt)
+                task = data["agent"]["task_id"]
+                count = sum(t == task for _, t, _ in seen)
+                seen.append((self.model, task, data["state"]["last_observation"]))
+                worker = TaskAuthorization(id="A", objective="w", tier="fast")
+                if task != "chief":
+                    action = Wait(reason="Fixture worker")
+                elif count == 0:
+                    self.prompt = packet.prompt
+                    action = Record(
+                        record=Requirement(
+                            id="r",
+                            wording="fixture",
+                            source=project.store.list("source")[0].ref,
+                            source_quote="fixture",
+                        )
+                    )
+                elif count in (1, 2, 4):
+                    # The first plan names a tier the project does not configure;
+                    # the last escalates the running worker once it has had a turn.
+                    while count == 4 and not any(t == "A" for _, t, _ in seen):
+                        await asyncio.sleep(0.01)
+                    tier = ("ghost", "fast", "", "slow")[count - 1]
+                    action = Decide(
+                        selected="fixture",
+                        request=plan_request(
+                            project.store.list("requirement")[0].ref,
+                            tasks=(worker.model_copy(update={"tier": tier}),),
+                        ),
+                    )
+                elif count == 3:
+                    action = Spawn(
+                        decision_id=data["agent"]["decision_id"], task_id="A"
+                    )
+                else:
+                    action = Wait(reason="Fixture finished")
+                return AgentTurn(
+                    rationale=Rationale(objective=task, explanation="Fixture"),
+                    action=action,
+                )
+
+        chief, fast = Tiered("big"), Tiered("small")
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(
+                Path(directory),
+                reasoning=chief,
+                tiers={"fast": fast, "slow": Tiered("medium")},
+            ) as project,
+        ):
+            await project.run(
+                ProjectRequest(
+                    description="fixture",
+                    context=ContextSpec(max_input_tokens=200_000),
+                )
+            )
+            (worker,) = [
+                s.data for s in project.store.list("agent") if s.data["parent_id"]
+            ]
+            dispatched = [
+                e.details
+                for e in project.events()
+                if e.type == "provider.dispatched" and e.actor == worker["id"]
+            ]
+        self.assertIn(
+            "Worker reasoning tier fast: test-double-reasoning small", chief.prompt
+        )
+        self.assertIn("unconfigured reasoning tier: ghost", seen[2][2]["detail"])
+        self.assertEqual(worker["tier"], "slow")
+        self.assertEqual(
+            [(d["model"], d["tier"], d["effort"]) for d in dispatched],
+            [("small", "fast", "low")],
+        )
+        self.assertEqual({m for m, t, _ in seen if t == "chief"}, {"big"})
+
+    def test_tasks_route_to_the_cheapest_qualified_tier(self):
+        class Tier(TestReasoning):
+            def __init__(self, model):
+                self.model, self.effort = model, "low"
+
+        def measured(model, family, trials, passed, cost):
+            return Qualification(
+                family=family,
+                provider="test-double-reasoning",
+                model=model,
+                effort="low",
+                trials=trials,
+                passed=passed,
+                cost_usd=cost,
+            )
+
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(
+                Path(directory),
+                tiers={"cheap": Tier("small"), "dear": Tier("big")},
+                qualifications=(
+                    measured("small", "extraction", 2, 2, 0.10),
+                    measured("big", "extraction", 2, 2, 1.00),
+                    # Cheaper per trial, but a failure makes each verified result dearer.
+                    measured("small", "analysis", 5, 4, 1.00),
+                    measured("big", "analysis", 5, 5, 1.10),
+                    measured("small", "diagnosis", 2, 1, 0.10),
+                ),
+            ) as project,
+        ):
+            runtime = Runtime(project, TestReasoning())
+
+            def route(family, tier=None):
+                task = TaskAuthorization(id="t", objective="o", family=family, tier=tier)
+                return runtime._route(task)[0]
+
+            self.assertEqual(route("extraction"), "cheap")
+            self.assertEqual(route("analysis"), "dear")
+            # Unqualified or unmeasured work runs on the Chief's model unless overridden.
+            self.assertIsNone(route("diagnosis"))
+            self.assertIsNone(route(None))
+            self.assertEqual(route("diagnosis", tier="cheap"), "cheap")
+            self.assertIn("diagnosis: 1/2 trials verified, $0.100", runtime.tier_menu)
+            self.assertIn("unqualified", runtime.tier_menu)
+        with self.assertRaises(ValueError):
+            measured("small", "extraction", 1, 2, 0.1)
 
     async def test_rejected_action_explains_runtime_errors_but_not_tool_errors(self):
         secret = "fixture-secret-must-not-persist"

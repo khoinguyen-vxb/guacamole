@@ -3,7 +3,7 @@
 import fcntl
 import hashlib
 import mimetypes
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from contextlib import ExitStack
 from pathlib import Path
 from typing import TYPE_CHECKING, Self
@@ -27,6 +27,7 @@ from .contracts import (
     ProducedFile,
     ProjectRequest,
     ProjectResult,
+    Qualification,
     Ref,
     RequestRecord,
     Requirement,
@@ -60,6 +61,8 @@ class Project:
         sandbox: Path | None = None,
         tools: ToolRegistry | None = None,
         reasoning: ReasoningProvider | None = None,
+        tiers: Mapping[str, ReasoningProvider] | None = None,
+        qualifications: Sequence[Qualification] = (),
         watchdog: "Watchdog | None" = None,
         systems_engineer: "SystemsEngineer | None" = None,
         middleware: "Sequence[ContextMiddleware]" = (),
@@ -117,6 +120,10 @@ class Project:
                 if name not in self.tools.schemas:
                     self.tools.schema(name, annotation)
             self.reasoning = reasoning
+            # Worker reasoning providers a work-plan task may name; see TaskAuthorization.tier.
+            self.tiers = dict(tiers or {})
+            # Measured tier results per task family; they route tasks to tiers.
+            self.qualifications = tuple(qualifications)
             self.watchdog = watchdog
             self.systems_engineer = systems_engineer
             self.middleware = tuple(middleware)

@@ -32,11 +32,15 @@ class CodexReasoning:
         timeout_s: float = 3000,
         web_search: bool = True,
         effort: str = "ultra",
+        model: str = model,
+        context_capacity_tokens: int = context_capacity_tokens,
     ):
         self.executable = executable
         self.timeout_s = timeout_s
         self.web_search = web_search
         self.effort = effort
+        self.model = model
+        self.context_capacity_tokens = context_capacity_tokens
 
     async def count_tokens(self, prompt: str) -> int:
         # ponytail: encoding estimate, not an exact Astra mapping; retain headroom
