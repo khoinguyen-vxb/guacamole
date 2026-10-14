@@ -395,6 +395,13 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                         "review", accepted.id, ReviewManifest
                     )
                     self.assertIn(artifact, manifest.baseline)
+                    # The review document traces each requirement to its evidence.
+                    report = (
+                        root / "reviews" / accepted.id / "v3/review.md"
+                    ).read_text()
+                    self.assertIn("| mission |", report)
+                    self.assertIn("| verification (passed) |", report)
+                    self.assertIn("### verification — passed", report)
                     self.assertTrue(
                         (root / "reviews" / accepted.id / "manifest-v3.json").exists()
                     )

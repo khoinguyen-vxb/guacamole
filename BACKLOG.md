@@ -16,6 +16,23 @@ IDs follow the external GUA-001..021 review; items it got wrong are rescoped her
 | GUA-010 | Partial: `max_agents` counts running workers; completed and superseded ones free their slot. |
 | GUA-021 | `pytest` moved to the dev group and pytest scoped to `tests/`. The garbled launcher text in `ehopper.py` and the ehopper install line are fixed. Supported platforms are documented. |
 
+## Milestone B: brief to review package
+
+Done, on one product family ([examples/bracket](examples/bracket/README.md)):
+
+- **CAD tools, not core modules.** A parametric FreeCAD bracket model produces native CAD, STEP, a third-angle drawing and a BOM derived from the assembly tree. Deterministic checks cover recompute, solid validity, recompute after a parameter change, STEP correspondence, interference, BOM against model, and every measurable requirement constraint. Unmeasurable constraints stay "not performed".
+- **Measured evidence.** `VerificationResult.measurements` carries quantities; one keyed by a requirement id traces into the report.
+- **Package document.** `review.md` is generated from records only: requirements traceability with measured values, decisions with candidate metrics, deliverables with figures and CSV tables inline, every check and measurement, and open items including unperformed checks.
+- **Benchmark harness.** One fresh project per brief and a scripted reply to blocking questions. A run passes when it reaches a ready PDR review within `max_run_input_tokens`.
+
+Next:
+
+1. **Run the benchmark live** on the three briefs (up to 6M estimated tokens each). Fix whatever stops a run before review. *Done when* all three reach a ready review on two consecutive runs.
+2. **Let agents see tool failures.** A tool exception reaches agents as "exception text omitted", so a FreeCAD failure inside `bracket_generate` is opaque to them. Layout problems already come back as data. *Done when* an agent can correct a failed generation without help.
+3. **A second product family**, such as a sheet-metal enclosure, before generalising the CAD representation into a shared assembly contract.
+4. **SysML in the loop.** Allow a SysML `library_dir` override so the model loads on linux-aarch64, then trace requirement constraints through the model.
+5. **Drawing checks and PDF.** Drawing dimensions are generated from the model but not checked. Export `review.md` to PDF if reviewers need it.
+
 ## Next
 
 Each item lists what "done" means.

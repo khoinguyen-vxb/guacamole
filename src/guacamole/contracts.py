@@ -89,12 +89,23 @@ class ProducedFile(Model):
         )
 
 
+class Quantity(Model):
+    value: float
+    unit: str
+    frame: str | None = None
+
+
 class VerificationResult(Model):
-    """An explicit physical/test acceptance result, distinct from tool completion."""
+    """An explicit physical/test acceptance result, distinct from tool completion.
+
+    A check or measurement keyed by a requirement id ("R1: mass <= 0.5 kg",
+    measurements["R1"]) traces to that requirement in the review report.
+    """
 
     outcome: Literal["passed", "failed", "unperformed", "inconclusive"]
     explanation: str
     checks: dict[str, bool | None]
+    measurements: dict[str, Quantity] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def consistent(self) -> "VerificationResult":
@@ -255,12 +266,6 @@ class WorkPlan(Model):
     chief_tools: tuple[ToolGrant, ...] = ()
     deliverables: tuple[DeliverableSpec, ...] = Field(min_length=1)
     inputs: tuple[Ref, ...] = ()
-
-
-class Quantity(Model):
-    value: float
-    unit: str
-    frame: str | None = None
 
 
 class Constraint(Model):

@@ -37,6 +37,7 @@ packages = ["src/guacamole"]
 [tool.pytest.ini_options]
 # Never collect the third-party test suites cloned under examples/*/tooling.
 testpaths = ["tests"]
+pythonpath = ["."]  # tests import examples.*
 
 [tool.ruff]
 target-version = "py313"

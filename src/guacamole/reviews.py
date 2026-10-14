@@ -1,5 +1,6 @@
 """Versioned deliverables, deterministic readiness, then human disposition."""
 
+import csv
 import shutil
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -7,14 +8,17 @@ from typing import TYPE_CHECKING
 from .contracts import (
     ArtifactRecord,
     AskHuman,
+    DecisionRecord,
     Deliverable,
     Evidence,
     OpenItem,
+    Quantity,
     Ref,
     Requirement,
     ReviewManifest,
     ReviewStage,
     SystemModel,
+    VerificationResult,
 )
 from .tools.registry import encode
 
@@ -241,24 +245,23 @@ class Reviews:
         return ref
 
     def _export(self, manifest: ReviewManifest) -> Path:
-        output = self.project.output_path
+        output, store = self.project.output_path, self.project.store
         directory = output(Path("reviews") / manifest.id)
         directory.mkdir(parents=True, exist_ok=True)
-        revision = self.project.store.get("review", manifest.id).ref.revision
+        revision = store.get("review", manifest.id).ref.revision
         path = output(directory / f"manifest-v{revision}.json")
         path.write_text(manifest.model_dump_json(indent=2), encoding="utf-8")
         package = output(directory / f"v{revision}")
         package.mkdir(exist_ok=True)
         records = [
-            self.project.store.resolve(ref).model_dump(mode="json")
-            for ref in manifest.baseline
+            store.resolve(ref).model_dump(mode="json") for ref in manifest.baseline
         ]
         output(package / "records.json").write_text(encode(records), encoding="utf-8")
-        artifacts = []
+        files: dict[str, Path] = {}
         for deliverable in manifest.deliverables:
             for ref in deliverable.artifacts:
                 artifact = ArtifactRecord.model_validate_json(
-                    encode(self.project.store.resolve(ref).data)
+                    encode(store.resolve(ref).data)
                 )
                 try:
                     source = self.project.verify_file(artifact.file)
@@ -269,13 +272,11 @@ class Reviews:
                 )
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(source, target)
-                artifacts.append(
-                    f"- {artifact.kind}: [{artifact.file.name}]({target.relative_to(package).as_posix()})"
-                )
+                files[ref.id] = target.relative_to(package)
         model = []
         if manifest.model is not None:
             system = SystemModel.model_validate_json(
-                encode(self.project.store.resolve(manifest.model).data)
+                encode(store.resolve(manifest.model).data)
             )
             for name, content in sorted(system.files.items()):
                 target = output(package / "sysml" / name)
@@ -283,21 +284,7 @@ class Reviews:
                 target.write_text(content, encoding="utf-8")
                 model.append(f"- [{name}]({target.relative_to(package).as_posix()})")
             model.insert(0, f"Revision {manifest.model.revision}: {system.summary}\n")
-        plan = self.project.decisions.plan(manifest.plan_decision)
-        criteria = [
-            f"- {spec.title}: {'; '.join(spec.acceptance_criteria)}"
-            for spec in plan.deliverables
-        ]
-        text = (
-            f"# {manifest.stage} — {manifest.status}\n\nBaseline: {manifest.id}, revision {revision}.\n\n## Artifacts\n\n"
-            + "\n".join(artifacts)
-            + ("\n\n## SysML model\n\n" + "\n".join(model) if model else "")
-            + "\n\n## Acceptance criteria\n\n"
-            + "\n".join(criteria)
-            + "\n\n## Open items\n\n"
-            + "\n".join(f"- {item}" for item in manifest.open_items)
-            + "\n"
-        )
+        text = self._report(manifest, revision, package, files, model)
         output(package / "review.md").write_text(text, encoding="utf-8")
         traces = {
             r.id: self.project.trace(r.id)
@@ -306,3 +293,221 @@ class Reviews:
         traces[manifest.plan_decision] = self.project.trace(manifest.plan_decision)
         output(package / "traces.json").write_text(encode(traces), encoding="utf-8")
         return path
+
+    def _report(
+        self,
+        manifest: ReviewManifest,
+        revision: int,
+        package: Path,
+        files: dict[str, Path],
+        model: list[str],
+    ) -> str:
+        """The review document, rendered only from the records under review."""
+        store, activity = self.project.store, self.project.activity
+        plan = self.project.decisions.plan(manifest.plan_decision)
+        verified: dict[str, tuple[Evidence, VerificationResult]] = {}
+        for deliverable in manifest.deliverables:
+            for ref in deliverable.evidence:
+                evidence = Evidence.model_validate_json(encode(store.resolve(ref).data))
+                result = activity.get(evidence.request_id).result
+                verified[ref.id] = (
+                    evidence,
+                    VerificationResult.model_validate_json(encode(result)),
+                )
+        lines = [
+            f"# {manifest.stage} design review — {manifest.status}",
+            "",
+            f"Baseline {manifest.id}, revision {revision}; plan {manifest.plan_decision}.",
+        ]
+        if manifest.human:
+            lines += ["", f"Disposition by {manifest.human}: {manifest.disposition}"]
+
+        lines += [
+            "",
+            "## Requirements and traceability",
+            "",
+            "| Requirement | Statement | Limit | Measured | Verified by |",
+            "|---|---|---|---|---|",
+        ]
+        for ref in manifest.baseline:
+            if ref.kind != "requirement":
+                continue
+            requirement = Requirement.model_validate_json(
+                encode(store.resolve(ref).data)
+            )
+            limit = "—"
+            if requirement.constraint is not None:
+                c = requirement.constraint
+                bounds = [
+                    f"{op} {value:g}"
+                    for op, value in ((">=", c.minimum), ("<=", c.maximum))
+                    if value is not None
+                ]
+                limit = f"{c.metric} {' and '.join(bounds)}{_unit(c.unit)}"
+            measured, by = [], []
+            for evidence, result in verified.values():
+                if requirement.id not in {r.id for r in evidence.requirements}:
+                    continue
+                by.append(f"{evidence.kind} ({evidence.outcome})")
+                checks = [
+                    ok
+                    for name, ok in result.checks.items()
+                    if name.startswith(f"{requirement.id}:")
+                ]
+                quantity = result.measurements.get(requirement.id)
+                if quantity is not None or checks:
+                    status = (
+                        "not performed"
+                        if not checks or None in checks
+                        else "FAILED"
+                        if False in checks
+                        else "passed"
+                    )
+                    value = f"{_amount(quantity)} " if quantity is not None else ""
+                    measured.append(f"{value}{status}")
+            lines.append(
+                "| "
+                + " | ".join(
+                    _cell(text)
+                    for text in (
+                        requirement.id,
+                        requirement.wording,
+                        limit,
+                        "; ".join(measured) or "—",
+                        "; ".join(by) or "not verified",
+                    )
+                )
+                + " |"
+            )
+
+        lines += ["", "## Decisions"]
+        run_id = activity.get(manifest.plan_decision).run_id
+        decisions = sorted(
+            (
+                s
+                for s in store.list("decision")
+                if not s.stale and activity.get(s.ref.id).run_id == run_id
+            ),
+            key=lambda s: activity.get(s.ref.id).created_at,
+        )
+        for snapshot in decisions:
+            decision = DecisionRecord.model_validate_json(encode(snapshot.data))
+            chosen = decision.result.selected
+            candidates = decision.request.candidates
+            lines += [
+                "",
+                f"### {decision.request.question}",
+                "",
+                f"Selected **{chosen}**: "
+                + next(c.description for c in candidates if c.id == chosen),
+                "",
+                decision.result.explanation,
+            ]
+            metrics = sorted({name for c in candidates for name in c.metrics})
+            if len(candidates) > 1 or metrics:
+                lines += [
+                    "",
+                    "| Candidate | " + " | ".join(_cell(m) for m in metrics) + " |",
+                    "|---|" + "---|" * len(metrics),
+                ]
+                lines += [
+                    f"| {_cell(c.id)} | "
+                    + " | ".join(
+                        _amount(q) if (q := c.metrics.get(m)) else "—" for m in metrics
+                    )
+                    + " |"
+                    for c in candidates
+                ]
+
+        lines += ["", "## Deliverables"]
+        titles = {spec.id: spec.title for spec in plan.deliverables}
+        for deliverable in manifest.deliverables:
+            lines += [
+                "",
+                f"### {titles.get(deliverable.spec_id, deliverable.spec_id)}",
+                "",
+                "| Kind | File | SHA-256 |",
+                "|---|---|---|",
+            ]
+            figures, tables = [], []
+            for ref in deliverable.artifacts:
+                artifact = ArtifactRecord.model_validate_json(
+                    encode(store.resolve(ref).data)
+                )
+                name, link = artifact.file.name, files.get(ref.id)
+                lines.append(
+                    f"| {_cell(artifact.kind)} | "
+                    + (f"[{name}]({link.as_posix()})" if link else f"{name} (missing)")
+                    + f" | {artifact.file.sha256[:12]} |"
+                )
+                if link and link.suffix.lower() in {".svg", ".png", ".jpg"}:
+                    figures.append(f"![{artifact.kind}: {name}]({link.as_posix()})")
+                elif link and link.suffix.lower() == ".csv":
+                    with (package / link).open(newline="", encoding="utf-8") as f:
+                        tables.append((artifact.kind, name, list(csv.reader(f))))
+            for figure in figures:
+                lines += ["", figure]
+            for kind, name, rows in tables:
+                if rows:
+                    lines += ["", f"**{kind}** ({name})", ""]
+                    lines += [
+                        "| " + " | ".join(_cell(v) for v in row) + " |"
+                        for row in (rows[0], ["---"] * len(rows[0]), *rows[1:])
+                    ]
+
+        lines += ["", "## Verification"]
+        for evidence, result in verified.values():
+            lines += [
+                "",
+                f"### {evidence.kind} — {evidence.outcome}",
+                "",
+                evidence.explanation,
+                "",
+                "| Check | Result |",
+                "|---|---|",
+            ]
+            lines += [
+                f"| {_cell(name)} | "
+                + ("passed" if ok else "FAILED" if ok is False else "not performed")
+                + " |"
+                for name, ok in result.checks.items()
+            ]
+            if result.measurements:
+                lines += ["", "| Quantity | Value |", "|---|---|"]
+                lines += [
+                    f"| {_cell(name)} | {_amount(q)} |"
+                    for name, q in result.measurements.items()
+                ]
+
+        unperformed = [
+            f"{evidence.kind}: {name} — not performed"
+            for evidence, result in verified.values()
+            for name, ok in result.checks.items()
+            if ok is None
+        ]
+        lines += ["", "## Open items and limitations", ""]
+        lines += [f"- {item}" for item in (*manifest.open_items, *unperformed)] or [
+            "None recorded."
+        ]
+        lines += ["", "## Acceptance criteria", ""]
+        lines += [
+            f"- {spec.title}: {'; '.join(spec.acceptance_criteria)}"
+            for spec in plan.deliverables
+        ]
+        if model:
+            lines += ["", "## SysML model", "", *model]
+        return "\n".join(lines) + "\n"
+
+
+def _unit(unit: str) -> str:
+    """ " kg", or nothing for a dimensionless unit."""
+    return "" if unit.strip() in {"", "1", "-"} else f" {unit}"
+
+
+def _amount(quantity: Quantity) -> str:
+    return f"{quantity.value:.4g}{_unit(quantity.unit)}"
+
+
+def _cell(text: str) -> str:
+    """One Markdown table cell: pipes escaped, newlines folded."""
+    return " ".join(str(text).split()).replace("|", "\\|")

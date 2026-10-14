@@ -574,6 +574,13 @@ The runtime lives in `src/guacamole` and tests live in `tests`.
 Engineering tools, their schemas, and numerical dependencies belong in supplied
 project code or separately installed packages.
 
+### Wall-bracket benchmark
+
+[examples/bracket](examples/bracket/README.md) runs natural-language briefs for one
+product family through to a ready PDR review package: parametric FreeCAD CAD, STEP,
+drawing and BOM, all checked and traced to requirements, with no manual CAD or
+document work. Needs FreeCAD and a logged-in Codex CLI.
+
 ### Sounding-rocket example
 
 [kookaburra.py](examples/sounding_rocket/kookaburra.py) uses the supplied
