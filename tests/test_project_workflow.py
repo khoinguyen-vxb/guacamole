@@ -23,6 +23,7 @@ from guacamole.contracts import (
     Deliver,
     Finish,
     Publish,
+    PublishedFile,
     Rationale,
     Record,
     Review,
@@ -120,9 +121,13 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                             )
                         elif artifact is None:
                             action = Publish(
-                                path=builds[0].result["path"],
-                                artifact_id=stage + "-artifact",
-                                artifact_kind="editable-design",
+                                files=(
+                                    PublishedFile(
+                                        path=builds[0].result["path"],
+                                        artifact_id=stage + "-artifact",
+                                        artifact_kind="editable-design",
+                                    ),
+                                ),
                                 tool_request=builds[0].id,
                                 inputs=(requirement.ref,),
                                 requirements=(requirement.ref,),

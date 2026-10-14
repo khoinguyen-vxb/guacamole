@@ -12,6 +12,7 @@ from .contracts import (
     AgentSpec,
     AgentTurn,
     ContextPacket,
+    InboxEntry,
     Omission,
     Ref,
     uid,
@@ -138,15 +139,20 @@ def _render(data: dict) -> tuple[str, tuple[int, ...]]:
     return prompt, tuple(sorted({end for end in ends[:-1] if 1 < end < len(prompt)}))
 
 
-def _components(data: dict, pinned: int) -> dict[str, int]:
+def _components(data: dict, pinned: set[tuple[str, str]]) -> dict[str, int]:
     """Characters per prompt component; state and sources are split further."""
     sizes: dict[str, int] = {}
     for key, value in data.items():
         if key == "state":
             sizes |= {f"state.{k}": len(encode(v)) for k, v in value.items()}
         elif key == "sources":
-            sizes["sources.pinned"] = sum(len(encode(s)) for s in value[:pinned])
-            sizes["sources.selected"] = sum(len(encode(s)) for s in value[pinned:])
+            held = [(s["ref"]["kind"], s["ref"]["id"]) in pinned for s in value]
+            sizes["sources.pinned"] = sum(
+                len(encode(s)) for s, p in zip(value, held) if p
+            )
+            sizes["sources.selected"] = sum(
+                len(encode(s)) for s, p in zip(value, held) if not p
+            )
         else:
             sizes[key] = len(encode(value))
     return sizes
@@ -253,7 +259,14 @@ class ContextBuilder:
         payload = {
             "instructions": instructions,
             "user_instructions": spec.instructions,
-            "agent": agent.model_dump(mode="json"),
+            # Its context lists repeat user_instructions and the sources' refs, and
+            # changed on every read, voiding the cached prefix through the sources.
+            "agent": agent.model_dump(
+                mode="json",
+                exclude={
+                    "context": {"instructions", "pinned", "selected", "summaries"}
+                },
+            ),
             "state": state,
             "tool_schemas": [
                 t.model_dump(mode="json")
@@ -333,13 +346,17 @@ class ContextBuilder:
             ),
         )
         # An answered message is settled even if never acknowledged; showing it
-        # again made agents reply to it again.
+        # again made agents reply to it again. One still owed a reply stays after
+        # acknowledgement; hiding it left finish rejected with nothing to answer.
+        owed = {e.message.id for e in self.activity.obligations(agent.id)}
+        pinned = {(r.kind, r.id) for r in refs}
         pending = [
             e
             for e in entries
             if e.delivered_at is not None
-            and e.acknowledged_at is None
             and e.response_message_id is None
+            and (e.acknowledged_at is None or e.message.id in owed)
+            and (e.message.id in owed or not self._carried(e, pinned))
         ]
         rejected = admit(
             payload["messages"], [e.message.model_dump(mode="json") for e in pending]
@@ -393,6 +410,13 @@ class ContextBuilder:
                 )
             else:
                 refs.append(ref)
+        # Admission favours the newest reads, but they render last, oldest first: a
+        # read then extends the prompt instead of shifting every source after it out
+        # of the provider's cached prefix. Sources that are not reads lead.
+        age = {(r.kind, r.id): i for i, r in enumerate(reversed(spec.selected))}
+        payload["sources"].sort(
+            key=lambda s: age.get((s["ref"]["kind"], s["ref"]["id"]), -1)
+        )
         # Middleware recall is the lowest-priority optional material.
         if memory:
             recalled: list[JSON] = []
@@ -423,9 +447,25 @@ class ContextBuilder:
             message_ids=tuple(messages),
             deferred=tuple(omissions),
             cache_breakpoints=breakpoints,
-            components=_components(data, len(spec.pinned)),
+            components=_components(data, pinned),
         )
         return packet
+
+    def _carried(self, entry: InboxEntry, pinned: set[tuple[str, str]]) -> bool:
+        """Whether a message already shown is now carried elsewhere or moot.
+
+        A human input is pinned as its source; a superseded sender awaits nothing.
+        Left until acknowledged, the Chief re-read both every turn for weeks.
+        """
+        message = entry.message
+        if not entry.included_packets:
+            return False
+        if message.sender.startswith("human:"):
+            return bool(message.context_refs) and all(
+                (r.kind, r.id) in pinned for r in message.context_refs
+            )
+        sender = self.store.maybe("agent_state", message.sender)
+        return sender is not None and sender.data["status"] == "superseded"
 
     def _save(self, packet: ContextPacket) -> ContextPacket:
         with self.store.atomic():

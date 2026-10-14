@@ -44,6 +44,7 @@ from ..contracts import (
     Review,
     Send,
     Spawn,
+    Supersede,
     TaskAuthorization,
     TaskReport,
     ToolCall,
@@ -670,13 +671,26 @@ class Runtime:
                 *self.project.human.references(self.run_id),
                 *requested,
             )
+            # The full arguments of the call just made: recent_tool_calls only
+            # previews them, so agents spent a turn reading them back. Selected for
+            # this turn, not pinned, so an oversized one is deferred, not overflowing.
+            ran = state.observation.get("ref")
+            made = (
+                store.maybe("job_inputs", str(ran.get("id")))
+                if isinstance(ran, dict) and ran.get("kind") == "tool_result"
+                else None
+            )
+            latest = (made.ref,) if made is not None and not made.stale else ()
             actual = agent.model_copy(
                 update={
                     "context": agent.context.model_copy(
                         update={
                             "pinned": tuple(
                                 dict.fromkeys((*agent.context.pinned, *pins))
-                            )
+                            ),
+                            "selected": tuple(
+                                dict.fromkeys((*latest, *agent.context.selected))
+                            ),
                         }
                     )
                 }
@@ -1022,6 +1036,14 @@ class Runtime:
                 )
                 await job.collect()
                 return {"request_id": job.id, "result": job.record.result}, "active"
+            case Supersede():
+                record = activity.supersede(
+                    action.request_id,
+                    by=action.by,
+                    actor=agent.id,
+                    reason=action.reason,
+                )
+                return {"request_id": record.id, "reason": record.reason}, "active"
             case ToolCall():
                 if state.tool_calls > agent.budget.max_tool_calls:
                     raise PermissionError("Tool budget exhausted")
@@ -1263,8 +1285,10 @@ class Runtime:
                     self._wake(recipient, peer, "Incoming peer message")
                 return {"message_id": message.id, "request_id": request_id}, "active"
             case Acknowledge():
-                activity.acknowledge(agent.id, action.message_id)
-                return {"acknowledged": action.message_id}, "active"
+                with store.atomic():
+                    for message_id in action.message_ids:
+                        activity.acknowledge(agent.id, message_id)
+                return {"acknowledged": list(action.message_ids)}, "active"
             case Record():
                 if isinstance(action.record, Requirement):
                     ref = project.record_requirement(action.record, actor=agent.id)
@@ -1302,17 +1326,22 @@ class Runtime:
             case Publish():
                 if agent.decision_id is None:
                     raise PermissionError("Missing governing plan")
-                ref = project.publish(
-                    path=action.path,
-                    artifact_id=action.artifact_id,
-                    kind=action.artifact_kind,
-                    request_id=action.tool_request,
-                    decision_id=agent.decision_id,
-                    inputs=action.inputs,
-                    requirements=action.requirements,
-                    actor=agent.id,
-                )
-                return {"ref": ref.model_dump(mode="json")}, "active"
+                # One turn per tool run, not per file; all of them or none.
+                with store.atomic():
+                    refs = [
+                        project.publish(
+                            path=file.path,
+                            artifact_id=file.artifact_id,
+                            kind=file.artifact_kind,
+                            request_id=action.tool_request,
+                            decision_id=agent.decision_id,
+                            inputs=action.inputs,
+                            requirements=action.requirements,
+                            actor=agent.id,
+                        )
+                        for file in action.files
+                    ]
+                return {"refs": [r.model_dump(mode="json") for r in refs]}, "active"
             case Verify():
                 ref = project.evidence(action.evidence, actor=agent.id)
                 self._wake_waiting(self.engineer_id, "Evidence recorded")
@@ -1360,19 +1389,11 @@ class Runtime:
                     for stage in self.request.target_reviews
                 ):
                     raise ValueError("Required reviews are not human-accepted")
-                obligations = [
-                    e
-                    for e in activity.inbox(agent.id)
-                    if e.response_required
-                    and e.response_message_id is None
-                    and e.message.kind != "delegation"
-                    and (
-                        not e.message.request_id
-                        or activity.get(e.message.request_id).status != "cancelled"
+                if obligations := activity.obligations(agent.id):
+                    raise ValueError(
+                        "Outstanding inbox response obligations; reply to "
+                        + ", ".join(e.message.id for e in obligations)
                     )
-                ]
-                if obligations:
-                    raise ValueError("Outstanding inbox response obligations")
                 activity.transition(
                     state.request_id, "completed", actor=agent.id, result=action.result
                 )

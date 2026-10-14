@@ -420,7 +420,7 @@ class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
                         result=TaskReport(summary="Done").model_dump(mode="json")
                     )
                 if data["messages"]:
-                    return Acknowledge(message_id=data["messages"][0]["id"])
+                    return Acknowledge(message_ids=(data["messages"][0]["id"],))
                 return Wait(reason="Model is current")
 
             def w(self, data, count):

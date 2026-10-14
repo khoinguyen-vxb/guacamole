@@ -1,0 +1,6415 @@
+{
+  "schema": "hopper_junction_refine_diagnostics/1",
+  "timestamp_UTC": "2026-10-14T00:45:38.512179+00:00",
+  "FreeCAD_version": [
+    "1",
+    "1",
+    "1",
+    "44227 +647 (Git)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "tag: 1.1.1",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "authority": {
+    "work_plan": "66c7448f443f44ac9a016a1b384593a2 revision 1",
+    "development_decision": "9aaf88cc8ecf4e8ab82a66cdae8731b1 revision 1",
+    "parent_configuration": "PDR-R12-FIXED-STRUCTURE-RECOVERY-CONFIG-01 revision 1",
+    "vehicle_requirement": "REQ-VEHICLE-CONFIGURATION revision 3",
+    "placement_requirement": "REQ-PROPULSION-PLACEMENT revision 1",
+    "budget_requirement": "REQ-HARDWARE-BUDGET revision 5",
+    "scope": "One preliminary integration prototype; demonstrate separate member/fitting geometry and fixed support packaging before transferring comparable fidelity to retained alternatives. No architecture, commercial component, travel limit, manufacturing release or review baseline is selected."
+  },
+  "inputs_before": {
+    "native": {
+      "path": "cad/pdr_r12_chief/physical_integration_prototype_20261014_01/physical_integration_prototype_01.FCStd",
+      "sha256": "45010bcd928d38cd580f8ded06273e561d290a671d7ecfb771943825fee2fa16"
+    },
+    "helpers": {
+      "path": "cad/pdr_r12_chief/inspect_physical_integration_topology_20261014_01.py",
+      "sha256": "94e3a6a12cfe0ec7222add47355afeb9199ae8df1f97bcf7fe0d57e3614c0f6f"
+    },
+    "previous_diagnostics": {
+      "path": "cad/pdr_r12_chief/junction_boolean_diagnostics_20261014_01/observations.json",
+      "sha256": "72f175d2b9e6ae7f454c83afde4140aa350712b32362f3d6e71963038d6a3df4"
+    },
+    "diagnostic_source": {
+      "path": "cad/pdr_r12_chief/diagnose_junction_refine_20261014_02.py",
+      "sha256": "b2ce4df7cab3a4941cbd0ff2a8a23564dfbb2ec7e17337978b1faa0a4ce7c9b9"
+    }
+  },
+  "units": {
+    "length": "mm",
+    "volume": "mm^3"
+  },
+  "scope": "Controlled native refinement comparison on identical saved operands; no intended physical geometry edits",
+  "junctions": [
+    {
+      "junction_index": 1,
+      "errors": [],
+      "experiments": [
+        {
+          "requested_union_refine": false,
+          "union": {
+            "name": "J01_UnionRefine0",
+            "type": "Part::MultiFuse",
+            "state": [
+              "Up-to-date"
+            ],
+            "dependencies": [
+              "J01_JunctionBranchBoss_01_Minus",
+              "J01_JunctionBranchBoss_01_Plus",
+              "J01_JunctionMainSleeve_01",
+              "J01_JunctionWeb_01_Minus",
+              "J01_JunctionWeb_01_Plus"
+            ],
+            "errors": [],
+            "MaterialHypothesis": null,
+            "MovingGroup": null,
+            "PhysicalRole": null,
+            "primitive_parameters": {
+              "Refine": "False"
+            },
+            "expressions": [],
+            "shape": {
+              "is_null": false,
+              "is_valid": true,
+              "solid_count": 1,
+              "volume_mm3": 34008.57296807354,
+              "bounds_CAD_mm": [
+                [
+                  181.74899986734505,
+                  260.83045154804194
+                ],
+                [
+                  181.74899986734496,
+                  260.8304515480419
+                ],
+                [
+                  77.27079439289425,
+                  197.71872911679523
+                ]
+              ],
+              "solids": [
+                {
+                  "index": 1,
+                  "errors": [],
+                  "valid": true,
+                  "volume_mm3": 34008.57296807354,
+                  "centroid_CAD_mm": [
+                    220.57503980831478,
+                    220.57505461549843,
+                    151.48277442786616
+                  ],
+                  "bounds_CAD_mm": [
+                    [
+                      181.74899986734505,
+                      260.83045154804194
+                    ],
+                    [
+                      181.74899986734496,
+                      260.8304515480419
+                    ],
+                    [
+                      77.27079439289425,
+                      197.71872911679523
+                    ]
+                  ]
+                }
+              ],
+              "errors": [],
+              "shape_type": "Compound"
+            }
+          },
+          "cuts": [
+            {
+              "requested_cut_refine": false,
+              "cut": {
+                "name": "J01_UnionRefine0_CutRefine0",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J01_SavedCutter",
+                  "J01_UnionRefine0"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "False"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.768857748364,
+                  "bounds_CAD_mm": [
+                    [
+                      181.74899986734505,
+                      260.83045154804194
+                    ],
+                    [
+                      181.74899986734496,
+                      260.8304515480419
+                    ],
+                    [
+                      77.27079439289425,
+                      197.71872911679523
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.768857748364,
+                      "centroid_CAD_mm": [
+                        220.4933820706081,
+                        220.4934046395024,
+                        151.62269198650006
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          181.74899986734505,
+                          260.83045154804194
+                        ],
+                        [
+                          181.74899986734496,
+                          260.8304515480419
+                        ],
+                        [
+                          77.27079439289425,
+                          197.71872911679523
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": false
+            },
+            {
+              "requested_cut_refine": true,
+              "cut": {
+                "name": "J01_UnionRefine0_CutRefine1",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J01_SavedCutter",
+                  "J01_UnionRefine0"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "True"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.768857748364,
+                  "bounds_CAD_mm": [
+                    [
+                      181.74899986734505,
+                      260.83045154804194
+                    ],
+                    [
+                      181.74899986734496,
+                      260.8304515480419
+                    ],
+                    [
+                      77.27079439289425,
+                      197.71872911679523
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.768857748364,
+                      "centroid_CAD_mm": [
+                        220.4933820706081,
+                        220.4934046395024,
+                        151.62269198650006
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          181.74899986734505,
+                          260.83045154804194
+                        ],
+                        [
+                          181.74899986734496,
+                          260.8304515480419
+                        ],
+                        [
+                          77.27079439289425,
+                          197.71872911679523
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": true
+            }
+          ],
+          "operand_minus_union": [
+            {
+              "operand": "J01_JunctionMainSleeve_01",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J01_JunctionBranchBoss_01_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J01_JunctionWeb_01_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J01_JunctionBranchBoss_01_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J01_JunctionWeb_01_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            }
+          ],
+          "errors": [],
+          "observed_union_refine": false
+        },
+        {
+          "requested_union_refine": true,
+          "union": {
+            "name": "J01_UnionRefine1",
+            "type": "Part::MultiFuse",
+            "state": [
+              "Up-to-date"
+            ],
+            "dependencies": [
+              "J01_JunctionBranchBoss_01_Minus",
+              "J01_JunctionBranchBoss_01_Plus",
+              "J01_JunctionMainSleeve_01",
+              "J01_JunctionWeb_01_Minus",
+              "J01_JunctionWeb_01_Plus"
+            ],
+            "errors": [],
+            "MaterialHypothesis": null,
+            "MovingGroup": null,
+            "PhysicalRole": null,
+            "primitive_parameters": {
+              "Refine": "True"
+            },
+            "expressions": [],
+            "shape": {
+              "is_null": false,
+              "is_valid": false,
+              "solid_count": 1,
+              "volume_mm3": 33994.71912786589,
+              "bounds_CAD_mm": [
+                [
+                  181.74899986734505,
+                  260.83045154804194
+                ],
+                [
+                  181.74899986734496,
+                  260.8304515480419
+                ],
+                [
+                  77.27079439289425,
+                  197.71872911679523
+                ]
+              ],
+              "solids": [
+                {
+                  "index": 1,
+                  "errors": [],
+                  "valid": false,
+                  "volume_mm3": 33994.71912786589,
+                  "centroid_CAD_mm": [
+                    220.5774085953905,
+                    220.58021114850666,
+                    151.47679989167554
+                  ],
+                  "bounds_CAD_mm": [
+                    [
+                      181.74899986734505,
+                      260.83045154804194
+                    ],
+                    [
+                      181.74899986734496,
+                      260.8304515480419
+                    ],
+                    [
+                      77.27079439289425,
+                      197.71872911679523
+                    ]
+                  ]
+                }
+              ],
+              "errors": [],
+              "shape_type": "Compound"
+            }
+          },
+          "cuts": [],
+          "operand_minus_union": [],
+          "errors": [],
+          "observed_union_refine": true,
+          "cuts_not_evaluated_reason": "Union is not one valid positive-volume solid"
+        }
+      ],
+      "union_directional_differences": null,
+      "source_union": {
+        "name": "JunctionUnbored_01",
+        "type": "Part::MultiFuse",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [
+          "JunctionBranchBoss_01_Minus",
+          "JunctionBranchBoss_01_Plus",
+          "JunctionMainSleeve_01",
+          "JunctionWeb_01_Minus",
+          "JunctionWeb_01_Plus"
+        ],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": false,
+          "solid_count": 1,
+          "volume_mm3": 33994.719136324355,
+          "bounds_CAD_mm": [
+            [
+              181.74899986734505,
+              260.83045154804205
+            ],
+            [
+              181.74899986734496,
+              260.830451548042
+            ],
+            [
+              77.27079439289426,
+              197.71872911679532
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": false,
+              "volume_mm3": 33994.719136324355,
+              "centroid_CAD_mm": [
+                220.57740859293472,
+                220.58021114493994,
+                151.47679989644442
+              ],
+              "bounds_CAD_mm": [
+                [
+                  181.74899986734505,
+                  260.83045154804205
+                ],
+                [
+                  181.74899986734496,
+                  260.830451548042
+                ],
+                [
+                  77.27079439289426,
+                  197.71872911679532
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "source_fitting": {
+        "name": "BraceJunctionFitting_01",
+        "type": "Part::Cut",
+        "state": [
+          "Touched",
+          "Invalid"
+        ],
+        "dependencies": [
+          "BraceJunctionFitting_01_CuttingToolUnion",
+          "JunctionUnbored_01"
+        ],
+        "errors": [],
+        "MaterialHypothesis": "PETG_assumed_full_density",
+        "MovingGroup": "fixed_airframe",
+        "PhysicalRole": "Separate sleeve/two-branch printed junction hypothesis",
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": true,
+          "is_valid": null,
+          "solid_count": 0,
+          "volume_mm3": null,
+          "bounds_CAD_mm": null,
+          "solids": [],
+          "errors": []
+        }
+      },
+      "source_operands": [
+        {
+          "name": "JunctionMainSleeve_01",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "135.0 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 20781.635403496486,
+            "bounds_CAD_mm": [
+              [
+                195.43076582313682,
+                260.83045154804194
+              ],
+              [
+                195.43076582313677,
+                260.8304515480419
+              ],
+              [
+                77.27079439289425,
+                197.71872911679523
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 20781.635403496486,
+                "centroid_CAD_mm": [
+                  228.13060868558938,
+                  228.13060868558932,
+                  137.49476175484475
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    195.43076582313682,
+                    260.83045154804194
+                  ],
+                  [
+                    195.43076582313677,
+                    260.8304515480419
+                  ],
+                  [
+                    77.27079439289425,
+                    197.71872911679523
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionBranchBoss_01_Plus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "43.0 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113702,
+            "bounds_CAD_mm": [
+              [
+                181.74899986734505,
+                215.97948576431193
+              ],
+              [
+                205.84030788641223,
+                231.78749639213868
+              ],
+              [
+                151.7313166039531,
+                194.636219393291
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113702,
+                "centroid_CAD_mm": [
+                  198.8642428158285,
+                  218.81390213927546,
+                  173.18376799862205
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    181.74899986734505,
+                    215.97948576431193
+                  ],
+                  [
+                    205.84030788641223,
+                    231.78749639213868
+                  ],
+                  [
+                    151.7313166039531,
+                    194.636219393291
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionWeb_01_Plus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "5.0 mm",
+            "Height": "14.700452718022467 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.JunctionWebRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845873,
+            "bounds_CAD_mm": [
+              [
+                195.2191378598868,
+                212.99674643891913
+              ],
+              [
+                205.98899139719722,
+                222.51468204409704
+              ],
+              [
+                169.42646840252863,
+                181.1197191038427
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845873,
+                "centroid_CAD_mm": [
+                  204.107942149403,
+                  214.25183672064713,
+                  175.27309375318566
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    195.2191378598868,
+                    212.99674643891913
+                  ],
+                  [
+                    205.98899139719722,
+                    222.51468204409704
+                  ],
+                  [
+                    169.42646840252863,
+                    181.1197191038427
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionBranchBoss_01_Minus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "43.00000000000002 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113702,
+            "bounds_CAD_mm": [
+              [
+                205.8403078864123,
+                231.7874963921388
+              ],
+              [
+                181.74899986734496,
+                215.97948576431182
+              ],
+              [
+                151.73131660395316,
+                194.63621939329104
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113702,
+                "centroid_CAD_mm": [
+                  218.81390213927554,
+                  198.8642428158284,
+                  173.1837679986221
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    205.8403078864123,
+                    231.7874963921388
+                  ],
+                  [
+                    181.74899986734496,
+                    215.97948576431182
+                  ],
+                  [
+                    151.73131660395316,
+                    194.63621939329104
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionWeb_01_Minus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "5.0 mm",
+            "Height": "14.700452718022452 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.JunctionWebRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845862,
+            "bounds_CAD_mm": [
+              [
+                205.98899139719728,
+                222.51468204409707
+              ],
+              [
+                195.21913785988664,
+                212.99674643891896
+              ],
+              [
+                169.4264684025286,
+                181.11971910384267
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845862,
+                "centroid_CAD_mm": [
+                  214.25183672064716,
+                  204.10794214940282,
+                  175.27309375318563
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    205.98899139719728,
+                    222.51468204409707
+                  ],
+                  [
+                    195.21913785988664,
+                    212.99674643891896
+                  ],
+                  [
+                    169.4264684025286,
+                    181.11971910384267
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        }
+      ],
+      "source_cutting_tool": {
+        "name": "BraceJunctionFitting_01_CuttingToolUnion",
+        "type": "Part::MultiFuse",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [
+          "JunctionBranchBlindBore_01_Minus",
+          "JunctionBranchBlindBore_01_Plus",
+          "JunctionMainThroughBore_01"
+        ],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 3,
+          "volume_mm3": 13527.70775070909,
+          "bounds_CAD_mm": [
+            [
+              184.14499026840434,
+              261.8409710149556
+            ],
+            [
+              184.14499026840426,
+              261.8409710149554
+            ],
+            [
+              71.10099213532598,
+              212.77619753282337
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729612,
+              "centroid_CAD_mm": [
+                198.08806140100276,
+                218.37585054349123,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  184.14499026840434,
+                  212.03113253360118
+                ],
+                [
+                  208.5182497717279,
+                  228.2334513152545
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489405
+                ]
+              ]
+            },
+            {
+              "index": 2,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729626,
+              "centroid_CAD_mm": [
+                218.37585054349128,
+                198.0880614010027,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  208.51824977172797,
+                  228.23345131525463
+                ],
+                [
+                  184.14499026840426,
+                  212.03113253360115
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489405
+                ]
+              ]
+            },
+            {
+              "index": 3,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 9094.292197963166,
+              "centroid_CAD_mm": [
+                226.06131254829234,
+                226.06131254829222,
+                141.93859483407468
+              ],
+              "bounds_CAD_mm": [
+                [
+                  190.28165408162909,
+                  261.8409710149556
+                ],
+                [
+                  190.28165408162897,
+                  261.8409710149554
+                ],
+                [
+                  71.10099213532598,
+                  212.77619753282337
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "previous_experiments": [
+        {
+          "variant": "global_original",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71913632103
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          }
+        },
+        {
+          "variant": "global_sequential",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71913510355
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          }
+        },
+        {
+          "variant": "global_branch_grouped",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71912749186
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          }
+        },
+        {
+          "variant": "joint_centred_original",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71912893092
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          }
+        }
+      ],
+      "copied_operands": [
+        {
+          "name": "J01_JunctionMainSleeve_01",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 20781.635403496482,
+            "bounds_CAD_mm": [
+              [
+                195.43076582313677,
+                260.8304515480419
+              ],
+              [
+                195.4307658231368,
+                260.8304515480419
+              ],
+              [
+                77.27079439289422,
+                197.7187291167952
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 20781.635403496482,
+                "centroid_CAD_mm": [
+                  228.13060868558932,
+                  228.13060868558935,
+                  137.49476175484472
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    195.43076582313677,
+                    260.8304515480419
+                  ],
+                  [
+                    195.4307658231368,
+                    260.8304515480419
+                  ],
+                  [
+                    77.27079439289422,
+                    197.7187291167952
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J01_JunctionBranchBoss_01_Plus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.3357211137,
+            "bounds_CAD_mm": [
+              [
+                181.748999867345,
+                215.97948576431187
+              ],
+              [
+                205.84030788641218,
+                231.7874963921386
+              ],
+              [
+                151.73131660395308,
+                194.63621939329096
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.3357211137,
+                "centroid_CAD_mm": [
+                  198.86424281582842,
+                  218.8139021392754,
+                  173.18376799862202
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    181.748999867345,
+                    215.97948576431187
+                  ],
+                  [
+                    205.84030788641218,
+                    231.7874963921386
+                  ],
+                  [
+                    151.73131660395308,
+                    194.63621939329096
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J01_JunctionWeb_01_Plus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845875,
+            "bounds_CAD_mm": [
+              [
+                195.21913785988676,
+                212.99674643891908
+              ],
+              [
+                205.98899139719717,
+                222.514682044097
+              ],
+              [
+                169.4264684025286,
+                181.11971910384267
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845875,
+                "centroid_CAD_mm": [
+                  204.10794214940293,
+                  214.25183672064708,
+                  175.27309375318563
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    195.21913785988676,
+                    212.99674643891908
+                  ],
+                  [
+                    205.98899139719717,
+                    222.514682044097
+                  ],
+                  [
+                    169.4264684025286,
+                    181.11971910384267
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J01_JunctionBranchBoss_01_Minus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.3357211137,
+            "bounds_CAD_mm": [
+              [
+                205.84030788641223,
+                231.78749639213873
+              ],
+              [
+                181.74899986734496,
+                215.97948576431185
+              ],
+              [
+                151.73131660395313,
+                194.63621939329101
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.3357211137,
+                "centroid_CAD_mm": [
+                  218.81390213927548,
+                  198.8642428158284,
+                  173.18376799862207
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    205.84030788641223,
+                    231.78749639213873
+                  ],
+                  [
+                    181.74899986734496,
+                    215.97948576431185
+                  ],
+                  [
+                    151.73131660395313,
+                    194.63621939329101
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J01_JunctionWeb_01_Minus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845862,
+            "bounds_CAD_mm": [
+              [
+                205.98899139719722,
+                222.51468204409701
+              ],
+              [
+                195.2191378598866,
+                212.9967464389189
+              ],
+              [
+                169.4264684025286,
+                181.11971910384264
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845862,
+                "centroid_CAD_mm": [
+                  214.2518367206471,
+                  204.10794214940273,
+                  175.27309375318563
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    205.98899139719722,
+                    222.51468204409701
+                  ],
+                  [
+                    195.2191378598866,
+                    212.9967464389189
+                  ],
+                  [
+                    169.4264684025286,
+                    181.11971910384264
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        }
+      ],
+      "copied_cutting_tool": {
+        "name": "J01_SavedCutter",
+        "type": "Part::Feature",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {},
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 3,
+          "volume_mm3": 13527.70775070909,
+          "bounds_CAD_mm": [
+            [
+              184.14499026840434,
+              261.8409710149556
+            ],
+            [
+              184.14499026840426,
+              261.8409710149554
+            ],
+            [
+              71.10099213532598,
+              212.77619753282337
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729612,
+              "centroid_CAD_mm": [
+                198.08806140100276,
+                218.37585054349123,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  184.14499026840434,
+                  212.03113253360118
+                ],
+                [
+                  208.5182497717279,
+                  228.2334513152545
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489405
+                ]
+              ]
+            },
+            {
+              "index": 2,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729626,
+              "centroid_CAD_mm": [
+                218.37585054349128,
+                198.0880614010027,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  208.51824977172797,
+                  228.23345131525463
+                ],
+                [
+                  184.14499026840426,
+                  212.03113253360115
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489405
+                ]
+              ]
+            },
+            {
+              "index": 3,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 9094.292197963166,
+              "centroid_CAD_mm": [
+                226.06131254829234,
+                226.06131254829222,
+                141.93859483407468
+              ],
+              "bounds_CAD_mm": [
+                [
+                  190.28165408162909,
+                  261.8409710149556
+                ],
+                [
+                  190.28165408162897,
+                  261.8409710149554
+                ],
+                [
+                  71.10099213532598,
+                  212.77619753282337
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "union_comparison_not_evaluated_reason": "Both unions must be usable before material-difference comparison"
+    },
+    {
+      "junction_index": 2,
+      "errors": [],
+      "experiments": [
+        {
+          "requested_union_refine": false,
+          "union": {
+            "name": "J02_UnionRefine0",
+            "type": "Part::MultiFuse",
+            "state": [
+              "Up-to-date"
+            ],
+            "dependencies": [
+              "J02_JunctionBranchBoss_02_Minus",
+              "J02_JunctionBranchBoss_02_Plus",
+              "J02_JunctionMainSleeve_02",
+              "J02_JunctionWeb_02_Minus",
+              "J02_JunctionWeb_02_Plus"
+            ],
+            "errors": [],
+            "MaterialHypothesis": null,
+            "MovingGroup": null,
+            "PhysicalRole": null,
+            "primitive_parameters": {
+              "Refine": "False"
+            },
+            "expressions": [],
+            "shape": {
+              "is_null": false,
+              "is_valid": true,
+              "solid_count": 1,
+              "volume_mm3": 34008.57285435087,
+              "bounds_CAD_mm": [
+                [
+                  -260.8304515480419,
+                  -181.7489998673451
+                ],
+                [
+                  181.748999867345,
+                  260.83045154804194
+                ],
+                [
+                  77.27079439289422,
+                  197.7187291167952
+                ]
+              ],
+              "solids": [
+                {
+                  "index": 1,
+                  "errors": [],
+                  "valid": true,
+                  "volume_mm3": 34008.57285435087,
+                  "centroid_CAD_mm": [
+                    -220.57504045012402,
+                    220.57505338795414,
+                    151.48277666022574
+                  ],
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480419,
+                      -181.7489998673451
+                    ],
+                    [
+                      181.748999867345,
+                      260.83045154804194
+                    ],
+                    [
+                      77.27079439289422,
+                      197.7187291167952
+                    ]
+                  ]
+                }
+              ],
+              "errors": [],
+              "shape_type": "Compound"
+            }
+          },
+          "cuts": [
+            {
+              "requested_cut_refine": false,
+              "cut": {
+                "name": "J02_UnionRefine0_CutRefine0",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J02_SavedCutter",
+                  "J02_UnionRefine0"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "False"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.76833958642,
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480419,
+                      -181.7489998673451
+                    ],
+                    [
+                      181.748999867345,
+                      260.83045154804194
+                    ],
+                    [
+                      77.27079439289422,
+                      197.7187291167952
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.76833958642,
+                      "centroid_CAD_mm": [
+                        -220.4933830475648,
+                        220.49340297178708,
+                        151.62269517133095
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          -260.8304515480419,
+                          -181.7489998673451
+                        ],
+                        [
+                          181.748999867345,
+                          260.83045154804194
+                        ],
+                        [
+                          77.27079439289422,
+                          197.7187291167952
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": false
+            },
+            {
+              "requested_cut_refine": true,
+              "cut": {
+                "name": "J02_UnionRefine0_CutRefine1",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J02_SavedCutter",
+                  "J02_UnionRefine0"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "True"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.76730493364,
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480419,
+                      -181.7489998673451
+                    ],
+                    [
+                      181.748999867345,
+                      260.83045154804194
+                    ],
+                    [
+                      77.27079439289422,
+                      197.7187291167952
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.76730493364,
+                      "centroid_CAD_mm": [
+                        -220.49338369234982,
+                        220.49340318067595,
+                        151.62269407332968
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          -260.8304515480419,
+                          -181.7489998673451
+                        ],
+                        [
+                          181.748999867345,
+                          260.83045154804194
+                        ],
+                        [
+                          77.27079439289422,
+                          197.7187291167952
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": true
+            }
+          ],
+          "operand_minus_union": [
+            {
+              "operand": "J02_JunctionMainSleeve_02",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J02_JunctionBranchBoss_02_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J02_JunctionWeb_02_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J02_JunctionBranchBoss_02_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J02_JunctionWeb_02_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            }
+          ],
+          "errors": [],
+          "observed_union_refine": false
+        },
+        {
+          "requested_union_refine": true,
+          "union": {
+            "name": "J02_UnionRefine1",
+            "type": "Part::MultiFuse",
+            "state": [
+              "Up-to-date"
+            ],
+            "dependencies": [
+              "J02_JunctionBranchBoss_02_Minus",
+              "J02_JunctionBranchBoss_02_Plus",
+              "J02_JunctionMainSleeve_02",
+              "J02_JunctionWeb_02_Minus",
+              "J02_JunctionWeb_02_Plus"
+            ],
+            "errors": [],
+            "MaterialHypothesis": null,
+            "MovingGroup": null,
+            "PhysicalRole": null,
+            "primitive_parameters": {
+              "Refine": "True"
+            },
+            "expressions": [],
+            "shape": {
+              "is_null": false,
+              "is_valid": true,
+              "solid_count": 1,
+              "volume_mm3": 34008.57174465593,
+              "bounds_CAD_mm": [
+                [
+                  -260.8304515480419,
+                  -181.7489998673451
+                ],
+                [
+                  181.748999867345,
+                  260.83045154804194
+                ],
+                [
+                  77.27079439289422,
+                  197.7187291167952
+                ]
+              ],
+              "solids": [
+                {
+                  "index": 1,
+                  "errors": [],
+                  "valid": true,
+                  "volume_mm3": 34008.57174465593,
+                  "centroid_CAD_mm": [
+                    -220.57504088534057,
+                    220.5750535491915,
+                    151.48277590061528
+                  ],
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480419,
+                      -181.7489998673451
+                    ],
+                    [
+                      181.748999867345,
+                      260.83045154804194
+                    ],
+                    [
+                      77.27079439289422,
+                      197.7187291167952
+                    ]
+                  ]
+                }
+              ],
+              "errors": [],
+              "shape_type": "Compound"
+            }
+          },
+          "cuts": [
+            {
+              "requested_cut_refine": false,
+              "cut": {
+                "name": "J02_UnionRefine1_CutRefine0",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J02_SavedCutter",
+                  "J02_UnionRefine1"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "False"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.767304933626,
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480419,
+                      -181.7489998673451
+                    ],
+                    [
+                      181.748999867345,
+                      260.83045154804194
+                    ],
+                    [
+                      77.27079439289422,
+                      197.7187291167952
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.767304933626,
+                      "centroid_CAD_mm": [
+                        -220.49338369234997,
+                        220.4934031806761,
+                        151.62269407332968
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          -260.8304515480419,
+                          -181.7489998673451
+                        ],
+                        [
+                          181.748999867345,
+                          260.83045154804194
+                        ],
+                        [
+                          77.27079439289422,
+                          197.7187291167952
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": false
+            },
+            {
+              "requested_cut_refine": true,
+              "cut": {
+                "name": "J02_UnionRefine1_CutRefine1",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J02_SavedCutter",
+                  "J02_UnionRefine1"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "True"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.767304933626,
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480419,
+                      -181.7489998673451
+                    ],
+                    [
+                      181.748999867345,
+                      260.83045154804194
+                    ],
+                    [
+                      77.27079439289422,
+                      197.7187291167952
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.767304933626,
+                      "centroid_CAD_mm": [
+                        -220.49338369234997,
+                        220.4934031806761,
+                        151.62269407332968
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          -260.8304515480419,
+                          -181.7489998673451
+                        ],
+                        [
+                          181.748999867345,
+                          260.83045154804194
+                        ],
+                        [
+                          77.27079439289422,
+                          197.7187291167952
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": true
+            }
+          ],
+          "operand_minus_union": [
+            {
+              "operand": "J02_JunctionMainSleeve_02",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J02_JunctionBranchBoss_02_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J02_JunctionWeb_02_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J02_JunctionBranchBoss_02_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J02_JunctionWeb_02_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            }
+          ],
+          "errors": [],
+          "observed_union_refine": true
+        }
+      ],
+      "union_directional_differences": {
+        "unrefined_minus_refined": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 0,
+          "volume_mm3": 0.0,
+          "errors": []
+        },
+        "refined_minus_unrefined": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 0,
+          "volume_mm3": 0.0,
+          "errors": []
+        }
+      },
+      "source_union": {
+        "name": "JunctionUnbored_02",
+        "type": "Part::MultiFuse",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [
+          "JunctionBranchBoss_02_Minus",
+          "JunctionBranchBoss_02_Plus",
+          "JunctionMainSleeve_02",
+          "JunctionWeb_02_Minus",
+          "JunctionWeb_02_Plus"
+        ],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 1,
+          "volume_mm3": 34008.572870410295,
+          "bounds_CAD_mm": [
+            [
+              -260.83045154804194,
+              -181.748999867345
+            ],
+            [
+              181.74899986734505,
+              260.830451548042
+            ],
+            [
+              77.27079439289432,
+              197.71872911679532
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 34008.572870410295,
+              "centroid_CAD_mm": [
+                -220.5750405407424,
+                220.57505319968834,
+                151.48277660674754
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -260.83045154804194,
+                  -181.748999867345
+                ],
+                [
+                  181.74899986734505,
+                  260.830451548042
+                ],
+                [
+                  77.27079439289432,
+                  197.71872911679532
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "source_fitting": {
+        "name": "BraceJunctionFitting_02",
+        "type": "Part::Cut",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [
+          "BraceJunctionFitting_02_CuttingToolUnion",
+          "JunctionUnbored_02"
+        ],
+        "errors": [],
+        "MaterialHypothesis": "PETG_assumed_full_density",
+        "MovingGroup": "fixed_airframe",
+        "PhysicalRole": "Separate sleeve/two-branch printed junction hypothesis",
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 1,
+          "volume_mm3": 22093.76844408742,
+          "bounds_CAD_mm": [
+            [
+              -260.83045154804194,
+              -181.748999867345
+            ],
+            [
+              181.74899986734505,
+              260.830451548042
+            ],
+            [
+              77.27079439289432,
+              197.71872911679532
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 22093.76844408742,
+              "centroid_CAD_mm": [
+                -220.4933831687728,
+                220.49340264467438,
+                151.6226951517455
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -260.83045154804194,
+                  -181.748999867345
+                ],
+                [
+                  181.74899986734505,
+                  260.830451548042
+                ],
+                [
+                  77.27079439289432,
+                  197.71872911679532
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "source_operands": [
+        {
+          "name": "JunctionMainSleeve_02",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "135.0 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 20781.635403496482,
+            "bounds_CAD_mm": [
+              [
+                -260.8304515480419,
+                -195.43076582313674
+              ],
+              [
+                195.43076582313685,
+                260.83045154804194
+              ],
+              [
+                77.27079439289422,
+                197.7187291167952
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 20781.635403496482,
+                "centroid_CAD_mm": [
+                  -228.1306086855893,
+                  228.13060868558938,
+                  137.49476175484472
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -260.8304515480419,
+                    -195.43076582313674
+                  ],
+                  [
+                    195.43076582313685,
+                    260.83045154804194
+                  ],
+                  [
+                    77.27079439289422,
+                    197.7187291167952
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionBranchBoss_02_Plus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "43.0 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113697,
+            "bounds_CAD_mm": [
+              [
+                -231.7874963921387,
+                -205.84030788641226
+              ],
+              [
+                181.748999867345,
+                215.97948576431187
+              ],
+              [
+                151.7313166039531,
+                194.636219393291
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113697,
+                "centroid_CAD_mm": [
+                  -218.81390213927548,
+                  198.86424281582842,
+                  173.18376799862205
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -231.7874963921387,
+                    -205.84030788641226
+                  ],
+                  [
+                    181.748999867345,
+                    215.97948576431187
+                  ],
+                  [
+                    151.7313166039531,
+                    194.636219393291
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionWeb_02_Plus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "5.0 mm",
+            "Height": "14.700452718022444 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.JunctionWebRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845857,
+            "bounds_CAD_mm": [
+              [
+                -222.5146820440971,
+                -205.98899139719728
+              ],
+              [
+                195.21913785988687,
+                212.99674643891916
+              ],
+              [
+                169.42646840252868,
+                181.11971910384273
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845857,
+                "centroid_CAD_mm": [
+                  -214.2518367206472,
+                  204.10794214940302,
+                  175.27309375318572
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -222.5146820440971,
+                    -205.98899139719728
+                  ],
+                  [
+                    195.21913785988687,
+                    212.99674643891916
+                  ],
+                  [
+                    169.42646840252868,
+                    181.11971910384273
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionBranchBoss_02_Minus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "43.00000000000001 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113698,
+            "bounds_CAD_mm": [
+              [
+                -215.97948576431196,
+                -181.7489998673451
+              ],
+              [
+                205.8403078864124,
+                231.7874963921389
+              ],
+              [
+                151.73131660395325,
+                194.63621939329113
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113698,
+                "centroid_CAD_mm": [
+                  -198.86424281582853,
+                  218.81390213927565,
+                  173.1837679986222
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -215.97948576431196,
+                    -181.7489998673451
+                  ],
+                  [
+                    205.8403078864124,
+                    231.7874963921389
+                  ],
+                  [
+                    151.73131660395325,
+                    194.63621939329113
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionWeb_02_Minus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "5.0 mm",
+            "Height": "14.70045271802243 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.JunctionWebRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845844,
+            "bounds_CAD_mm": [
+              [
+                -212.99674643891905,
+                -195.21913785988676
+              ],
+              [
+                205.98899139719737,
+                222.51468204409716
+              ],
+              [
+                169.42646840252866,
+                181.11971910384273
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845844,
+                "centroid_CAD_mm": [
+                  -204.1079421494029,
+                  214.25183672064725,
+                  175.2730937531857
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -212.99674643891905,
+                    -195.21913785988676
+                  ],
+                  [
+                    205.98899139719737,
+                    222.51468204409716
+                  ],
+                  [
+                    169.42646840252866,
+                    181.11971910384273
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        }
+      ],
+      "source_cutting_tool": {
+        "name": "BraceJunctionFitting_02_CuttingToolUnion",
+        "type": "Part::MultiFuse",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [
+          "JunctionBranchBlindBore_02_Minus",
+          "JunctionBranchBlindBore_02_Plus",
+          "JunctionMainThroughBore_02"
+        ],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 3,
+          "volume_mm3": 13527.707750709107,
+          "bounds_CAD_mm": [
+            [
+              -261.84097101495547,
+              -184.14499026840429
+            ],
+            [
+              184.14499026840434,
+              261.8409710149556
+            ],
+            [
+              71.10099213532591,
+              212.77619753282337
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729617,
+              "centroid_CAD_mm": [
+                -218.37585054349123,
+                198.0880614010028,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -228.2334513152545,
+                  -208.5182497717279
+                ],
+                [
+                  184.14499026840434,
+                  212.03113253360124
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489405
+                ]
+              ]
+            },
+            {
+              "index": 2,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.707776372964,
+              "centroid_CAD_mm": [
+                -198.0880614010027,
+                218.37585054349128,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -212.03113253360112,
+                  -184.14499026840429
+                ],
+                [
+                  208.51824977172797,
+                  228.2334513152546
+                ],
+                [
+                  155.8080135370491,
+                  192.97253154489405
+                ]
+              ]
+            },
+            {
+              "index": 3,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 9094.292197963185,
+              "centroid_CAD_mm": [
+                -226.06131254829225,
+                226.06131254829234,
+                141.93859483407465
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -261.84097101495547,
+                  -190.28165408162897
+                ],
+                [
+                  190.28165408162909,
+                  261.8409710149556
+                ],
+                [
+                  71.10099213532591,
+                  212.77619753282337
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "previous_experiments": [
+        {
+          "variant": "global_original",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.57254197831
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.768111651938
+          }
+        },
+        {
+          "variant": "global_sequential",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.572540396446
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.76811006053
+          }
+        },
+        {
+          "variant": "global_branch_grouped",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.572536383
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.76810608591
+          }
+        },
+        {
+          "variant": "joint_centred_original",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.57387829664
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.76943201728
+          }
+        }
+      ],
+      "copied_operands": [
+        {
+          "name": "J02_JunctionMainSleeve_02",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 20781.635403496486,
+            "bounds_CAD_mm": [
+              [
+                -260.83045154804176,
+                -195.43076582313668
+              ],
+              [
+                195.43076582313685,
+                260.83045154804194
+              ],
+              [
+                77.27079439289422,
+                197.7187291167952
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 20781.635403496486,
+                "centroid_CAD_mm": [
+                  -228.13060868558924,
+                  228.13060868558938,
+                  137.49476175484472
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -260.83045154804176,
+                    -195.43076582313668
+                  ],
+                  [
+                    195.43076582313685,
+                    260.83045154804194
+                  ],
+                  [
+                    77.27079439289422,
+                    197.7187291167952
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J02_JunctionBranchBoss_02_Plus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113701,
+            "bounds_CAD_mm": [
+              [
+                -231.78749639213873,
+                -205.8403078864123
+              ],
+              [
+                181.74899986734496,
+                215.97948576431185
+              ],
+              [
+                151.73131660395305,
+                194.63621939329093
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113701,
+                "centroid_CAD_mm": [
+                  -218.8139021392755,
+                  198.8642428158284,
+                  173.183767998622
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -231.78749639213873,
+                    -205.8403078864123
+                  ],
+                  [
+                    181.74899986734496,
+                    215.97948576431185
+                  ],
+                  [
+                    151.73131660395305,
+                    194.63621939329093
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J02_JunctionWeb_02_Plus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845855,
+            "bounds_CAD_mm": [
+              [
+                -222.51468204409707,
+                -205.98899139719725
+              ],
+              [
+                195.21913785988679,
+                212.99674643891908
+              ],
+              [
+                169.4264684025286,
+                181.11971910384264
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845855,
+                "centroid_CAD_mm": [
+                  -214.25183672064716,
+                  204.10794214940293,
+                  175.27309375318563
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -222.51468204409707,
+                    -205.98899139719725
+                  ],
+                  [
+                    195.21913785988679,
+                    212.99674643891908
+                  ],
+                  [
+                    169.4264684025286,
+                    181.11971910384264
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J02_JunctionBranchBoss_02_Minus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113697,
+            "bounds_CAD_mm": [
+              [
+                -215.97948576431193,
+                -181.74899986734508
+              ],
+              [
+                205.8403078864124,
+                231.7874963921389
+              ],
+              [
+                151.73131660395325,
+                194.63621939329113
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113697,
+                "centroid_CAD_mm": [
+                  -198.8642428158285,
+                  218.81390213927565,
+                  173.1837679986222
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -215.97948576431193,
+                    -181.74899986734508
+                  ],
+                  [
+                    205.8403078864124,
+                    231.7874963921389
+                  ],
+                  [
+                    151.73131660395325,
+                    194.63621939329113
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J02_JunctionWeb_02_Minus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845844,
+            "bounds_CAD_mm": [
+              [
+                -212.996746438919,
+                -195.2191378598867
+              ],
+              [
+                205.9889913971973,
+                222.5146820440971
+              ],
+              [
+                169.42646840252863,
+                181.11971910384267
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845844,
+                "centroid_CAD_mm": [
+                  -204.10794214940285,
+                  214.2518367206472,
+                  175.27309375318566
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -212.996746438919,
+                    -195.2191378598867
+                  ],
+                  [
+                    205.9889913971973,
+                    222.5146820440971
+                  ],
+                  [
+                    169.42646840252863,
+                    181.11971910384267
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        }
+      ],
+      "copied_cutting_tool": {
+        "name": "J02_SavedCutter",
+        "type": "Part::Feature",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {},
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 3,
+          "volume_mm3": 13527.707750709107,
+          "bounds_CAD_mm": [
+            [
+              -261.84097101495547,
+              -184.14499026840429
+            ],
+            [
+              184.14499026840434,
+              261.8409710149556
+            ],
+            [
+              71.10099213532591,
+              212.77619753282337
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729617,
+              "centroid_CAD_mm": [
+                -218.37585054349123,
+                198.0880614010028,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -228.2334513152545,
+                  -208.5182497717279
+                ],
+                [
+                  184.14499026840434,
+                  212.03113253360124
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489405
+                ]
+              ]
+            },
+            {
+              "index": 2,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.707776372964,
+              "centroid_CAD_mm": [
+                -198.0880614010027,
+                218.37585054349128,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -212.03113253360112,
+                  -184.14499026840429
+                ],
+                [
+                  208.51824977172797,
+                  228.2334513152546
+                ],
+                [
+                  155.8080135370491,
+                  192.97253154489405
+                ]
+              ]
+            },
+            {
+              "index": 3,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 9094.292197963185,
+              "centroid_CAD_mm": [
+                -226.06131254829225,
+                226.06131254829234,
+                141.93859483407465
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -261.84097101495547,
+                  -190.28165408162897
+                ],
+                [
+                  190.28165408162909,
+                  261.8409710149556
+                ],
+                [
+                  71.10099213532591,
+                  212.77619753282337
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      }
+    },
+    {
+      "junction_index": 3,
+      "errors": [],
+      "experiments": [
+        {
+          "requested_union_refine": false,
+          "union": {
+            "name": "J03_UnionRefine0",
+            "type": "Part::MultiFuse",
+            "state": [
+              "Up-to-date"
+            ],
+            "dependencies": [
+              "J03_JunctionBranchBoss_03_Minus",
+              "J03_JunctionBranchBoss_03_Plus",
+              "J03_JunctionMainSleeve_03",
+              "J03_JunctionWeb_03_Minus",
+              "J03_JunctionWeb_03_Plus"
+            ],
+            "errors": [],
+            "MaterialHypothesis": null,
+            "MovingGroup": null,
+            "PhysicalRole": null,
+            "primitive_parameters": {
+              "Refine": "False"
+            },
+            "expressions": [],
+            "shape": {
+              "is_null": false,
+              "is_valid": true,
+              "solid_count": 1,
+              "volume_mm3": 34008.58282110171,
+              "bounds_CAD_mm": [
+                [
+                  -260.8304515480422,
+                  -181.74899986734505
+                ],
+                [
+                  -260.83045154804205,
+                  -181.74899986734508
+                ],
+                [
+                  77.27079439289435,
+                  197.71872911679534
+                ]
+              ],
+              "solids": [
+                {
+                  "index": 1,
+                  "errors": [],
+                  "valid": true,
+                  "volume_mm3": 34008.58282110171,
+                  "centroid_CAD_mm": [
+                    -220.57504411353406,
+                    -220.57504372462807,
+                    151.4827815294526
+                  ],
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480422,
+                      -181.74899986734505
+                    ],
+                    [
+                      -260.83045154804205,
+                      -181.74899986734508
+                    ],
+                    [
+                      77.27079439289435,
+                      197.71872911679534
+                    ]
+                  ]
+                }
+              ],
+              "errors": [],
+              "shape_type": "Compound"
+            }
+          },
+          "cuts": [
+            {
+              "requested_cut_refine": false,
+              "cut": {
+                "name": "J03_UnionRefine0_CutRefine0",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J03_SavedCutter",
+                  "J03_UnionRefine0"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "False"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.778878101824,
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480422,
+                      -181.74899986734505
+                    ],
+                    [
+                      -260.83045154804205,
+                      -181.74899986734508
+                    ],
+                    [
+                      77.27079439289435,
+                      197.71872911679534
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.778878101824,
+                      "centroid_CAD_mm": [
+                        -220.49338851374918,
+                        -220.49338791516902,
+                        151.6227030031971
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          -260.8304515480422,
+                          -181.74899986734505
+                        ],
+                        [
+                          -260.83045154804205,
+                          -181.74899986734508
+                        ],
+                        [
+                          77.27079439289435,
+                          197.71872911679534
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": false
+            },
+            {
+              "requested_cut_refine": true,
+              "cut": {
+                "name": "J03_UnionRefine0_CutRefine1",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J03_SavedCutter",
+                  "J03_UnionRefine0"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "True"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.77927140997,
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480422,
+                      -181.74899986734505
+                    ],
+                    [
+                      -260.83045154804205,
+                      -181.74899986734508
+                    ],
+                    [
+                      77.27079439289435,
+                      197.71872911679534
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.77927140997,
+                      "centroid_CAD_mm": [
+                        -220.49338829985734,
+                        -220.4933876707336,
+                        151.62270363646846
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          -260.8304515480422,
+                          -181.74899986734505
+                        ],
+                        [
+                          -260.83045154804205,
+                          -181.74899986734508
+                        ],
+                        [
+                          77.27079439289435,
+                          197.71872911679534
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": true
+            }
+          ],
+          "operand_minus_union": [
+            {
+              "operand": "J03_JunctionMainSleeve_03",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J03_JunctionBranchBoss_03_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J03_JunctionWeb_03_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J03_JunctionBranchBoss_03_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J03_JunctionWeb_03_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            }
+          ],
+          "errors": [],
+          "observed_union_refine": false
+        },
+        {
+          "requested_union_refine": true,
+          "union": {
+            "name": "J03_UnionRefine1",
+            "type": "Part::MultiFuse",
+            "state": [
+              "Up-to-date"
+            ],
+            "dependencies": [
+              "J03_JunctionBranchBoss_03_Minus",
+              "J03_JunctionBranchBoss_03_Plus",
+              "J03_JunctionMainSleeve_03",
+              "J03_JunctionWeb_03_Minus",
+              "J03_JunctionWeb_03_Plus"
+            ],
+            "errors": [],
+            "MaterialHypothesis": null,
+            "MovingGroup": null,
+            "PhysicalRole": null,
+            "primitive_parameters": {
+              "Refine": "True"
+            },
+            "expressions": [],
+            "shape": {
+              "is_null": false,
+              "is_valid": true,
+              "solid_count": 1,
+              "volume_mm3": 34008.58347007894,
+              "bounds_CAD_mm": [
+                [
+                  -260.8304515480422,
+                  -181.74899986734505
+                ],
+                [
+                  -260.83045154804205,
+                  -181.74899986734508
+                ],
+                [
+                  77.27079439289435,
+                  197.71872911679534
+                ]
+              ],
+              "solids": [
+                {
+                  "index": 1,
+                  "errors": [],
+                  "valid": true,
+                  "volume_mm3": 34008.58347007894,
+                  "centroid_CAD_mm": [
+                    -220.5750439016497,
+                    -220.57504347945283,
+                    151.4827820883949
+                  ],
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480422,
+                      -181.74899986734505
+                    ],
+                    [
+                      -260.83045154804205,
+                      -181.74899986734508
+                    ],
+                    [
+                      77.27079439289435,
+                      197.71872911679534
+                    ]
+                  ]
+                }
+              ],
+              "errors": [],
+              "shape_type": "Compound"
+            }
+          },
+          "cuts": [
+            {
+              "requested_cut_refine": false,
+              "cut": {
+                "name": "J03_UnionRefine1_CutRefine0",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J03_SavedCutter",
+                  "J03_UnionRefine1"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "False"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.77927140997,
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480422,
+                      -181.74899986734505
+                    ],
+                    [
+                      -260.83045154804205,
+                      -181.74899986734508
+                    ],
+                    [
+                      77.27079439289435,
+                      197.71872911679534
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.77927140997,
+                      "centroid_CAD_mm": [
+                        -220.4933882998574,
+                        -220.4933876707336,
+                        151.62270363646851
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          -260.8304515480422,
+                          -181.74899986734505
+                        ],
+                        [
+                          -260.83045154804205,
+                          -181.74899986734508
+                        ],
+                        [
+                          77.27079439289435,
+                          197.71872911679534
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": false
+            },
+            {
+              "requested_cut_refine": true,
+              "cut": {
+                "name": "J03_UnionRefine1_CutRefine1",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J03_SavedCutter",
+                  "J03_UnionRefine1"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "True"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.77927140997,
+                  "bounds_CAD_mm": [
+                    [
+                      -260.8304515480422,
+                      -181.74899986734505
+                    ],
+                    [
+                      -260.83045154804205,
+                      -181.74899986734508
+                    ],
+                    [
+                      77.27079439289435,
+                      197.71872911679534
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.77927140997,
+                      "centroid_CAD_mm": [
+                        -220.4933882998574,
+                        -220.4933876707336,
+                        151.62270363646851
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          -260.8304515480422,
+                          -181.74899986734505
+                        ],
+                        [
+                          -260.83045154804205,
+                          -181.74899986734508
+                        ],
+                        [
+                          77.27079439289435,
+                          197.71872911679534
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": true
+            }
+          ],
+          "operand_minus_union": [
+            {
+              "operand": "J03_JunctionMainSleeve_03",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J03_JunctionBranchBoss_03_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J03_JunctionWeb_03_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J03_JunctionBranchBoss_03_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J03_JunctionWeb_03_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            }
+          ],
+          "errors": [],
+          "observed_union_refine": true
+        }
+      ],
+      "union_directional_differences": {
+        "unrefined_minus_refined": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 0,
+          "volume_mm3": 0.0,
+          "errors": []
+        },
+        "refined_minus_unrefined": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 0,
+          "volume_mm3": 0.0,
+          "errors": []
+        }
+      },
+      "source_union": {
+        "name": "JunctionUnbored_03",
+        "type": "Part::MultiFuse",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [
+          "JunctionBranchBoss_03_Minus",
+          "JunctionBranchBoss_03_Plus",
+          "JunctionMainSleeve_03",
+          "JunctionWeb_03_Minus",
+          "JunctionWeb_03_Plus"
+        ],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 1,
+          "volume_mm3": 34008.583059792894,
+          "bounds_CAD_mm": [
+            [
+              -260.8304515480421,
+              -181.7489998673451
+            ],
+            [
+              -260.830451548042,
+              -181.748999867345
+            ],
+            [
+              77.27079439289437,
+              197.71872911679532
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 34008.583059792894,
+              "centroid_CAD_mm": [
+                -220.57504398265115,
+                -220.57504356949627,
+                151.48278178978637
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -260.8304515480421,
+                  -181.7489998673451
+                ],
+                [
+                  -260.830451548042,
+                  -181.748999867345
+                ],
+                [
+                  77.27079439289437,
+                  197.71872911679532
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "source_fitting": {
+        "name": "BraceJunctionFitting_03",
+        "type": "Part::Cut",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [
+          "BraceJunctionFitting_03_CuttingToolUnion",
+          "JunctionUnbored_03"
+        ],
+        "errors": [],
+        "MaterialHypothesis": "PETG_assumed_full_density",
+        "MovingGroup": "fixed_airframe",
+        "PhysicalRole": "Separate sleeve/two-branch printed junction hypothesis",
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 1,
+          "volume_mm3": 22093.778870092927,
+          "bounds_CAD_mm": [
+            [
+              -260.8304515480421,
+              -181.7489998673451
+            ],
+            [
+              -260.830451548042,
+              -181.748999867345
+            ],
+            [
+              77.27079439289437,
+              197.71872911679532
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 22093.778870092927,
+              "centroid_CAD_mm": [
+                -220.49338841798303,
+                -220.4933878023708,
+                151.62270319359723
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -260.8304515480421,
+                  -181.7489998673451
+                ],
+                [
+                  -260.830451548042,
+                  -181.748999867345
+                ],
+                [
+                  77.27079439289437,
+                  197.71872911679532
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "source_operands": [
+        {
+          "name": "JunctionMainSleeve_03",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "135.0 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 20781.635403496504,
+            "bounds_CAD_mm": [
+              [
+                -260.8304515480422,
+                -195.43076582313702
+              ],
+              [
+                -260.83045154804205,
+                -195.43076582313688
+              ],
+              [
+                77.27079439289436,
+                197.71872911679534
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 20781.635403496504,
+                "centroid_CAD_mm": [
+                  -228.1306086855896,
+                  -228.13060868558946,
+                  137.49476175484486
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -260.8304515480422,
+                    -195.43076582313702
+                  ],
+                  [
+                    -260.83045154804205,
+                    -195.43076582313688
+                  ],
+                  [
+                    77.27079439289436,
+                    197.71872911679534
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionBranchBoss_03_Plus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "42.99999999999999 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113696,
+            "bounds_CAD_mm": [
+              [
+                -215.97948576431193,
+                -181.74899986734505
+              ],
+              [
+                -231.78749639213862,
+                -205.84030788641218
+              ],
+              [
+                151.73131660395308,
+                194.63621939329093
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113696,
+                "centroid_CAD_mm": [
+                  -198.8642428158285,
+                  -218.8139021392754,
+                  173.183767998622
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -215.97948576431193,
+                    -181.74899986734505
+                  ],
+                  [
+                    -231.78749639213862,
+                    -205.84030788641218
+                  ],
+                  [
+                    151.73131660395308,
+                    194.63621939329093
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionWeb_03_Plus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "5.0 mm",
+            "Height": "14.700452718022452 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.JunctionWebRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845862,
+            "bounds_CAD_mm": [
+              [
+                -212.99674643891913,
+                -195.2191378598868
+              ],
+              [
+                -222.51468204409701,
+                -205.98899139719722
+              ],
+              [
+                169.42646840252857,
+                181.11971910384264
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845862,
+                "centroid_CAD_mm": [
+                  -204.107942149403,
+                  -214.2518367206471,
+                  175.2730937531856
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -212.99674643891913,
+                    -195.2191378598868
+                  ],
+                  [
+                    -222.51468204409701,
+                    -205.98899139719722
+                  ],
+                  [
+                    169.42646840252857,
+                    181.11971910384264
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionBranchBoss_03_Minus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "43.00000000000001 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113695,
+            "bounds_CAD_mm": [
+              [
+                -231.78749639213896,
+                -205.84030788641246
+              ],
+              [
+                -215.97948576431193,
+                -181.74899986734508
+              ],
+              [
+                151.73131660395325,
+                194.63621939329113
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113695,
+                "centroid_CAD_mm": [
+                  -218.8139021392757,
+                  -198.8642428158285,
+                  173.1837679986222
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -231.78749639213896,
+                    -205.84030788641246
+                  ],
+                  [
+                    -215.97948576431193,
+                    -181.74899986734508
+                  ],
+                  [
+                    151.73131660395325,
+                    194.63621939329113
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionWeb_03_Minus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "5.0 mm",
+            "Height": "14.70045271802243 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.JunctionWebRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845848,
+            "bounds_CAD_mm": [
+              [
+                -222.51468204409719,
+                -205.9889913971974
+              ],
+              [
+                -212.99674643891908,
+                -195.21913785988679
+              ],
+              [
+                169.42646840252868,
+                181.11971910384275
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845848,
+                "centroid_CAD_mm": [
+                  -214.2518367206473,
+                  -204.10794214940293,
+                  175.27309375318572
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -222.51468204409719,
+                    -205.9889913971974
+                  ],
+                  [
+                    -212.99674643891908,
+                    -195.21913785988679
+                  ],
+                  [
+                    169.42646840252868,
+                    181.11971910384275
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        }
+      ],
+      "source_cutting_tool": {
+        "name": "BraceJunctionFitting_03_CuttingToolUnion",
+        "type": "Part::MultiFuse",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [
+          "JunctionBranchBlindBore_03_Minus",
+          "JunctionBranchBlindBore_03_Plus",
+          "JunctionMainThroughBore_03"
+        ],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 3,
+          "volume_mm3": 13527.707750709082,
+          "bounds_CAD_mm": [
+            [
+              -261.8409710149556,
+              -184.1449902684044
+            ],
+            [
+              -261.8409710149555,
+              -184.14499026840429
+            ],
+            [
+              71.10099213532611,
+              212.77619753282337
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729612,
+              "centroid_CAD_mm": [
+                -198.08806140100285,
+                -218.37585054349123,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -212.0311325336013,
+                  -184.1449902684044
+                ],
+                [
+                  -228.23345131525454,
+                  -208.5182497717279
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489403
+                ]
+              ]
+            },
+            {
+              "index": 2,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.707776372961,
+              "centroid_CAD_mm": [
+                -218.37585054349137,
+                -198.0880614010027,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -228.23345131525468,
+                  -208.51824977172802
+                ],
+                [
+                  -212.03113253360112,
+                  -184.14499026840429
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489405
+                ]
+              ]
+            },
+            {
+              "index": 3,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 9094.292197963157,
+              "centroid_CAD_mm": [
+                -226.06131254829236,
+                -226.06131254829228,
+                141.93859483407476
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -261.8409710149556,
+                  -190.28165408162914
+                ],
+                [
+                  -261.8409710149555,
+                  -190.281654081629
+                ],
+                [
+                  71.10099213532611,
+                  212.77619753282337
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "previous_experiments": [
+        {
+          "variant": "global_original",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.58346753925
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.779268431386
+          }
+        },
+        {
+          "variant": "global_sequential",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.583468580604
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.77926946065
+          }
+        },
+        {
+          "variant": "global_branch_grouped",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.58346782022
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.77926872435
+          }
+        },
+        {
+          "variant": "joint_centred_original",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.58153349356
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.777250339277
+          }
+        }
+      ],
+      "copied_operands": [
+        {
+          "name": "J03_JunctionMainSleeve_03",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 20781.6354034965,
+            "bounds_CAD_mm": [
+              [
+                -260.83045154804205,
+                -195.4307658231369
+              ],
+              [
+                -260.830451548042,
+                -195.43076582313682
+              ],
+              [
+                77.27079439289423,
+                197.71872911679523
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 20781.6354034965,
+                "centroid_CAD_mm": [
+                  -228.13060868558946,
+                  -228.13060868558938,
+                  137.49476175484472
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -260.83045154804205,
+                    -195.4307658231369
+                  ],
+                  [
+                    -260.830451548042,
+                    -195.43076582313682
+                  ],
+                  [
+                    77.27079439289423,
+                    197.71872911679523
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J03_JunctionBranchBoss_03_Plus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113695,
+            "bounds_CAD_mm": [
+              [
+                -215.97948576431193,
+                -181.74899986734505
+              ],
+              [
+                -231.7874963921386,
+                -205.84030788641215
+              ],
+              [
+                151.73131660395305,
+                194.63621939329093
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113695,
+                "centroid_CAD_mm": [
+                  -198.8642428158285,
+                  -218.81390213927537,
+                  173.183767998622
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -215.97948576431193,
+                    -181.74899986734505
+                  ],
+                  [
+                    -231.7874963921386,
+                    -205.84030788641215
+                  ],
+                  [
+                    151.73131660395305,
+                    194.63621939329093
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J03_JunctionWeb_03_Plus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.570856584586,
+            "bounds_CAD_mm": [
+              [
+                -212.99674643891913,
+                -195.2191378598868
+              ],
+              [
+                -222.51468204409701,
+                -205.98899139719722
+              ],
+              [
+                169.42646840252857,
+                181.1197191038426
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.570856584586,
+                "centroid_CAD_mm": [
+                  -204.10794214940296,
+                  -214.2518367206471,
+                  175.2730937531856
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -212.99674643891913,
+                    -195.2191378598868
+                  ],
+                  [
+                    -222.51468204409701,
+                    -205.98899139719722
+                  ],
+                  [
+                    169.42646840252857,
+                    181.1197191038426
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J03_JunctionBranchBoss_03_Minus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113695,
+            "bounds_CAD_mm": [
+              [
+                -231.787496392139,
+                -205.8403078864125
+              ],
+              [
+                -215.97948576431193,
+                -181.74899986734508
+              ],
+              [
+                151.73131660395325,
+                194.63621939329113
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113695,
+                "centroid_CAD_mm": [
+                  -218.81390213927574,
+                  -198.8642428158285,
+                  173.1837679986222
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -231.787496392139,
+                    -205.8403078864125
+                  ],
+                  [
+                    -215.97948576431193,
+                    -181.74899986734508
+                  ],
+                  [
+                    151.73131660395325,
+                    194.63621939329113
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J03_JunctionWeb_03_Minus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845848,
+            "bounds_CAD_mm": [
+              [
+                -222.51468204409724,
+                -205.98899139719745
+              ],
+              [
+                -212.99674643891908,
+                -195.21913785988679
+              ],
+              [
+                169.42646840252863,
+                181.1197191038427
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845848,
+                "centroid_CAD_mm": [
+                  -214.25183672064736,
+                  -204.10794214940293,
+                  175.27309375318566
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    -222.51468204409724,
+                    -205.98899139719745
+                  ],
+                  [
+                    -212.99674643891908,
+                    -195.21913785988679
+                  ],
+                  [
+                    169.42646840252863,
+                    181.1197191038427
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        }
+      ],
+      "copied_cutting_tool": {
+        "name": "J03_SavedCutter",
+        "type": "Part::Feature",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {},
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 3,
+          "volume_mm3": 13527.707750709082,
+          "bounds_CAD_mm": [
+            [
+              -261.8409710149556,
+              -184.1449902684044
+            ],
+            [
+              -261.8409710149555,
+              -184.14499026840429
+            ],
+            [
+              71.10099213532611,
+              212.77619753282337
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729612,
+              "centroid_CAD_mm": [
+                -198.08806140100285,
+                -218.37585054349123,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -212.0311325336013,
+                  -184.1449902684044
+                ],
+                [
+                  -228.23345131525454,
+                  -208.5182497717279
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489403
+                ]
+              ]
+            },
+            {
+              "index": 2,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.707776372961,
+              "centroid_CAD_mm": [
+                -218.37585054349137,
+                -198.0880614010027,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -228.23345131525468,
+                  -208.51824977172802
+                ],
+                [
+                  -212.03113253360112,
+                  -184.14499026840429
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489405
+                ]
+              ]
+            },
+            {
+              "index": 3,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 9094.292197963157,
+              "centroid_CAD_mm": [
+                -226.06131254829236,
+                -226.06131254829228,
+                141.93859483407476
+              ],
+              "bounds_CAD_mm": [
+                [
+                  -261.8409710149556,
+                  -190.28165408162914
+                ],
+                [
+                  -261.8409710149555,
+                  -190.281654081629
+                ],
+                [
+                  71.10099213532611,
+                  212.77619753282337
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      }
+    },
+    {
+      "junction_index": 4,
+      "errors": [],
+      "experiments": [
+        {
+          "requested_union_refine": false,
+          "union": {
+            "name": "J04_UnionRefine0",
+            "type": "Part::MultiFuse",
+            "state": [
+              "Up-to-date"
+            ],
+            "dependencies": [
+              "J04_JunctionBranchBoss_04_Minus",
+              "J04_JunctionBranchBoss_04_Plus",
+              "J04_JunctionMainSleeve_04",
+              "J04_JunctionWeb_04_Minus",
+              "J04_JunctionWeb_04_Plus"
+            ],
+            "errors": [],
+            "MaterialHypothesis": null,
+            "MovingGroup": null,
+            "PhysicalRole": null,
+            "primitive_parameters": {
+              "Refine": "False"
+            },
+            "expressions": [],
+            "shape": {
+              "is_null": false,
+              "is_valid": true,
+              "solid_count": 1,
+              "volume_mm3": 34008.579344427555,
+              "bounds_CAD_mm": [
+                [
+                  181.74899986734505,
+                  260.83045154804205
+                ],
+                [
+                  -260.8304515480421,
+                  -181.74899986734505
+                ],
+                [
+                  77.2707943928944,
+                  197.71872911679537
+                ]
+              ],
+              "solids": [
+                {
+                  "index": 1,
+                  "errors": [],
+                  "valid": true,
+                  "volume_mm3": 34008.579344427555,
+                  "centroid_CAD_mm": [
+                    220.57504997359726,
+                    -220.5750433651478,
+                    151.48278036197814
+                  ],
+                  "bounds_CAD_mm": [
+                    [
+                      181.74899986734505,
+                      260.83045154804205
+                    ],
+                    [
+                      -260.8304515480421,
+                      -181.74899986734505
+                    ],
+                    [
+                      77.2707943928944,
+                      197.71872911679537
+                    ]
+                  ]
+                }
+              ],
+              "errors": [],
+              "shape_type": "Compound"
+            }
+          },
+          "cuts": [
+            {
+              "requested_cut_refine": false,
+              "cut": {
+                "name": "J04_UnionRefine0_CutRefine0",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J04_SavedCutter",
+                  "J04_UnionRefine0"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "False"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.775203606976,
+                  "bounds_CAD_mm": [
+                    [
+                      181.74899986734505,
+                      260.83045154804205
+                    ],
+                    [
+                      -260.8304515480421,
+                      -181.74899986734505
+                    ],
+                    [
+                      77.2707943928944,
+                      197.71872911679537
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.775203606976,
+                      "centroid_CAD_mm": [
+                        220.49339779978285,
+                        -220.4933874212719,
+                        151.62270105531078
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          181.74899986734505,
+                          260.83045154804205
+                        ],
+                        [
+                          -260.8304515480421,
+                          -181.74899986734505
+                        ],
+                        [
+                          77.2707943928944,
+                          197.71872911679537
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": false
+            },
+            {
+              "requested_cut_refine": true,
+              "cut": {
+                "name": "J04_UnionRefine0_CutRefine1",
+                "type": "Part::Cut",
+                "state": [
+                  "Up-to-date"
+                ],
+                "dependencies": [
+                  "J04_SavedCutter",
+                  "J04_UnionRefine0"
+                ],
+                "errors": [],
+                "MaterialHypothesis": null,
+                "MovingGroup": null,
+                "PhysicalRole": null,
+                "primitive_parameters": {
+                  "Refine": "True"
+                },
+                "expressions": [],
+                "shape": {
+                  "is_null": false,
+                  "is_valid": true,
+                  "solid_count": 1,
+                  "volume_mm3": 22093.775203606976,
+                  "bounds_CAD_mm": [
+                    [
+                      181.74899986734505,
+                      260.83045154804205
+                    ],
+                    [
+                      -260.8304515480421,
+                      -181.74899986734505
+                    ],
+                    [
+                      77.2707943928944,
+                      197.71872911679537
+                    ]
+                  ],
+                  "solids": [
+                    {
+                      "index": 1,
+                      "errors": [],
+                      "valid": true,
+                      "volume_mm3": 22093.775203606976,
+                      "centroid_CAD_mm": [
+                        220.49339779978285,
+                        -220.4933874212719,
+                        151.62270105531078
+                      ],
+                      "bounds_CAD_mm": [
+                        [
+                          181.74899986734505,
+                          260.83045154804205
+                        ],
+                        [
+                          -260.8304515480421,
+                          -181.74899986734505
+                        ],
+                        [
+                          77.2707943928944,
+                          197.71872911679537
+                        ]
+                      ]
+                    }
+                  ],
+                  "errors": [],
+                  "shape_type": "Compound"
+                }
+              },
+              "errors": [],
+              "observed_cut_refine": true
+            }
+          ],
+          "operand_minus_union": [
+            {
+              "operand": "J04_JunctionMainSleeve_04",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J04_JunctionBranchBoss_04_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J04_JunctionWeb_04_Plus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J04_JunctionBranchBoss_04_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            },
+            {
+              "operand": "J04_JunctionWeb_04_Minus",
+              "difference": {
+                "is_null": false,
+                "is_valid": true,
+                "solid_count": 0,
+                "volume_mm3": 0.0,
+                "errors": []
+              }
+            }
+          ],
+          "errors": [],
+          "observed_union_refine": false
+        },
+        {
+          "requested_union_refine": true,
+          "union": {
+            "name": "J04_UnionRefine1",
+            "type": "Part::MultiFuse",
+            "state": [
+              "Up-to-date"
+            ],
+            "dependencies": [
+              "J04_JunctionBranchBoss_04_Minus",
+              "J04_JunctionBranchBoss_04_Plus",
+              "J04_JunctionMainSleeve_04",
+              "J04_JunctionWeb_04_Minus",
+              "J04_JunctionWeb_04_Plus"
+            ],
+            "errors": [],
+            "MaterialHypothesis": null,
+            "MovingGroup": null,
+            "PhysicalRole": null,
+            "primitive_parameters": {
+              "Refine": "True"
+            },
+            "expressions": [],
+            "shape": {
+              "is_null": false,
+              "is_valid": false,
+              "solid_count": 1,
+              "volume_mm3": 33994.71394111753,
+              "bounds_CAD_mm": [
+                [
+                  181.74899986734505,
+                  260.83045154804205
+                ],
+                [
+                  -260.8304515480421,
+                  -181.74899986734505
+                ],
+                [
+                  77.27079439289437,
+                  197.71872911679537
+                ]
+              ],
+              "solids": [
+                {
+                  "index": 1,
+                  "errors": [],
+                  "valid": false,
+                  "volume_mm3": 33994.71394111753,
+                  "centroid_CAD_mm": [
+                    220.5774219928377,
+                    -220.58020250050714,
+                    151.47679816175042
+                  ],
+                  "bounds_CAD_mm": [
+                    [
+                      181.74899986734505,
+                      260.83045154804205
+                    ],
+                    [
+                      -260.8304515480421,
+                      -181.74899986734505
+                    ],
+                    [
+                      77.27079439289437,
+                      197.71872911679537
+                    ]
+                  ]
+                }
+              ],
+              "errors": [],
+              "shape_type": "Compound"
+            }
+          },
+          "cuts": [],
+          "operand_minus_union": [],
+          "errors": [],
+          "observed_union_refine": true,
+          "cuts_not_evaluated_reason": "Union is not one valid positive-volume solid"
+        }
+      ],
+      "union_directional_differences": null,
+      "source_union": {
+        "name": "JunctionUnbored_04",
+        "type": "Part::MultiFuse",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [
+          "JunctionBranchBoss_04_Minus",
+          "JunctionBranchBoss_04_Plus",
+          "JunctionMainSleeve_04",
+          "JunctionWeb_04_Minus",
+          "JunctionWeb_04_Plus"
+        ],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": false,
+          "solid_count": 1,
+          "volume_mm3": 33994.71449246111,
+          "bounds_CAD_mm": [
+            [
+              181.748999867345,
+              260.830451548042
+            ],
+            [
+              -260.8304515480421,
+              -181.7489998673451
+            ],
+            [
+              77.27079439289429,
+              197.71872911679532
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": false,
+              "volume_mm3": 33994.71449246111,
+              "centroid_CAD_mm": [
+                220.57742184308879,
+                -220.58020236083237,
+                151.476798523839
+              ],
+              "bounds_CAD_mm": [
+                [
+                  181.748999867345,
+                  260.830451548042
+                ],
+                [
+                  -260.8304515480421,
+                  -181.7489998673451
+                ],
+                [
+                  77.27079439289429,
+                  197.71872911679532
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "source_fitting": {
+        "name": "BraceJunctionFitting_04",
+        "type": "Part::Cut",
+        "state": [
+          "Touched",
+          "Invalid"
+        ],
+        "dependencies": [
+          "BraceJunctionFitting_04_CuttingToolUnion",
+          "JunctionUnbored_04"
+        ],
+        "errors": [],
+        "MaterialHypothesis": "PETG_assumed_full_density",
+        "MovingGroup": "fixed_airframe",
+        "PhysicalRole": "Separate sleeve/two-branch printed junction hypothesis",
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": true,
+          "is_valid": null,
+          "solid_count": 0,
+          "volume_mm3": null,
+          "bounds_CAD_mm": null,
+          "solids": [],
+          "errors": []
+        }
+      },
+      "source_operands": [
+        {
+          "name": "JunctionMainSleeve_04",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "135.0 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 20781.6354034965,
+            "bounds_CAD_mm": [
+              [
+                195.43076582313688,
+                260.8304515480421
+              ],
+              [
+                -260.8304515480421,
+                -195.43076582313702
+              ],
+              [
+                77.27079439289436,
+                197.71872911679537
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 20781.6354034965,
+                "centroid_CAD_mm": [
+                  228.13060868558946,
+                  -228.13060868558958,
+                  137.49476175484486
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    195.43076582313688,
+                    260.8304515480421
+                  ],
+                  [
+                    -260.8304515480421,
+                    -195.43076582313702
+                  ],
+                  [
+                    77.27079439289436,
+                    197.71872911679537
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionBranchBoss_04_Plus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "42.99999999999999 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.3357211136945,
+            "bounds_CAD_mm": [
+              [
+                205.84030788641218,
+                231.78749639213862
+              ],
+              [
+                -215.97948576431193,
+                -181.74899986734505
+              ],
+              [
+                151.73131660395305,
+                194.6362193932909
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.3357211136945,
+                "centroid_CAD_mm": [
+                  218.8139021392754,
+                  -198.86424281582848,
+                  173.18376799862196
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    205.84030788641218,
+                    231.78749639213862
+                  ],
+                  [
+                    -215.97948576431193,
+                    -181.74899986734505
+                  ],
+                  [
+                    151.73131660395305,
+                    194.6362193932909
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionWeb_04_Plus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "5.0 mm",
+            "Height": "14.700452718022467 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.JunctionWebRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845873,
+            "bounds_CAD_mm": [
+              [
+                205.98899139719725,
+                222.51468204409707
+              ],
+              [
+                -212.9967464389192,
+                -195.21913785988687
+              ],
+              [
+                169.4264684025286,
+                181.11971910384267
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845873,
+                "centroid_CAD_mm": [
+                  214.25183672064716,
+                  -204.10794214940304,
+                  175.27309375318563
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    205.98899139719725,
+                    222.51468204409707
+                  ],
+                  [
+                    -212.9967464389192,
+                    -195.21913785988687
+                  ],
+                  [
+                    169.4264684025286,
+                    181.11971910384267
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionBranchBoss_04_Minus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "7.0 mm",
+            "Height": "42.99999999999998 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.SharedSocketOuterRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113694,
+            "bounds_CAD_mm": [
+              [
+                181.74899986734505,
+                215.97948576431193
+              ],
+              [
+                -231.78749639213888,
+                -205.84030788641243
+              ],
+              [
+                151.73131660395322,
+                194.63621939329107
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113694,
+                "centroid_CAD_mm": [
+                  198.8642428158285,
+                  -218.81390213927565,
+                  173.18376799862216
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    181.74899986734505,
+                    215.97948576431193
+                  ],
+                  [
+                    -231.78749639213888,
+                    -205.84030788641243
+                  ],
+                  [
+                    151.73131660395322,
+                    194.63621939329107
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "JunctionWeb_04_Minus",
+          "type": "Part::Cylinder",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [
+            "Parameters",
+            "Parameters"
+          ],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {
+            "Radius": "5.0 mm",
+            "Height": "14.70045271802243 mm",
+            "Angle": "360.0 deg"
+          },
+          "expressions": [
+            [
+              "Radius",
+              "Parameters.JunctionWebRadius"
+            ]
+          ],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845846,
+            "bounds_CAD_mm": [
+              [
+                195.2191378598868,
+                212.9967464389191
+              ],
+              [
+                -222.51468204409724,
+                -205.98899139719745
+              ],
+              [
+                169.42646840252866,
+                181.11971910384273
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845846,
+                "centroid_CAD_mm": [
+                  204.10794214940296,
+                  -214.25183672064733,
+                  175.2730937531857
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    195.2191378598868,
+                    212.9967464389191
+                  ],
+                  [
+                    -222.51468204409724,
+                    -205.98899139719745
+                  ],
+                  [
+                    169.42646840252866,
+                    181.11971910384273
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        }
+      ],
+      "source_cutting_tool": {
+        "name": "BraceJunctionFitting_04_CuttingToolUnion",
+        "type": "Part::MultiFuse",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [
+          "JunctionBranchBlindBore_04_Minus",
+          "JunctionBranchBlindBore_04_Plus",
+          "JunctionMainThroughBore_04"
+        ],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {
+          "Refine": "True"
+        },
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 3,
+          "volume_mm3": 13527.707750709096,
+          "bounds_CAD_mm": [
+            [
+              184.14499026840429,
+              261.84097101495547
+            ],
+            [
+              -261.84097101495564,
+              -184.1449902684044
+            ],
+            [
+              71.10099213532597,
+              212.77619753282337
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729612,
+              "centroid_CAD_mm": [
+                218.37585054349125,
+                -198.08806140100285,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  208.51824977172794,
+                  228.23345131525457
+                ],
+                [
+                  -212.0311325336013,
+                  -184.1449902684044
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489403
+                ]
+              ]
+            },
+            {
+              "index": 2,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729617,
+              "centroid_CAD_mm": [
+                198.08806140100273,
+                -218.37585054349137,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  184.14499026840429,
+                  212.03113253360118
+                ],
+                [
+                  -228.23345131525468,
+                  -208.51824977172805
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489403
+                ]
+              ]
+            },
+            {
+              "index": 3,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 9094.292197963174,
+              "centroid_CAD_mm": [
+                226.06131254829225,
+                -226.0613125482924,
+                141.93859483407465
+              ],
+              "bounds_CAD_mm": [
+                [
+                  190.28165408162903,
+                  261.84097101495547
+                ],
+                [
+                  -261.84097101495564,
+                  -190.28165408162914
+                ],
+                [
+                  71.10099213532597,
+                  212.77619753282337
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "previous_experiments": [
+        {
+          "variant": "global_original",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71392749986
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          }
+        },
+        {
+          "variant": "global_sequential",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": true,
+            "is_valid": null,
+            "solid_count": 0,
+            "volume_mm3": null
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          }
+        },
+        {
+          "variant": "global_branch_grouped",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.713929922844
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          }
+        },
+        {
+          "variant": "joint_centred_original",
+          "union_refine": true,
+          "cut_refine": true,
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71448281539
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          }
+        }
+      ],
+      "copied_operands": [
+        {
+          "name": "J04_JunctionMainSleeve_04",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 20781.6354034965,
+            "bounds_CAD_mm": [
+              [
+                195.43076582313688,
+                260.8304515480421
+              ],
+              [
+                -260.83045154804205,
+                -195.43076582313697
+              ],
+              [
+                77.27079439289436,
+                197.71872911679537
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 20781.6354034965,
+                "centroid_CAD_mm": [
+                  228.13060868558946,
+                  -228.1306086855895,
+                  137.49476175484486
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    195.43076582313688,
+                    260.8304515480421
+                  ],
+                  [
+                    -260.83045154804205,
+                    -195.43076582313697
+                  ],
+                  [
+                    77.27079439289436,
+                    197.71872911679537
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J04_JunctionBranchBoss_04_Plus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113694,
+            "bounds_CAD_mm": [
+              [
+                205.8403078864122,
+                231.78749639213865
+              ],
+              [
+                -215.97948576431196,
+                -181.74899986734508
+              ],
+              [
+                151.7313166039531,
+                194.63621939329096
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113694,
+                "centroid_CAD_mm": [
+                  218.81390213927543,
+                  -198.8642428158285,
+                  173.18376799862202
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    205.8403078864122,
+                    231.78749639213865
+                  ],
+                  [
+                    -215.97948576431196,
+                    -181.74899986734508
+                  ],
+                  [
+                    151.7313166039531,
+                    194.63621939329096
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J04_JunctionWeb_04_Plus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845875,
+            "bounds_CAD_mm": [
+              [
+                205.9889913971973,
+                222.51468204409713
+              ],
+              [
+                -212.99674643891922,
+                -195.2191378598869
+              ],
+              [
+                169.42646840252857,
+                181.11971910384264
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845875,
+                "centroid_CAD_mm": [
+                  214.25183672064722,
+                  -204.10794214940307,
+                  175.2730937531856
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    205.9889913971973,
+                    222.51468204409713
+                  ],
+                  [
+                    -212.99674643891922,
+                    -195.2191378598869
+                  ],
+                  [
+                    169.42646840252857,
+                    181.11971910384264
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J04_JunctionBranchBoss_04_Minus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 6619.335721113697,
+            "bounds_CAD_mm": [
+              [
+                181.74899986734496,
+                215.97948576431185
+              ],
+              [
+                -231.78749639213876,
+                -205.84030788641232
+              ],
+              [
+                151.7313166039531,
+                194.63621939329096
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 6619.335721113697,
+                "centroid_CAD_mm": [
+                  198.8642428158284,
+                  -218.81390213927554,
+                  173.18376799862205
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    181.74899986734496,
+                    215.97948576431185
+                  ],
+                  [
+                    -231.78749639213876,
+                    -205.84030788641232
+                  ],
+                  [
+                    151.7313166039531,
+                    194.63621939329096
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        },
+        {
+          "name": "J04_JunctionWeb_04_Minus",
+          "type": "Part::Feature",
+          "state": [
+            "Up-to-date"
+          ],
+          "dependencies": [],
+          "errors": [],
+          "MaterialHypothesis": null,
+          "MovingGroup": null,
+          "PhysicalRole": null,
+          "primitive_parameters": {},
+          "expressions": [],
+          "shape": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 1154.5708565845844,
+            "bounds_CAD_mm": [
+              [
+                195.21913785988676,
+                212.99674643891905
+              ],
+              [
+                -222.51468204409719,
+                -205.9889913971974
+              ],
+              [
+                169.4264684025286,
+                181.11971910384264
+              ]
+            ],
+            "solids": [
+              {
+                "index": 1,
+                "errors": [],
+                "valid": true,
+                "volume_mm3": 1154.5708565845844,
+                "centroid_CAD_mm": [
+                  204.1079421494029,
+                  -214.25183672064728,
+                  175.27309375318563
+                ],
+                "bounds_CAD_mm": [
+                  [
+                    195.21913785988676,
+                    212.99674643891905
+                  ],
+                  [
+                    -222.51468204409719,
+                    -205.9889913971974
+                  ],
+                  [
+                    169.4264684025286,
+                    181.11971910384264
+                  ]
+                ]
+              }
+            ],
+            "errors": [],
+            "shape_type": "Solid"
+          }
+        }
+      ],
+      "copied_cutting_tool": {
+        "name": "J04_SavedCutter",
+        "type": "Part::Feature",
+        "state": [
+          "Up-to-date"
+        ],
+        "dependencies": [],
+        "errors": [],
+        "MaterialHypothesis": null,
+        "MovingGroup": null,
+        "PhysicalRole": null,
+        "primitive_parameters": {},
+        "expressions": [],
+        "shape": {
+          "is_null": false,
+          "is_valid": true,
+          "solid_count": 3,
+          "volume_mm3": 13527.707750709096,
+          "bounds_CAD_mm": [
+            [
+              184.14499026840429,
+              261.84097101495547
+            ],
+            [
+              -261.84097101495564,
+              -184.1449902684044
+            ],
+            [
+              71.10099213532597,
+              212.77619753282337
+            ]
+          ],
+          "solids": [
+            {
+              "index": 1,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729612,
+              "centroid_CAD_mm": [
+                218.37585054349125,
+                -198.08806140100285,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  208.51824977172794,
+                  228.23345131525457
+                ],
+                [
+                  -212.0311325336013,
+                  -184.1449902684044
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489403
+                ]
+              ]
+            },
+            {
+              "index": 2,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 2216.7077763729617,
+              "centroid_CAD_mm": [
+                198.08806140100273,
+                -218.37585054349137,
+                174.39027254097158
+              ],
+              "bounds_CAD_mm": [
+                [
+                  184.14499026840429,
+                  212.03113253360118
+                ],
+                [
+                  -228.23345131525468,
+                  -208.51824977172805
+                ],
+                [
+                  155.80801353704913,
+                  192.97253154489403
+                ]
+              ]
+            },
+            {
+              "index": 3,
+              "errors": [],
+              "valid": true,
+              "volume_mm3": 9094.292197963174,
+              "centroid_CAD_mm": [
+                226.06131254829225,
+                -226.0613125482924,
+                141.93859483407465
+              ],
+              "bounds_CAD_mm": [
+                [
+                  190.28165408162903,
+                  261.84097101495547
+                ],
+                [
+                  -261.84097101495564,
+                  -190.28165408162914
+                ],
+                [
+                  71.10099213532597,
+                  212.77619753282337
+                ]
+              ]
+            }
+          ],
+          "errors": [],
+          "shape_type": "Compound"
+        }
+      },
+      "union_comparison_not_evaluated_reason": "Both unions must be usable before material-difference comparison"
+    }
+  ],
+  "errors": [],
+  "source_document_saved": false,
+  "prototype_repaired": false,
+  "root_cause_confirmed": false,
+  "geometry_acceptance": null,
+  "inputs_after": {
+    "native": {
+      "path": "cad/pdr_r12_chief/physical_integration_prototype_20261014_01/physical_integration_prototype_01.FCStd",
+      "sha256": "45010bcd928d38cd580f8ded06273e561d290a671d7ecfb771943825fee2fa16"
+    },
+    "helpers": {
+      "path": "cad/pdr_r12_chief/inspect_physical_integration_topology_20261014_01.py",
+      "sha256": "94e3a6a12cfe0ec7222add47355afeb9199ae8df1f97bcf7fe0d57e3614c0f6f"
+    },
+    "previous_diagnostics": {
+      "path": "cad/pdr_r12_chief/junction_boolean_diagnostics_20261014_01/observations.json",
+      "sha256": "72f175d2b9e6ae7f454c83afde4140aa350712b32362f3d6e71963038d6a3df4"
+    },
+    "diagnostic_source": {
+      "path": "cad/pdr_r12_chief/diagnose_junction_refine_20261014_02.py",
+      "sha256": "b2ce4df7cab3a4941cbd0ff2a8a23564dfbb2ec7e17337978b1faa0a4ce7c9b9"
+    }
+  },
+  "input_bytes_unchanged": true,
+  "limitations": [
+    "Directional differences use the same geometry kernel and are not independent proof of set equivalence.",
+    "No difference-volume acceptance threshold is introduced.",
+    "No fitting repair, regenerated prototype, parameter test or export verification is performed.",
+    "Joint assembly, material properties, mass, clearances and structural adequacy remain unaccepted.",
+    "No vehicle selection, complete budget or review acceptance is established."
+  ]
+}

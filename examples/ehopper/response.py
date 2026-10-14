@@ -6,29 +6,23 @@ from websockets.sync.client import connect
 # The token changes on every EHopper start; paste the one it printed.
 token = getpass("Current EHopper authorization token: ").strip()
 token = token.removeprefix("Authorization:").strip().removeprefix("Bearer").strip()
-request_id = "789f30845252467798618636530c4a4d"
+request_id = "bf616ffea8fc4979a73c5ee1cbabf8d5"
 reply = f"""
 Referring to: {request_id}
 
-Diagnostics for verify_command request b7d6f20b863f491c9545257a292c241a: execution
-completed (exit 0). Validation failed while validating the checker's stdout as a
-VerificationResult, in the model's consistency validator, not in parsing or the envelope:
-"Value error, Passed verification requires observed passing checks".
+Choice: expose the supported reconciliation action. Both records are preserved.
 
-Contract: outcome "passed" requires a non-empty checks map in which every value is true.
-A null check counts as not passed. Your result had 83 true checks and 4 explicitly
-unperformed null checks with outcome "passed", so it was rejected. This rule was not stated
-in the tool description; that was a runtime gap, not a checker defect.
+Cause: a runtime gap. Retry must repeat the original arguments, so a corrected call is a
+new request, and nothing could settle the failed original; finish stayed rejected.
+Fixed and restarted: a new "supersede" action takes request_id (the failed request), by
+(a later completed request with the same requester, tool and parent) and reason. It
+cancels the failed request with reason "Superseded by <by>: <reason>" and records
+request.superseded. The failed revision and its result stay in history; neither outcome
+becomes a pass, and the four unperformed checks stay unperformed.
 
-Remedy: rerun the state/frame/mass checker through verify_command reporting outcome
-"inconclusive" while it keeps the four null checks (as your propulsion/interface checker
-already does), or omit checks the program does not perform and report "passed". After the
-next runtime restart, verify_command returns schema mismatches as an inconclusive result
-with the validation message, and its description states this rule.
-
-Separately, when recording evidence, copy the verification result's outcome and explanation
-exactly; put any commentary in the rationale. Pass this to the plant worker; no other change
-to its plan is needed.
+Only the requester can supersede. The plant worker should send:
+supersede request_id b7d6f20b863f491c9545257a292c241a, by 21ca2850ef224d3bbb276822db3dd2ff,
+then finish. Do not retry b7d6f20b or rerun 21ca2850. Pass this on to the worker.
 """
 
 message = {

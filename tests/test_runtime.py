@@ -19,6 +19,7 @@ from guacamole import (
     ContextSpec,
     DecisionRequest,
     Note,
+    ProducedFile,
     Project,
     ProjectRequest,
     Qualification,
@@ -45,6 +46,8 @@ from guacamole.contracts import (
     Decide,
     Finish,
     MessageEnvelope,
+    Publish,
+    PublishedFile,
     Rationale,
     Read,
     Record,
@@ -940,7 +943,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     json.loads(packet.prompt)["state"]["last_observation"]
                 )
                 actions = (
-                    Acknowledge(message_id="missing"),
+                    Acknowledge(message_ids=("missing",)),
                     ToolCall(tool=tool.definition.grant, arguments={}),
                     Wait(reason="Fixture finished"),
                 )
@@ -1252,6 +1255,16 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     {omission.item for omission in packet_with_omission.deferred},
                 )
                 self.assertNotIn(huge.id, packet_with_omission.message_ids)
+                # Acknowledged is not answered: finish still waits on the question.
+                project.activity.acknowledge(agent.id, message.id)
+                owed = await project.contexts.build(
+                    agent,
+                    "task-request",
+                    TestReasoning(),
+                    instructions="test",
+                    state={},
+                )
+                self.assertIn(message.id, owed.message_ids)
                 project.store.put(
                     "inbox",
                     message.id,
@@ -1310,6 +1323,175 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 )
                 reopened.activity.transition(request.id, "dispatched", actor="runtime")
                 self.assertEqual(len(reopened.activity.get(request.id).attempts), 2)
+
+    async def test_context_drops_carried_mail_and_renders_newest_reads_last(self):
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory)) as project,
+        ):
+            refs = []
+            for name in ("human", "older", "newer"):
+                path = Path(directory) / f"{name}.txt"
+                path.write_text(f"{name} fixture")
+                refs.append(project.ingest(path))
+            human, older, newer = refs
+            agent = AgentSpec(
+                id="worker",
+                task_id="task",
+                parent_id="chief",
+                objective="Inspect",
+                context=ContextSpec(
+                    instructions="Fixture instructions",
+                    pinned=(human,),
+                    selected=(newer, older),
+                    max_input_tokens=100_000,
+                ),
+                decision_id=None,
+            )
+            store = project.store
+            store.put("agent", agent.id, agent, actor="script")
+            gone = AgentState(request_id="fixture", status="superseded")
+            store.put("agent_state", "gone", gone, actor="script")
+
+            def send(sender: str, kind: str, *cited: Ref) -> str:
+                message = MessageEnvelope(
+                    project_id=store.project_id,
+                    run_id="run",
+                    sender=sender,
+                    recipient=agent.id,
+                    kind=kind,
+                    schema_id="Note@1",
+                    payload=Note(text=f"{sender} {kind}").model_dump(mode="json"),
+                    context_refs=cited,
+                )
+                project.activity.deliver(message)
+                return message.id
+
+            echo = send("human:fixture", "finding", human)
+            sent = {echo, send("gone", "finding"), send("gone", "request")}
+            live = send("peer", "finding")
+            # A superseded sender can no longer take the reply its request asked for.
+            self.assertEqual(project.activity.obligations(agent.id), ())
+            packets = [
+                await project.contexts.build(
+                    agent, "request", TestReasoning(), instructions="test", state={}
+                )
+                for _ in range(2)
+            ]
+            self.assertEqual(set(packets[0].message_ids), {*sent, live})
+            # Shown once; then the pinned source carries it, or its sender is gone.
+            self.assertEqual(packets[1].message_ids, (live,))
+            data = json.loads(packets[1].prompt)
+            self.assertEqual(data["user_instructions"], "Fixture instructions")
+            self.assertFalse(
+                {"instructions", "pinned", "selected", "summaries"}
+                & data["agent"]["context"].keys()
+            )
+            # Pinned first, then reads oldest to newest, so a new read appends.
+            self.assertEqual(
+                [s["ref"]["id"] for s in data["sources"]],
+                [human.id, older.id, newer.id],
+            )
+            components = packets[1].components
+            self.assertGreater(
+                components["sources.selected"], components["sources.pinned"]
+            )
+
+    async def test_one_publish_takes_a_runs_files_after_its_arguments_return(self):
+        def pair() -> list[ProducedFile]:
+            paths = [project.output_path(Path(n)) for n in ("first.txt", "second.txt")]
+            for path in paths:
+                path.write_text(f"TEST FIXTURE {path.name}")
+            return [ProducedFile.from_path(path) for path in paths]
+
+        class Publisher(TestReasoning):
+            def __init__(self):
+                self.prompts = []
+
+            async def respond(self, packet):
+                data = json.loads(packet.prompt)
+                self.prompts.append(data)
+                store = project.store
+                requirement = store.maybe("requirement", "r")
+                runs = [r for r in project.requests() if r.kind == "tool"]
+                if requirement is None:
+                    action = Record(
+                        record=Requirement(
+                            id="r",
+                            wording="fixture",
+                            source=store.get("source", "brief").ref,
+                            source_quote="fixture",
+                        )
+                    )
+                elif not store.list("decision"):
+                    action = Decide(
+                        selected="fixture",
+                        request=plan_request(
+                            requirement.ref, tools=(tool.definition.grant,)
+                        ),
+                    )
+                elif not runs:
+                    action = ToolCall(
+                        tool=tool.definition.grant,
+                        arguments={},
+                        inputs=(requirement.ref,),
+                    )
+                elif not store.list("artifact"):
+                    action = Publish(
+                        files=tuple(
+                            PublishedFile(
+                                path=file["path"],
+                                artifact_id=Path(file["path"]).stem,
+                                artifact_kind="editable-design",
+                            )
+                            for file in runs[0].result
+                        ),
+                        tool_request=runs[0].id,
+                        inputs=(requirement.ref,),
+                        requirements=(requirement.ref,),
+                    )
+                elif data["messages"]:
+                    action = Acknowledge(
+                        message_ids=tuple(m["id"] for m in data["messages"])
+                    )
+                else:
+                    action = Wait(reason="Fixture finished")
+                return AgentTurn(
+                    rationale=Rationale(objective="Fixture", explanation="Fixture"),
+                    action=action,
+                )
+
+        tools = ToolRegistry()
+        tool = tools.register(pair)
+        provider = Publisher()
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), tools=tools, reasoning=provider) as project,
+        ):
+            await project.run(
+                ProjectRequest(
+                    description="fixture",
+                    context=ContextSpec(
+                        max_input_tokens=200_000, reserved_output_tokens=1000
+                    ),
+                )
+            )
+            (run,) = [r for r in project.requests() if r.kind == "tool"]
+            artifacts = {s.ref.id for s in project.store.list("artifact")}
+            (delegation,) = project.inbox(provider.prompts[0]["agent"]["id"])
+        self.assertEqual(artifacts, {"first", "second"})
+        kinds = [p["state"]["last_observation"] for p in provider.prompts]
+        publish = next(i for i, o in enumerate(kinds) if "refs" in o) - 1
+        self.assertEqual(len(kinds[publish + 1]["refs"]), 2)
+        # The call's full arguments arrived without a read turn.
+        self.assertIn(
+            ("job_inputs", run.id),
+            {
+                (s["ref"]["kind"], s["ref"]["id"])
+                for s in provider.prompts[publish]["sources"]
+            },
+        )
+        self.assertIsNotNone(delegation.acknowledged_at)
 
     async def test_restart_keeps_peer_requests_answerable(self):
         with tempfile.TemporaryDirectory() as directory:

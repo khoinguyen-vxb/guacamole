@@ -80,7 +80,10 @@ class Activity:
                     and r.status not in {"completed", "cancelled"}
                 ]
                 if pending:
-                    raise ValueError(f"Required child requests unresolved: {pending}")
+                    raise ValueError(
+                        f"Required child requests unresolved: {pending}; retry a failed "
+                        "one, or supersede it with the completed request that corrected it"
+                    )
             attempts = record.attempts
             if status == "dispatched":
                 if record.status != "queued":
@@ -139,6 +142,46 @@ class Activity:
             request_id=id,
             event="request.retry_requested",
         )
+        return changed
+
+    def supersede(self, id: str, *, by: str, actor: str, reason: str) -> RequestRecord:
+        """Cancel a failed request in favour of its completed correction.
+
+        Retry must repeat the same arguments; a corrected call is a new request.
+        The failed revision and its result stay in history.
+        """
+        with self.store.atomic():
+            record, correction = self.get(id), self.get(by)
+            if record.status != "failed":
+                raise ValueError("Only a failed request can be superseded")
+            if actor not in {"script", record.requester}:
+                raise PermissionError("Only the requester or the user can supersede")
+            if (
+                correction.status != "completed"
+                or correction.created_at <= record.created_at
+                or (correction.requester, correction.target, correction.parent_id)
+                != (record.requester, record.target, record.parent_id)
+            ):
+                raise ValueError(
+                    "The correction must be a later completed request with the same "
+                    "requester, target and parent"
+                )
+            if not reason.strip():
+                raise ValueError("Supersession needs a recorded reason")
+            changed = record.model_copy(
+                update={
+                    "status": "cancelled",
+                    "reason": f"Superseded by {by}: {reason}",
+                }
+            )
+            self.store.put(
+                "request",
+                id,
+                changed,
+                actor=actor,
+                request_id=id,
+                event="request.superseded",
+            )
         return changed
 
     def recover(self) -> None:
@@ -231,6 +274,27 @@ class Activity:
             sorted(
                 (e for e in entries if e.message.recipient == agent_id),
                 key=lambda e: e.message.created_at,
+            )
+        )
+
+    def obligations(self, agent_id: str) -> tuple[InboxEntry, ...]:
+        """Messages owed a reply; the agent cannot finish until each is answered.
+
+        A sender that completed or was superseded can no longer take a reply.
+        """
+        return tuple(
+            e
+            for e in self.inbox(agent_id)
+            if e.response_required
+            and e.response_message_id is None
+            and e.message.kind != "delegation"
+            and (
+                not e.message.request_id
+                or self.get(e.message.request_id).status != "cancelled"
+            )
+            and (
+                (sender := self.store.maybe("agent_state", e.message.sender)) is None
+                or sender.data["status"] not in {"completed", "superseded"}
             )
         )
 

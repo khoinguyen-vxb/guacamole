@@ -14,7 +14,7 @@ from mcp import Client, StdioServerParameters
 from pydantic import BaseModel, ValidationError
 
 from guacamole import ProducedFile, Project, ToolRegistry
-from guacamole.contracts import FileRecord
+from guacamole.contracts import FileRecord, RequestRecord
 from guacamole.tools.mcp import ToolSession, create_mcp
 from guacamole.websocket import WebSocketBridge
 
@@ -171,6 +171,46 @@ class ToolsTests(unittest.IsolatedAsyncioTestCase):
                 self.assertGreater(len(trace["records"]), 3)
             self.assertEqual(len(project.events()), count)
             self.assertEqual(attempts, 2)
+
+    async def test_failed_child_superseded_by_its_correction(self):
+        async def check(passed: bool) -> int:
+            if not passed:
+                raise ValueError("fixture checker rejected")
+            return 1
+
+        tools = ToolRegistry()
+        tool = tools.register(check)
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), tools=tools) as project,
+        ):
+            activity = project.activity
+            parent = activity.request(
+                RequestRecord(
+                    run_id="r",
+                    requester="script",
+                    target="worker",
+                    kind="agent",
+                    arguments={},
+                    purpose="fixture task",
+                )
+            )
+            failed = project.executor.submit(
+                tool, {"passed": False}, parent_id=parent.id
+            )
+            with self.assertRaises(ValueError):
+                await failed.collect()
+            fixed = project.executor.submit(tool, {"passed": True}, parent_id=parent.id)
+            await fixed.collect()
+            with self.assertRaisesRegex(ValueError, "supersede"):
+                activity.transition(parent.id, "completed", actor="script")
+            for by, actor in ((failed.id, "script"), (fixed.id, "other-agent")):
+                with self.assertRaises((ValueError, PermissionError)):
+                    activity.supersede(failed.id, by=by, actor=actor, reason="fixed")
+            activity.supersede(failed.id, by=fixed.id, actor="script", reason="fixed")
+            self.assertEqual(failed.record.status, "cancelled")
+            self.assertIn(fixed.id, failed.record.reason or "")
+            activity.transition(parent.id, "completed", actor="script")
 
     async def test_contracts_and_atomic_dispatch(self):
         registry = ToolRegistry()

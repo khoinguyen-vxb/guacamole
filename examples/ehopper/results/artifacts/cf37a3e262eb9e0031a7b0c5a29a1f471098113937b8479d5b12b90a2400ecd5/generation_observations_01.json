@@ -1,0 +1,3013 @@
+{
+  "schema": "hopper_physical_integration_generation_observations/1",
+  "generated_at_UTC": "2026-10-14T00:02:58.017303+00:00",
+  "authority": {
+    "work_plan": "66c7448f443f44ac9a016a1b384593a2 revision 1",
+    "development_decision": "9aaf88cc8ecf4e8ab82a66cdae8731b1 revision 1",
+    "parent_configuration": "PDR-R12-FIXED-STRUCTURE-RECOVERY-CONFIG-01 revision 1",
+    "vehicle_requirement": "REQ-VEHICLE-CONFIGURATION revision 3",
+    "placement_requirement": "REQ-PROPULSION-PLACEMENT revision 1",
+    "budget_requirement": "REQ-HARDWARE-BUDGET revision 5",
+    "scope": "One preliminary integration prototype; demonstrate separate member/fitting geometry and fixed support packaging before transferring comparable fidelity to retained alternatives. No architecture, commercial component, travel limit, manufacturing release or review baseline is selected."
+  },
+  "inputs_before": [
+    {
+      "path": "cad/pdr_r12_chief/build_physical_integration_prototype_20261014_01.py",
+      "sha256": "d9a929d840a83343e8b457a916d0d0b0029f2d2286b9b64f74b8987cc5650253"
+    },
+    {
+      "path": "cad/pdr_r12_chief/physical_integration_geometry_20261014_01.py",
+      "sha256": "c8e74b814c41899236df91d885abc876c5e0f950a514f19d4719a61a0aeee7e6"
+    },
+    {
+      "path": "cad/pdr_r12_chief/physical_integration_prototype_config_20261014_01.json",
+      "sha256": "be78fc14b24b01cd824e1bf90625c415176b27ecae2dca26dff8ac790de1e9b0"
+    }
+  ],
+  "inputs_after": [
+    {
+      "path": "cad/pdr_r12_chief/build_physical_integration_prototype_20261014_01.py",
+      "sha256": "d9a929d840a83343e8b457a916d0d0b0029f2d2286b9b64f74b8987cc5650253"
+    },
+    {
+      "path": "cad/pdr_r12_chief/physical_integration_geometry_20261014_01.py",
+      "sha256": "c8e74b814c41899236df91d885abc876c5e0f950a514f19d4719a61a0aeee7e6"
+    },
+    {
+      "path": "cad/pdr_r12_chief/physical_integration_prototype_config_20261014_01.json",
+      "sha256": "be78fc14b24b01cd824e1bf90625c415176b27ecae2dca26dff8ac790de1e9b0"
+    }
+  ],
+  "input_bytes_unchanged": true,
+  "FreeCAD_version": [
+    "1",
+    "1",
+    "1",
+    "44227 +647 (Git)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "tag: 1.1.1",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "physical_component_count": 58,
+  "physical_inventory": [
+    {
+      "name": "MainLeg_01",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Continuous main landing tube",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 11235.662835656938,
+          "cg_CAD_mm": [
+            185.43878670796963,
+            185.43878670796965,
+            229.17585432409922
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              82.40523422047235,
+              288.472339195467
+            ],
+            [
+              82.40523422047232,
+              288.472339195467
+            ],
+            [
+              13.624183397838236,
+              444.7275252503603
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          82.40523422047235,
+          288.472339195467
+        ],
+        [
+          82.40523422047232,
+          288.472339195467
+        ],
+        [
+          13.624183397838236,
+          444.7275252503603
+        ]
+      ]
+    },
+    {
+      "name": "Brace_01_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Brace with explicit junction cutback",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 7428.381194648272,
+          "cg_CAD_mm": [
+            121.04181139766999,
+            174.89344795243002,
+            294.15177265482225
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              30.22363243324299,
+              211.85999036209694
+            ],
+            [
+              121.7447261528422,
+              228.04216975201774
+            ],
+            [
+              155.92684838336314,
+              432.37669692628134
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          30.22363243324299,
+          211.85999036209694
+        ],
+        [
+          121.7447261528422,
+          228.04216975201774
+        ],
+        [
+          155.92684838336314,
+          432.37669692628134
+        ]
+      ]
+    },
+    {
+      "name": "Brace_01_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Brace with explicit junction cutback",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 7428.381194648257,
+          "cg_CAD_mm": [
+            174.8934479524299,
+            121.04181139766997,
+            294.15177265482237
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              121.7447261528422,
+              228.04216975201774
+            ],
+            [
+              30.223632433242994,
+              211.8599903620969
+            ],
+            [
+              155.9268483833632,
+              432.37669692628134
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          121.7447261528422,
+          228.04216975201774
+        ],
+        [
+          30.223632433242994,
+          211.8599903620969
+        ],
+        [
+          155.9268483833632,
+          432.37669692628134
+        ]
+      ]
+    },
+    {
+      "name": "MainLeg_02",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Continuous main landing tube",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 11235.662835656916,
+          "cg_CAD_mm": [
+            -185.43878670796968,
+            185.4387867079697,
+            229.17585432409933
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -288.472339195467,
+              -82.40523422047235
+            ],
+            [
+              82.40523422047237,
+              288.472339195467
+            ],
+            [
+              13.624183397838236,
+              444.7275252503603
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -288.472339195467,
+          -82.40523422047235
+        ],
+        [
+          82.40523422047237,
+          288.472339195467
+        ],
+        [
+          13.624183397838236,
+          444.7275252503603
+        ]
+      ]
+    },
+    {
+      "name": "Brace_02_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Brace with explicit junction cutback",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 7428.381194648272,
+          "cg_CAD_mm": [
+            -174.8934479524299,
+            121.04181139766993,
+            294.1517726548223
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -228.04216975201774,
+              -121.74472615284218
+            ],
+            [
+              30.223632433243026,
+              211.85999036209697
+            ],
+            [
+              155.92684838336314,
+              432.37669692628134
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -228.04216975201774,
+          -121.74472615284218
+        ],
+        [
+          30.223632433243026,
+          211.85999036209697
+        ],
+        [
+          155.92684838336314,
+          432.37669692628134
+        ]
+      ]
+    },
+    {
+      "name": "Brace_02_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Brace with explicit junction cutback",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 7428.381194648268,
+          "cg_CAD_mm": [
+            -121.04181139766995,
+            174.89344795243,
+            294.15177265482237
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -211.8599903620969,
+              -30.223632433243004
+            ],
+            [
+              121.7447261528422,
+              228.04216975201783
+            ],
+            [
+              155.92684838336314,
+              432.37669692628134
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -211.8599903620969,
+          -30.223632433243004
+        ],
+        [
+          121.7447261528422,
+          228.04216975201783
+        ],
+        [
+          155.92684838336314,
+          432.37669692628134
+        ]
+      ]
+    },
+    {
+      "name": "MainLeg_03",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Continuous main landing tube",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 11235.662835656916,
+          "cg_CAD_mm": [
+            -185.43878670796977,
+            -185.43878670796974,
+            229.17585432409948
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -288.4723391954671,
+              -82.40523422047235
+            ],
+            [
+              -288.47233919546704,
+              -82.40523422047235
+            ],
+            [
+              13.624183397838348,
+              444.7275252503603
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -288.4723391954671,
+          -82.40523422047235
+        ],
+        [
+          -288.47233919546704,
+          -82.40523422047235
+        ],
+        [
+          13.624183397838348,
+          444.7275252503603
+        ]
+      ]
+    },
+    {
+      "name": "Brace_03_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Brace with explicit junction cutback",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 7428.381194648258,
+          "cg_CAD_mm": [
+            -121.04181139766999,
+            -174.8934479524299,
+            294.15177265482237
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -211.85999036209705,
+              -30.223632433242972
+            ],
+            [
+              -228.04216975201774,
+              -121.74472615284219
+            ],
+            [
+              155.9268483833632,
+              432.37669692628134
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -211.85999036209705,
+          -30.223632433242972
+        ],
+        [
+          -228.04216975201774,
+          -121.74472615284219
+        ],
+        [
+          155.9268483833632,
+          432.37669692628134
+        ]
+      ]
+    },
+    {
+      "name": "Brace_03_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Brace with explicit junction cutback",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 7428.381194648259,
+          "cg_CAD_mm": [
+            -174.89344795242997,
+            -121.04181139766973,
+            294.1517726548222
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -228.04216975201786,
+              -121.74472615284219
+            ],
+            [
+              -211.85999036209682,
+              -30.223632433242994
+            ],
+            [
+              155.92684838336314,
+              432.37669692628134
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -228.04216975201786,
+          -121.74472615284219
+        ],
+        [
+          -211.85999036209682,
+          -30.223632433242994
+        ],
+        [
+          155.92684838336314,
+          432.37669692628134
+        ]
+      ]
+    },
+    {
+      "name": "MainLeg_04",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Continuous main landing tube",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 11235.662835656933,
+          "cg_CAD_mm": [
+            185.43878670796974,
+            -185.43878670796983,
+            229.17585432409933
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              82.40523422047234,
+              288.47233919546704
+            ],
+            [
+              -288.4723391954671,
+              -82.40523422047235
+            ],
+            [
+              13.624183397838404,
+              444.7275252503603
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          82.40523422047234,
+          288.47233919546704
+        ],
+        [
+          -288.4723391954671,
+          -82.40523422047235
+        ],
+        [
+          13.624183397838404,
+          444.7275252503603
+        ]
+      ]
+    },
+    {
+      "name": "Brace_04_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Brace with explicit junction cutback",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 7428.381194648271,
+          "cg_CAD_mm": [
+            174.89344795243,
+            -121.04181139767,
+            294.15177265482225
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              121.7447261528422,
+              228.04216975201777
+            ],
+            [
+              -211.85999036209708,
+              -30.22363243324298
+            ],
+            [
+              155.92684838336308,
+              432.37669692628134
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          121.7447261528422,
+          228.04216975201777
+        ],
+        [
+          -211.85999036209708,
+          -30.22363243324298
+        ],
+        [
+          155.92684838336308,
+          432.37669692628134
+        ]
+      ]
+    },
+    {
+      "name": "Brace_04_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Brace with explicit junction cutback",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 7428.381194648264,
+          "cg_CAD_mm": [
+            121.04181139766995,
+            -174.89344795243014,
+            294.1517726548225
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              30.22363243324293,
+              211.859990362097
+            ],
+            [
+              -228.04216975201794,
+              -121.74472615284222
+            ],
+            [
+              155.92684838336314,
+              432.37669692628134
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          30.22363243324293,
+          211.859990362097
+        ],
+        [
+          -228.04216975201794,
+          -121.74472615284222
+        ],
+        [
+          155.92684838336314,
+          432.37669692628134
+        ]
+      ]
+    },
+    {
+      "name": "Spine_01",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "CFRP",
+      "density_hypothesis_kg_m3": 1600.0,
+      "moving_group": "fixed_airframe",
+      "role": "Single-spine prototype, not spine-count selection",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 12252.211349000194,
+          "cg_CAD_mm": [
+            2.277308628487034e-15,
+            1.1280535998877506e-15,
+            599.9999999999999
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -7.0,
+              7.0
+            ],
+            [
+              -7.0,
+              7.0
+            ],
+            [
+              450.0,
+              750.0
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          -7.0,
+          7.0
+        ],
+        [
+          450.0,
+          750.0
+        ]
+      ]
+    },
+    {
+      "name": "PrintedRootRingSpider",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "One-piece preliminary root ring, spider and integral sockets",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 161053.05512333504,
+          "cg_CAD_mm": [
+            8.017848345347024e-06,
+            0.0007432628025112928,
+            428.43250242401757
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -141.0262440465528,
+              141.02624404655276
+            ],
+            [
+              -141.0262440465528,
+              141.02624404655276
+            ],
+            [
+              401.7106895320171,
+              448.88300955336655
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -141.0262440465528,
+          141.02624404655276
+        ],
+        [
+          -141.0262440465528,
+          141.02624404655276
+        ],
+        [
+          401.7106895320171,
+          448.88300955336655
+        ]
+      ]
+    },
+    {
+      "name": "Bond_MainRoot_01",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661852,
+          "cg_CAD_mm": [
+            91.9238815542511,
+            91.9238815542512,
+            430.00000000000045
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              82.22097839975324,
+              101.62678470874913
+            ],
+            [
+              82.22097839975322,
+              101.62678470874911
+            ],
+            [
+              415.1624766357366,
+              444.8375233642634
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          82.22097839975324,
+          101.62678470874913
+        ],
+        [
+          82.22097839975322,
+          101.62678470874911
+        ],
+        [
+          415.1624766357366,
+          444.8375233642634
+        ]
+      ]
+    },
+    {
+      "name": "Bond_BraceRoot_01_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661784,
+          "cg_CAD_mm": [
+            41.408290011584754,
+            129.95087337542114,
+            417.934954576504
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              30.052490261738757,
+              52.76408976143087
+            ],
+            [
+              121.55344458960536,
+              138.3483021612371
+            ],
+            [
+              403.37437738041405,
+              432.4955317725954
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          30.052490261738757,
+          52.76408976143087
+        ],
+        [
+          121.55344458960536,
+          138.3483021612371
+        ],
+        [
+          403.37437738041405,
+          432.4955317725954
+        ]
+      ]
+    },
+    {
+      "name": "Bond_BraceRoot_01_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661807,
+          "cg_CAD_mm": [
+            129.95087337542128,
+            41.408290011584796,
+            417.9349545765043
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              121.55344458960536,
+              138.3483021612371
+            ],
+            [
+              30.052490261738757,
+              52.76408976143087
+            ],
+            [
+              403.37437738041405,
+              432.4955317725954
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          121.55344458960536,
+          138.3483021612371
+        ],
+        [
+          30.052490261738757,
+          52.76408976143087
+        ],
+        [
+          403.37437738041405,
+          432.4955317725954
+        ]
+      ]
+    },
+    {
+      "name": "Bond_MainRoot_02",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661898,
+          "cg_CAD_mm": [
+            -91.9238815542512,
+            91.9238815542512,
+            430.0000000000002
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -101.62678470874911,
+              -82.22097839975322
+            ],
+            [
+              82.22097839975324,
+              101.62678470874913
+            ],
+            [
+              415.1624766357366,
+              444.8375233642634
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -101.62678470874911,
+          -82.22097839975322
+        ],
+        [
+          82.22097839975324,
+          101.62678470874913
+        ],
+        [
+          415.1624766357366,
+          444.8375233642634
+        ]
+      ]
+    },
+    {
+      "name": "Bond_BraceRoot_02_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661602,
+          "cg_CAD_mm": [
+            -129.95087337542134,
+            41.40829001158489,
+            417.9349545765051
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -138.3483021612371,
+              -121.55344458960535
+            ],
+            [
+              30.052490261738793,
+              52.76408976143089
+            ],
+            [
+              403.37437738041405,
+              432.4955317725954
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -138.3483021612371,
+          -121.55344458960535
+        ],
+        [
+          30.052490261738793,
+          52.76408976143089
+        ],
+        [
+          403.37437738041405,
+          432.4955317725954
+        ]
+      ]
+    },
+    {
+      "name": "Bond_BraceRoot_02_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.566358556615,
+          "cg_CAD_mm": [
+            -41.408290011584796,
+            129.9508733754211,
+            417.9349545765039
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -52.76408976143088,
+              -30.05249026173877
+            ],
+            [
+              121.55344458960536,
+              138.3483021612371
+            ],
+            [
+              403.37437738041405,
+              432.4955317725954
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -52.76408976143088,
+          -30.05249026173877
+        ],
+        [
+          121.55344458960536,
+          138.3483021612371
+        ],
+        [
+          403.37437738041405,
+          432.4955317725954
+        ]
+      ]
+    },
+    {
+      "name": "Bond_MainRoot_03",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.5663585566183,
+          "cg_CAD_mm": [
+            -91.92388155425115,
+            -91.92388155425124,
+            430.00000000000006
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -101.62678470874914,
+              -82.22097839975325
+            ],
+            [
+              -101.62678470874911,
+              -82.22097839975322
+            ],
+            [
+              415.1624766357366,
+              444.8375233642634
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -101.62678470874914,
+          -82.22097839975325
+        ],
+        [
+          -101.62678470874911,
+          -82.22097839975322
+        ],
+        [
+          415.1624766357366,
+          444.8375233642634
+        ]
+      ]
+    },
+    {
+      "name": "Bond_BraceRoot_03_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661557,
+          "cg_CAD_mm": [
+            -41.408290011584704,
+            -129.9508733754211,
+            417.9349545765046
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -52.76408976143086,
+              -30.052490261738743
+            ],
+            [
+              -138.3483021612371,
+              -121.55344458960536
+            ],
+            [
+              403.37437738041405,
+              432.4955317725954
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -52.76408976143086,
+          -30.052490261738743
+        ],
+        [
+          -138.3483021612371,
+          -121.55344458960536
+        ],
+        [
+          403.37437738041405,
+          432.4955317725954
+        ]
+      ]
+    },
+    {
+      "name": "Bond_BraceRoot_03_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661796,
+          "cg_CAD_mm": [
+            -129.95087337542097,
+            -41.40829001158483,
+            417.93495457650414
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -138.34830216123711,
+              -121.55344458960536
+            ],
+            [
+              -52.76408976143087,
+              -30.052490261738765
+            ],
+            [
+              403.37437738041405,
+              432.4955317725954
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -138.34830216123711,
+          -121.55344458960536
+        ],
+        [
+          -52.76408976143087,
+          -30.052490261738765
+        ],
+        [
+          403.37437738041405,
+          432.4955317725954
+        ]
+      ]
+    },
+    {
+      "name": "Bond_MainRoot_04",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661852,
+          "cg_CAD_mm": [
+            91.92388155425128,
+            -91.92388155425128,
+            430.0000000000001
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              82.2209783997532,
+              101.6267847087491
+            ],
+            [
+              -101.62678470874914,
+              -82.22097839975325
+            ],
+            [
+              415.1624766357366,
+              444.8375233642634
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          82.2209783997532,
+          101.6267847087491
+        ],
+        [
+          -101.62678470874914,
+          -82.22097839975325
+        ],
+        [
+          415.1624766357366,
+          444.8375233642634
+        ]
+      ]
+    },
+    {
+      "name": "Bond_BraceRoot_04_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.5663585566174,
+          "cg_CAD_mm": [
+            129.9508733754211,
+            -41.40829001158485,
+            417.9349545765045
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              121.55344458960536,
+              138.3483021612371
+            ],
+            [
+              -52.76408976143086,
+              -30.05249026173875
+            ],
+            [
+              403.37437738041405,
+              432.4955317725954
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          121.55344458960536,
+          138.3483021612371
+        ],
+        [
+          -52.76408976143086,
+          -30.05249026173875
+        ],
+        [
+          403.37437738041405,
+          432.4955317725954
+        ]
+      ]
+    },
+    {
+      "name": "Bond_BraceRoot_04_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.5663585566183,
+          "cg_CAD_mm": [
+            41.40829001158478,
+            -129.95087337542117,
+            417.9349545765049
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              30.0524902617387,
+              52.76408976143081
+            ],
+            [
+              -138.34830216123711,
+              -121.55344458960538
+            ],
+            [
+              403.37437738041405,
+              432.4955317725954
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          30.0524902617387,
+          52.76408976143081
+        ],
+        [
+          -138.34830216123711,
+          -121.55344458960538
+        ],
+        [
+          403.37437738041405,
+          432.4955317725954
+        ]
+      ]
+    },
+    {
+      "name": "BraceJunctionFitting_01",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate sleeve/two-branch printed junction hypothesis",
+      "inspection_error": "OCCError: 19Standard_NullObject BRepCheck_Analyzer::Init() - NULL shape",
+      "shape_is_null": true
+    },
+    {
+      "name": "Bond_JunctionMain_01",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 695.5486135047777,
+          "cg_CAD_mm": [
+            228.13060868559015,
+            228.13060868558983,
+            137.49476175484526
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              198.0103473132047,
+              258.2508700579742
+            ],
+            [
+              198.01034731320462,
+              258.25087005797417
+            ],
+            [
+              78.81076798753779,
+              196.17875552215185
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          198.0103473132047,
+          258.2508700579742
+        ],
+        [
+          198.01034731320462,
+          258.25087005797417
+        ],
+        [
+          78.81076798753779,
+          196.17875552215185
+        ]
+      ]
+    },
+    {
+      "name": "Bond_JunctionBrace_01_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 206.08847807549,
+          "cg_CAD_mm": [
+            198.08806140100293,
+            218.3758505434914,
+            174.39027254097178
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              184.14499026840434,
+              212.03113253360118
+            ],
+            [
+              208.5182497717279,
+              228.2334513152545
+            ],
+            [
+              155.80801353704913,
+              192.97253154489405
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          184.14499026840434,
+          212.03113253360118
+        ],
+        [
+          208.5182497717279,
+          228.2334513152545
+        ],
+        [
+          155.80801353704913,
+          192.97253154489405
+        ]
+      ]
+    },
+    {
+      "name": "Bond_JunctionBrace_01_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 206.0884780754909,
+          "cg_CAD_mm": [
+            218.37585054349148,
+            198.08806140100302,
+            174.3902725409718
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              208.51824977172797,
+              228.2334513152546
+            ],
+            [
+              184.14499026840426,
+              212.03113253360112
+            ],
+            [
+              155.80801353704913,
+              192.97253154489405
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          208.51824977172797,
+          228.2334513152546
+        ],
+        [
+          184.14499026840426,
+          212.03113253360112
+        ],
+        [
+          155.80801353704913,
+          192.97253154489405
+        ]
+      ]
+    },
+    {
+      "name": "BraceJunctionFitting_02",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate sleeve/two-branch printed junction hypothesis",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 22093.768444087444,
+          "cg_CAD_mm": [
+            -220.49338316877282,
+            220.4934026446744,
+            151.6226951517455
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -260.830451548042,
+              -181.748999867345
+            ],
+            [
+              181.74899986734505,
+              260.83045154804205
+            ],
+            [
+              77.2707943928943,
+              197.71872911679532
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -260.830451548042,
+          -181.748999867345
+        ],
+        [
+          181.74899986734505,
+          260.83045154804205
+        ],
+        [
+          77.2707943928943,
+          197.71872911679532
+        ]
+      ]
+    },
+    {
+      "name": "Bond_JunctionMain_02",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 695.5486135047786,
+          "cg_CAD_mm": [
+            -228.13060868558952,
+            228.13060868558932,
+            137.4947617548451
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -258.25087005797417,
+              -198.01034731320462
+            ],
+            [
+              198.0103473132047,
+              258.2508700579742
+            ],
+            [
+              78.81076798753779,
+              196.17875552215185
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -258.25087005797417,
+          -198.01034731320462
+        ],
+        [
+          198.0103473132047,
+          258.2508700579742
+        ],
+        [
+          78.81076798753779,
+          196.17875552215185
+        ]
+      ]
+    },
+    {
+      "name": "Bond_JunctionBrace_02_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 206.08847807549023,
+          "cg_CAD_mm": [
+            -218.3758505434911,
+            198.08806140100276,
+            174.3902725409714
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -228.2334513152545,
+              -208.5182497717279
+            ],
+            [
+              184.14499026840434,
+              212.0311325336012
+            ],
+            [
+              155.80801353704913,
+              192.97253154489405
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -228.2334513152545,
+          -208.5182497717279
+        ],
+        [
+          184.14499026840434,
+          212.0311325336012
+        ],
+        [
+          155.80801353704913,
+          192.97253154489405
+        ]
+      ]
+    },
+    {
+      "name": "Bond_JunctionBrace_02_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 206.08847807549,
+          "cg_CAD_mm": [
+            -198.0880614010028,
+            218.3758505434914,
+            174.39027254097186
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -212.03113253360112,
+              -184.14499026840429
+            ],
+            [
+              208.51824977172797,
+              228.2334513152546
+            ],
+            [
+              155.8080135370491,
+              192.97253154489405
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -212.03113253360112,
+          -184.14499026840429
+        ],
+        [
+          208.51824977172797,
+          228.2334513152546
+        ],
+        [
+          155.8080135370491,
+          192.97253154489405
+        ]
+      ]
+    },
+    {
+      "name": "BraceJunctionFitting_03",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate sleeve/two-branch printed junction hypothesis",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 22093.77887009295,
+          "cg_CAD_mm": [
+            -220.49338841798297,
+            -220.4933878023707,
+            151.62270319359723
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -260.8304515480421,
+              -181.7489998673451
+            ],
+            [
+              -260.830451548042,
+              -181.748999867345
+            ],
+            [
+              77.27079439289435,
+              197.71872911679532
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -260.8304515480421,
+          -181.7489998673451
+        ],
+        [
+          -260.830451548042,
+          -181.748999867345
+        ],
+        [
+          77.27079439289435,
+          197.71872911679532
+        ]
+      ]
+    },
+    {
+      "name": "Bond_JunctionMain_03",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 695.5486135047722,
+          "cg_CAD_mm": [
+            -228.13060868558952,
+            -228.13060868558964,
+            137.49476175484514
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -258.2508700579743,
+              -198.01034731320476
+            ],
+            [
+              -258.25087005797417,
+              -198.01034731320465
+            ],
+            [
+              78.81076798753783,
+              196.17875552215185
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -258.2508700579743,
+          -198.01034731320476
+        ],
+        [
+          -258.25087005797417,
+          -198.01034731320465
+        ],
+        [
+          78.81076798753783,
+          196.17875552215185
+        ]
+      ]
+    },
+    {
+      "name": "Bond_JunctionBrace_03_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 206.0884780754909,
+          "cg_CAD_mm": [
+            -198.08806140100305,
+            -218.3758505434914,
+            174.39027254097167
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -212.03113253360127,
+              -184.1449902684044
+            ],
+            [
+              -228.23345131525454,
+              -208.5182497717279
+            ],
+            [
+              155.80801353704913,
+              192.97253154489403
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -212.03113253360127,
+          -184.1449902684044
+        ],
+        [
+          -228.23345131525454,
+          -208.5182497717279
+        ],
+        [
+          155.80801353704913,
+          192.97253154489403
+        ]
+      ]
+    },
+    {
+      "name": "Bond_JunctionBrace_03_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 206.08847807549137,
+          "cg_CAD_mm": [
+            -218.37585054349154,
+            -198.088061401003,
+            174.39027254097152
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -228.23345131525468,
+              -208.51824977172802
+            ],
+            [
+              -212.03113253360112,
+              -184.14499026840429
+            ],
+            [
+              155.80801353704913,
+              192.97253154489405
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -228.23345131525468,
+          -208.51824977172802
+        ],
+        [
+          -212.03113253360112,
+          -184.14499026840429
+        ],
+        [
+          155.80801353704913,
+          192.97253154489405
+        ]
+      ]
+    },
+    {
+      "name": "BraceJunctionFitting_04",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate sleeve/two-branch printed junction hypothesis",
+      "inspection_error": "OCCError: 19Standard_NullObject BRepCheck_Analyzer::Init() - NULL shape",
+      "shape_is_null": true
+    },
+    {
+      "name": "Bond_JunctionMain_04",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 695.5486135047868,
+          "cg_CAD_mm": [
+            228.13060868558952,
+            -228.13060868558944,
+            137.49476175484486
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              198.01034731320465,
+              258.25087005797417
+            ],
+            [
+              -258.25087005797434,
+              -198.01034731320476
+            ],
+            [
+              78.81076798753779,
+              196.17875552215185
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          198.01034731320465,
+          258.25087005797417
+        ],
+        [
+          -258.25087005797434,
+          -198.01034731320476
+        ],
+        [
+          78.81076798753779,
+          196.17875552215185
+        ]
+      ]
+    },
+    {
+      "name": "Bond_JunctionBrace_04_Plus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 206.08847807549023,
+          "cg_CAD_mm": [
+            218.3758505434913,
+            -198.08806140100282,
+            174.39027254097155
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              208.51824977172794,
+              228.23345131525457
+            ],
+            [
+              -212.03113253360127,
+              -184.1449902684044
+            ],
+            [
+              155.80801353704913,
+              192.97253154489403
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          208.51824977172794,
+          228.23345131525457
+        ],
+        [
+          -212.03113253360127,
+          -184.1449902684044
+        ],
+        [
+          155.80801353704913,
+          192.97253154489403
+        ]
+      ]
+    },
+    {
+      "name": "Bond_JunctionBrace_04_Minus",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 206.08847807549046,
+          "cg_CAD_mm": [
+            198.08806140100253,
+            -218.3758505434914,
+            174.39027254097172
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              184.14499026840429,
+              212.03113253360115
+            ],
+            [
+              -228.23345131525468,
+              -208.51824977172805
+            ],
+            [
+              155.80801353704913,
+              192.97253154489403
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          184.14499026840429,
+          212.03113253360115
+        ],
+        [
+          -228.23345131525468,
+          -208.51824977172805
+        ],
+        [
+          155.80801353704913,
+          192.97253154489403
+        ]
+      ]
+    },
+    {
+      "name": "FixedGimbalSupport_PositiveX",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Fixed-side ring-to-outer-axis support hypothesis",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 28553.628619349245,
+          "cg_CAD_mm": [
+            185.23088387381065,
+            -2.1689423192214198e-14,
+            395.66301633098044
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              115.0,
+              211.0
+            ],
+            [
+              -12.0,
+              12.0
+            ],
+            [
+              328.0,
+              427.0
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          115.0,
+          211.0
+        ],
+        [
+          -12.0,
+          12.0
+        ],
+        [
+          328.0,
+          427.0
+        ]
+      ]
+    },
+    {
+      "name": "FixedGimbalSupport_NegativeX",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Fixed-side ring-to-outer-axis support hypothesis",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 28553.628619349813,
+          "cg_CAD_mm": [
+            -185.23088387381105,
+            -1.1057018117843287e-15,
+            395.66301633098016
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -211.00000000000006,
+              -115.0
+            ],
+            [
+              -12.0,
+              12.0
+            ],
+            [
+              328.0,
+              427.0
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -211.00000000000006,
+          -115.0
+        ],
+        [
+          -12.0,
+          12.0
+        ],
+        [
+          328.0,
+          427.0
+        ]
+      ]
+    },
+    {
+      "name": "SpinePedestal",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate spine pedestal with blind socket",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 17572.81266711987,
+          "cg_CAD_mm": [
+            -3.652210133884954e-15,
+            9.31781547243959e-16,
+            451.4545194508009
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -20.0,
+              20.0
+            ],
+            [
+              -20.0,
+              20.0
+            ],
+            [
+              433.0,
+              485.0
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -20.0,
+          20.0
+        ],
+        [
+          -20.0,
+          20.0
+        ],
+        [
+          433.0,
+          485.0
+        ]
+      ]
+    },
+    {
+      "name": "Bond_SpinePedestal",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 312.2743097668258,
+          "cg_CAD_mm": [
+            2.3627802230085373e-14,
+            3.9703383290786184e-15,
+            467.4999999999996
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -7.2,
+              7.2
+            ],
+            [
+              -7.2,
+              7.2
+            ],
+            [
+              450.0,
+              485.0
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -7.2,
+          7.2
+        ],
+        [
+          -7.2,
+          7.2
+        ],
+        [
+          450.0,
+          485.0
+        ]
+      ]
+    },
+    {
+      "name": "PrintedFoot_01",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate printed foot with inclined blind socket",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 14482.548432528356,
+          "cg_CAD_mm": [
+            281.75728983999807,
+            281.7572898400201,
+            16.252003052429853
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              264.842712474619,
+              300.842712474619
+            ],
+            [
+              264.84271247461896,
+              300.84271247461896
+            ],
+            [
+              6.0,
+              45.27919617662119
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          264.842712474619,
+          300.842712474619
+        ],
+        [
+          264.84271247461896,
+          300.84271247461896
+        ],
+        [
+          6.0,
+          45.27919617662119
+        ]
+      ]
+    },
+    {
+      "name": "FootPad_01",
+      "native_type": "Part::Cylinder",
+      "material_hypothesis": "unspecified_compliant_pad_density_hypothesis",
+      "density_hypothesis_kg_m3": 1100.0,
+      "moving_group": "fixed_airframe",
+      "role": "Finite rigid pad shape representing an unspecified compliant product",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 6107.256118578556,
+          "cg_CAD_mm": [
+            282.842712474619,
+            282.84271247461896,
+            3.0
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              264.842712474619,
+              300.842712474619
+            ],
+            [
+              264.84271247461896,
+              300.84271247461896
+            ],
+            [
+              0.0,
+              6.0
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          264.842712474619,
+          300.842712474619
+        ],
+        [
+          264.84271247461896,
+          300.84271247461896
+        ],
+        [
+          0.0,
+          6.0
+        ]
+      ]
+    },
+    {
+      "name": "Bond_Foot_01",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.5663585566167,
+          "cg_CAD_mm": [
+            278.95369186168836,
+            278.9536918616879,
+            28.351708648198823
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              269.2507887071903,
+              288.65659501618615
+            ],
+            [
+              269.2507887071902,
+              288.6565950161861
+            ],
+            [
+              13.51418528393539,
+              43.18923201246218
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          269.2507887071903,
+          288.65659501618615
+        ],
+        [
+          269.2507887071902,
+          288.6565950161861
+        ],
+        [
+          13.51418528393539,
+          43.18923201246218
+        ]
+      ]
+    },
+    {
+      "name": "PrintedFoot_02",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate printed foot with inclined blind socket",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 14482.548432803796,
+          "cg_CAD_mm": [
+            -281.75728983996254,
+            281.7572898399829,
+            16.25200305243927
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -300.84271247461896,
+              -264.84271247461896
+            ],
+            [
+              264.842712474619,
+              300.842712474619
+            ],
+            [
+              6.0,
+              45.27919617662119
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -300.84271247461896,
+          -264.84271247461896
+        ],
+        [
+          264.842712474619,
+          300.842712474619
+        ],
+        [
+          6.0,
+          45.27919617662119
+        ]
+      ]
+    },
+    {
+      "name": "FootPad_02",
+      "native_type": "Part::Cylinder",
+      "material_hypothesis": "unspecified_compliant_pad_density_hypothesis",
+      "density_hypothesis_kg_m3": 1100.0,
+      "moving_group": "fixed_airframe",
+      "role": "Finite rigid pad shape representing an unspecified compliant product",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 6107.256118578556,
+          "cg_CAD_mm": [
+            -282.84271247461896,
+            282.842712474619,
+            3.0
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -300.84271247461896,
+              -264.84271247461896
+            ],
+            [
+              264.842712474619,
+              300.842712474619
+            ],
+            [
+              0.0,
+              6.0
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -300.84271247461896,
+          -264.84271247461896
+        ],
+        [
+          264.842712474619,
+          300.842712474619
+        ],
+        [
+          0.0,
+          6.0
+        ]
+      ]
+    },
+    {
+      "name": "Bond_Foot_02",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661705,
+          "cg_CAD_mm": [
+            -278.9536918616877,
+            278.9536918616881,
+            28.351708648198912
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -288.6565950161861,
+              -269.2507887071902
+            ],
+            [
+              269.2507887071903,
+              288.65659501618615
+            ],
+            [
+              13.51418528393539,
+              43.18923201246218
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -288.6565950161861,
+          -269.2507887071902
+        ],
+        [
+          269.2507887071903,
+          288.65659501618615
+        ],
+        [
+          13.51418528393539,
+          43.18923201246218
+        ]
+      ]
+    },
+    {
+      "name": "PrintedFoot_03",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate printed foot with inclined blind socket",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 14482.548432948373,
+          "cg_CAD_mm": [
+            -281.757289840006,
+            -281.7572898399675,
+            16.252003052495333
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -300.8427124746191,
+              -264.8427124746191
+            ],
+            [
+              -300.84271247461896,
+              -264.84271247461896
+            ],
+            [
+              6.0,
+              45.279196176621184
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -300.8427124746191,
+          -264.8427124746191
+        ],
+        [
+          -300.84271247461896,
+          -264.84271247461896
+        ],
+        [
+          6.0,
+          45.279196176621184
+        ]
+      ]
+    },
+    {
+      "name": "FootPad_03",
+      "native_type": "Part::Cylinder",
+      "material_hypothesis": "unspecified_compliant_pad_density_hypothesis",
+      "density_hypothesis_kg_m3": 1100.0,
+      "moving_group": "fixed_airframe",
+      "role": "Finite rigid pad shape representing an unspecified compliant product",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 6107.256118578556,
+          "cg_CAD_mm": [
+            -282.8427124746191,
+            -282.84271247461896,
+            3.0
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -300.8427124746191,
+              -264.8427124746191
+            ],
+            [
+              -300.84271247461896,
+              -264.84271247461896
+            ],
+            [
+              0.0,
+              6.0
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -300.8427124746191,
+          -264.8427124746191
+        ],
+        [
+          -300.84271247461896,
+          -264.84271247461896
+        ],
+        [
+          0.0,
+          6.0
+        ]
+      ]
+    },
+    {
+      "name": "Bond_Foot_03",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661762,
+          "cg_CAD_mm": [
+            -278.95369186168796,
+            -278.95369186168847,
+            28.351708648198855
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              -288.6565950161862,
+              -269.25078870719034
+            ],
+            [
+              -288.6565950161861,
+              -269.2507887071902
+            ],
+            [
+              13.514185283935385,
+              43.18923201246217
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          -288.6565950161862,
+          -269.25078870719034
+        ],
+        [
+          -288.6565950161861,
+          -269.2507887071902
+        ],
+        [
+          13.514185283935385,
+          43.18923201246217
+        ]
+      ]
+    },
+    {
+      "name": "PrintedFoot_04",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "PETG_assumed_full_density",
+      "density_hypothesis_kg_m3": 1270.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate printed foot with inclined blind socket",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 14482.548433611877,
+          "cg_CAD_mm": [
+            281.7572898400653,
+            -281.7572898401581,
+            16.252003052655844
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              264.84271247461896,
+              300.84271247461896
+            ],
+            [
+              -300.8427124746191,
+              -264.8427124746191
+            ],
+            [
+              6.0,
+              45.279196176621184
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          264.84271247461896,
+          300.84271247461896
+        ],
+        [
+          -300.8427124746191,
+          -264.8427124746191
+        ],
+        [
+          6.0,
+          45.279196176621184
+        ]
+      ]
+    },
+    {
+      "name": "FootPad_04",
+      "native_type": "Part::Cylinder",
+      "material_hypothesis": "unspecified_compliant_pad_density_hypothesis",
+      "density_hypothesis_kg_m3": 1100.0,
+      "moving_group": "fixed_airframe",
+      "role": "Finite rigid pad shape representing an unspecified compliant product",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 6107.256118578556,
+          "cg_CAD_mm": [
+            282.84271247461896,
+            -282.8427124746191,
+            3.0
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              264.84271247461896,
+              300.84271247461896
+            ],
+            [
+              -300.8427124746191,
+              -264.8427124746191
+            ],
+            [
+              0.0,
+              6.0
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          264.84271247461896,
+          300.84271247461896
+        ],
+        [
+          -300.8427124746191,
+          -264.8427124746191
+        ],
+        [
+          0.0,
+          6.0
+        ]
+      ]
+    },
+    {
+      "name": "Bond_Foot_04",
+      "native_type": "Part::Cut",
+      "material_hypothesis": "unspecified_adhesive_density_hypothesis",
+      "density_hypothesis_kg_m3": 1200.0,
+      "moving_group": "fixed_airframe",
+      "role": "Separate nominal annular bond layer",
+      "inspection_error": null,
+      "shape_is_null": false,
+      "shape_valid": true,
+      "solid_count": 1,
+      "solid_observations": [
+        {
+          "index_within_component": 1,
+          "valid": true,
+          "volume_mm3": 154.56635855661727,
+          "cg_CAD_mm": [
+            278.95369186168756,
+            -278.95369186168784,
+            28.35170864819883
+          ],
+          "bounding_box_CAD_mm": [
+            [
+              269.2507887071902,
+              288.6565950161861
+            ],
+            [
+              -288.6565950161862,
+              -269.25078870719034
+            ],
+            [
+              13.514185283935385,
+              43.18923201246217
+            ]
+          ]
+        }
+      ],
+      "bounding_box_CAD_mm": [
+        [
+          269.2507887071902,
+          288.6565950161861
+        ],
+        [
+          -288.6565950161862,
+          -269.25078870719034
+        ],
+        [
+          13.514185283935385,
+          43.18923201246217
+        ]
+      ]
+    }
+  ],
+  "native_file": {
+    "path": "cad/pdr_r12_chief/physical_integration_prototype_20261014_01/physical_integration_prototype_01.FCStd",
+    "sha256": "45010bcd928d38cd580f8ded06273e561d290a671d7ecfb771943825fee2fa16"
+  },
+  "physical_STEP_file": {
+    "path": "cad/pdr_r12_chief/physical_integration_prototype_20261014_01/physical_integration_prototype_01_physical.step",
+    "sha256": "74c69347eed6498e280398daee8ab77da3ac7f5afa822be7bf1b3384e0ddf1a3"
+  },
+  "drawing_omission_count": 10,
+  "evidence_boundary": "Initial in-memory solid observations and exported files only; not independent reopened inspection or a VerificationResult",
+  "geometry_changed_by_driver": false,
+  "unperformed": [
+    "Independent native/STEP reopen and heterogeneous-material correspondence",
+    "Unsaved parameter perturbation and restoration after reopen",
+    "All physical pair distances, common volumes and intended contacts",
+    "Bore separation, residual webs, insertion and assembly sequence",
+    "Material-based partial mass, CG and full inertia reconciliation",
+    "Retained 97-pose rotor/yoke sampling and finite-pad ground observations",
+    "Continuous, deformed and tolerance-aware clearance",
+    "Structural, joint, actuator, electrical and hardware qualification",
+    "Complete installed mass, propulsion energy and purchased cost closure",
+    "PDR/CDR and flight acceptance"
+  ],
+  "geometry_acceptance": null,
+  "structural_selection": null,
+  "physical_validation": null
+}

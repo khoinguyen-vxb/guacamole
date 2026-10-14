@@ -14,7 +14,7 @@ from langchain.agents.middleware import (
 from langchain_core.language_models.fake_chat_models import FakeListChatModel
 from runtime_support import TestReasoning
 
-from guacamole import AgentSpec, Project, ProjectRequest
+from guacamole import AgentSpec, ContextSpec, Project, ProjectRequest
 from guacamole.contracts import AgentTurn, Rationale, Read, Wait
 from guacamole.middleware import (
     ContextMiddleware,
@@ -91,7 +91,13 @@ class MiddlewareTests(unittest.IsolatedAsyncioTestCase):
             refs.append(project.ingest(path))
         provider = Reader(refs)
         project.reasoning = provider
-        await project.run(ProjectRequest(description="Middleware fixture"))
+        # Headroom over the contracts' size, which every new action grows.
+        await project.run(
+            ProjectRequest(
+                description="Middleware fixture",
+                context=ContextSpec(max_input_tokens=64_000),
+            )
+        )
         self.assertEqual(len(provider.packets), 5)
         return project, refs, provider.packets[-1]
 

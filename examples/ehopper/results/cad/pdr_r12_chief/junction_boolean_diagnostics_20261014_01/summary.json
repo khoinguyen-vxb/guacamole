@@ -1,0 +1,381 @@
+{
+  "schema": "hopper_junction_boolean_diagnostic_summary/1",
+  "inputs": {
+    "native": {
+      "path": "cad/pdr_r12_chief/physical_integration_prototype_20261014_01/physical_integration_prototype_01.FCStd",
+      "sha256": "45010bcd928d38cd580f8ded06273e561d290a671d7ecfb771943825fee2fa16"
+    },
+    "configuration": {
+      "path": "cad/pdr_r12_chief/physical_integration_prototype_config_20261014_01.json",
+      "sha256": "be78fc14b24b01cd824e1bf90625c415176b27ecae2dca26dff8ac790de1e9b0"
+    },
+    "geometry_source": {
+      "path": "cad/pdr_r12_chief/physical_integration_geometry_20261014_01.py",
+      "sha256": "c8e74b814c41899236df91d885abc876c5e0f950a514f19d4719a61a0aeee7e6"
+    },
+    "inspection_helpers": {
+      "path": "cad/pdr_r12_chief/inspect_physical_integration_topology_20261014_01.py",
+      "sha256": "94e3a6a12cfe0ec7222add47355afeb9199ae8df1f97bcf7fe0d57e3614c0f6f"
+    },
+    "prior_observations": {
+      "path": "cad/pdr_r12_chief/physical_integration_topology_20261014_01/observations.json",
+      "sha256": "c412ea15d3d371114c1f4a7745b9d7f973d07740f41081763579c5bc2674831e"
+    },
+    "diagnostic_source": {
+      "path": "cad/pdr_r12_chief/diagnose_junction_booleans_20261014_01.py",
+      "sha256": "1bf6831acd9a9b51b0dd3470ed36b58f23a0b07df5bf9aa76c38af7611c797a8"
+    }
+  },
+  "input_bytes_unchanged": true,
+  "junctions": [
+    {
+      "junction_index": 1,
+      "source_union": {
+        "is_null": false,
+        "is_valid": false,
+        "solid_count": 1,
+        "volume_mm3": 33994.719136324355
+      },
+      "source_fitting": {
+        "is_null": true,
+        "is_valid": null,
+        "solid_count": 0,
+        "volume_mm3": null
+      },
+      "errors": [],
+      "experiments": [
+        {
+          "variant": "global_original",
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71913632103
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          },
+          "cut_not_evaluated_reason": "Union is not one valid positive-volume solid",
+          "errors": []
+        },
+        {
+          "variant": "global_sequential",
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71913510355
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          },
+          "cut_not_evaluated_reason": "Union is not one valid positive-volume solid",
+          "errors": []
+        },
+        {
+          "variant": "global_branch_grouped",
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71912749186
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          },
+          "cut_not_evaluated_reason": "Union is not one valid positive-volume solid",
+          "errors": []
+        },
+        {
+          "variant": "joint_centred_original",
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71912893092
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          },
+          "cut_not_evaluated_reason": "Union is not one valid positive-volume solid",
+          "errors": []
+        }
+      ]
+    },
+    {
+      "junction_index": 2,
+      "source_union": {
+        "is_null": false,
+        "is_valid": true,
+        "solid_count": 1,
+        "volume_mm3": 34008.572870410295
+      },
+      "source_fitting": {
+        "is_null": false,
+        "is_valid": true,
+        "solid_count": 1,
+        "volume_mm3": 22093.76844408742
+      },
+      "errors": [],
+      "experiments": [
+        {
+          "variant": "global_original",
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.57254197831
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.768111651938
+          },
+          "cut_not_evaluated_reason": null,
+          "errors": []
+        },
+        {
+          "variant": "global_sequential",
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.572540396446
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.76811006053
+          },
+          "cut_not_evaluated_reason": null,
+          "errors": []
+        },
+        {
+          "variant": "global_branch_grouped",
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.572536383
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.76810608591
+          },
+          "cut_not_evaluated_reason": null,
+          "errors": []
+        },
+        {
+          "variant": "joint_centred_original",
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.57387829664
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.76943201728
+          },
+          "cut_not_evaluated_reason": null,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "junction_index": 3,
+      "source_union": {
+        "is_null": false,
+        "is_valid": true,
+        "solid_count": 1,
+        "volume_mm3": 34008.583059792894
+      },
+      "source_fitting": {
+        "is_null": false,
+        "is_valid": true,
+        "solid_count": 1,
+        "volume_mm3": 22093.778870092927
+      },
+      "errors": [],
+      "experiments": [
+        {
+          "variant": "global_original",
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.58346753925
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.779268431386
+          },
+          "cut_not_evaluated_reason": null,
+          "errors": []
+        },
+        {
+          "variant": "global_sequential",
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.583468580604
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.77926946065
+          },
+          "cut_not_evaluated_reason": null,
+          "errors": []
+        },
+        {
+          "variant": "global_branch_grouped",
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.58346782022
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.77926872435
+          },
+          "cut_not_evaluated_reason": null,
+          "errors": []
+        },
+        {
+          "variant": "joint_centred_original",
+          "union": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 34008.58153349356
+          },
+          "cut": {
+            "is_null": false,
+            "is_valid": true,
+            "solid_count": 1,
+            "volume_mm3": 22093.777250339277
+          },
+          "cut_not_evaluated_reason": null,
+          "errors": []
+        }
+      ]
+    },
+    {
+      "junction_index": 4,
+      "source_union": {
+        "is_null": false,
+        "is_valid": false,
+        "solid_count": 1,
+        "volume_mm3": 33994.71449246111
+      },
+      "source_fitting": {
+        "is_null": true,
+        "is_valid": null,
+        "solid_count": 0,
+        "volume_mm3": null
+      },
+      "errors": [],
+      "experiments": [
+        {
+          "variant": "global_original",
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71392749986
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          },
+          "cut_not_evaluated_reason": "Union is not one valid positive-volume solid",
+          "errors": []
+        },
+        {
+          "variant": "global_sequential",
+          "union": {
+            "is_null": true,
+            "is_valid": null,
+            "solid_count": 0,
+            "volume_mm3": null
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          },
+          "cut_not_evaluated_reason": "Union is not one valid positive-volume solid",
+          "errors": []
+        },
+        {
+          "variant": "global_branch_grouped",
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.713929922844
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          },
+          "cut_not_evaluated_reason": "Union is not one valid positive-volume solid",
+          "errors": []
+        },
+        {
+          "variant": "joint_centred_original",
+          "union": {
+            "is_null": false,
+            "is_valid": false,
+            "solid_count": 1,
+            "volume_mm3": 33994.71448281539
+          },
+          "cut": {
+            "is_null": null,
+            "is_valid": null,
+            "solid_count": null,
+            "volume_mm3": null
+          },
+          "cut_not_evaluated_reason": "Union is not one valid positive-volume solid",
+          "errors": []
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "root_cause_confirmed": false,
+  "prototype_repaired": false,
+  "geometry_acceptance": null,
+  "interpretation": "Differences can support a failure hypothesis, but validity alone does not prove material equivalence or establish a root cause."
+}

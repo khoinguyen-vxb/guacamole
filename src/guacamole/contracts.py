@@ -650,9 +650,31 @@ class Send(Model):
         return self
 
 
+def _batched(data: object, into: str, *single: str) -> object:
+    """Read a turn recorded before batching: its single item's fields become one entry.
+
+    A before-validator hands strict tuple fields Python lists rather than JSON
+    arrays, so lists become tuples here.
+    """
+    if not isinstance(data, dict):
+        return data
+    data = {k: tuple(v) if isinstance(v, list) else v for k, v in data.items()}
+    if single[0] in data:
+        item = {key: data.pop(key) for key in single if key in data}
+        data[into] = (item[single[0]] if len(single) == 1 else item,)
+    return data
+
+
 class Acknowledge(Model):
+    """Mark messages seen; they leave your context unless a reply is still owed."""
+
     kind: Literal["acknowledge"] = "acknowledge"
-    message_id: str
+    message_ids: tuple[str, ...] = Field(min_length=1)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _single(cls, data: object) -> object:
+        return _batched(data, "message_ids", "message_id")
 
 
 class AskHuman(Model):
@@ -681,14 +703,25 @@ class Record(Model):
     record: Requirement | OpenItem
 
 
-class Publish(Model):
-    kind: Literal["publish"] = "publish"
+class PublishedFile(Model):
     path: str
     artifact_id: str
     artifact_kind: str
+
+
+class Publish(Model):
+    """Publish every file one tool run produced, sharing inputs and requirements."""
+
+    kind: Literal["publish"] = "publish"
+    files: tuple[PublishedFile, ...] = Field(min_length=1)
     tool_request: str
     inputs: tuple[Ref, ...]
     requirements: tuple[Ref, ...]
+
+    @model_validator(mode="before")
+    @classmethod
+    def _single(cls, data: object) -> object:
+        return _batched(data, "files", "path", "artifact_id", "artifact_kind")
 
 
 class Verify(Model):
@@ -740,6 +773,15 @@ class Retry(Model):
     reason: str = Field(min_length=1)
 
 
+class Supersede(Model):
+    """Settle your failed request with the later completed request that corrected it."""
+
+    kind: Literal["supersede"] = "supersede"
+    request_id: str
+    by: str
+    reason: str = Field(min_length=1)
+
+
 class UpdateModel(Model):
     kind: Literal["model"] = "model"
     summary: str = Field(min_length=1)
@@ -772,6 +814,7 @@ type Action = Annotated[
     | Finish
     | Wait
     | Retry
+    | Supersede
     | UpdateModel
     | Amend,
     Field(discriminator="kind"),

@@ -60,7 +60,8 @@ rejects candidates that violate its bounds, and invalidates decisions a new revi
 contradicts. Only the systems engineer (task_id systems_engineer) changes the model;
 send it questions, conflicts and change requests instead of contradicting the model.
 Wait when external inputs or peer responses are
-needed. A finished task cannot hide unresolved required child requests. Use exact
+needed. A finished task cannot hide unresolved required child requests: retry a
+failed one, or supersede it with the later completed request that corrected it. Use exact
 current Ref objects from state or sources; never manufacture their hashes.
 state.records lists current records that are not already in sources; workers see
 only their own tool records. Stale records cannot be read or cited.
@@ -71,7 +72,8 @@ state.recent_tool_calls lists your latest finished tool calls with previews of t
 arguments and results; a marker such as "…[N more chars]" shows where a preview was
 cut. Reuse them instead of repeating a call, and read a call's ref when you need its
 full result. last_observation holds your latest result in full and is replaced
-every turn, so read a tool_result ref to keep an older result in context.
+every turn, so read a tool_result ref to keep an older result in context. Your
+latest call's full arguments are among sources as its job_inputs record.
 """
 
 CHIEF = (
