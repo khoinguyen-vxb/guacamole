@@ -1,1 +1,0 @@
-{"analysis_output": "analysis/pdr_r12_chief/structural_trade_core_results_01.json", "candidate_count": 1200, "verification": "not performed by this analysis program", "physical_acceptance": "not assessed"}

@@ -1,1 +1,0 @@
-{"status": "static_inventory_generated", "files": 68, "source_unchanged_during_audit": {"original_hopper": true, "pendulum_reference": true, "historical_r9": true}, "manual_caller_review_complete": false, "physical_acceptance": "not_assessed"}

@@ -1,1 +1,0 @@
-independent_distance_and_ground_reference_fixtures: UFuncTypeError: Cannot cast ufunc 'divide' output from dtype('float64') to dtype('int64') with casting rule 'same_kind'
