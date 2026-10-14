@@ -733,7 +733,6 @@ source = { editable = "." }
 dependencies = [
     { name = "mcp" },
     { name = "pydantic" },
-    { name = "pytest" },
     { name = "sysml" },
     { name = "tiktoken" },
 ]
@@ -764,6 +763,7 @@ websocket = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "pytest" },
     { name = "ruff" },
     { name = "ty" },
 ]
@@ -779,7 +779,6 @@ requires-dist = [
     { name = "openpyxl", marker = "extra == 'sounding-rocket'", specifier = ">=3.1,<4" },
     { name = "pydantic", specifier = ">=2.12,<3" },
     { name = "pypdf", marker = "extra == 'sounding-rocket'", specifier = ">=6,<7" },
-    { name = "pytest", specifier = ">=9.1.1" },
     { name = "python-pptx", marker = "extra == 'sounding-rocket'", specifier = ">=1,<2" },
     { name = "sysml", specifier = ">=0.1.0" },
     { name = "tiktoken", specifier = ">=0.12,<1" },
@@ -790,6 +789,7 @@ provides-extras = ["websocket", "litellm", "langchain", "graphiti", "mem0", "sou
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "pytest", specifier = ">=9.1.1" },
     { name = "ruff", specifier = ">=0.16" },
     { name = "ty", specifier = ">=0.0.84" },
 ]

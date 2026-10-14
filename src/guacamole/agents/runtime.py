@@ -75,6 +75,7 @@ class Runtime:
         self.chief_id = ""
         self.engineer_id = ""
         self.request: ProjectRequest
+        self.input_tokens = 0
 
     def _records(self, provider: ReasoningProvider) -> tuple[Qualification, ...]:
         profile = (provider.name, provider.model, getattr(provider, "effort", None))
@@ -172,6 +173,8 @@ class Runtime:
         workers on the old plan, which then failed validation on every tool call.
         """
         store = self.project.store
+        if chief.decision_id is None:
+            return
         tasks = {t.id: t for t in self.project.decisions.plan(chief.decision_id).tasks}
         decision = store.get("decision", chief.decision_id).ref
         for worker in self._agents():
@@ -361,6 +364,14 @@ class Runtime:
                     "run", resume, {**run, "engineer_id": engineer.id}, actor="script"
                 )
                 self._add_agent(engineer, parent_request=None, required=False)
+        if self.request.budget.max_run_input_tokens is not None:
+            # A resumed run keeps counting what it already sent, failed calls included.
+            ids = {r.id for r in self.project.requests() if r.run_id == self.run_id}
+            self.input_tokens = sum(
+                int(str(e.details["input_tokens"]))
+                for e in store.events()
+                if e.type == "provider.dispatched" and e.request_id in ids
+            )
         start = time.monotonic()
         self.deadline = start + self.request.budget.max_seconds
         watchdog = self.project.watchdog
@@ -778,6 +789,18 @@ class Runtime:
                         packet = await build(call.agent)
                     if self.project.human.version(self.run_id) != human_version:
                         return
+                    cap = self.request.budget.max_run_input_tokens
+                    if (
+                        cap is not None
+                        and self.input_tokens + packet.input_tokens > cap
+                    ):
+                        raise ProviderError(
+                            f"Run input-token budget exhausted: {self.input_tokens:,} "
+                            f"of {cap:,} estimated tokens sent; raise "
+                            "max_run_input_tokens to continue"
+                        )
+                    # Counted here, before any await, so concurrent turns cannot overshoot.
+                    self.input_tokens += packet.input_tokens
                     store.event(
                         agent.id,
                         "provider.dispatched",
@@ -813,6 +836,19 @@ class Runtime:
                         "agent.turn_superseded",
                         packet.invocation_id,
                         {"reason": "Human input arrived during this invocation"},
+                        request_id=state.request_id,
+                    )
+                    return
+                # A replan can move a worker to another plan, tools or tier mid-call;
+                # its reply answered the old one, so reason again instead of acting.
+                if store.model("agent", agent.id, AgentSpec).decision_id != (
+                    agent.decision_id
+                ):
+                    store.event(
+                        "runtime",
+                        "agent.turn_superseded",
+                        packet.invocation_id,
+                        {"reason": "The agent's plan changed during this invocation"},
                         request_id=state.request_id,
                     )
                     return
@@ -1078,14 +1114,16 @@ class Runtime:
                 )
                 if action.request.kind == "work_plan":
                     plan = project.decisions.plan(decision)
+                    # Reload: this turn may have raised the budget or compacted context.
+                    current = store.model("agent", agent.id, AgentSpec)
                     pins = tuple(
-                        r for r in agent.context.pinned if r.kind != "decision"
+                        r for r in current.context.pinned if r.kind != "decision"
                     )
-                    updated = agent.model_copy(
+                    updated = current.model_copy(
                         update={
                             "decision_id": decision,
                             "tools": plan.chief_tools,
-                            "context": agent.context.model_copy(
+                            "context": current.context.model_copy(
                                 update={
                                     "pinned": (
                                         *pins,
@@ -1113,8 +1151,14 @@ class Runtime:
                 plan = project.decisions.plan(action.decision_id)
                 task = next(t for t in plan.tasks if t.id == action.task_id)
                 agents = self._agents()
-                if sum(a.parent_id is not None for a in agents) >= (
-                    self.request.budget.max_agents
+                if (
+                    sum(
+                        a.parent_id is not None
+                        and store.model("agent_state", a.id, AgentState).status
+                        not in {"completed", "superseded"}
+                        for a in agents
+                    )
+                    >= self.request.budget.max_agents
                 ):
                     raise PermissionError("Project agent limit reached")
                 if any(

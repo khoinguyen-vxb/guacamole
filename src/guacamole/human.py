@@ -242,7 +242,7 @@ class Humans:
                 if recipient and store.maybe("agent_state", recipient)
                 else None
             )
-            if state and state.status not in {"completed", "superseded"}:
+            if recipient and state and state.status not in {"completed", "superseded"}:
                 runtime = project.runtime
                 if state.status == "waiting" and runtime and runtime.run_id == run_id:
                     agent = store.model("agent", recipient, AgentSpec)
@@ -376,6 +376,23 @@ class Humans:
                         context_refs=(source,),
                     )
                 )
+            # Failed or interrupted work of the superseded reasoning keeps its status,
+            # but no agent is left to retry or supersede it, so it stops holding the
+            # run open. After the redirect above, so new requests keep their flag.
+            for request in project.requests():
+                if (
+                    request.run_id == run_id
+                    and request.required
+                    and request.status in TERMINAL - {"completed", "cancelled"}
+                ):
+                    store.put(
+                        "request",
+                        request.id,
+                        request.model_copy(update={"required": False}),
+                        actor=actor,
+                        request_id=request.id,
+                        event="request.superseded",
+                    )
         return source
 
     def review_answered(self, ref: Ref, *, author: str, disposition: str) -> None:

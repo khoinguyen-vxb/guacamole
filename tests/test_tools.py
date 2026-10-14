@@ -12,8 +12,9 @@ from unittest.mock import patch
 
 from mcp import Client, StdioServerParameters
 from pydantic import BaseModel, ValidationError
+from runtime_support import plan_request
 
-from guacamole import ProducedFile, Project, ToolRegistry
+from guacamole import ProducedFile, Project, Requirement, ToolRegistry
 from guacamole.contracts import FileRecord, RequestRecord
 from guacamole.tools.mcp import ToolSession, create_mcp
 from guacamole.websocket import WebSocketBridge
@@ -211,6 +212,44 @@ class ToolsTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(failed.record.status, "cancelled")
             self.assertIn(fixed.id, failed.record.reason or "")
             activity.transition(parent.id, "completed", actor="script")
+
+    async def test_retry_refused_by_its_plan_leaves_the_request_failed(self):
+        async def check(passed: bool) -> int:
+            if not passed:
+                raise ValueError("fixture checker rejected")
+            return 1
+
+        tools = ToolRegistry()
+        tool = tools.register(check, retry_safe=True)
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), tools=tools) as project,
+        ):
+            brief = Path(directory) / "brief.txt"
+            brief.write_text("fixture")
+            source = project.ingest(brief, source_id="brief")
+
+            def requirement(id: str):
+                return project.record_requirement(
+                    Requirement(
+                        id=id, wording="fixture", source=source, source_quote="fixture"
+                    )
+                )
+
+            decision = await project.decisions.choose(
+                plan_request(requirement("r1")),
+                selected="fixture",
+                explanation="Test fixture selection",
+            )
+            job = project.executor.submit(
+                tool, {"passed": False}, actor="worker", decision_id=decision
+            )
+            with self.assertRaises(ValueError):
+                await job.collect()
+            requirement("r2")  # The plan no longer covers every requirement.
+            with self.assertRaisesRegex(ValueError, "requirement"):
+                project.executor.retry(job.id, actor="worker", reason="fixture")
+            self.assertEqual(job.record.status, "failed")
 
     async def test_contracts_and_atomic_dispatch(self):
         registry = ToolRegistry()

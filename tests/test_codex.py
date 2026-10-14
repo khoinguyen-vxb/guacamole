@@ -68,7 +68,9 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
             "output.write_text('fixture-secret' if invalid else json.dumps(payload))\n"
         )
         self.executable.chmod(0o755)
-        self.provider = CodexReasoning(executable=str(self.executable), web_search=False)
+        self.provider = CodexReasoning(
+            executable=str(self.executable), web_search=False
+        )
         self.packet = ContextPacket(
             agent_id="fixture",
             invocation_id="fixture",
@@ -112,9 +114,12 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
             )
             packet = project.store.list("context")[0].data
             self.assertEqual(packet["provider"], "codex-cli")
-            self.assertEqual(packet["token_count_method"], self.provider.token_count_method)
             self.assertEqual(
-                packet["input_tokens"], await self.provider.count_tokens(packet["prompt"])
+                packet["token_count_method"], self.provider.token_count_method
+            )
+            self.assertEqual(
+                packet["input_tokens"],
+                await self.provider.count_tokens(packet["prompt"]),
             )
 
     async def test_stable_prefix_rides_in_instructions_and_usage_is_reported(self):
@@ -155,10 +160,14 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_token_count_compresses_text_and_accepts_literal_special_tokens(self):
         prompt = "Hopper engineering evidence: mass and inertia. " * 1000
-        self.assertLess(await self.provider.count_tokens(prompt), len(prompt.encode()) // 2)
+        self.assertLess(
+            await self.provider.count_tokens(prompt), len(prompt.encode()) // 2
+        )
         self.assertGreater(await self.provider.count_tokens("<|endoftext|>"), 1024)
 
-    async def test_cli_character_limit_covers_initial_and_validation_retry_prompts(self):
+    async def test_cli_character_limit_covers_initial_and_validation_retry_prompts(
+        self,
+    ):
         with (
             patch.object(self.provider, "max_input_chars", len(self.packet.prompt) - 1),
             self.assertRaisesRegex(ProviderError, "CLI input limit"),

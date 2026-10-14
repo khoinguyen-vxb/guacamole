@@ -15,8 +15,8 @@ Or: uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra m
     .venv/bin/python -m examples.ehopper.ehopper
 
 Edit the configuration below; this script has no command-line arguments.
-Install the codex Code CLI and run codex login with your codex account before running.
-Reasoning uses a local codex --print process with codex Opus 5.5; no API key is needed.
+Install the Codex CLI and run codex login with your ChatGPT account before running.
+Reasoning uses a local codex exec process with GPT-6 Astra; no API key is needed.
 Optional OPENAI_API_KEY adds context summarization and Graphiti/mem0 memory.
 uv installs this script's document readers; backend installations are separate.
 See https://docs.astral.sh/uv/guides/scripts/ for inline dependency metadata.
@@ -785,7 +785,7 @@ async def notifications(project: Project) -> None:
 async def main() -> None:
     if shutil.which("codex") is None:
         raise SystemExit(
-            "Install the codex Code CLI on PATH and run 'codex login' with your codex account."
+            "Install the Codex CLI on PATH and run 'codex login' with your ChatGPT account."
         )
     missing = [
         name

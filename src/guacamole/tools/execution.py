@@ -69,21 +69,24 @@ class Executor:
         snapshot = self.project.store.get("job_inputs", record.id)
         for ref in snapshot.dependencies:
             self.project.store.resolve(ref, current=True)
-        self.project.activity.retry(
-            request_id, actor=actor, reason=reason, reconcile_uncertain=reconciled
-        )
-        return self.submit(
-            tool,
-            record.arguments,
-            actor=record.requester,
-            run_id=record.run_id,
-            parent_id=record.parent_id,
-            decision_id=record.decision_id,
-            rationale_id=record.rationale_id,
-            packet_id=record.packet_id,
-            inputs=snapshot.dependencies,
-            retry_id=request_id,
-        )
+        # A submit refused by its plan rolls the re-queue back; a request left
+        # queued could never be retried, superseded or recovered.
+        with self.project.store.atomic():
+            self.project.activity.retry(
+                request_id, actor=actor, reason=reason, reconcile_uncertain=reconciled
+            )
+            return self.submit(
+                tool,
+                record.arguments,
+                actor=record.requester,
+                run_id=record.run_id,
+                parent_id=record.parent_id,
+                decision_id=record.decision_id,
+                rationale_id=record.rationale_id,
+                packet_id=record.packet_id,
+                inputs=snapshot.dependencies,
+                retry_id=request_id,
+            )
 
     def submit[R](
         self,

@@ -16,7 +16,7 @@ This installs the host/document readers and the supplied local FreeCAD MCP.
 An alternative using the existing repository environment is:
 
 ```bash
-uv sync --extra sounding-rocket
+uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra mem0
 uv sync --project examples/ehopper/freecad-mcp --locked --no-dev
 .venv/bin/python -m examples.ehopper.ehopper
 ```

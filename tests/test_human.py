@@ -161,9 +161,7 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
                     )
                 if not self.asked:
                     self.asked = True
-                    return turn(
-                        AskHuman(question="Agree with 2 kg?", blocking=False)
-                    )
+                    return turn(AskHuman(question="Agree with 2 kg?", blocking=False))
                 return turn(Wait(reason="Continue without the answer"))
 
         with tempfile.TemporaryDirectory() as directory:
@@ -184,8 +182,7 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
                     [
                         r.id
                         for r in project.requests()
-                        if r.status == "cancelled"
-                        and requests.get(r.id) != "cancelled"
+                        if r.status == "cancelled" and requests.get(r.id) != "cancelled"
                     ]
                 )
                 await project.run(resume=result.run_id)
@@ -271,6 +268,40 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(await job.collect(), 7)
                 self.assertEqual(job.record.status, "completed")
                 self.assertTrue(project.store.get("tool_result", job.id).stale)
+
+    async def test_correction_releases_failed_work_but_keeps_the_chief_required(self):
+        started = asyncio.Event()
+
+        async def fail() -> int:
+            raise RuntimeError("fixture failure")
+
+        class Hanging(TestReasoning):
+            async def respond(self, packet):
+                started.set()
+                await asyncio.Event().wait()
+
+        with tempfile.TemporaryDirectory() as directory:
+            tools = ToolRegistry()
+            tool = tools.register(fail)
+            with Project(Path(directory), tools=tools, reasoning=Hanging()) as project:
+                task = asyncio.create_task(project.run(brief()))
+                await asyncio.wait_for(started.wait(), 5)
+                run_id = project.runtime.run_id
+                task.cancel()  # As Ctrl-C does: the Chief's request is interrupted.
+                with self.assertRaises(asyncio.CancelledError):
+                    await task
+                job = project.executor.submit(tool, {}, run_id=run_id)
+                with self.assertRaises(RuntimeError):
+                    await job.collect()
+                project.human.interject(
+                    "Start over", author="test human", run_id=run_id
+                )
+                # Nothing is left to settle it, so it no longer holds the run open.
+                self.assertEqual(job.record.status, "failed")
+                self.assertFalse(job.record.required)
+                chief = project.store.get("run", run_id).data["chief_id"]
+                state = project.store.get("agent_state", chief).data
+                self.assertTrue(project.activity.get(state["request_id"]).required)
 
     async def test_websocket_human_commands_are_deduplicated_and_host_only(self):
         with (

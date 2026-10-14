@@ -184,7 +184,11 @@ class Budget(Model):
     max_steps: int = Field(default=40, gt=0)
     max_tool_calls: int = Field(default=30, ge=0)
     max_seconds: float = Field(default=600.0, gt=0)
+    # Workers running at once; completed and superseded ones free their slot.
     max_agents: int = Field(default=12, ge=0)
+    # Run-wide cap on estimated agent prompt tokens, failed calls included (the
+    # watchdog's own calls are not counted); None is unlimited.
+    max_run_input_tokens: int | None = Field(default=None, gt=0)
 
 
 class ToolGrant(Model):

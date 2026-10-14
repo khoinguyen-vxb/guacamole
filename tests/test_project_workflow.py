@@ -333,6 +333,32 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                         inputs=(artifact,),
                     )
                     verified = await check_job.collect()
+                    # Passing evidence about none of a deliverable's artifacts is no proof.
+                    unrelated = project.evidence(
+                        Evidence(
+                            id=stage + "-unrelated",
+                            kind="verification",
+                            outcome=verified.outcome,
+                            explanation=verified.explanation,
+                            artifacts=(),
+                            requirements=(req_ref,),
+                            request_id=check_job.id,
+                            decision_id=decision,
+                        )
+                    )
+                    project.deliver(
+                        Deliverable(
+                            spec_id=stage + "-design",
+                            artifacts=(artifact,),
+                            evidence=(unrelated,),
+                            rationale_id="fixture-rationale",
+                        ),
+                        decision_id=decision,
+                    )
+                    self.assertIn(
+                        f"{stage}-design: verification evidence covers none of its artifacts",
+                        project.reviews.checks(decision)[2],
+                    )
                     evidence = project.evidence(
                         Evidence(
                             id=stage + "-evidence",

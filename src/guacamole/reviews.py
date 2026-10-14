@@ -88,7 +88,13 @@ class Reviews:
                         covered.update(r.id for r in artifact.requirements)
                     elif ref.kind == "evidence":
                         evidence = store.model("evidence", ref.id, Evidence)
-                        if evidence.outcome == "passed":
+                        if not {a.id for a in evidence.artifacts} & {
+                            a.id for a in deliverable.artifacts
+                        }:
+                            issues.append(
+                                f"{spec.id}: {evidence.kind} evidence covers none of its artifacts"
+                            )
+                        elif evidence.outcome == "passed":
                             evidence_kinds.add(evidence.kind)
                         else:
                             issues.append(

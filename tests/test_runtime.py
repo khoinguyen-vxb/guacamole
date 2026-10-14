@@ -14,6 +14,7 @@ from guacamole import (
     AgentSpec,
     AgentTurn,
     AskHuman,
+    Budget,
     Candidate,
     Constraint,
     ContextSpec,
@@ -70,18 +71,24 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         current = {"kind": "artifact", "id": "current", "revision": 1, "sha256": "hash"}
         entries = [
             {"ref": ref, "content": content},
-            {"ref": nested, "content": {"request": {"context": [
-                {"ref": ref, "content": content}
-            ]}}},
+            {
+                "ref": nested,
+                "content": {"request": {"context": [{"ref": ref, "content": content}]}},
+            },
             current,  # Newer decisions store refs only.
         ]
-        payload = {"sources": [
-            {"ref": ref, "data": content},
-            {"ref": {"kind": "decision"}, "data": {
-                "request": {"context": entries, "question": "Choose design"},
-                "result": {"selected": "approved"},
-            }},
-        ]}
+        payload = {
+            "sources": [
+                {"ref": ref, "data": content},
+                {
+                    "ref": {"kind": "decision"},
+                    "data": {
+                        "request": {"context": entries, "question": "Choose design"},
+                        "result": {"selected": "approved"},
+                    },
+                },
+            ]
+        }
         original = json.dumps(payload)
         encoded = encode_context(payload)
         sources = json.loads(encoded)["sources"]
@@ -107,28 +114,48 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             async def count_tokens(self, prompt):
                 return len(prompt) // 10
 
-        with tempfile.TemporaryDirectory() as directory, Project(Path(directory)) as project:
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory)) as project,
+        ):
             source = Path(directory) / "large.txt"
             source.write_text("π" * 30_000)
             ref = project.ingest(source)
             agent = AgentSpec(
-                id="worker", task_id="task", parent_id="chief", objective="Inspect",
+                id="worker",
+                task_id="task",
+                parent_id="chief",
+                objective="Inspect",
                 context=ContextSpec(selected=(ref,), max_input_tokens=100_000),
                 decision_id=None,
             )
             packet = await project.contexts.build(
-                agent, "request", Limited(), instructions="test", state={},
+                agent,
+                "request",
+                Limited(),
+                instructions="test",
+                state={},
             )
             self.assertLessEqual(len(packet.prompt), Limited.max_input_chars)
             self.assertNotIn(ref, packet.sources)
             self.assertTrue(packet.deferred)
-            self.assertEqual(packet.input_tokens, await Limited().count_tokens(packet.prompt))
-            pinned = agent.model_copy(update={"context": agent.context.model_copy(
-                update={"pinned": (ref,), "selected": ()},
-            )})
+            self.assertEqual(
+                packet.input_tokens, await Limited().count_tokens(packet.prompt)
+            )
+            pinned = agent.model_copy(
+                update={
+                    "context": agent.context.model_copy(
+                        update={"pinned": (ref,), "selected": ()},
+                    )
+                }
+            )
             with self.assertRaisesRegex(ContextOverflow, "characters"):
                 await project.contexts.build(
-                    pinned, "request", Limited(), instructions="test", state={},
+                    pinned,
+                    "request",
+                    Limited(),
+                    instructions="test",
+                    state={},
                 )
 
     async def test_prompt_leads_with_stable_fields_and_marks_cacheable_prefixes(self):
@@ -140,28 +167,39 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
 
         tools = ToolRegistry()
         granted, _ = (tools.register(f, requires_plan=False) for f in (probe, other))
-        with tempfile.TemporaryDirectory() as directory, Project(
-            Path(directory), tools=tools
-        ) as project:
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), tools=tools) as project,
+        ):
             source = Path(directory) / "source.txt"
             source.write_text("pinned evidence")
             agent = AgentSpec(
-                id="chief", task_id="chief", parent_id=None, objective="Plan",
+                id="chief",
+                task_id="chief",
+                parent_id=None,
+                objective="Plan",
                 context=ContextSpec(
                     pinned=(project.ingest(source),), max_input_tokens=100_000
                 ),
-                decision_id=None, tools=(granted.definition.grant,),
+                decision_id=None,
+                tools=(granted.definition.grant,),
             )
             packets = [
                 await project.contexts.build(
-                    agent, "request", TestReasoning(), instructions="test",
-                    state={"turn": turn}, catalogue=True,
+                    agent,
+                    "request",
+                    TestReasoning(),
+                    instructions="test",
+                    state={"turn": turn},
+                    catalogue=True,
                 )
                 for turn in (1, 2)
             ]
         first, second = packets
         data = json.loads(first.prompt)
-        self.assertEqual(list(data)[:3], ["instructions", "response_schema", "result_schema"])
+        self.assertEqual(
+            list(data)[:3], ["instructions", "response_schema", "result_schema"]
+        )
         self.assertEqual(list(data)[-2:], ["messages", "state"])
         # The Chief's own tools are in tool_schemas; the catalogue lists the rest.
         self.assertEqual([t["grant"]["name"] for t in data["tool_schemas"]], ["probe"])
@@ -185,7 +223,10 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 Counting.calls += 1
                 return len(prompt.encode())
 
-        with tempfile.TemporaryDirectory() as directory, Project(Path(directory)) as project:
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory)) as project,
+        ):
             refs = []
             for index, size in enumerate((1_000, 1_000, 1_000, 5_000, 500)):
                 path = Path(directory) / f"source{index}.txt"
@@ -194,7 +235,10 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
 
             async def build(budget):
                 agent = AgentSpec(
-                    id="worker", task_id="task", parent_id="chief", objective="Read",
+                    id="worker",
+                    task_id="task",
+                    parent_id="chief",
+                    objective="Read",
                     context=ContextSpec(selected=tuple(refs), max_input_tokens=budget),
                     decision_id=None,
                 )
@@ -205,7 +249,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
 
             packet = await build(100_000)
             self.assertEqual(packet.sources, tuple(refs))
-            self.assertEqual(Counting.calls, 2)  # The pinned base, then all sources at once
+            self.assertEqual(
+                Counting.calls, 2
+            )  # The pinned base, then all sources at once
             self.assertEqual(packet.input_tokens, len(packet.prompt.encode()))
             # 2,000 short: the large fourth source no longer fits, the small fifth does.
             packet = await build(len(packet.prompt.encode()) - 2_000)
@@ -224,6 +270,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             "log": "iteration " * 5_000,
             "cells": list(range(5_000)),
         }
+
         def size(value):
             return len(json.dumps(value, ensure_ascii=False, separators=(",", ":")))
 
@@ -603,7 +650,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_litellm_marks_stable_prefixes_for_claude_and_reports_usage(self):
         expected = AgentTurn(
-            rationale=Rationale(objective="fixture", explanation="No engineering claim"),
+            rationale=Rationale(
+                objective="fixture", explanation="No engineering claim"
+            ),
             action=Wait(reason="await inputs"),
         )
         prompt = '{"instructions":"stable","agent":{},"state":{"turn":1}}'
@@ -914,7 +963,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             runtime = Runtime(project, TestReasoning())
 
             def route(family, tier=None):
-                task = TaskAuthorization(id="t", objective="o", family=family, tier=tier)
+                task = TaskAuthorization(
+                    id="t", objective="o", family=family, tier=tier
+                )
                 return runtime._route(task)[0]
 
             self.assertEqual(route("extraction"), "cheap")
@@ -1608,7 +1659,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(states.count("completed"), 2)
         # Woken after its mid-turn Wait, the Chief saw both worker replies, and the
         # handoffs that did not block their finish.
-        replies = [m for m in provider.chief_seen[6]["messages"] if m["kind"] == "reply"]
+        replies = [
+            m for m in provider.chief_seen[6]["messages"] if m["kind"] == "reply"
+        ]
         self.assertEqual(len(replies), 2)
         for reply in replies:
             self.assertEqual(reply["payload"]["handoffs"], ["Chief-owned input"])
@@ -1796,7 +1849,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             ]
             self.assertEqual(follow_up["sender"], questioner)
             (reply,) = [
-                e for e in project.inbox(questioner) if e.message.id == provider.follow_up
+                e
+                for e in project.inbox(questioner)
+                if e.message.id == provider.follow_up
             ]
             self.assertIsNotNone(reply.acknowledged_at)
             self.assertIn("without reply_to", provider.task_reply["detail"])
@@ -1845,6 +1900,234 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             result = await project.run(resume=result.run_id)
             self.assertEqual(result.status, "incomplete")
             self.assertFalse(project.human.inbox())
+
+    async def test_finished_and_superseded_workers_free_their_agent_slot(self):
+        class Spawner(TestReasoning):
+            count = 0
+
+            async def respond(self, packet):
+                data = json.loads(packet.prompt)
+                action = Wait(reason="Fixture waits")
+                if data["agent"]["task_id"] == "chief":
+                    self.count += 1
+                    tasks = tuple(
+                        TaskAuthorization(id=task, objective="fixture")
+                        for task in ("A", "B")
+                    )
+                    if self.count == 1:
+                        action = Record(
+                            record=Requirement(
+                                id="r1",
+                                wording="fixture",
+                                source=project.store.list("source")[0].ref,
+                                source_quote="fixture",
+                            )
+                        )
+                    elif self.count == 2:
+                        action = Decide(
+                            selected="fixture",
+                            request=plan_request(
+                                project.store.get("requirement", "r1").ref, tasks=tasks
+                            ),
+                        )
+                    elif self.count in (3, 5):
+                        action = Spawn(
+                            decision_id=data["agent"]["decision_id"],
+                            task_id="A" if self.count == 3 else "B",
+                        )
+                return AgentTurn(
+                    rationale=Rationale(objective="fixture", explanation="Fixture"),
+                    action=action,
+                )
+
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=Spawner()) as project,
+        ):
+            result = await project.run(
+                ProjectRequest(
+                    description="fixture",
+                    context=ContextSpec(max_input_tokens=200_000),
+                    budget=Budget(max_agents=1),
+                )
+            )
+            (worker,) = [
+                s for s in project.store.list("agent") if s.data["task_id"] == "A"
+            ]
+            # As human input leaves an unfinished worker: no longer holding a slot.
+            state = project.store.model("agent_state", worker.ref.id, AgentState)
+            project.store.put(
+                "agent_state",
+                worker.ref.id,
+                state.model_copy(update={"status": "superseded"}),
+                actor="script",
+            )
+            await project.run(resume=result.run_id)
+            self.assertEqual(
+                sorted(s.data["task_id"] for s in project.store.list("agent")),
+                ["A", "B", "chief"],
+            )
+
+    async def test_a_reply_that_spans_a_replan_is_not_acted_on(self):
+        replanned = asyncio.Event()
+        probes = []
+
+        def probe() -> str:
+            probes.append("probe")
+            return "ok"
+
+        class Overlap(TestReasoning):
+            def __init__(self):
+                self.steps = {}
+
+            async def respond(self, packet):
+                data = json.loads(packet.prompt)
+                task = data["agent"]["task_id"]
+                count = self.steps[task] = self.steps.get(task, 0) + 1
+                action = Wait(reason="Fixture waits")
+                if task == "A" and count == 1:
+                    # The Chief replans while this call is out.
+                    await replanned.wait()
+                    action = ToolCall(tool=tool.definition.grant, arguments={})
+                elif task == "chief":
+                    tasks = (
+                        TaskAuthorization(
+                            id="A", objective="probe", tools=(tool.definition.grant,)
+                        ),
+                    )
+                    if count == 1:
+                        action = Record(
+                            record=Requirement(
+                                id="r1",
+                                wording="fixture",
+                                source=project.store.list("source")[0].ref,
+                                source_quote="fixture",
+                            )
+                        )
+                    elif count in (2, 4):
+                        action = Decide(
+                            selected="fixture",
+                            request=plan_request(
+                                project.store.get("requirement", "r1").ref, tasks=tasks
+                            ),
+                        )
+                    elif count == 3:
+                        action = Spawn(
+                            decision_id=data["agent"]["decision_id"], task_id="A"
+                        )
+                    elif count == 5:
+                        replanned.set()
+                return AgentTurn(
+                    rationale=Rationale(objective=task, explanation="Fixture"),
+                    action=action,
+                )
+
+        tools = ToolRegistry()
+        tool = tools.register(probe)
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), tools=tools, reasoning=Overlap()) as project,
+        ):
+            await project.run(
+                ProjectRequest(
+                    description="fixture",
+                    context=ContextSpec(max_input_tokens=200_000),
+                )
+            )
+            dropped = [
+                e.details for e in project.events() if e.type == "agent.turn_superseded"
+            ]
+        self.assertEqual(
+            dropped, [{"reason": "The agent's plan changed during this invocation"}]
+        )
+        self.assertFalse(probes)
+
+    async def test_a_plan_decision_keeps_the_budget_raised_in_its_turn(self):
+        class Planner(TestReasoning):
+            plan = False
+
+            async def respond(self, packet):
+                requirement = project.store.maybe("requirement", "r1")
+                action = Wait(reason="Fixture waits")
+                if requirement is None:
+                    action = Record(
+                        record=Requirement(
+                            id="r1",
+                            wording="fixture",
+                            source=project.store.list("source")[0].ref,
+                            source_quote="fixture",
+                        )
+                    )
+                elif self.plan and not project.store.list("decision"):
+                    action = Decide(
+                        selected="fixture", request=plan_request(requirement.ref)
+                    )
+                return AgentTurn(
+                    rationale=Rationale(objective="fixture", explanation="Fixture"),
+                    action=action,
+                )
+
+        provider = Planner()
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=provider) as project,
+        ):
+            request = ProjectRequest(
+                description="fixture", context=ContextSpec(max_input_tokens=200_000)
+            )
+            result = await project.run(request)
+            chief_id = str(project.store.get("run", result.run_id).data["chief_id"])
+            chief = project.store.model("agent", chief_id, AgentSpec)
+            small = chief.context.model_copy(update={"max_input_tokens": 1_000})
+            project.store.put(
+                "agent",
+                chief_id,
+                chief.model_copy(update={"context": small}),
+                actor="script",
+            )
+            provider.plan = True
+            await project.run(resume=result.run_id)
+            chief = project.store.model("agent", chief_id, AgentSpec)
+            self.assertIsNotNone(chief.decision_id)
+            # Raised once: recording the plan no longer restores the stale budget.
+            raised = [e for e in project.events() if e.type == "agent.budget_raised"]
+            self.assertEqual(
+                [e.details for e in raised], [{"from": 1_000, "to": 200_000}]
+            )
+
+    async def test_run_input_token_budget_blocks_dispatch_across_resume(self):
+        class Waiting(TestReasoning):
+            calls = 0
+
+            async def respond(self, packet):
+                self.calls += 1
+                return AgentTurn(
+                    rationale=Rationale(objective="fixture", explanation="Fixture"),
+                    action=Wait(reason="fixture"),
+                )
+
+        provider = Waiting()
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=provider) as project,
+        ):
+            result = await project.run(
+                ProjectRequest(
+                    description="fixture", context=ContextSpec(max_input_tokens=200_000)
+                )
+            )
+            sent = sum(
+                e.details["input_tokens"]
+                for e in project.events()
+                if e.type == "provider.dispatched"
+            )
+            run = project.store.get("run", result.run_id).data
+            run["request"]["budget"]["max_run_input_tokens"] = sent + 1
+            project.store.put("run", result.run_id, run, actor="script")
+            # The resumed run counts what it already sent, so nothing more goes out.
+            result = await project.run(resume=result.run_id)
+            self.assertEqual(provider.calls, 1)
+            self.assertIn("input-token budget exhausted", "".join(result.open_items))
 
 
 if __name__ == "__main__":

@@ -8,3 +8,17 @@ __pycache__/
 dist/
 *.egg-info/
 examples/kookaburra/technical_documentation/*
+
+# Bulky run outputs; the project database keeps their hashes. Summaries,
+# manifests and generator scripts under results/ stay tracked.
+examples/*/results/**/artifacts/
+examples/*/results/**/logs/
+examples/*/results/**/stdout.txt
+examples/*/results/**/stderr.txt
+examples/*/results/**/freecad-*.txt
+examples/*/results/timeline.jsonl
+examples/*/cad_preview/run_std*.txt
+examples/**/*.FCStd
+examples/**/*.FCBak
+examples/**/*.step
+examples/**/*.stp

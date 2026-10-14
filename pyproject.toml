@@ -7,7 +7,6 @@ requires-python = ">=3.13.3"
 dependencies = [
     "pydantic>=2.12,<3",
     "mcp>=2.2,<3",
-    "pytest>=9.1.1",
     "tiktoken>=0.12,<1",
     "sysml>=0.1.0",
 ]
@@ -30,10 +29,14 @@ sounding-rocket = [
 ]
 
 [dependency-groups]
-dev = ["ruff>=0.16", "ty>=0.0.84"]
+dev = ["pytest>=9.1.1", "ruff>=0.16", "ty>=0.0.84"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/guacamole"]
+
+[tool.pytest.ini_options]
+# Never collect the third-party test suites cloned under examples/*/tooling.
+testpaths = ["tests"]
 
 [tool.ruff]
 target-version = "py313"

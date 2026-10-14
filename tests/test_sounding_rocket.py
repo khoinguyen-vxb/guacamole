@@ -177,7 +177,6 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                     ROOT=root,
                     TOOLING=repo.parent,
                     DOCUMENTS=documents,
-                    EXTRA_TOOLS=(),
                 ),
                 Project(
                     root / "state", sandbox=root / "outputs", tools=ToolRegistry()

@@ -10,6 +10,9 @@ in a local SQLite workspace. There is no platform frontend or HTTP service.
 uv sync
 ```
 
+It runs on Linux and macOS (the workspace lock uses `fcntl`; on Windows use WSL),
+with Python 3.13.3 or newer, which `uv sync` installs if needed.
+
 Tool input/output annotations generate strict runtime validation and MCP schemas.
 New tools do not require a solver adapter, agent role, or skill file in Guacamole.
 

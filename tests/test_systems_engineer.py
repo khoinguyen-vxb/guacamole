@@ -4,7 +4,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import sysml
 from runtime_support import TestReasoning, plan_request
+from sysml.library import LibraryUnavailable
 
 from guacamole import (
     AgentTurn,
@@ -39,6 +41,14 @@ from guacamole.contracts import (
 from guacamole.decision import DecisionBlocked
 from guacamole.integrations.sysml import validator
 from guacamole.integrations.sysml.registry import ModelRejected
+
+try:
+    sysml.standard_library()
+    LIBRARY = True
+except LibraryUnavailable:
+    LIBRARY = False
+# Only sysml's platform wheels carry its standard library; linux-aarch64 has none.
+needs_library = unittest.skipUnless(LIBRARY, "sysml has no standard library here")
 
 WORDING = "Liftoff mass shall not exceed 50 kg"
 # Validator-only checks never resolve requirement sources.
@@ -83,6 +93,7 @@ def choice(*candidates, question="Select a fixture motor"):
     )
 
 
+@needs_library
 class ValidatorTests(unittest.TestCase):
     def test_valid_model_traces_requirements_bounds_and_satisfactions(self):
         report = validator.validate(rocket(), [requirement(SOURCE)])
@@ -171,6 +182,7 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
         self.project.close()
         self.directory.cleanup()
 
+    @needs_library
     async def test_decisions_need_a_current_model_of_every_requirement(self):
         project = self.project
         motors = choice(
@@ -229,6 +241,7 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
             await project.decisions.choose(motors, selected="A", explanation="Fixture")
         self.assertTrue(project.sysml.review_issues())
 
+    @needs_library
     async def test_a_new_revision_invalidates_decisions_it_contradicts(self):
         project = self.project
         await project.sysml.commit(
@@ -252,6 +265,7 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn("mass = 45 kg violates R1", invalidated[decision])
         self.assertTrue(project.store.get("decision", decision).stale)
 
+    @needs_library
     async def test_amendments_are_adopted_by_decision_then_implemented(self):
         project = self.project
         base, _ = await project.sysml.commit(
@@ -350,6 +364,7 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
         )
 
 
+@needs_library
 class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
     async def test_systems_engineer_maintains_truth_beside_the_chief(self):
         rationale = Rationale(objective="Fixture", explanation="Fixture")

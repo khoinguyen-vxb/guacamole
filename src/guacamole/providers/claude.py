@@ -281,6 +281,5 @@ def _strip_fence(text: str) -> str:
     text = text.strip()
     if text.startswith("```") and text.endswith("```"):
         text = text[3:-3]
-        if text.startswith("json"):
-            text = text[4:]
+        text = text.removeprefix("json")
     return text.strip()
