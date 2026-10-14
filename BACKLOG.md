@@ -15,6 +15,7 @@ IDs follow the external GUA-001..021 review; items it got wrong are rescoped her
 | GUA-009 | (c) A turn whose plan changed while its call was out is dropped, not acted on. A plan decision no longer reverts a budget raise or compaction made earlier in the same turn. (b) was already done: each dispatch records provider, model, tier and effort. |
 | GUA-010 | Partial: `max_agents` counts running workers; completed and superseded ones free their slot. |
 | GUA-021 | `pytest` moved to the dev group and pytest scoped to `tests/`. The garbled launcher text in `ehopper.py` and the ehopper install line are fixed. Supported platforms are documented. |
+| GUA-016 | Image input: reading a PNG/JPEG/WebP record sends its pixels through Codex `--image`, Claude CLI stream-json image blocks and LiteLLM data URLs, with hash checks, budgeting and stated omissions. ehopper ingests its reference photos and keeps FreeCAD screenshots as files; MCP results carry produced images. The live check (`GUACAMOLE_LIVE_VISION`) is opt-in. |
 
 ## Milestone B: brief to review package
 
@@ -37,7 +38,7 @@ Next:
 
 Each item lists what "done" means.
 
-1. **GUA-012 Name CLI provider failures.** Codex and Claude CLI exits all read "exited with status N", because stderr is rightly never stored. Map its tail to a fixed label (usage limit, auth, context overflow, other). *Done when* a Codex usage-limit exit says so in the blocked agent's observation.
+1. **GUA-012 Name CLI provider failures.** Codex and Claude CLI exits all read "exited with status N", because stderr is rightly never stored. Map its tail to a fixed label (usage limit, auth, context overflow, other). Codex needs no stderr: under `--json` it reports the limit on stdout as `{"type":"error"}` and `turn.failed` events, which `_usage` already reads. *Done when* a Codex usage-limit exit says so in the blocked agent's observation.
 2. **GUA-008 Context waste.**
    - (a) Context clearing edits only a per-call copy (`middleware.py`), so about 87 of the Chief's sources are cleared again every turn, and the prompt never says they were dropped.
    - (b) `state.records` gives the Chief every run's tool results, about 13% of its prompt.
@@ -65,4 +66,4 @@ Each item lists what "done" means.
 - **GUA-013 migrations:** write the first migration when a column changes. Back up with `sqlite3 project.sqlite3 ".backup ..."` while no run is going.
 - **GUA-014 storage:** the database is about 1% of turn time. The one cheap win: `Activity.included()` writes an inbox revision every time a packet includes a message, about 315 MB in the current run.
 - **GUA-009a** clamping input budgets to a tier's capacity: no example uses tiers.
-- **GUA-015** capability registry, **GUA-016** image input, **GUA-019** fault injection beyond the existing restart, timeout and stale-input tests, **GUA-020** CLI: wait for a concrete need.
+- **GUA-015** capability registry, **GUA-019** fault injection beyond the existing restart, timeout and stale-input tests, **GUA-020** CLI: wait for a concrete need.

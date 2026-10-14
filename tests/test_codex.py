@@ -1,6 +1,7 @@
 """Exercise the CLI protocol with a real local fixture process, without model calls."""
 
 import asyncio
+import hashlib
 import json
 import os
 import sys
@@ -9,9 +10,9 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from guacamole import ContextSpec, Project, ProjectRequest, Usage
+from guacamole import ContextSpec, Project, ProjectRequest, Ref, Usage
 from guacamole.context import CONTINUED, ProviderError
-from guacamole.contracts import ContextPacket, Wait
+from guacamole.contracts import ContextPacket, ImageAttachment, Wait
 from guacamole.providers.codex import CodexReasoning
 
 
@@ -24,7 +25,7 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
         self.executable = self.root / "fake codex"
         self.executable.write_text(
             f"#!{sys.executable}\n"
-            "import json, os, sys, time\n"
+            "import hashlib, json, os, sys, time\n"
             "from pathlib import Path\n"
             "prompt = sys.stdin.read()\n"
             f"capture = Path({str(self.capture)!r})\n"
@@ -39,6 +40,8 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
             "    'prompt': prompt, 'argv': sys.argv[1:], 'cwd': os.getcwd(),\n"
             "    'pid': os.getpid(), 'environment': list(os.environ),\n"
             "    'attempt': attempt, 'instructions': instructions, 'stdin': stdin,\n"
+            "    'images': [hashlib.sha256(Path(sys.argv[i + 1]).read_bytes()).hexdigest()\n"
+            "               for i, a in enumerate(sys.argv) if a == '--image'],\n"
             "}))\n"
             "temporary.replace(capture)\n"
             "usage = {'input_tokens': 1000, 'cached_input_tokens': 600, 'output_tokens': 50}\n"
@@ -157,6 +160,35 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
             result.usage,
             Usage(input_tokens=800, cache_read_input_tokens=1200, output_tokens=100),
         )
+
+    async def test_images_are_checked_staged_copies_resent_on_retry(self):
+        original = self.root / "view.png"
+        original.write_bytes(b"fixture pixels")
+        image = ImageAttachment(
+            source=Ref(kind="source", id="view", revision=1, sha256="0" * 64),
+            path=str(original),
+            sha256=hashlib.sha256(b"fixture pixels").hexdigest(),
+            media_type="image/png",
+        )
+        packet = self.packet.model_copy(
+            update={"prompt": '{"mode":"invalid_once"}', "images": (image, image)}
+        )
+        with self.assertLogs("guacamole.providers.codex", level="WARNING"):
+            result = await self.provider.respond(packet)
+        self.assertEqual(result.action, Wait(reason="fixture"))
+        capture = json.loads(self.capture.read_text())
+        self.assertEqual(capture["attempt"], 2)
+        self.assertEqual(capture["images"], [image.sha256, image.sha256])
+        argv = capture["argv"]
+        staged = [argv[i + 1] for i, a in enumerate(argv) if a == "--image"]
+        self.assertEqual([Path(p).name for p in staged], ["image-1.png", "image-2.png"])
+        self.assertFalse(any(Path(p).exists() for p in staged))
+        # Changed bytes are refused before Codex starts.
+        self.capture.unlink()
+        original.write_bytes(b"changed")
+        with self.assertRaisesRegex(ProviderError, "missing or changed"):
+            await self.provider.respond(packet)
+        self.assertFalse(self.capture.exists())
 
     async def test_token_count_compresses_text_and_accepts_literal_special_tokens(self):
         prompt = "Hopper engineering evidence: mass and inertia. " * 1000

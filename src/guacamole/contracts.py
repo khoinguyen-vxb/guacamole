@@ -145,6 +145,15 @@ class Omission(Model):
     reason: str
 
 
+class ImageAttachment(Model):
+    """A file's pixels sent with one invocation; the provider re-checks its hash."""
+
+    source: Ref  # The source, job_file or artifact record holding the file
+    path: str  # Absolute; verified inside project storage when assembled
+    sha256: str
+    media_type: str  # image/png, image/jpeg or image/webp
+
+
 class ContextPacket(Model):
     id: str = Field(default_factory=uid)
     agent_id: str
@@ -162,6 +171,8 @@ class ContextPacket(Model):
     ] = "exact"
     reserved_output_tokens: int = Field(gt=0)
     sources: tuple[Ref, ...] = ()
+    # Sent in this order; the prompt marks their sources "image": "attached".
+    images: tuple[ImageAttachment, ...] = ()
     message_ids: tuple[str, ...] = ()
     deferred: tuple[Omission, ...] = ()
     # Prompt prefix lengths, in characters, that stay identical across turns;

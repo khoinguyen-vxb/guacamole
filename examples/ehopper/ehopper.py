@@ -29,6 +29,7 @@ OS sandbox. Source checkouts are available for inspection, not assumed installed
 """
 
 import asyncio
+import base64
 import importlib.util
 import json
 import os
@@ -37,13 +38,13 @@ import signal
 import sys
 from contextlib import AsyncExitStack, suppress
 from pathlib import Path
-from typing import Annotated
+from typing import Annotated, Literal
 from uuid import uuid4
 from zipfile import ZipFile
 
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
-from mcp.types import CallToolResult, TextContent
+from mcp.types import CallToolResult, ImageContent, TextContent
 from pydantic import Field, ValidationError
 
 from guacamole import (
@@ -137,6 +138,8 @@ calibration parameters for coaxial loss and motor/ESC response.
 Use freecad_status to inspect the GUI addon, and freecad_run to execute a saved
 sandbox Python script through the supplied FreeCAD MCP. Headless execution is
 the default and does not require the GUI addon. Declare all CAD exports in outputs.
+With the GUI addon, freecad_view saves a screenshot to read; a picture can flag
+a missing feature or interference but never replaces measured geometry checks.
 Save parametric FCStd and STEP files; verify actual solids, rotor/structure
 clearances, mounting interfaces and mass/CG/inertia with material densities.
 FreeCAD lengths are mm; simulator quantities are SI. Record the CAD-to-body frame
@@ -186,12 +189,21 @@ class FreeCADExecution(Model):
     files: tuple[ProducedFile, ...]
     missing_outputs: tuple[str, ...]
     log: ProducedFile
+    views: tuple[ProducedFile, ...] = ()  # GUI screenshots
+
+
+class FreeCADView(Model):
+    view: ProducedFile | None
+    reply: str  # FreeCAD's explanation when it returned no screenshot
 
 
 async def _freecad_call(
     name: str, arguments: dict[str, object], timeout_s: float
-) -> str:
-    """Use the supplied MCP server, rather than bypassing its CAD execution tools."""
+) -> tuple[str, tuple[ImageContent, ...]]:
+    """Use the supplied MCP server, rather than bypassing its CAD execution tools.
+
+    Returns its text and any screenshots, which callers save as files.
+    """
     candidate = FREECAD_MCP / ".venv/bin/python"
     environment = {
         key: value
@@ -204,7 +216,6 @@ async def _freecad_call(
         args=[
             "-c",
             "from freecad_mcp.server import main; main()",
-            "--only-text-feedback",
         ],
         env=environment,
     )
@@ -224,7 +235,7 @@ async def _freecad_call(
     )
     if result.is_error:
         raise RuntimeError(reply)
-    return reply
+    return reply, tuple(i for i in result.content if isinstance(i, ImageContent))
 
 
 def tool_paths() -> dict[str, Path]:
@@ -364,7 +375,7 @@ def register_tools(project: Project) -> None:
 
         Supply source also in the tool action's inputs, then use extract on this job.
         first is 1-based; offset paginates text within the chosen page/slide/row range.
-        Images and diagrams require a separate visual reader; this tool extracts text.
+        This tool extracts text; read image sources to see pictures.
         """
         saved = project.store.resolve(source, current=True)
         file = FileRecord.model_validate_json(json.dumps(saved.data))
@@ -510,9 +521,48 @@ def register_tools(project: Project) -> None:
                 checks={"result_schema_valid": False},
             )
 
+    def save_views(images: tuple[ImageContent, ...]) -> tuple[ProducedFile, ...]:
+        """FreeCAD screenshots as sandbox files, which agents read to see them."""
+        views = []
+        for image in images:
+            suffix = {"image/png": ".png", "image/jpeg": ".jpg"}.get(image.mime_type)
+            if suffix is None:
+                raise ValueError(f"Unexpected FreeCAD image type {image.mime_type}")
+            path = project.output_path(Path("views") / f"freecad-{uuid4().hex}{suffix}")
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(base64.b64decode(image.data, validate=True))
+            views.append(ProducedFile.from_path(path))
+        return tuple(views)
+
     async def freecad_status() -> str:
         """Inspect the GUI addon through FreeCAD MCP. Headless CAD needs no GUI addon."""
-        return await _freecad_call("get_rpc_status", {}, 30.0)
+        return (await _freecad_call("get_rpc_status", {}, 30.0))[0]
+
+    async def freecad_view(
+        view: Literal[
+            "Isometric",
+            "Dimetric",
+            "Trimetric",
+            "Front",
+            "Back",
+            "Top",
+            "Bottom",
+            "Left",
+            "Right",
+        ] = "Isometric",
+        focus_object: str = "",
+    ) -> FreeCADView:
+        """Save a screenshot of the FreeCAD GUI's active view; needs the GUI addon.
+
+        Read the screenshot's job_file record to see it. focus_object names the
+        object to fit; blank fits everything. Pictures do not measure geometry.
+        """
+        arguments: dict[str, object] = {"view_name": view}
+        if focus_object:
+            arguments["focus_object"] = focus_object
+        reply, images = await _freecad_call("get_view", arguments, 60.0)
+        views = save_views(images[:1])
+        return FreeCADView(view=views[0] if views else None, reply=reply)
 
     async def freecad_run(
         script: str,
@@ -528,6 +578,7 @@ def register_tools(project: Project) -> None:
         mode needs the running addon. Execution is not geometry verification.
         A failed run returns succeeded=false with the end of FreeCAD's output,
         including any traceback, in reply; partial outputs may remain on disk.
+        GUI runs also return a screenshot in views; read its job_file to see it.
         """
         source = project.output_path(Path(script))
         output_paths = tuple(project.output_path(Path(p)) for p in outputs)
@@ -538,9 +589,7 @@ def register_tools(project: Project) -> None:
             f"exec(compile({source.read_text(encoding='utf-8')!r}, {str(source)!r}, 'exec'))\n"
         )
         arguments: dict[str, object] = {"code": code, "timeout": timeout_s}
-        if not headless:
-            arguments["include_screenshot"] = False
-        reply = await _freecad_call(
+        reply, images = await _freecad_call(
             "execute_code_headless" if headless else "execute_code",
             arguments,
             2 * timeout_s + 30,
@@ -563,9 +612,16 @@ def register_tools(project: Project) -> None:
             files=tuple(ProducedFile.from_path(p) for p in output_paths if p.is_file()),
             missing_outputs=tuple(str(p) for p in output_paths if not p.is_file()),
             log=ProducedFile.from_path(log),
+            views=save_views(images),
         )
 
-    for function in (list_files, read_text, read_document, freecad_status):
+    for function in (
+        list_files,
+        read_text,
+        read_document,
+        freecad_status,
+        freecad_view,
+    ):
         project.tools.register(function, retry_safe=True, requires_plan=False)
     for function in (write_text, execute, verify_command, freecad_run):
         project.tools.register(function)
@@ -655,7 +711,7 @@ def configure_run(project: Project, run_id: str | None = None) -> ContextSpec:
 def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
     """Inventory the supplied packages without importing or running their code."""
     documents = sorted(
-        p for p in DOCUMENTS.iterdir() if p.is_file() and not p.name.startswith(".")
+        p for p in DOCUMENTS.rglob("*") if p.is_file() and not p.name.startswith(".")
     )
     lines = ["# Electronic Hopper supplied inputs", "", "## Tool source paths"]
     for name, path in tool_paths().items():

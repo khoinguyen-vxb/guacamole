@@ -209,6 +209,22 @@ result, cut with a marker) with the `tool_result` ref to read for the full value
 the latest result arrives whole. Binary or large documents require a supplied reader
 returning `SourceExcerpt`; originals remain available and unparsed inputs stay open.
 
+Images need no reader: they reach the model as pixels. Reading a PNG, JPEG or WebP
+`source`, `job_file` or `artifact` attaches the file to the agent's later turns.
+`ContextPacket.images` lists each attached file (record ref, verified path and hash)
+in prompt order, and its source entry shows `"image": "attached"`. Each image counts
+a flat `image_tokens` estimate (5,000) against the input budget. An image stays
+unattached, with a deferral record and the reason in its source entry, when it does
+not fit, exceeds 3.75 MB, is past the 20 per turn, has changed since it was stored, or
+the provider takes no images. Providers re-check each file's hash before sending it:
+Codex passes staged copies with `--image`, the Claude CLI sends base64 image blocks
+over `--input-format stream-json`, and LiteLLM sends data URLs to models its model map
+lists as vision-capable. Images a tool produces appear in `state.records` for the
+agent that ran it (the Chief sees all of them). What a model reads from an image is an
+observation to check with tools: a requirement still needs a quote from a text source.
+Run `GUACAMOLE_LIVE_VISION=claude` (or `codex`) with `tests/test_images.py` to check
+that a provider reads a random label from pixels alone; it makes one model call.
+
 PDR and CDR packages contain manifests, copied editable artifacts, record snapshots,
 readable review summaries and communication/tool traces. Required artifacts,
 verification kinds, current dependencies and open items determine readiness.
@@ -540,7 +556,8 @@ await serve_stdio(ToolSession(project, grants=(tool.definition.grant,)))
 ```
 
 Both listing and invocation enforce the host-configured grants. MCP and Python use
-the same executor. The transport is stdio and opens no network listener.
+the same executor. The transport is stdio and opens no network listener. A result
+also carries the PNG, JPEG or WebP files the tool produced as MCP image content.
 
 For optional scripting control, install `uv sync --extra websocket`, then use
 `guacamole.websocket.WebSocketBridge(ToolSession(project))` and its async `serve()`
@@ -618,8 +635,8 @@ install inline dependencies. Startup checks for Codex and missing readers before
 It registers typed
 file/document access, command execution, and verification tools. Backend packages
 retain their own dependencies and can use separate interpreters via
-`PYTHON_EXECUTABLES`. PDF/PPTX extraction reads text; figures still require visual
-interpretation. XLSX cell addresses/formulas and OpenRocket XML remain traceable.
+`PYTHON_EXECUTABLES`. PDF/PPTX extraction reads text; agents see a figure only as a
+PNG, JPEG or WebP file, supplied or rendered by a tool. XLSX cell addresses/formulas and OpenRocket XML remain traceable.
 
 Outputs go to `examples/sounding_rocket/results/`; SQLite history goes to
 `examples/sounding_rocket/.guacamole/`. The host prints human questions and the

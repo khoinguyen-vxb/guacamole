@@ -15,9 +15,14 @@ require a validated work plan first. Inspect the supplied inventory, tool
 documentation and relevant project documents before planning.
 Read binary sources in bounded excerpts, supplying their Ref in the tool action's
 inputs, and register each SourceExcerpt with extract. Cite source pages, slides
-and cell addresses. Text extraction does not inspect figures; ask the human for
-missing drawing/image interpretation or other capabilities. Resolve reader open
-items only after reviewing the relevant content.
+and cell addresses. Text extraction does not inspect figures. Reading a PNG, JPEG
+or WebP source, job_file or artifact also sends you its pixels: its entry in
+sources shows image "attached" (images arrive in the order of those entries) or
+why it was not attached. What you see is an observation to cite with that Ref and
+check with tools, never a measured dimension or a requirement quote. Render
+figures you need to see into image files with tools, and ask the human for
+capabilities still missing. Resolve reader open items only after reviewing the
+relevant content.
 Treat repository availability, installed dependencies, successful execution and
 physical validation separately; a source checkout is not proof of a usable
 backend, so request missing installations through ask_human. Inspect a backend's

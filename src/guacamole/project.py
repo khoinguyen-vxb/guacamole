@@ -131,7 +131,9 @@ class Project:
             self.max_concurrent_calls = max_concurrent_calls
             self.activity = Activity(self.store, self.tools)
             self.human = Humans(self)
-            self.contexts = ContextBuilder(self.store, self.activity, self.tools)
+            self.contexts = ContextBuilder(
+                self.store, self.activity, self.tools, self.verify_file
+            )
             self.decisions = Decisions(self)
             self.reviews = Reviews(self)
             self.executor = Executor(self)

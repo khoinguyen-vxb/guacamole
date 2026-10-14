@@ -7,7 +7,13 @@ from pathlib import Path
 from types import CoroutineType
 from typing import Any
 
-from ..context import ContextOverflow, ProviderError, ReasoningProvider, preview
+from ..context import (
+    IMAGE_TYPES,
+    ContextOverflow,
+    ProviderError,
+    ReasoningProvider,
+    preview,
+)
 from ..contracts import (
     JSON,
     TERMINAL,
@@ -277,7 +283,9 @@ class Runtime:
             for path in request.documents:
                 ref = self.project.ingest(path)
                 sources.append(ref)
-                if store.get("source", ref.id).data.get("text") is None:
+                data = store.get("source", ref.id).data
+                # Images reach a provider as pixels when an agent reads them.
+                if data.get("text") is None and data["media_type"] not in IMAGE_TYPES:
                     self.project.record_open_item(
                         OpenItem(
                             id=f"reader:{ref.id}",
@@ -557,15 +565,22 @@ class Runtime:
                     "summary",
                     "tool_result",
                     "job_inputs",
+                    "job_file",
                     "system_model",
                     "amendment",
                 )
                 if not s.stale
                 and (s.ref.kind, s.ref.id, s.ref.revision) not in pins
                 and (
-                    s.ref.kind not in {"tool_result", "job_inputs"}
+                    s.ref.kind not in {"tool_result", "job_inputs", "job_file"}
                     or s.ref.id in own
                     or (is_chief and s.ref.kind == "tool_result")
+                    # Produced images, readable as pixels; other files publish by path.
+                    or (
+                        s.ref.kind == "job_file"
+                        and s.data["media_type"] in IMAGE_TYPES
+                        and (is_chief or s.data["producer_request"] in own)
+                    )
                 )
             ],
             "requests": [
@@ -814,6 +829,7 @@ class Runtime:
                             "input_tokens": packet.input_tokens,
                             "max_input_tokens": call.agent.context.max_input_tokens,
                             "deferred": len(packet.deferred),
+                            "images": len(packet.images),
                             "components": {**packet.components},
                         },
                         request_id=state.request_id,

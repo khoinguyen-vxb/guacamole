@@ -12,7 +12,7 @@ from tempfile import TemporaryDirectory
 import tiktoken
 from pydantic import ValidationError
 
-from ..context import CONTINUED, ProviderError
+from ..context import CONTINUED, IMAGE_TOKENS, ProviderError, image_data
 from ..contracts import AgentTurn, ContextPacket, Usage
 
 logger = logging.getLogger(__name__)
@@ -24,6 +24,7 @@ class CodexReasoning:
     context_capacity_tokens = 1_050_000
     max_input_chars = 1_048_576
     token_count_method = "tiktoken_o200k_base_estimate_10pct_plus_1024"
+    image_tokens = IMAGE_TOKENS
 
     def __init__(
         self,
@@ -95,6 +96,13 @@ class CodexReasoning:
                 + (CONTINUED + packet.prompt[:stable] if stable else ""),
                 encoding="utf-8",
             )
+            # Copies of the checked bytes, so the CLI reads exactly what the packet
+            # records; one flag each, as --image takes several values.
+            images: list[str] = []
+            for number, image in enumerate(packet.images, 1):
+                staged = root / f"image-{number}{Path(image.path).suffix}"
+                staged.write_bytes(image_data(image))
+                images += ["--image", str(staged)]
             loop = asyncio.get_running_loop()
             deadline = loop.time() + self.timeout_s
             # ponytail: retry once; specialize free-form action maps if strict CLI schemas are needed.
@@ -114,6 +122,7 @@ class CodexReasoning:
                         "--skip-git-repo-check",
                         "--sandbox",
                         "read-only",
+                        *images,
                         "--color",
                         "never",
                         "--json",
@@ -237,6 +246,7 @@ class CodexReasoning:
                         )
                         if (
                             await self.count_tokens(packet.prompt[:stable] + prompt)
+                            + len(packet.images) * self.image_tokens
                             + packet.reserved_output_tokens
                             > self.context_capacity_tokens
                             or stable + len(prompt) > self.max_input_chars

@@ -53,6 +53,9 @@ log. GUI mode also requires the
 [FreeCAD MCP addon](freecad-mcp/docs/installation.md) running on localhost:9875;
 `freecad_status` checks that addon. Set `FREECAD_MCP_TOKEN` in the environment
 when the addon requires authentication. No token belongs in the brief or files.
+With the addon, `freecad_view` and GUI-mode `freecad_run` save screenshots under
+`results/views/`; agents read them as images. The reference photos in
+`context/reference_images/` are ingested with the other documents.
 
 Edit configuration in `ehopper.py`; there are no command-line arguments.
 The project inventories `context/`, both `tooling/` repositories and

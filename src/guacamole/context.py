@@ -1,8 +1,10 @@
 """Source-preserving context selection and provider-specific token accounting."""
 
 import asyncio
+import hashlib
 from collections.abc import Callable, Sequence
-from typing import Protocol
+from pathlib import Path
+from typing import Any, Protocol
 
 from pydantic import JsonValue
 
@@ -12,12 +14,14 @@ from .contracts import (
     AgentSpec,
     AgentTurn,
     ContextPacket,
+    FileRecord,
+    ImageAttachment,
     InboxEntry,
     Omission,
     Ref,
     uid,
 )
-from .storage import Store
+from .storage import Snapshot, Store
 from .tools.registry import ToolRegistry, encode
 
 # Prompt fields from least to most volatile. Each group but the last ends a prefix
@@ -40,12 +44,22 @@ CONTINUED = (
     "The context packet is one JSON object. It begins below, and the user message "
     "continues it.\n"
 )
+# Image files a provider may receive as pixels. Anthropic limits an image to 5 MiB
+# of base64 text (about 3.9 MB of file) and, past 20 images, to 2,000 px a side.
+IMAGE_TYPES = frozenset({"image/png", "image/jpeg", "image/webp"})
+MAX_IMAGE_BYTES = 3_750_000
+MAX_IMAGES = 20
+# ponytail: one generous estimate per image for every provider, since each scales
+# large images down; count by pixel size if images crowd budgets.
+IMAGE_TOKENS = 5_000
 
 
 class ReasoningProvider(Protocol):
     name: str
     model: str
     context_capacity_tokens: int
+    # Optional image_tokens: estimated input per attached image. Absent or None,
+    # the provider takes no images and image sources arrive as records only.
 
     async def count_tokens(self, prompt: str) -> int: ...
     async def respond(self, packet: ContextPacket) -> AgentTurn: ...
@@ -57,6 +71,20 @@ class ContextOverflow(ValueError):
 
 class ProviderError(RuntimeError):
     """A locally constructed provider diagnostic safe to persist without secrets."""
+
+
+def image_data(image: ImageAttachment) -> bytes:
+    """An attached image's bytes, refused if they changed since context assembly."""
+    try:
+        data = Path(image.path).read_bytes()
+    except OSError:
+        data = b""
+    if hashlib.sha256(data).hexdigest() != image.sha256:
+        raise ProviderError(
+            f"Image {image.source.kind}:{image.source.id} is missing or changed since "
+            "its context was assembled; no action executed"
+        )
+    return data
 
 
 def preview(value: JsonValue, limit: int) -> JsonValue:
@@ -165,9 +193,15 @@ def encode_context(payload: dict) -> str:
 
 class ContextBuilder:
     def __init__(
-        self, store: Store, activity: Activity, registry: ToolRegistry
+        self,
+        store: Store,
+        activity: Activity,
+        registry: ToolRegistry,
+        files: Callable[[FileRecord], Path],
     ) -> None:
+        """files returns a stored file's verified path, as Project.verify_file does."""
         self.store, self.activity, self.registry = store, activity, registry
+        self.files = files
 
     def search(self, query: str, limit: int = 8) -> tuple[Ref, ...]:
         words = query.casefold().split()
@@ -211,7 +245,7 @@ class ContextBuilder:
             reader = Store(self.store.directory, read_only=True)
             try:
                 builder = ContextBuilder(
-                    reader, Activity(reader, self.registry), self.registry
+                    reader, Activity(reader, self.registry), self.registry, self.files
                 )
                 return builder._assemble(
                     agent,
@@ -256,6 +290,7 @@ class ContextBuilder:
             raise ContextOverflow(
                 "Input budget plus reserved output exceeds the configured provider capacity"
             )
+        sources: list[Any] = []  # Snapshot dumps, as rendered
         payload = {
             "instructions": instructions,
             "user_instructions": spec.instructions,
@@ -274,7 +309,7 @@ class ContextBuilder:
             ],
             "result_schema": self.registry.schemas[agent.result_schema].json_schema(),
             "response_schema": AgentTurn.model_json_schema(),
-            "sources": [],
+            "sources": sources,
             "messages": [],
         }
         if catalogue:
@@ -284,12 +319,66 @@ class ContextBuilder:
                 for t in self.registry.definitions()
                 if t.grant not in agent.tools
             ]
+        omissions = list(deferred)
+        per_image = getattr(provider, "image_tokens", None)
+        images: dict[str, ImageAttachment] = {}  # By "kind:id"
+
+        def source(ref: Ref, snapshot: Snapshot) -> JSON:
+            """A source as shown; an image file's pixels are attached, or it says why not."""
+            shown = snapshot.model_dump(mode="json") | {"locator": ref.locator}
+            data = (
+                snapshot.data.get("file") if ref.kind == "artifact" else snapshot.data
+            )
+            if (
+                ref.kind not in {"source", "job_file", "artifact"}
+                or not isinstance(data, dict)
+                or data.get("media_type") not in IMAGE_TYPES
+            ):
+                return shown
+            file = FileRecord.model_validate_json(encode(data))
+            if per_image is None:
+                reason = f"{provider.model} via {provider.name} accepts no images"
+            elif len(images) >= MAX_IMAGES:
+                reason = f"{MAX_IMAGES} per turn, pinned then newest reads first"
+            else:
+                try:
+                    path = self.files(file)
+                    size = path.stat().st_size
+                except (OSError, ValueError):
+                    reason = "file is missing or changed since it was recorded"
+                else:
+                    if size <= MAX_IMAGE_BYTES:
+                        images[f"{ref.kind}:{ref.id}"] = ImageAttachment(
+                            source=ref,
+                            path=str(path),
+                            sha256=file.sha256,
+                            media_type=file.media_type,
+                        )
+                        return shown | {"image": "attached"}
+                    reason = f"file exceeds {MAX_IMAGE_BYTES:,} bytes"
+            omissions.append(
+                Omission(
+                    item=f"{ref.kind}:{ref.id}@{ref.revision}",
+                    reason=f"Image not attached: {reason}",
+                )
+            )
+            return shown | {"image": f"not attached: {reason}"}
+
+        def attached() -> list[ImageAttachment]:
+            """Attached images among the prompt's sources, in prompt order."""
+            return [
+                image
+                for s in sources
+                if (image := images.get(f"{s['ref']['kind']}:{s['ref']['id']}"))
+            ]
+
+        def measure(prompt: str) -> int:
+            return count_tokens(prompt) + len(attached()) * (per_image or 0)
+
         refs: list[Ref] = []
         for ref in spec.pinned:
             snapshot = self.store.resolve(ref, current=True)
-            payload["sources"].append(
-                snapshot.model_dump(mode="json") | {"locator": ref.locator}
-            )
+            payload["sources"].append(source(ref, snapshot))
             refs.append(ref)
         prompt = encode_context(payload)
         if max_chars is not None and len(prompt) > max_chars:
@@ -297,7 +386,7 @@ class ContextBuilder:
                 f"Pinned context and contracts require {len(prompt)} characters; "
                 f"provider input limit is {max_chars}"
             )
-        count = count_tokens(prompt)
+        count = measure(prompt)
         if count > spec.max_input_tokens:
             raise ContextOverflow(
                 f"Pinned context and contracts require {count} input tokens; budget is {spec.max_input_tokens}"
@@ -321,7 +410,7 @@ class ContextBuilder:
                     measured = (
                         None
                         if max_chars is not None and len(prompt) > max_chars
-                        else count_tokens(prompt)
+                        else measure(prompt)
                     )
                     if measured is not None and measured <= spec.max_input_tokens:
                         fit, count = probe, measured
@@ -335,7 +424,6 @@ class ContextBuilder:
                 start = fit + 1
             return rejected
 
-        omissions = list(deferred)
         # New messages first. Inclusion is never acknowledgement.
         entries = sorted(
             self.activity.inbox(agent.id),
@@ -396,9 +484,7 @@ class ContextBuilder:
                 )
                 continue
             seen.add((ref.kind, ref.id))
-            candidates.append(
-                (ref, snapshot.model_dump(mode="json") | {"locator": ref.locator})
-            )
+            candidates.append((ref, source(ref, snapshot)))
         rejected = admit(payload["sources"], [data for _, data in candidates])
         for index, (ref, _) in enumerate(candidates):
             if index in rejected:
@@ -444,6 +530,7 @@ class ContextBuilder:
             token_count_method=getattr(provider, "token_count_method", "exact"),
             reserved_output_tokens=spec.reserved_output_tokens,
             sources=tuple(refs),
+            images=tuple(attached()),
             message_ids=tuple(messages),
             deferred=tuple(omissions),
             cache_breakpoints=breakpoints,

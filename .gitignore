@@ -22,3 +22,4 @@ examples/**/*.FCStd
 examples/**/*.FCBak
 examples/**/*.step
 examples/**/*.stp
+examples/bracket/runs/

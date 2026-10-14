@@ -1,6 +1,7 @@
 """Local Claude Code CLI reasoning using its existing claude.ai login."""
 
 import asyncio
+import base64
 import json
 import logging
 import os
@@ -11,8 +12,8 @@ from tempfile import TemporaryDirectory
 
 from pydantic import JsonValue, ValidationError
 
-from ..context import CONTINUED, ProviderError
-from ..contracts import AgentTurn, ContextPacket, Usage
+from ..context import CONTINUED, IMAGE_TOKENS, ProviderError, image_data
+from ..contracts import JSON, AgentTurn, ContextPacket, Usage
 
 logger = logging.getLogger(__name__)
 
@@ -30,6 +31,7 @@ class ClaudeReasoning:
     model = "claude-opus-5-5"
     context_capacity_tokens = 1_050_000
     token_count_method = "utf8_upper_bound"
+    image_tokens = IMAGE_TOKENS
 
     def __init__(
         self,
@@ -99,8 +101,12 @@ class ClaudeReasoning:
             self.model,
             "--effort",
             self.effort,
+            # Messages in and events out, as JSON lines; images need message input.
+            "--input-format",
+            "stream-json",
             "--output-format",
-            "json",
+            "stream-json",
+            "--verbose",
             "--no-session-persistence",
             "--safe-mode",
             "--strict-mcp-config",
@@ -112,6 +118,17 @@ class ClaudeReasoning:
         ]
         if tools:
             arguments += ["--allowedTools", tools]
+        images: list[JSON] = [
+            {
+                "type": "image",
+                "source": {
+                    "type": "base64",
+                    "media_type": image.media_type,
+                    "data": base64.b64encode(image_data(image)).decode("ascii"),
+                },
+            }
+            for image in packet.images
+        ]
         with TemporaryDirectory(prefix="guacamole-claude-") as directory:
             # A file, not an argument: one argument is limited to 128 KiB on Linux.
             system = Path(directory) / "system.md"
@@ -139,9 +156,17 @@ class ClaudeReasoning:
                         "Cannot start Claude Code CLI; install claude on PATH and run "
                         "'claude auth login'."
                     ) from None
+                # Images lead the text, as Anthropic recommends.
+                message = {
+                    "type": "user",
+                    "message": {
+                        "role": "user",
+                        "content": [*images, {"type": "text", "text": prompt}],
+                    },
+                }
                 try:
                     stdout, _ = await asyncio.wait_for(
-                        process.communicate(prompt.encode("utf-8")),
+                        process.communicate(json.dumps(message).encode() + b"\n"),
                         max(0.0, deadline - loop.time()),
                     )
                 except (TimeoutError, asyncio.CancelledError) as exc:
@@ -162,15 +187,16 @@ class ClaudeReasoning:
                     )
                 response: bytes | None = None
                 try:
-                    envelope = json.loads(stdout)
+                    envelope = _result(stdout)
                     spent += _usage(envelope)
-                    if (
-                        not isinstance(envelope, dict)
-                        or envelope.get("is_error")
-                        or not isinstance(envelope.get("result"), str)
-                    ):
+                    result = (
+                        envelope.get("result")
+                        if isinstance(envelope, dict) and not envelope.get("is_error")
+                        else None
+                    )
+                    if not isinstance(result, str):
                         raise OSError("Claude CLI returned no result")
-                    response = _strip_fence(envelope["result"]).encode("utf-8")
+                    response = _strip_fence(result).encode("utf-8")
                     turn = AgentTurn.model_validate_json(response)
                 except (OSError, ValueError) as exc:
                     errors = (
@@ -230,6 +256,7 @@ class ClaudeReasoning:
                         )
                         if (
                             await self.count_tokens(packet.prompt[:stable] + prompt)
+                            + len(packet.images) * self.image_tokens
                             + packet.reserved_output_tokens
                             > self.context_capacity_tokens
                         ):
@@ -251,6 +278,18 @@ class ClaudeReasoning:
                         "usage": spent,
                     }
                 )
+
+
+def _result(stdout: bytes) -> JsonValue:
+    """The final result event, which carries the reply and the run's usage."""
+    for line in reversed(stdout.splitlines()):
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(event, dict) and event.get("type") == "result":
+            return event
+    return None
 
 
 def _usage(envelope: JsonValue) -> Usage:

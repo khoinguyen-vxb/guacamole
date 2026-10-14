@@ -6,10 +6,12 @@ environment variables (OPENAI_API_KEY, ANTHROPIC_API_KEY, ...), never prompts.
 https://docs.litellm.ai/docs/providers
 """
 
+import base64
+
 import litellm
 from pydantic import JsonValue, ValidationError
 
-from ..context import ProviderError
+from ..context import IMAGE_TOKENS, ProviderError, image_data
 from ..contracts import JSON, AgentTurn, ContextPacket, Usage
 from .claude import _strip_fence
 
@@ -66,6 +68,8 @@ class LiteLLMReasoning:
         self.model = model
         self.context_capacity_tokens = capacity
         self.max_output_tokens = info.get("max_output_tokens")
+        # None: the context builder leaves image sources unattached for this model.
+        self.image_tokens = IMAGE_TOKENS if litellm.supports_vision(model) else None
         self.effort, self.timeout_s, self.options = effort, timeout_s, options
         self.prompt_caching = (
             "claude" in model.casefold() and bool(info.get("supports_prompt_caching"))
@@ -99,6 +103,20 @@ class LiteLLMReasoning:
                 {"type": "text", "text": packet.prompt[start:end]}
                 | ({"cache_control": {"type": "ephemeral"}} if end in ends[:-1] else {})
                 for start, end in zip((0, *ends), ends, strict=False)
+            ]
+        if packet.images:
+            if isinstance(content, str):
+                content = [{"type": "text", "text": content}]
+            # After the text, so its marked prefixes stay cacheable.
+            content += [
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:{image.media_type};base64,"
+                        + base64.b64encode(image_data(image)).decode("ascii")
+                    },
+                }
+                for image in packet.images
             ]
         try:
             response = await litellm.acompletion(

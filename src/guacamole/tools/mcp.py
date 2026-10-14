@@ -1,5 +1,6 @@
 """Generated standard MCP over local stdio, using the shared executor."""
 
+import base64
 import sys
 from contextlib import redirect_stdout
 from typing import TYPE_CHECKING
@@ -8,7 +9,8 @@ from mcp import types
 from mcp.server.lowlevel import Server
 from mcp.server.stdio import stdio_server
 
-from ..contracts import JSON, AgentSpec, ToolGrant
+from ..context import IMAGE_TYPES, MAX_IMAGE_BYTES
+from ..contracts import JSON, AgentSpec, FileRecord, ToolGrant
 from .execution import Job
 from .registry import ToolDefinition, encode
 
@@ -116,7 +118,10 @@ def create_mcp(session: ToolSession) -> Server:
             await job.collect()
             payload = {"result": job.record.result}
             return types.CallToolResult(
-                content=[types.TextContent(type="text", text=encode(payload))],
+                content=[
+                    types.TextContent(type="text", text=encode(payload)),
+                    *_images(session.project, job.record.id),
+                ],
                 structured_content=payload,
             )
         except Exception as exc:  # noqa: BLE001 -- provider failures become protocol errors
@@ -133,6 +138,25 @@ def create_mcp(session: ToolSession) -> Server:
     return Server(
         "guacamole", version="0.1.0", on_list_tools=list_tools, on_call_tool=call_tool
     )
+
+
+def _images(project: "Project", request_id: str) -> list[types.ImageContent]:
+    """The images a tool run produced, verified, for clients that can see them."""
+    images = []
+    for snapshot in project.store.list("job_file"):
+        file = FileRecord.model_validate_json(encode(snapshot.data))
+        if file.producer_request != request_id or file.media_type not in IMAGE_TYPES:
+            continue
+        data = project.verify_file(file).read_bytes()
+        if len(data) <= MAX_IMAGE_BYTES:
+            images.append(
+                types.ImageContent(
+                    type="image",
+                    data=base64.b64encode(data).decode("ascii"),
+                    mime_type=file.media_type,
+                )
+            )
+    return images
 
 
 async def serve_stdio(session: ToolSession) -> None:

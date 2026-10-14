@@ -31,7 +31,7 @@ guacamole/
 │       ├── contracts.py             # Strict shared runtime models and IDs
 │       ├── project.py               # Project scripting API, sources, artifacts, evidence
 │       ├── storage.py               # Shared SQLite revisions and atomic activity log
-│       ├── context.py               # Sources, inbox context, saved packets and budgets
+│       ├── context.py               # Sources, images, inbox context, saved packets and budgets
 │       ├── activity.py              # Message routing, inbox/sent views, request traces
 │       ├── human.py                 # Human questions, replies, corrections and replanning
 │       ├── decision.py              # Typed choices, local validation and decision records
@@ -77,6 +77,7 @@ guacamole/
     ├── test_runtime.py              # Choices, agents, context, inbox/recovery and grants
     ├── test_human.py                # Human input, restart, superseded calls and controls
     ├── test_middleware.py           # Summarization, context editing and memory hooks
+    ├── test_images.py               # Image attachment, budgets, provider and MCP transport
     ├── test_systems_engineer.py     # SysML truth checks, decision gates, amendments
     ├── test_sounding_rocket.py       # Example tool execution, document readers and launch guard
     └── test_project_workflow.py     # Source evidence, artifacts, PDR/CDR, invalidation

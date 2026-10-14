@@ -1,11 +1,14 @@
 """Hopper setup checks; model calls are never made."""
 
+import base64
 import json
 import os
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
+
+from mcp.types import ImageContent
 
 from examples.ehopper import ehopper
 from guacamole import ContextSpec, Project
@@ -31,6 +34,9 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                 ehopper.register_tools(project)
                 request = ehopper.project_request(project, ContextSpec())
                 self.assertIn(ehopper.DOCUMENTS / "brief.md", request.documents)
+                self.assertEqual(
+                    len([p for p in request.documents if p.suffix == ".jpg"]), 7
+                )
                 self.assertIn(
                     ehopper.FREECAD_MCP / "docs/execution.md", request.documents
                 )
@@ -41,9 +47,8 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                 self.assertIn("freecad-mcp", ehopper.tool_paths())
                 inventory = (project.sandbox / "context/inventory.md").read_text()
                 self.assertIn("freecad.cmd", inventory)
-                self.assertFalse(
-                    project.tools.get("freecad_status@1").definition.requires_plan
-                )
+                for name in ("freecad_status@1", "freecad_view@1"):
+                    self.assertFalse(project.tools.get(name).definition.requires_plan)
                 self.assertTrue(
                     project.tools.get("freecad_run@1").definition.requires_plan
                 )
@@ -57,7 +62,7 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                 (project.sandbox / "model.FCStd").write_text("test export")
                 tool = project.tools.get("freecad_run@1")
                 call = AsyncMock(
-                    return_value="Headless FreeCAD script finished (exit 0)."
+                    return_value=("Headless FreeCAD script finished (exit 0).", ())
                 )
                 with patch.object(ehopper, "_freecad_call", call):
                     result = await project.call(
@@ -70,14 +75,41 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                     self.assertEqual(call.call_args.args[0], "execute_code_headless")
                     self.assertIn("saved CAD script", call.call_args.args[1]["code"])
                     self.assertTrue(result.succeeded)
-                    call.return_value = "Failed to run headless code: backend absent"
+                    call.return_value = (
+                        "Failed to run headless code: backend absent",
+                        (),
+                    )
                     failed = await project.call(tool, {"script": "cad.py"})
                     self.assertFalse(failed.succeeded)
                     self.assertIn("backend absent", failed.reply)
-                    call.return_value = "Code executed successfully: GUI fixture"
-                    await project.call(tool, {"script": "cad.py", "headless": False})
+                    screenshot = ImageContent(
+                        type="image",
+                        data=base64.b64encode(b"fixture png").decode(),
+                        mime_type="image/png",
+                    )
+                    call.return_value = (
+                        "Code executed successfully: GUI fixture",
+                        (screenshot,),
+                    )
+                    gui = await project.call(
+                        tool, {"script": "cad.py", "headless": False}
+                    )
                     self.assertEqual(call.call_args.args[0], "execute_code")
-                    self.assertFalse(call.call_args.args[1]["include_screenshot"])
+                    (view,) = gui.views
+                    self.assertEqual(Path(view.path).read_bytes(), b"fixture png")
+                    view_tool = project.tools.get("freecad_view@1")
+                    call.return_value = ("", (screenshot,))
+                    shown = await project.call(view_tool, {"view": "Front"})
+                    self.assertEqual(
+                        call.call_args.args[:2], ("get_view", {"view_name": "Front"})
+                    )
+                    self.assertTrue(shown.view.path.endswith(".png"))
+                    call.return_value = ("Cannot get screenshot in this view", ())
+                    blank = await project.call(view_tool, {})
+                    self.assertEqual(
+                        (blank.view, blank.reply),
+                        (None, "Cannot get screenshot in this view"),
+                    )
                     call.reset_mock()
                     for arguments in (
                         {"script": "../outside.py"},
