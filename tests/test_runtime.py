@@ -8,7 +8,12 @@ from pathlib import Path
 from unittest.mock import patch
 
 import litellm
-from runtime_support import TestReasoning, plan_request
+from runtime_support import (
+    TestReasoning,
+    commit_fixture_model,
+    engineer_id,
+    plan_request,
+)
 
 from guacamole import (
     AgentSpec,
@@ -339,7 +344,10 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     await project.run(
                         ProjectRequest(
                             description="Invalid read recovery fixture",
-                            context=ContextSpec(selected=(bad,)),
+                            # Headroom over the contracts and system_model state.
+                            context=ContextSpec(
+                                max_input_tokens=64_000, selected=(bad,)
+                            ),
                         )
                     )
                     packets = provider.packets
@@ -357,9 +365,12 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                         f"{bad.kind}:{bad.id}@{bad.revision}",
                         {item.item for item in packets[0].deferred},
                     )
-                    agent = project.store.model(
-                        "agent", project.store.list("agent")[0].ref.id, AgentSpec
-                    )
+                    (chief,) = [
+                        s
+                        for s in project.store.list("agent")
+                        if s.data["task_id"] == "chief"
+                    ]
+                    agent = project.store.model("agent", chief.ref.id, AgentSpec)
                     self.assertEqual(len(project.store.history("agent", agent.id)), 2)
                     pinned = agent.model_copy(
                         update={
@@ -454,7 +465,8 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                         context=ContextSpec(max_input_tokens=200_000),
                     )
                 )
-                state = project.store.list("agent_state")[0].data
+                chief = project.store.get("run", result.run_id).data["chief_id"]
+                state = project.store.get("agent_state", chief).data
                 self.assertEqual(result.status, "incomplete")
                 self.assertEqual(state["status"], "blocked")
                 self.assertEqual(
@@ -601,7 +613,11 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     self.assertEqual(observations[1]["phase"], "rationale")
                     self.assertIn("current Ref", observations[1]["detail"])
                     self.assertNotIn(bad.id, observations[1]["detail"])
-                    rationales = project.store.list("rationale")
+                    rationales = [
+                        r
+                        for r in project.store.list("rationale")
+                        if r.data["author"] != engineer_id(project)
+                    ]
                     self.assertEqual(len(rationales), 1)
                     self.assertEqual(rationales[0].dependencies, (current,))
                     self.assertEqual(
@@ -806,6 +822,14 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     self.worker_results.append(data["state"]["last_observation"])
                     # Concurrent turns may overlap the replan; probe until it lands.
                     done = data["state"]["last_observation"].get("result") == "ok"
+                    # The replan first waits for the engineer to model r2.
+                    async with asyncio.timeout(30):
+                        while (
+                            count
+                            and not done
+                            and len(project.store.list("decision")) < 2
+                        ):
+                            await asyncio.sleep(0.05)
                     action = (
                         Wait(reason="Fixture probed")
                         if done or count >= 10
@@ -828,7 +852,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     )
                 )
                 agents = [s.data for s in project.store.list("agent")]
-                (chief,) = [a for a in agents if not a["parent_id"]]
+                (chief,) = [a for a in agents if a["task_id"] == "chief"]
                 (worker,) = [a for a in agents if a["parent_id"]]
                 self.assertEqual(worker["decision_id"], chief["decision_id"])
                 # A worker left on an old plan by an earlier runtime moves on resume.
@@ -1246,6 +1270,10 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             with self.assertRaisesRegex(RuntimeError, "reasoning"):
                 await project.run(ProjectRequest(description="a fixture"))
             self.assertFalse(project.store.list("agent"))
+            brief = Path(directory) / "brief.txt"
+            brief.write_text("fixture")
+            project.ingest(brief)
+            await commit_fixture_model(project)
             request = DecisionRequest(
                 question="choose",
                 kind="engineering",
@@ -1599,7 +1627,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                         selected="fixture",
                         request=plan_request(requirement.ref, tasks=(task,)),
                     )
-                elif len(store.list("agent")) == 1:
+                elif len(store.list("agent")) == 2:  # The chief and its engineer.
                     action = Spawn(
                         decision_id=data["agent"]["decision_id"], task_id="publish"
                     )
@@ -2069,7 +2097,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             await project.run(resume=result.run_id)
             self.assertEqual(
                 sorted(s.data["task_id"] for s in project.store.list("agent")),
-                ["A", "B", "chief"],
+                ["A", "B", "chief", "systems_engineer"],
             )
 
     async def test_a_reply_that_spans_a_replan_is_not_acted_on(self):

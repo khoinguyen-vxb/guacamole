@@ -358,20 +358,12 @@ from `project.requests(agent="watchdog")` to `project.trace` for its packets, tu
 
 ## Systems engineer and SysML truth
 
-Pass a `SystemsEngineer` to make a SysML v2 model the project's deterministic
-source of truth for every agent and decision:
+Every project has a Systems Engineer that makes a SysML v2 model the project's
+deterministic source of truth for every agent and decision. It is not optional:
+`Project` uses `SystemsEngineer()` unless you pass one with other settings.
 
-```python
-from guacamole import SystemsEngineer
-
-project = Project(
-    workspace, sandbox=Path("results/project"), tools=tools,
-    reasoning=CodexReasoning(),
-    systems_engineer=SystemsEngineer(),
-)
-```
-
-Every run then starts a Systems Engineer agent beside the Chief. It writes the model
+Every run starts a Systems Engineer agent beside the Chief; resuming a run saved
+without one adds it. It writes the model
 as SysML v2 text through a `model` action that cites the records the revision reflects.
 A revision is recorded only after the
 [SysML Toolkit](https://github.com/Open-MBEE/sysml-sdk) (the `sysml` package) parses
@@ -409,8 +401,9 @@ does not withdraw an accepted review.
 
 Scripts use the same API without the agent: `await project.sysml.commit(summary=...,
 files={...}, derived_from=(ref,))`, `await project.sysml.amend(Amendment(...))`,
-`project.sysml.status(amendment_id)` and `await project.sysml.validate(files)`. A
-project with neither a systems engineer nor a committed model behaves as before.
+`project.sysml.status(amendment_id)` and `await project.sysml.validate(files)`.
+Scripts that call `project.decisions.choose` directly must first commit a model of
+every recorded requirement.
 Existing `.sysml` and `.kerml` files supplied through `ProjectRequest.documents` are
 ingested as text. `SystemsEngineer(budget=..., context=...)` overrides the run's budget
 and the Chief's context. The first validation in a process loads the SysML standard

@@ -310,12 +310,8 @@ class Runtime:
                 budget=request.budget,
             )
             self.chief_id = chief.id
-            engineer = (
-                self.project.systems_engineer.spec(chief, request.budget)
-                if self.project.systems_engineer is not None
-                else None
-            )
-            self.engineer_id = engineer.id if engineer else ""
+            engineer = self.project.systems_engineer.spec(chief, request.budget)
+            self.engineer_id = engineer.id
             store.put(
                 "run",
                 self.run_id,
@@ -328,9 +324,8 @@ class Runtime:
                 actor="script",
             )
             self._add_agent(chief, parent_request=None)
-            if engineer is not None:
-                # It serves the whole run and never finishes: not a required request.
-                self._add_agent(engineer, parent_request=None, required=False)
+            # It serves the whole run and never finishes: not a required request.
+            self._add_agent(engineer, parent_request=None, required=False)
         else:
             if request is not None:
                 raise ValueError(
@@ -364,7 +359,7 @@ class Runtime:
                     self._adopt_plan(chief)
                 except (ValueError, KeyError, DecisionBlocked):
                     pass  # An invalid chief plan is the chief's to replace first.
-            if not self.engineer_id and self.project.systems_engineer is not None:
+            if not self.engineer_id:  # Runs saved before the engineer was required.
                 engineer = self.project.systems_engineer.spec(
                     chief, self.request.budget
                 )
@@ -627,10 +622,9 @@ class Runtime:
                 ]
             except (ValueError, KeyError, DecisionBlocked) as exc:
                 context["review_blockers"] = [f"Current work plan is unusable: {exc}"]
-        if self.project.sysml.active:
-            context["system_model"] = self.project.sysml.state(
-                engineer=agent.id == self.engineer_id
-            )
+        context["system_model"] = self.project.sysml.state(
+            engineer=agent.id == self.engineer_id
+        )
         return context
 
     async def _hook(

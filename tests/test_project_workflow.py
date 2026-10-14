@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from runtime_support import TestReasoning, plan_request
+from runtime_support import TestReasoning, commit_fixture_model, plan_request
 
 from guacamole import (
     AgentTurn,
@@ -267,7 +267,9 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(result.status, "complete")
                 # The Chief, and a worker per plan: each rejection brought a replan.
                 tasks = [s.data["task_id"] for s in project.store.list("agent")]
-                self.assertEqual(sorted(tasks), ["chief", *["work"] * 4])
+                self.assertEqual(
+                    sorted(tasks), ["chief", "systems_engineer", *["work"] * 4]
+                )
                 self.assertTrue((sandbox / "work").is_dir())
                 self.assertFalse((root / "state/reviews").exists())
 
@@ -317,6 +319,7 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                     source_quote=brief.read_text(),
                 )
                 req_ref = project.record_requirement(requirement)
+                await commit_fixture_model(project)
                 with self.assertRaises(DecisionBlocked):
                     await project.decisions.choose(
                         plan_request(req_ref, stage="CDR", tools=grants),
@@ -458,6 +461,7 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                         }
                     )
                 )
+                await commit_fixture_model(project)
                 decision = await project.decisions.choose(
                     plan_request(changed, stage="PDR", tools=grants),
                     selected="fixture",

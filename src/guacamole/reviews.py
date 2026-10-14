@@ -151,7 +151,7 @@ class Reviews:
         deliverables, baseline, issues = self.checks(plan_decision)
         # The model revision is reviewed but kept out of the baseline, so refining
         # the model after acceptance does not withdraw an accepted review.
-        model = self.project.sysml.current() if self.project.sysml.active else None
+        model = self.project.sysml.current()
         manifest = ReviewManifest(
             stage=plan.stage,
             plan_decision=plan_decision,

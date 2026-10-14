@@ -12,7 +12,7 @@ from unittest.mock import patch
 
 from mcp import Client, StdioServerParameters
 from pydantic import BaseModel, ValidationError
-from runtime_support import plan_request
+from runtime_support import commit_fixture_model, plan_request
 
 from guacamole import (
     ProducedFile,
@@ -242,8 +242,10 @@ class ToolsTests(unittest.IsolatedAsyncioTestCase):
                     )
                 )
 
+            r1 = requirement("r1")
+            await commit_fixture_model(project)
             decision = await project.decisions.choose(
-                plan_request(requirement("r1")),
+                plan_request(r1),
                 selected="fixture",
                 explanation="Test fixture selection",
             )

@@ -45,8 +45,10 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                         ),
                     )
                 )
-                before = project.store.model(
-                    "agent", project.store.list("agent")[0].ref.id, AgentSpec
+                run = project.store.get("run", result.run_id).data
+                before, engineer = (
+                    project.store.model("agent", run[key], AgentSpec)
+                    for key in ("chief_id", "engineer_id")
                 )
             budget = Budget(max_steps=300, max_tool_calls=250, max_seconds=9000)
             with (
@@ -76,6 +78,10 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                 )
                 self.assertEqual(saved.budget, budget)
                 self.assertEqual(saved.decision_id, before.decision_id)
+                # The Systems Engineer gets the same limits.
+                saved = project.store.model("agent", engineer.id, AgentSpec)
+                self.assertEqual(saved.context.max_input_tokens, 480_000)
+                self.assertEqual(saved.budget, budget)
                 await project.run(resume=result.run_id)
                 request = project.store.get("run", result.run_id).data["request"]
                 self.assertEqual(request["description"], "Preserve this brief")

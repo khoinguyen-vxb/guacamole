@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Self
 
 from .activity import Activity
+from .agents.systems_engineer import SystemsEngineer
 from .context import ContextBuilder, ReasoningProvider
 from .contracts import (
     JSON,
@@ -48,7 +49,6 @@ from .tools.registry import Tool, ToolRegistry, encode
 
 if TYPE_CHECKING:
     from .agents.runtime import Runtime
-    from .agents.systems_engineer import SystemsEngineer
     from .agents.watchdog import Watchdog
     from .middleware import ContextMiddleware
 
@@ -64,7 +64,7 @@ class Project:
         tiers: Mapping[str, ReasoningProvider] | None = None,
         qualifications: Sequence[Qualification] = (),
         watchdog: "Watchdog | None" = None,
-        systems_engineer: "SystemsEngineer | None" = None,
+        systems_engineer: SystemsEngineer | None = None,
         middleware: "Sequence[ContextMiddleware]" = (),
         max_concurrent_calls: int = 4,
         read_only: bool = False,
@@ -125,7 +125,8 @@ class Project:
             # Measured tier results per task family; they route tasks to tiers.
             self.qualifications = tuple(qualifications)
             self.watchdog = watchdog
-            self.systems_engineer = systems_engineer
+            # Every project runs a Systems Engineer; None uses the defaults.
+            self.systems_engineer = systems_engineer or SystemsEngineer()
             self.middleware = tuple(middleware)
             # Agents' model calls in flight at once; the rest queue (provider rate limits).
             self.max_concurrent_calls = max_concurrent_calls

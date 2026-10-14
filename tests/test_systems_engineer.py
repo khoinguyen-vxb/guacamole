@@ -9,6 +9,7 @@ from runtime_support import TestReasoning, plan_request
 from sysml.library import LibraryUnavailable
 
 from guacamole import (
+    AgentSpec,
     AgentTurn,
     Amendment,
     Budget,
@@ -26,6 +27,7 @@ from guacamole import (
     TaskAuthorization,
     TaskReport,
 )
+from guacamole.agents.systems_engineer import OBJECTIVE
 from guacamole.contracts import (
     Acknowledge,
     AgentState,
@@ -366,6 +368,26 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
 
 @needs_library
 class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
+    async def test_every_project_runs_a_systems_engineer(self):
+        class Idle(TestReasoning):
+            async def respond(self, packet):
+                return AgentTurn(
+                    rationale=Rationale(objective="Fixture", explanation="Fixture"),
+                    action=Wait(reason="Fixture idle"),
+                )
+
+        # No systems_engineer argument: every project gets the default one.
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=Idle()) as project,
+        ):
+            self.assertIsInstance(project.systems_engineer, SystemsEngineer)
+            result = await project.run(ProjectRequest(description="fixture"))
+            run = project.store.get("run", result.run_id).data
+            engineer = project.store.model("agent", run["engineer_id"], AgentSpec)
+            self.assertEqual(engineer.task_id, "systems_engineer")
+            self.assertEqual(engineer.objective, OBJECTIVE)
+
     async def test_systems_engineer_maintains_truth_beside_the_chief(self):
         rationale = Rationale(objective="Fixture", explanation="Fixture")
         chief_blocked = asyncio.Event()

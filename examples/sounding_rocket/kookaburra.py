@@ -407,13 +407,12 @@ def configure_run(project: Project, run_id: str | None = None) -> ContextSpec:
                 "budget": BUDGET,
             }
         )
-        chief = store.model("agent", str(run["chief_id"]), AgentSpec)
-        updated_chief = chief.model_copy(
-            update={
-                "context": chief.context.model_copy(update=limits),
-                "budget": BUDGET,
-            }
-        )
+        # The chief and the Systems Engineer serve the whole run.
+        agents = [
+            store.model("agent", str(run[key]), AgentSpec)
+            for key in ("chief_id", "engineer_id")
+            if run.get(key)
+        ]
         with store.atomic():
             if request != saved_request:
                 store.put(
@@ -423,14 +422,21 @@ def configure_run(project: Project, run_id: str | None = None) -> ContextSpec:
                     actor="script",
                     event="run.budgets_updated",
                 )
-            if updated_chief != chief:
-                store.put(
-                    "agent",
-                    chief.id,
-                    updated_chief,
-                    actor="script",
-                    event="agent.budgets_updated",
+            for agent in agents:
+                updated = agent.model_copy(
+                    update={
+                        "context": agent.context.model_copy(update=limits),
+                        "budget": BUDGET,
+                    }
                 )
+                if updated != agent:
+                    store.put(
+                        "agent",
+                        agent.id,
+                        updated,
+                        actor="script",
+                        event="agent.budgets_updated",
+                    )
     return context
 
 

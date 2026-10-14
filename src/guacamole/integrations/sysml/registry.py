@@ -85,10 +85,6 @@ class SysMLRegistry:
     def __init__(self, project: "Project") -> None:
         self.project = project
 
-    @property
-    def active(self) -> bool:
-        return self.project.systems_engineer is not None or self.current() is not None
-
     def current(self) -> Snapshot | None:
         return self.project.store.maybe("system_model", MODEL_ID)
 
@@ -365,10 +361,8 @@ class SysMLRegistry:
         modeled = {r.id for r in model.report.requirements}
         return sorted({s.ref.id for s in self.requirements()} - modeled)
 
-    def gate(self) -> Snapshot | None:
-        """The model a decision must respect, or None while the gate is inactive."""
-        if not self.active:
-            return None
+    def gate(self) -> Snapshot:
+        """The model a decision must respect."""
         snapshot = self.current()
         if snapshot is None:
             raise DecisionBlocked(
@@ -410,8 +404,6 @@ class SysMLRegistry:
 
     def review_issues(self) -> tuple[str, ...]:
         """Why the model cannot yet be baselined in a review."""
-        if not self.active:
-            return ()
         try:
             self.gate()
         except DecisionBlocked as exc:

@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from runtime_support import TestReasoning
+from runtime_support import TestReasoning, engineer_id
 
 from guacamole import (
     AgentTurn,
@@ -112,7 +112,13 @@ class WatchdogTests(unittest.IsolatedAsyncioTestCase):
                     ).model_dump(mode="json"),
                 )
                 sent = [p.input_tokens for p in provider.packets]
-                self.assertEqual(tokens["input_tokens_sent"], sum(sent))
+                engineer = sum(
+                    e.details["input_tokens"]
+                    for e in project.events()
+                    if e.type == "provider.dispatched"
+                    and e.actor == engineer_id(project)
+                )
+                self.assertEqual(tokens["input_tokens_sent"], sum(sent) + engineer)
                 self.assertEqual(
                     tokens["input_tokens_on_rejected_turns"], sum(sent[:4])
                 )
