@@ -15,6 +15,8 @@ IDs follow the external GUA-001..021 review; items it got wrong are rescoped her
 | GUA-009 | (c) A turn whose plan changed while its call was out is dropped, not acted on. A plan decision no longer reverts a budget raise or compaction made earlier in the same turn. (b) was already done: each dispatch records provider, model, tier and effort. |
 | GUA-010 | Partial: `max_agents` counts running workers; completed and superseded ones free their slot. |
 | GUA-021 | `pytest` moved to the dev group and pytest scoped to `tests/`. The garbled launcher text in `ehopper.py` and the ehopper install line are fixed. Supported platforms are documented. |
+| GUA-012 | A failed Codex or Claude CLI is reported by a fixed label (usage limit, rate limit, authentication, context overflow, unrecognised error) read from its JSON error events; the text itself is still never stored. |
+| Delivery | From the ehopper run's history (no `deliver` or `review` in 2,003 turns; the Chief 61% of turns): `passed` means every performed check passed, with unperformed checks listed for the reviewer; the Chief sees `review_blockers`; plans give the Chief reader tools only, so execution runs in parallel workers; replies carry their question (one Chief spent 247 turns searching for it); empty searches say what search covers. |
 | GUA-016 | Image input: reading a PNG/JPEG/WebP record sends its pixels through Codex `--image`, Claude CLI stream-json image blocks and LiteLLM data URLs, with hash checks, budgeting and stated omissions. ehopper ingests its reference photos and keeps FreeCAD screenshots as files; MCP results carry produced images. The live check (`GUACAMOLE_LIVE_VISION`) is opt-in. |
 
 ## Milestone B: brief to review package
@@ -29,7 +31,7 @@ Done, on one product family ([examples/bracket](examples/bracket/README.md)):
 Next:
 
 1. **Run the benchmark live** on the three briefs (up to 6M estimated tokens each). Fix whatever stops a run before review. *Done when* all three reach a ready review on two consecutive runs.
-2. **Let agents see tool failures.** A tool exception reaches agents as "exception text omitted", so a FreeCAD failure inside `bracket_generate` is opaque to them. Layout problems already come back as data. *Done when* an agent can correct a failed generation without help.
+2. **Let agents see tool failures.** A tool's exception text reaches agents only if it is registered with `show_errors=True`. The bracket tools are not, so a FreeCAD failure inside `bracket_generate` is still opaque to them. Layout problems already come back as data. *Done when* an agent can correct a failed generation without help.
 3. **A second product family**, such as a sheet-metal enclosure, before generalising the CAD representation into a shared assembly contract.
 4. **SysML in the loop.** Allow a SysML `library_dir` override so the model loads on linux-aarch64, then trace requirement constraints through the model.
 5. **Drawing checks and PDF.** Drawing dimensions are generated from the model but not checked. Export `review.md` to PDF if reviewers need it.
@@ -38,7 +40,7 @@ Next:
 
 Each item lists what "done" means.
 
-1. **GUA-012 Name CLI provider failures.** Codex and Claude CLI exits all read "exited with status N", because stderr is rightly never stored. Map its tail to a fixed label (usage limit, auth, context overflow, other). Codex needs no stderr: under `--json` it reports the limit on stdout as `{"type":"error"}` and `turn.failed` events, which `_usage` already reads. *Done when* a Codex usage-limit exit says so in the blocked agent's observation.
+1. **Engineering review interface.** The smallest page another engineer can use without reading logs: submit a brief, confirm assumptions, inspect the package and its change summary, request a change, accept or reject. It drives the existing WebSocket human commands. *Done when* an engineer other than the author completes a review and one change cycle without help.
 2. **GUA-008 Context waste.**
    - (a) Context clearing edits only a per-call copy (`middleware.py`), so about 87 of the Chief's sources are cleared again every turn, and the prompt never says they were dropped.
    - (b) `state.records` gives the Chief every run's tool results, about 13% of its prompt.
@@ -66,4 +68,5 @@ Each item lists what "done" means.
 - **GUA-013 migrations:** write the first migration when a column changes. Back up with `sqlite3 project.sqlite3 ".backup ..."` while no run is going.
 - **GUA-014 storage:** the database is about 1% of turn time. The one cheap win: `Activity.included()` writes an inbox revision every time a packet includes a message, about 315 MB in the current run.
 - **GUA-009a** clamping input budgets to a tier's capacity: no example uses tiers.
+- **Repair budget** capping retries of a failing tool: in ehopper's 815 tool calls the longest failure streak was 2. Add one if runs show agents grinding on a tool.
 - **GUA-015** capability registry, **GUA-019** fault injection beyond the existing restart, timeout and stale-input tests, **GUA-020** CLI: wait for a concrete need.

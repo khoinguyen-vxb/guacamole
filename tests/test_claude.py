@@ -11,7 +11,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from guacamole import Ref, Usage
-from guacamole.context import CONTINUED
+from guacamole.context import CONTINUED, ProviderError
 from guacamole.contracts import ContextPacket, ImageAttachment, Wait
 from guacamole.providers.claude import ClaudeReasoning
 
@@ -38,6 +38,10 @@ class ClaudeTests(unittest.IsolatedAsyncioTestCase):
             "    'blocks': [b['type'] for b in content],\n"
             "    'images': [b['source'] for b in content if b['type'] == 'image'],\n"
             "}))\n"
+            "if '\"limit\"' in stdin:\n"
+            "    print(json.dumps({'type': 'result', 'is_error': True,\n"
+            "                      'result': 'Claude AI usage limit reached|1 fixture-secret'}))\n"
+            "    sys.exit(1)\n"
             "turn = {\n"
             "    'rationale': {'objective': 'fixture', 'explanation': 'No engineering claim'},\n"
             "    'action': {'kind': 'wait', 'reason': 'fixture'},\n"
@@ -136,6 +140,22 @@ class ClaudeTests(unittest.IsolatedAsyncioTestCase):
                 }
             ],
         )
+
+    async def test_cli_failure_names_its_cause_without_its_text(self):
+        packet = ContextPacket(
+            agent_id="fixture",
+            invocation_id="fixture",
+            request_id="fixture",
+            provider=self.provider.name,
+            model=self.provider.model,
+            prompt='{"mode":"limit"}',
+            input_tokens=100,
+            reserved_output_tokens=1000,
+        )
+        with self.assertRaises(ProviderError) as raised:
+            await self.provider.respond(packet)
+        self.assertIn("status 1 (usage limit)", str(raised.exception))
+        self.assertNotIn("fixture-secret", str(raised.exception))
 
 
 if __name__ == "__main__":

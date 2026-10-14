@@ -64,6 +64,7 @@ from ..decision import DecisionBlocked
 from ..integrations.sysml.registry import ModelRejected
 from ..middleware import ContextMiddleware, Invocation
 from ..project import Project
+from ..tools.execution import Job, ToolError
 from ..tools.registry import encode
 from .chief import CHIEF, COMMON
 from .systems_engineer import SYSTEMS_ENGINEER
@@ -618,6 +619,14 @@ class Runtime:
                 for s in store.list("review")
             ],
         }
+        if is_chief and agent.decision_id:
+            # The finish line, which agents never saw: no run had tried to deliver.
+            try:
+                context["review_blockers"] = [
+                    *self.project.reviews.checks(agent.decision_id)[2]
+                ]
+            except (ValueError, KeyError, DecisionBlocked) as exc:
+                context["review_blockers"] = [f"Current work plan is unusable: {exc}"]
         if self.project.sysml.active:
             context["system_model"] = self.project.sysml.state(
                 engineer=agent.id == self.engineer_id
@@ -989,6 +998,7 @@ class Runtime:
                     str(exc)
                     if isinstance(exc, ProviderError)
                     and phase in {"context", "provider"}
+                    or isinstance(exc, ToolError)
                     else "Action rejected; inspect request records. Exception text omitted."
                 )
             )
@@ -1081,12 +1091,15 @@ class Runtime:
                     "reason": action.question,
                 }, "waiting" if action.blocking else "active"
             case Retry():
-                if state.tool_calls > agent.budget.max_tool_calls:
-                    raise PermissionError("Tool budget exhausted")
-                job = project.executor.retry(
-                    action.request_id, actor=agent.id, reason=action.reason
-                )
-                await job.collect()
+                try:
+                    if state.tool_calls > agent.budget.max_tool_calls:
+                        raise PermissionError("Tool budget exhausted")
+                    job = project.executor.retry(
+                        action.request_id, actor=agent.id, reason=action.reason
+                    )
+                except (KeyError, ValueError, PermissionError) as exc:
+                    raise _refused(exc) from exc
+                await _ran(job)
                 return {"request_id": job.id, "result": job.record.result}, "active"
             case Supersede():
                 record = activity.supersede(
@@ -1097,27 +1110,51 @@ class Runtime:
                 )
                 return {"request_id": record.id, "reason": record.reason}, "active"
             case ToolCall():
-                if state.tool_calls > agent.budget.max_tool_calls:
-                    raise PermissionError("Tool budget exhausted")
-                job = project.executor.submit(
-                    project.tools.get(action.tool),
-                    action.arguments,
-                    actor=agent.id,
-                    grants=agent.tools,
-                    run_id=self.run_id,
-                    parent_id=state.request_id,
-                    decision_id=agent.decision_id,
-                    rationale_id=rationale_id,
-                    packet_id=packet.id,
-                    inputs=action.inputs,
-                )
-                await job.collect()
+                try:
+                    if state.tool_calls > agent.budget.max_tool_calls:
+                        raise PermissionError("Tool budget exhausted")
+                    job = project.executor.submit(
+                        project.tools.get(action.tool),
+                        action.arguments,
+                        actor=agent.id,
+                        grants=agent.tools,
+                        run_id=self.run_id,
+                        parent_id=state.request_id,
+                        decision_id=agent.decision_id,
+                        rationale_id=rationale_id,
+                        packet_id=packet.id,
+                        inputs=action.inputs,
+                    )
+                except (KeyError, ValueError, PermissionError) as exc:
+                    raise _refused(exc) from exc
+                await _ran(job)
                 return {
                     "request_id": job.id,
                     "result": job.record.result,
                     "ref": store.get("tool_result", job.id).ref.model_dump(mode="json"),
                 }, "active"
             case Decide():
+                plan = next(
+                    (
+                        c.plan
+                        for c in action.request.candidates
+                        if c.id == action.selected
+                    ),
+                    None,
+                )
+                # The Chief working alone kept parallel workers idle (ehopper: 61% of
+                # turns, every plan granting it every tool), so it plans and reads.
+                doers = [
+                    grant.key
+                    for grant in (plan.chief_tools if plan else ())
+                    if project.tools.get(grant).definition.requires_plan
+                ]
+                if doers:
+                    raise ValueError(
+                        f"Grant {', '.join(doers)} to worker tasks, not chief_tools: "
+                        "the Chief keeps reader tools (requires_plan=false) so work "
+                        "runs in parallel workers"
+                    )
                 decision = await project.decisions.choose(
                     action.request,
                     selected=action.selected,
@@ -1357,7 +1394,8 @@ class Runtime:
                 self._wake_waiting(self.engineer_id, "Record changed")
                 return {"ref": ref.model_dump(mode="json")}, "active"
             case Read():
-                refs = (*action.refs, *project.contexts.search(action.search))
+                found = project.contexts.search(action.search)
+                refs = (*action.refs, *found)
                 for ref in refs:
                     store.resolve(ref, current=True)
                 # Reload: the Chief may reassign this worker's plan while it reasons.
@@ -1376,7 +1414,15 @@ class Runtime:
                     current.model_copy(update={"context": context}),
                     actor="runtime",
                 )
-                return {"selected": [r.model_dump(mode="json") for r in refs]}, "active"
+                observation: JSON = {
+                    "selected": [r.model_dump(mode="json") for r in refs]
+                }
+                if action.search and not found:
+                    observation["search"] = (
+                        "Nothing matched. Search covers current sources, artifacts, "
+                        "requirements, evidence and summaries, not requests or messages."
+                    )
+                return observation, "active"
             case Compact():
                 ref = project.compact(agent.id, action.summary, actor=agent.id)
                 return {"summary": ref.model_dump(mode="json")}, "active"
@@ -1587,3 +1633,16 @@ class Runtime:
             )
         )
         self._wake_waiting(recipient, f"Finding from {sender.task_id}")
+
+
+def _refused(exc: Exception) -> ToolError:
+    """A tool call the runtime refused before running it, in the runtime's own words."""
+    return ToolError(f"Not run: {type(exc).__name__}: {exc}"[:2000])
+
+
+async def _ran(job: Job) -> None:
+    """Wait for a tool; a failure shows only what its request record kept."""
+    try:
+        await job.collect()
+    except Exception as exc:
+        raise ToolError(f"Failed: {job.record.reason or type(exc).__name__}") from exc

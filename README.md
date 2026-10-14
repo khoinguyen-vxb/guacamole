@@ -67,8 +67,11 @@ tool execution does not imply convergence or physical acceptance.
 
 Tools write native files under `project.sandbox` and return
 `ProducedFile.from_path(path)`. The executor snapshots the bytes before success.
-Explicit acceptance tools return `VerificationResult`. Publishing evidence checks
-that the verification actually used the claimed artifact revision. Native solver
+Explicit acceptance tools return `VerificationResult`. Its outcome is `passed` when
+every check it performed passed; a check it cannot perform, such as a physical test,
+is `null` and the review package lists it as not performed for the reviewer to
+weigh. Publishing evidence checks that the verification actually used the claimed
+artifact revision. Native solver
 objects remain inside the provider. Keep credentials in provider configuration or
 environment variables rather than tool arguments, documents, or model context.
 
@@ -114,7 +117,10 @@ working directory, skips user configuration, and disables shell, apps, plugins,
 web search, and delegation by default so Guacamole executes the returned typed
 actions. Pass `CodexReasoning(web_search=True)` to enable built-in live web
 research; the Electronic Hopper launcher enables it for component sourcing.
-Timeouts and cancellation stop the child process group.
+Timeouts and cancellation stop the child process group. A CLI that fails is
+reported by a fixed label read from its error output (usage limit, rate limit,
+authentication, context overflow or unrecognised error); that output itself, which
+may echo prompts or credentials, is never stored.
 
 Codex input budgeting uses a local `o200k_base` estimate plus 10% and 1,024 tokens
 of headroom (`token_count_method="tiktoken_o200k_base_estimate_10pct_plus_1024"`);
@@ -164,6 +170,12 @@ the initial work plan. Tool grants and input revision checks still apply. Kookab
 does this for `list_files`, `read_text`, and `read_document`; file-writing and
 execution tools retain the default requirement for a validated plan.
 
+When a tool call fails, the agent sees what it can fix. A call refused before the
+tool runs (unknown tool, invalid arguments, missing grant or plan, stale input)
+shows the runtime's reason. A tool's own exception shows only its type, since its
+message may carry credentials, unless the tool is registered with
+`show_errors=True`; the examples' local file, document and CAD tools are.
+
 ```python
 from pathlib import Path
 
@@ -192,7 +204,10 @@ finally:
 
 The Chief records typed requirements, alternatives, deliverables and its selected
 work plans. Workers are created from validated task IDs, with their
-own objective, context, result schema, tool/peer grants and budgets. Workers can
+own objective, context, result schema, tool/peer grants and budgets. A plan the
+Chief writes may grant it only reader tools (`requires_plan=False`): writing,
+execution and verification run in worker tasks, in parallel where independent. The
+Chief's `state.review_blockers` lists what keeps its plan's review from being ready. Workers can
 request information and reply directly to allowed peers through persistent inboxes.
 Each provider invocation saves its context before dispatch. Pinned material is
 never silently dropped. When required material exceeds an agent's budget, the
@@ -228,6 +243,10 @@ that a provider reads a random label from pixels alone; it makes one model call.
 PDR and CDR packages contain manifests, copied editable artifacts, record snapshots,
 readable review summaries and communication/tool traces. Required artifacts,
 verification kinds, current dependencies and open items determine readiness.
+Once a human has accepted or rejected a package of the same stage, `review.md`
+opens with the changes since the latest such package: each record added, revised,
+dropped or now stale, with the earlier wording of changed requirements. Stale work
+stays in history and never counts as evidence for the new baseline.
 Human acceptance is a separate operation on the exact returned
 review `Ref`:
 
@@ -504,7 +523,8 @@ source = project.human.interject(
 result = await project.run(resume=result.run_id)
 ```
 
-Replies, corrections, and rejected reviews reopen the Chief for replanning.
+Replies, corrections, and rejected reviews reopen the Chief for replanning. A reply's
+source record carries the question it answers.
 Human input is pinned in subsequent agent context and captured in new decisions. The
 returned source `Ref` lets the Chief cite the correction when amending typed
 requirements. Previous wording and decisions remain in history. Current plans

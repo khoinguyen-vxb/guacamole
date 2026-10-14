@@ -368,10 +368,13 @@ def register_tools(project: Project) -> None:
             Path(result.stdout_log.path).read_text()
         )
 
+    # Local file and document errors hold no secrets; agents fix calls with them.
     for function in (list_files, read_text, read_document):
-        project.tools.register(function, retry_safe=True, requires_plan=False)
+        project.tools.register(
+            function, retry_safe=True, requires_plan=False, show_errors=True
+        )
     for function in (write_text, execute, verify_command):
-        project.tools.register(function)
+        project.tools.register(function, show_errors=True)
 
 
 def configure_run(project: Project, run_id: str | None = None) -> ContextSpec:

@@ -98,7 +98,10 @@ class Quantity(Model):
 class VerificationResult(Model):
     """An explicit physical/test acceptance result, distinct from tool completion.
 
-    A check or measurement keyed by a requirement id ("R1: mass <= 0.5 kg",
+    passed: every performed check passed. A check this program cannot perform, such
+    as a physical test, is null; review packages list it as not performed, and the
+    reviewer judges whether that scope suffices. inconclusive: the program could not
+    tell. A check or measurement keyed by a requirement id ("R1: mass <= 0.5 kg",
     measurements["R1"]) traces to that requirement in the review report.
     """
 
@@ -110,9 +113,11 @@ class VerificationResult(Model):
     @model_validator(mode="after")
     def consistent(self) -> "VerificationResult":
         if self.outcome == "passed" and (
-            not self.checks or not all(v is True for v in self.checks.values())
+            True not in self.checks.values() or False in self.checks.values()
         ):
-            raise ValueError("Passed verification requires observed passing checks")
+            raise ValueError(
+                "Passed verification requires a performed check and no failed one"
+            )
         return self
 
 
@@ -484,6 +489,7 @@ class HumanInput(Model):
     text: str = Field(pattern=r"\S")
     references: tuple[Ref, ...] = ()
     reply_to: str | None = None
+    question: str | None = None  # As asked, so a reply reads on its own
     created_at: str = Field(default_factory=now)
 
 

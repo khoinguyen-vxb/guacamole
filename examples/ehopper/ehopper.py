@@ -99,13 +99,13 @@ CLEAR_AT_TOKENS = 400_000  # Above this, reads beyond the latest 8 are hidden pe
 # Otherwise use the repository's .venv/bin/python if present, then this interpreter.
 PYTHON_EXECUTABLES: dict[str, Path] = {}
 
-DESCRIPTION = """Project Electronic Hopper: build a self-landing rocket-shaped
-hopper using electric motors and counter-rotating coaxial propellers.
-Reach approximately 5 m above takeoff level, sustain hover there for 5 minutes,
-then land under control. There is no specified propeller diameter limit.
-Keep the complete vehicle hardware budget below 500; provisionally use AUD,
-with currency and inclusion of shipping/tax still to be confirmed. Look into the supplied images under
-context/reference_images to see succesful/flown designs.
+DESCRIPTION = """Project Electronic Hopper: build a self-landing hopper using
+electric motors and counter-rotating coaxial propellers. Reach approximately 5 m
+above takeoff level, sustain hover there for 5 minutes, then land under control.
+There is no specified propeller diameter limit. Keep purchased vehicle hardware and
+materials below 500 AUD, excluding tax and shipping. It is a zero-payload
+demonstrator flown in calm air near sea level. The photos in
+context/reference_images show flown designs of this kind.
 
 Scope: select the motors, coaxial propellers, ESCs and battery; design the
 editable vehicle CAD using the supplied FreeCAD MCP; diagnose, fix, improve
@@ -113,13 +113,15 @@ and integrate PID control into the supplied tooling/6dof_hopper simulator.
 Deliver the propulsion trade study and priced BOM, native FCStd assembly and
 STEP/drawings, mass/CG/inertia data, runnable corrected simulator and PID code,
 gain configuration, repeatable verification scripts, logs and test procedures.
-Prepare scoped PDR/CDR packages for these deliverables. Mass, payload, operating
-conditions, landing tolerances and controller hardware remain open requirements.
-Use context/brief.md as the current project brief. Ask focused questions where
-missing requirements block selection; keep provisional assumptions explicit.
+Prepare the PDR package for these deliverables; CDR is out of scope for this run.
+context/brief.md is the current project brief: it records the agreed vehicle
+configuration, budget rules and simulation acceptance targets. Controller hardware
+remains open. Ask focused questions where missing requirements block selection;
+keep provisional assumptions explicit.
 """
 
-INSTRUCTIONS = """Start with the hopper brief.
+INSTRUCTIONS = """Start with the hopper brief and context/previous_run/README.md, which
+indexes unverified prior work to build on rather than repeat.
 
 Use built-in live web search for current manufacturer/supplier prices, motor
 dimensions, mounting drawings, thrust data, ESC ratings and battery specifications.
@@ -157,9 +159,10 @@ Update PID at a fixed control cadence, holding commands between samples; do not
 mutate PID integrals inside adaptive solve_ivp RHS evaluations. Include anti-windup,
 filtered derivative feedback, explicit units and configurable gains/limits.
 Verify hover trim, quaternion norm, attitude recovery, altitude tracking,
-disturbances, saturation recovery and takeoff/300-second hover/landing. Propose
-numeric acceptance tolerances for human agreement and record measured errors,
-touchdown rates, thrust/current/energy and budget margins. Preserve original
+disturbances, saturation recovery and takeoff/300-second hover/landing. Score them
+against the simulation acceptance targets in the brief, propose the still-open
+disturbance, reserve and solver tolerances for human agreement, and record measured
+errors, touchdown rates, thrust/current/energy and budget margins. Preserve original
 source checkouts; publish a runnable modified copy/patch under results/software.
 Stay within propulsion, CAD and simulated PID integration; the pendulum reference
 does not add Gazebo, ROS, MPC or machine-learning work to this project.
@@ -498,8 +501,8 @@ def register_tools(project: Project) -> None:
 
         Include the tested artifact Refs in tool inputs. Stdout must contain only
         the result JSON; diagnostic logging belongs on stderr. Never invent checks.
-        outcome "passed" requires every check to be true; report a program with
-        unperformed (null) checks as "inconclusive" or leave those checks out.
+        outcome "passed" requires every performed check to be true; set a check the
+        program cannot perform to null, and it is listed as not performed.
         """
         result = await execute(command, repository, workdir, timeout_s=timeout_s)
         if result.returncode or result.timed_out:
@@ -615,6 +618,7 @@ def register_tools(project: Project) -> None:
             views=save_views(images),
         )
 
+    # Local file, document and CAD errors hold no secrets; agents fix calls with them.
     for function in (
         list_files,
         read_text,
@@ -622,9 +626,11 @@ def register_tools(project: Project) -> None:
         freecad_status,
         freecad_view,
     ):
-        project.tools.register(function, retry_safe=True, requires_plan=False)
+        project.tools.register(
+            function, retry_safe=True, requires_plan=False, show_errors=True
+        )
     for function in (write_text, execute, verify_command, freecad_run):
-        project.tools.register(function)
+        project.tools.register(function, show_errors=True)
 
 
 def configure_run(project: Project, run_id: str | None = None) -> ContextSpec:
@@ -748,6 +754,8 @@ def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
     return ProjectRequest(
         description=DESCRIPTION,
         documents=tuple(documents),
+        # PDR first; a CDR target waits until a PDR has been accepted.
+        target_reviews=("PDR",),
         context=context.model_copy(
             update={"instructions": INSTRUCTIONS, "pinned": (inventory_ref,)}
         ),

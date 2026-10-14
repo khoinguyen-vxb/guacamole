@@ -474,8 +474,8 @@ def register_tools(project: Project) -> None:
 
         Include the tested artifact Refs in tool inputs. Stdout must contain only
         the result JSON; diagnostic logging belongs on stderr. Never invent checks.
-        outcome "passed" requires every check to be true; report a program with
-        unperformed (null) checks as "inconclusive" or leave those checks out.
+        outcome "passed" requires every performed check to be true; set a check the
+        program cannot perform to null, and it is listed as not performed.
         """
         result = await execute(command, repository, workdir, timeout_s=timeout_s)
         if result.returncode or result.timed_out:
@@ -552,10 +552,13 @@ def register_tools(project: Project) -> None:
             log=ProducedFile.from_path(log),
         )
 
+    # Local file, document and CAD errors hold no secrets; agents fix calls with them.
     for function in (list_files, read_text, read_document, freecad_status):
-        project.tools.register(function, retry_safe=True, requires_plan=False)
+        project.tools.register(
+            function, retry_safe=True, requires_plan=False, show_errors=True
+        )
     for function in (write_text, execute, verify_command, freecad_run):
-        project.tools.register(function)
+        project.tools.register(function, show_errors=True)
 
 
 def configure_run(project: Project, run_id: str | None = None) -> ContextSpec:

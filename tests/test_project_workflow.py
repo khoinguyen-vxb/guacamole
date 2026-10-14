@@ -28,9 +28,12 @@ from guacamole.contracts import (
     Record,
     Review,
     ReviewManifest,
+    Spawn,
+    TaskAuthorization,
     TaskReport,
     ToolCall,
     Verify,
+    Wait,
 )
 from guacamole.decision import DecisionBlocked
 
@@ -60,9 +63,12 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
             grants = (build.definition.grant, validate.definition.grant)
 
             class Workflow(TestReasoning):
+                """The Chief plans and reviews; a worker per stage does the work."""
+
                 async def respond(self, packet):
                     assert project.context(packet.id) == packet
-                    assert json.loads(packet.prompt)["state"]["sandbox"] == str(sandbox)
+                    data = json.loads(packet.prompt)
+                    assert data["state"]["sandbox"] == str(sandbox)
                     store = project.store
                     stage = "CDR" if project.reviews.accepted("PDR") else "PDR"
                     requirement = store.maybe("requirement", "r")
@@ -81,31 +87,50 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                     deliverable = (
                         deliverable if deliverable and not deliverable.stale else None
                     )
-                    if project.reviews.accepted("CDR"):
-                        action = Finish(
-                            result=TaskReport(
-                                summary="Fixture gates exercised"
-                            ).model_dump(mode="json")
-                        )
-                    elif requirement is None:
-                        source = store.get("source", "brief").ref
-                        action = Record(
-                            record=Requirement(
-                                id="r",
-                                wording="fixture",
-                                source=source,
-                                source_quote="fixture",
+                    if data["agent"]["task_id"] == "chief":
+                        workers = [
+                            a
+                            for a in store.list("agent")
+                            if a.data["task_id"] == "work"
+                            and decisions
+                            and a.data["decision_id"] == decisions[0].ref.id
+                        ]
+                        if project.reviews.accepted("CDR"):
+                            action = Finish(
+                                result=TaskReport(
+                                    summary="Fixture gates exercised"
+                                ).model_dump(mode="json")
                             )
-                        )
-                    elif not decisions:
-                        action = Decide(
-                            selected="fixture",
-                            request=plan_request(
-                                requirement.ref, stage=stage, tools=grants
-                            ),
-                        )
+                        elif requirement is None:
+                            source = store.get("source", "brief").ref
+                            action = Record(
+                                record=Requirement(
+                                    id="r",
+                                    wording="fixture",
+                                    source=source,
+                                    source_quote="fixture",
+                                )
+                            )
+                        elif not decisions:
+                            task = TaskAuthorization(
+                                id="work", objective="Build and verify", tools=grants
+                            )
+                            action = Decide(
+                                selected="fixture",
+                                request=plan_request(
+                                    requirement.ref, stage=stage, tasks=(task,)
+                                ),
+                            )
+                        elif not workers:
+                            action = Spawn(
+                                decision_id=decisions[0].ref.id, task_id="work"
+                            )
+                        elif deliverable is None:
+                            action = Wait(reason="Worker building")
+                        else:
+                            action = Review(decision_id=decisions[0].ref.id)
                     else:
-                        decision = decisions[0].ref.id
+                        decision = data["agent"]["decision_id"]
                         jobs = [
                             r
                             for r in project.requests(decision=decision)
@@ -164,7 +189,11 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                                 evidence=(evidence.ref,),
                             )
                         else:
-                            action = Review(decision_id=decision)
+                            action = Finish(
+                                result=TaskReport(summary="Delivered").model_dump(
+                                    mode="json"
+                                )
+                            )
                     return AgentTurn(
                         rationale=Rationale(
                             objective="Exercise workflow",
@@ -236,7 +265,9 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                     )
                     result = await project.run(resume=result.run_id)
                 self.assertEqual(result.status, "complete")
-                self.assertEqual(len(project.store.list("agent")), 1)
+                # The Chief, and a worker per plan: each rejection brought a replan.
+                tasks = [s.data["task_id"] for s in project.store.list("agent")]
+                self.assertEqual(sorted(tasks), ["chief", *["work"] * 4])
                 self.assertTrue((sandbox / "work").is_dir())
                 self.assertFalse((root / "state/reviews").exists())
 
@@ -256,7 +287,8 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                 return VerificationResult(
                     outcome="passed" if passed else "failed",
                     explanation="TEST ONLY: fixture value comparison",
-                    checks={"value": passed},
+                    # A physical test no program here can run; it still passes.
+                    checks={"value": passed, "flight_test": None},
                 )
 
             tools = ToolRegistry()
@@ -402,6 +434,7 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                     self.assertIn("| mission |", report)
                     self.assertIn("| verification (passed) |", report)
                     self.assertIn("### verification — passed", report)
+                    self.assertIn("- verification: flight_test — not performed", report)
                     self.assertTrue(
                         (root / "reviews" / accepted.id / "manifest-v3.json").exists()
                     )
@@ -414,6 +447,34 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                 self.assertFalse(project.reviews.accepted("CDR"))
                 with self.assertRaises(ValueError):
                     project.store.resolve(accepted_pdr, current=True)
+                # The revised package says what changed since the accepted baseline:
+                # stale work is shown as stale, never carried over as evidence.
+                changed = project.record_requirement(
+                    requirement.model_copy(
+                        update={
+                            "wording": "Changed altitude requirement",
+                            "source": project.store.get("source", "brief").ref,
+                            "source_quote": "Changed altitude requirement",
+                        }
+                    )
+                )
+                decision = await project.decisions.choose(
+                    plan_request(changed, stage="PDR", tools=grants),
+                    selected="fixture",
+                    explanation="Replan for the changed requirement",
+                )
+                revised = await project.reviews.generate(decision)
+                report = (root / "reviews" / revised.id / "v1/review.md").read_text()
+                self.assertIn(
+                    f"## Changes since review {accepted_pdr.id} (accepted)", report
+                )
+                self.assertIn(
+                    "| requirement:mission | revision 1 → 2 | 10,000ft (+- 2000ft)",
+                    report,
+                )
+                self.assertIn("| artifact:PDR-artifact | stale |", report)
+                self.assertIn(f"| decision:{decision} | added |", report)
+                self.assertIn("0 records carry over unchanged", report)
 
 
 if __name__ == "__main__":

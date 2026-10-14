@@ -185,15 +185,6 @@ class Humans:
         run = store.maybe("run", run_id)
         if run is None and run_id != "script":
             raise ValueError("Unknown project run")
-        note = HumanInput(
-            run_id=run_id,
-            author=author,
-            text=text,
-            references=references,
-            reply_to=reply_to,
-        )
-        for ref in references:
-            store.resolve(ref)
         reply = project.activity.get(reply_to) if reply_to else None
         if reply and (
             reply.kind != "human"
@@ -202,6 +193,17 @@ class Humans:
             or "review" in reply.arguments
         ):
             raise ValueError("Reply requires a pending question in this run")
+        # Without the question, a Chief spent 247 turns searching for what "yes" meant.
+        note = HumanInput(
+            run_id=run_id,
+            author=author,
+            text=text,
+            references=references,
+            reply_to=reply_to,
+            question=reply.purpose if reply else None,
+        )
+        for ref in references:
+            store.resolve(ref)
         actor = f"human:{author}"
         with store.atomic():
             source = store.put(

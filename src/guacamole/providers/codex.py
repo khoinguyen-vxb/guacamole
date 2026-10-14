@@ -12,7 +12,13 @@ from tempfile import TemporaryDirectory
 import tiktoken
 from pydantic import ValidationError
 
-from ..context import CONTINUED, IMAGE_TOKENS, ProviderError, image_data
+from ..context import (
+    CONTINUED,
+    IMAGE_TOKENS,
+    ProviderError,
+    failure_label,
+    image_data,
+)
 from ..contracts import AgentTurn, ContextPacket, Usage
 
 logger = logging.getLogger(__name__)
@@ -176,8 +182,9 @@ class CodexReasoning:
                 if process.returncode:
                     # CLI stderr may echo prompts or credentials; never persist it.
                     raise ProviderError(
-                        f"Codex exited with status {process.returncode}; run 'codex login status' "
-                        "and check ChatGPT model access, usage limits, and connectivity."
+                        f"Codex exited with status {process.returncode} "
+                        f"({_failure(events)}); run 'codex login status' and check "
+                        "ChatGPT model access, usage limits, and connectivity."
                     )
                 spent += _usage(events)
                 response: bytes | None = None
@@ -269,6 +276,19 @@ class CodexReasoning:
                         "usage": spent,
                     }
                 )
+
+
+def _failure(events: bytes) -> str:
+    """A fixed label for the error events of `codex exec --json` output."""
+    errors = []
+    for line in events.splitlines():
+        try:
+            event = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(event, dict) and event.get("type") in {"error", "turn.failed"}:
+            errors.append(line.decode("utf-8", errors="replace"))
+    return failure_label(" ".join(errors))
 
 
 def _usage(events: bytes) -> Usage:

@@ -12,7 +12,13 @@ from tempfile import TemporaryDirectory
 
 from pydantic import JsonValue, ValidationError
 
-from ..context import CONTINUED, IMAGE_TOKENS, ProviderError, image_data
+from ..context import (
+    CONTINUED,
+    IMAGE_TOKENS,
+    ProviderError,
+    failure_label,
+    image_data,
+)
 from ..contracts import JSON, AgentTurn, ContextPacket, Usage
 
 logger = logging.getLogger(__name__)
@@ -181,9 +187,9 @@ class ClaudeReasoning:
                 if process.returncode:
                     # CLI output may echo prompts or credentials; never persist it.
                     raise ProviderError(
-                        f"Claude exited with status {process.returncode}; run "
-                        "'claude auth status' and check model access, usage limits, "
-                        "and connectivity."
+                        f"Claude exited with status {process.returncode} "
+                        f"({_failure(stdout)}); run 'claude auth status' and check "
+                        "model access, usage limits, and connectivity."
                     )
                 response: bytes | None = None
                 try:
@@ -290,6 +296,14 @@ def _result(stdout: bytes) -> JsonValue:
         if isinstance(event, dict) and event.get("type") == "result":
             return event
     return None
+
+
+def _failure(stdout: bytes) -> str:
+    """A fixed label for the error the final result event reports."""
+    envelope = _result(stdout)
+    if isinstance(envelope, dict) and envelope.get("is_error"):
+        return failure_label(f"{envelope.get('subtype')} {envelope.get('result')}")
+    return failure_label("")
 
 
 def _usage(envelope: JsonValue) -> Usage:

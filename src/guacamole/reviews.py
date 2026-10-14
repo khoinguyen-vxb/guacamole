@@ -321,6 +321,7 @@ class Reviews:
         ]
         if manifest.human:
             lines += ["", f"Disposition by {manifest.human}: {manifest.disposition}"]
+        lines += self._changes(manifest)
 
         lines += [
             "",
@@ -497,6 +498,57 @@ class Reviews:
         if model:
             lines += ["", "## SysML model", "", *model]
         return "\n".join(lines) + "\n"
+
+    def _changes(self, manifest: ReviewManifest) -> list[str]:
+        """What changed since the last baseline of this stage a human dispositioned."""
+        store, activity = self.project.store, self.project.activity
+        reviewed = [
+            ReviewManifest.model_validate_json(encode(s.data))
+            for s in store.list("review")
+            if s.ref.id != manifest.id
+            and s.data["stage"] == manifest.stage
+            and s.data["status"] in {"accepted", "rejected"}
+        ]
+        if not reviewed:
+            return []
+        # ponytail: latest by plan decision; two dispositions of one plan tie.
+        previous = max(reviewed, key=lambda m: activity.get(m.plan_decision).created_at)
+        before = {(r.kind, r.id): r for r in previous.baseline}
+        after = {(r.kind, r.id): r for r in manifest.baseline}
+        rows, kept = [], 0
+        for key in sorted(before.keys() | after.keys()):
+            old, new = before.get(key), after.get(key)
+            if new is not None and store.resolve(new).stale:
+                change = "stale"
+            elif old is None:
+                change = "added"
+            elif new is None:
+                change = "dropped"
+            elif old.revision != new.revision:
+                change = f"revision {old.revision} → {new.revision}"
+            else:
+                kept += 1
+                continue
+            wording = (
+                str(store.resolve(old).data["wording"])
+                if key[0] == "requirement" and old is not None
+                else ""
+            )
+            rows.append(f"| {_cell(':'.join(key))} | {change} | {_cell(wording)} |")
+        return [
+            "",
+            f"## Changes since review {previous.id} ({previous.status})",
+            "",
+            (
+                f"{kept} records carry over unchanged and current. Dropped records stay "
+                "in history and are not evidence for this baseline; anything still owed "
+                "is listed under open items."
+            ),
+            "",
+            "| Record | Change | Earlier requirement wording |",
+            "|---|---|---|",
+            *rows,
+        ]
 
 
 def _unit(unit: str) -> str:

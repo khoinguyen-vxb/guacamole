@@ -46,6 +46,10 @@ class Job[R]:
             )
 
 
+class ToolError(RuntimeError):
+    """A failed or refused tool call, described only with text safe to show agents."""
+
+
 class Executor:
     def __init__(self, project: "Project") -> None:
         self.project = project
@@ -229,12 +233,15 @@ class Executor:
             )
             raise
         except Exception as exc:
-            # Exception messages can contain provider credentials or arbitrary tool output.
+            # Exception messages can contain provider credentials or arbitrary tool
+            # output, so they are kept only for tools registered with show_errors.
             activity.transition(
                 record.id,
                 "failed",
                 actor="runtime",
-                reason=f"{type(exc).__name__}; exception text omitted to avoid credential leakage",
+                reason=f"{type(exc).__name__}: {exc}"[:2000]
+                if tool.definition.show_errors
+                else f"{type(exc).__name__}; exception text omitted to avoid credential leakage",
             )
             raise
 

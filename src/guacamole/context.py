@@ -73,6 +73,27 @@ class ProviderError(RuntimeError):
     """A locally constructed provider diagnostic safe to persist without secrets."""
 
 
+# CLI error text may echo prompts or credentials, so only these labels are kept.
+_FAILURES = (
+    ("usage limit", ("usage limit", "quota", "credit")),
+    ("rate limit", ("rate limit", "rate_limit", "429", "too many requests")),
+    (
+        "authentication",
+        ("log in", "login", "sign in", "unauthorized", "authentication", "api key"),
+    ),
+    ("context overflow", ("context window", "context length", "too long")),
+)
+
+
+def failure_label(text: str) -> str:
+    """A fixed label for a provider's error text."""
+    text = text.casefold()
+    return next(
+        (label for label, words in _FAILURES if any(w in text for w in words)),
+        "unrecognised error",
+    )
+
+
 def image_data(image: ImageAttachment) -> bytes:
     """An attached image's bytes, refused if they changed since context assembly."""
     try:

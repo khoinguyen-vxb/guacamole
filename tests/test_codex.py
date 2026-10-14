@@ -54,6 +54,9 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
             "if mode == 'fail':\n"
             "    print('fixture-secret', file=sys.stderr)\n"
             "    sys.exit(7)\n"
+            "if mode == 'limit':\n"
+            "    print(json.dumps({'type': 'error', 'message': 'Usage limit hit; fixture-secret'}))\n"
+            "    sys.exit(1)\n"
             "if mode == 'missing' or mode == 'invalid_then_missing' and attempt > 1: sys.exit(0)\n"
             "output = Path(sys.argv[sys.argv.index('--output-last-message') + 1])\n"
             "payload = {\n"
@@ -236,7 +239,8 @@ class CodexTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_cli_failure_and_invalid_output_never_return_an_action(self):
         for mode, message, attempts in (
-            ("fail", "status 7", 1),
+            ("fail", "status 7 (unrecognised error)", 1),
+            ("limit", "status 1 (usage limit)", 1),
             ("missing", "output_unavailable", 1),
             ("invalid", "json_line=1, json_column=1", 2),
             ("invalid_then_missing", "output_unavailable", 2),

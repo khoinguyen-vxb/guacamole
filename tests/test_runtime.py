@@ -986,6 +986,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         def leaky() -> str:
             raise ValueError(secret)
 
+        def explained() -> str:
+            raise ValueError("Path is outside the inputs; pick one from list_files")
+
         class Rejected(TestReasoning):
             def __init__(self):
                 self.observations = []
@@ -997,6 +1000,8 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 actions = (
                     Acknowledge(message_ids=("missing",)),
                     ToolCall(tool=tool.definition.grant, arguments={}),
+                    ToolCall(tool=shown.definition.grant, arguments={}),
+                    ToolCall(tool=tool.definition.grant, arguments={"path": "x"}),
                     Wait(reason="Fixture finished"),
                 )
                 return AgentTurn(
@@ -1006,12 +1011,94 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
 
         tools = ToolRegistry()
         tool = tools.register(leaky, requires_plan=False)
+        shown = tools.register(explained, requires_plan=False, show_errors=True)
         with tempfile.TemporaryDirectory() as directory:
             provider = Rejected()
             with Project(Path(directory), tools=tools, reasoning=provider) as project:
-                await project.run(ProjectRequest(description="fixture"))
-        self.assertIn("Unknown inbox: missing", provider.observations[1]["detail"])
-        self.assertNotIn(secret, json.dumps(provider.observations[2]))
+                await project.run(
+                    ProjectRequest(
+                        description="fixture",
+                        context=ContextSpec(max_input_tokens=100_000),
+                    )
+                )
+        observations = provider.observations
+        self.assertIn("Unknown inbox: missing", observations[1]["detail"])
+        self.assertNotIn(secret, json.dumps(observations[2]))
+        self.assertIn(
+            "Failed: ValueError; exception text omitted", observations[2]["detail"]
+        )
+        # A tool that declares its errors safe, and refusals before any tool runs,
+        # tell the agent what to fix.
+        self.assertIn("Failed: ValueError: Path is outside", observations[3]["detail"])
+        self.assertIn("Not run: ValidationError", observations[4]["detail"])
+        self.assertIn("path", observations[4]["detail"])
+
+    async def test_chief_plans_with_readers_and_sees_what_blocks_its_review(self):
+        def build() -> str:
+            return "built"
+
+        def look() -> str:
+            return "seen"
+
+        class Planner(TestReasoning):
+            def __init__(self):
+                self.prompts = []
+
+            async def respond(self, packet):
+                self.prompts.append(json.loads(packet.prompt)["state"])
+                requirement = next(iter(project.store.list("requirement")), None)
+                count = len(self.prompts) - 1
+                if count == 0:
+                    action = Record(
+                        record=Requirement(
+                            id="r",
+                            wording="fixture",
+                            source=project.store.list("source")[0].ref,
+                            source_quote="fixture",
+                        )
+                    )
+                elif count in (1, 2):
+                    # The Chief first grants itself an execution tool.
+                    tool = writer if count == 1 else reader
+                    action = Decide(
+                        selected="fixture",
+                        request=plan_request(
+                            requirement.ref, tools=(tool.definition.grant,)
+                        ),
+                    )
+                elif count == 3:
+                    action = Read(search="zzz-nothing-matches")
+                else:
+                    action = Wait(reason="Fixture finished")
+                return AgentTurn(
+                    rationale=Rationale(objective="Fixture", explanation="Fixture"),
+                    action=action,
+                )
+
+        tools = ToolRegistry()
+        writer = tools.register(build)
+        reader = tools.register(look, requires_plan=False)
+        provider = Planner()
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), tools=tools, reasoning=provider) as project,
+        ):
+            await project.run(
+                ProjectRequest(
+                    description="fixture",
+                    context=ContextSpec(max_input_tokens=200_000),
+                )
+            )
+        rejected, planned, searched = (
+            p["last_observation"] for p in provider.prompts[2:5]
+        )
+        self.assertIn("Grant build@1 to worker tasks", rejected["detail"])
+        self.assertNotIn("review_blockers", provider.prompts[2])
+        self.assertIn("decision_id", planned)
+        self.assertEqual(
+            provider.prompts[3]["review_blockers"], ["PDR-design: missing deliverable"]
+        )
+        self.assertTrue(searched["search"].startswith("Nothing matched"))
 
     async def test_incomplete_provider_response_explains_output_limit(self):
         provider = LiteLLMReasoning("openai/gpt-6-astra")
@@ -1466,7 +1553,34 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 store = project.store
                 requirement = store.maybe("requirement", "r")
                 runs = [r for r in project.requests() if r.kind == "tool"]
-                if requirement is None:
+                if data["agent"]["task_id"] == "publish":
+                    if not runs:
+                        action = ToolCall(
+                            tool=tool.definition.grant,
+                            arguments={},
+                            inputs=(requirement.ref,),
+                        )
+                    elif not store.list("artifact"):
+                        action = Publish(
+                            files=tuple(
+                                PublishedFile(
+                                    path=file["path"],
+                                    artifact_id=Path(file["path"]).stem,
+                                    artifact_kind="editable-design",
+                                )
+                                for file in runs[0].result
+                            ),
+                            tool_request=runs[0].id,
+                            inputs=(requirement.ref,),
+                            requirements=(requirement.ref,),
+                        )
+                    else:
+                        action = Finish(
+                            result=TaskReport(summary="Published").model_dump(
+                                mode="json"
+                            )
+                        )
+                elif requirement is None:
                     action = Record(
                         record=Requirement(
                             id="r",
@@ -1476,31 +1590,18 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                         )
                     )
                 elif not store.list("decision"):
+                    task = TaskAuthorization(
+                        id="publish",
+                        objective="Publish",
+                        tools=(tool.definition.grant,),
+                    )
                     action = Decide(
                         selected="fixture",
-                        request=plan_request(
-                            requirement.ref, tools=(tool.definition.grant,)
-                        ),
+                        request=plan_request(requirement.ref, tasks=(task,)),
                     )
-                elif not runs:
-                    action = ToolCall(
-                        tool=tool.definition.grant,
-                        arguments={},
-                        inputs=(requirement.ref,),
-                    )
-                elif not store.list("artifact"):
-                    action = Publish(
-                        files=tuple(
-                            PublishedFile(
-                                path=file["path"],
-                                artifact_id=Path(file["path"]).stem,
-                                artifact_kind="editable-design",
-                            )
-                            for file in runs[0].result
-                        ),
-                        tool_request=runs[0].id,
-                        inputs=(requirement.ref,),
-                        requirements=(requirement.ref,),
+                elif len(store.list("agent")) == 1:
+                    action = Spawn(
+                        decision_id=data["agent"]["decision_id"], task_id="publish"
                     )
                 elif data["messages"]:
                     action = Acknowledge(
@@ -1530,18 +1631,20 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             )
             (run,) = [r for r in project.requests() if r.kind == "tool"]
             artifacts = {s.ref.id for s in project.store.list("artifact")}
-            (delegation,) = project.inbox(provider.prompts[0]["agent"]["id"])
+            (delegation,) = [
+                e
+                for e in project.inbox(provider.prompts[0]["agent"]["id"])
+                if e.message.kind == "delegation"
+            ]
         self.assertEqual(artifacts, {"first", "second"})
-        kinds = [p["state"]["last_observation"] for p in provider.prompts]
+        worker = [p for p in provider.prompts if p["agent"]["task_id"] == "publish"]
+        kinds = [p["state"]["last_observation"] for p in worker]
         publish = next(i for i, o in enumerate(kinds) if "refs" in o) - 1
         self.assertEqual(len(kinds[publish + 1]["refs"]), 2)
         # The call's full arguments arrived without a read turn.
         self.assertIn(
             ("job_inputs", run.id),
-            {
-                (s["ref"]["kind"], s["ref"]["id"])
-                for s in provider.prompts[publish]["sources"]
-            },
+            {(s["ref"]["kind"], s["ref"]["id"]) for s in worker[publish]["sources"]},
         )
         self.assertIsNotNone(delegation.acknowledged_at)
 

@@ -82,6 +82,8 @@ class ToolDefinition(Model):
     output_schema: JSON
     retry_safe: bool
     requires_plan: bool = True
+    # The tool's exception messages hold no secrets, so failed calls show them.
+    show_errors: bool = False
 
 
 @dataclasses.dataclass(frozen=True)
@@ -126,6 +128,7 @@ class ToolRegistry:
         tags: tuple[str, ...] = (),
         retry_safe: bool = False,
         requires_plan: bool = True,
+        show_errors: bool = False,
     ) -> Tool[P, R]: ...
 
     @overload
@@ -139,6 +142,7 @@ class ToolRegistry:
         tags: tuple[str, ...] = (),
         retry_safe: bool = False,
         requires_plan: bool = True,
+        show_errors: bool = False,
     ) -> Tool[P, R]: ...
 
     def register[**P, R](
@@ -151,6 +155,7 @@ class ToolRegistry:
         tags: tuple[str, ...] = (),
         retry_safe: bool = False,
         requires_plan: bool = True,
+        show_errors: bool = False,
     ) -> Tool[P, R]:
         name = name or getattr(function, "__name__", type(function).__name__)
         if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_.-]*", name):
@@ -194,6 +199,7 @@ class ToolRegistry:
             output_schema=output.json_schema(),
             retry_safe=retry_safe,
             requires_plan=requires_plan,
+            show_errors=show_errors,
         )
         encode(definition.model_dump(mode="json"))
         tool = Tool[P, R](definition, function, inputs, output)

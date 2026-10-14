@@ -95,6 +95,11 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
                 )
                 self.assertFalse(project.human.inbox())
                 self.assertEqual(project.activity.get(question_id).status, "completed")
+                # The answer carries its question, so the Chief need not search.
+                self.assertEqual(
+                    project.store.resolve(source).data["question"],
+                    "Confirm the payload mass?",
+                )
                 self.assertTrue(project.store.resolve(old_plan).stale)
                 corrected = project.record_requirement(
                     Requirement(
@@ -230,7 +235,8 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
 
         with tempfile.TemporaryDirectory() as directory:
             tools = ToolRegistry()
-            tool = tools.register(compute)
+            # A pure calculation, so the Chief may hold it (see chief_tools).
+            tool = tools.register(compute, requires_plan=False)
             with Project(
                 Path(directory), tools=tools, reasoning=SlowProposal()
             ) as project:

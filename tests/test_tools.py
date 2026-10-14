@@ -14,7 +14,13 @@ from mcp import Client, StdioServerParameters
 from pydantic import BaseModel, ValidationError
 from runtime_support import plan_request
 
-from guacamole import ProducedFile, Project, Requirement, ToolRegistry
+from guacamole import (
+    ProducedFile,
+    Project,
+    Requirement,
+    ToolRegistry,
+    VerificationResult,
+)
 from guacamole.contracts import FileRecord, RequestRecord
 from guacamole.tools.mcp import ToolSession, create_mcp
 from guacamole.websocket import WebSocketBridge
@@ -250,6 +256,17 @@ class ToolsTests(unittest.IsolatedAsyncioTestCase):
             with self.assertRaisesRegex(ValueError, "requirement"):
                 project.executor.retry(job.id, actor="worker", reason="fixture")
             self.assertEqual(job.record.status, "failed")
+
+    def test_passed_verification_means_every_performed_check_passed(self):
+        # A physical test the program cannot run stays null and is listed as such.
+        VerificationResult(
+            outcome="passed",
+            explanation="Simulated checks",
+            checks={"hover_margin": True, "flight_test": None},
+        )
+        for checks in ({}, {"flight_test": None}, {"hover": True, "mass": False}):
+            with self.subTest(checks=checks), self.assertRaises(ValidationError):
+                VerificationResult(outcome="passed", explanation="x", checks=checks)
 
     async def test_contracts_and_atomic_dispatch(self):
         registry = ToolRegistry()

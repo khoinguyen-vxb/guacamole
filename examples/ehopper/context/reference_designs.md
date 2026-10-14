@@ -1,8 +1,8 @@
 # Reference designs: flown electric coaxial hoppers
 
-Text descriptions of the 7 photos in `context/reference_images/`. Agents cannot
-view the images, so this file is the usable source. A human wrote it from visual
-inspection only: there is no scale, dimension, part number or performance data.
+Text descriptions of the 7 photos in `context/reference_images/`. Agents can read
+the photos themselves as images; this file is a human's description of them, written
+from visual inspection only: there is no scale, dimension, part number or performance data.
 Anything marked "appears" is an interpretation; confirm it with the human before
 using it as a requirement. The photos are social-media screenshots of other teams'
 vehicles, not of this project.
@@ -85,9 +85,8 @@ File: `79f67b5a-…jpg`.
 
 ## Takeaways for this project (provisional)
 
-- These photos support the existing choices: bottom-mounted coaxial propulsion
-  (REQ-PROPULSION-PLACEMENT), a common two-axis gimbal, and a tripod or quadpod
-  of thin CFRP tubes.
+- These photos support the brief's choices: bottom-mounted coaxial propulsion,
+  a common two-axis gimbal, and a tripod or quadpod of thin CFRP tubes.
 - Successful builds keep the avionics simple and off-the-shelf: a Nucleo or
   Raspberry Pi, one integrated contra-rotating motor, and a small LiPo
   (2200 mAh is seen once).

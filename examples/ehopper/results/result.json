@@ -1,9 +1,0 @@
-{
-  "run_id": "0d3952dea3fd4803a63b63a01d64464c",
-  "status": "incomplete",
-  "reviews": [],
-  "human_requests": [],
-  "open_items": [
-    "chief: blocked: {\"detail\":\"Codex exited with status 1; run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\",\"selected\":[{\"id\":\"1ca31b42dbca445aa0a7cef4e7c2fc27\",\"kind\":\"job_inputs\",\"locator\":\"\",\"revision\":1,\"sha256\":\"f01d218eeeb7706788eb90b722bb9fb070c92dba09e99bbd3e23c4ed815b8fda\"}]}"
-  ]
-}
