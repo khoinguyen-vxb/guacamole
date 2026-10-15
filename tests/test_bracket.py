@@ -1,10 +1,12 @@
+import importlib.util
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from runtime_support import TestReasoning
+from runtime_support import TestReasoning, commit_fixture_model
 
+from examples import drafting
 from examples.bracket import bracket
 from guacamole import (
     AgentTurn,
@@ -110,6 +112,36 @@ class BracketTests(unittest.IsolatedAsyncioTestCase):
         stale = bracket.assess(MEASURED, [["item"]], 250, ())
         self.assertFalse(stale.checks["BOM matches the assembly"])
 
+    def test_proposed_tolerancing_is_checked_against_the_family_rules(self):
+        m6 = bracket.FASTENERS["M6"]  # H 6.6 for F 6: T at most 0.6
+        loose = bracket.Tolerancing(position_mm=0.8, wall_flatness_mm=1.0)
+        self.assertEqual(len(bracket.tolerancing_problems(loose, m6)), 2)
+        tight = bracket.Tolerancing(
+            hole_class="H11", position_mm=0.4, wall_flatness_mm=0.1
+        )
+        self.assertEqual(bracket.tolerancing_problems(tight, m6), [])
+        plane = drafting.Plane(point=(0, 0, 0), normal=(0, -1, 0), area=1.0)
+        holes = drafting.Holes(
+            axis=(0, 1, 0), diameter=6.6, centers=((0, 0, 0),), length=8
+        )
+        features = {
+            "wall_face": plane,
+            "base_face": plane.model_copy(update={"normal": (0, 0, -1)}),
+            "side_face": plane.model_copy(update={"normal": (-1, 0, 0)}),
+            "wall_holes": holes,
+            "shelf_holes": holes.model_copy(update={"axis": (0, 0, 1)}),
+        }
+        pmi = bracket.bracket_pmi(features, m6, tight)
+        self.assertEqual({s.fit for s in pmi.sizes}, {"H11"})
+        self.assertIn(
+            ("flatness", 0.1), {(t.characteristic, t.value) for t in pmi.tolerances}
+        )
+        bom = [["Part number"], ["ISO4017-M6x25-8.8"]]
+        self.assertTrue(bracket.floating(pmi, bom))
+        self.assertFalse(
+            bracket.floating(bracket.bracket_pmi(features, m6, loose), bom)
+        )
+
     async def test_benchmark_answers_blocking_questions_then_reports(self):
         class Asking(TestReasoning):
             calls = 0
@@ -136,7 +168,10 @@ class BracketTests(unittest.IsolatedAsyncioTestCase):
         self.assertGreater(result["estimated_input_tokens"], 0)
 
 
-@unittest.skipUnless(bracket.FREECAD, "needs FreeCAD (freecadcmd or freecad.cmd)")
+@unittest.skipUnless(
+    bracket.FREECAD and all(map(importlib.util.find_spec, ("ezdxf", "OCP"))),
+    "needs FreeCAD (freecadcmd or freecad.cmd) and the bracket extra (ezdxf, OCP)",
+)
 class FreeCADBracketTests(unittest.IsolatedAsyncioTestCase):
     async def test_generated_bracket_reaches_an_accepted_review_with_its_report(self):
         # Snap and Flatpak FreeCAD builds see $HOME but not /tmp.
@@ -170,7 +205,8 @@ class FreeCADBracketTests(unittest.IsolatedAsyncioTestCase):
                         (requirement("R4", "depth", "mm", minimum=180), "180 mm deep"),
                     )
                 )
-                kinds = ("native-cad", "step", "drawing", "bom")
+                await commit_fixture_model(project)
+                kinds = ("native-cad", "step", "pmi", "drawing", "bom")
                 plan = DeliverableSpec(
                     id="PDR-bracket",
                     title="Shelf bracket",
@@ -224,25 +260,39 @@ class FreeCADBracketTests(unittest.IsolatedAsyncioTestCase):
                 )
                 built = (await job.collect()).files
                 assert built is not None
+                files = {  # Artifact id: kind, BracketFiles field
+                    "native-cad": ("native-cad", "native"),
+                    "step": ("step", "step"),
+                    "pmi": ("pmi", "pmi"),
+                    "drawing": ("drawing", "drawing"),
+                    "drawing-svg": ("drawing", "drawing_svg"),
+                    "drawing-pdf": ("drawing", "drawing_pdf"),
+                    "bom": ("bom", "bom"),
+                }
                 artifacts = {
-                    kind: project.publish(
+                    id: project.publish(
                         path=getattr(built, field).path,
-                        artifact_id=kind,
+                        artifact_id=id,
                         kind=kind,
                         request_id=job.id,
                         decision_id=decision,
                         inputs=requirements,
                         requirements=requirements,
                     )
-                    for kind, field in zip(kinds, ("native", "step", "drawing", "bom"))
+                    for id, (kind, field) in files.items()
                 }
-                checked = (artifacts["native-cad"], artifacts["step"], artifacts["bom"])
+                checked = tuple(
+                    artifacts[id]
+                    for id in ("native-cad", "step", "bom", "pmi", "drawing")
+                )
                 check_job = project.executor.submit(
                     check,
                     {
                         "native_artifact": "native-cad",
                         "step_artifact": "step",
                         "bom_artifact": "bom",
+                        "pmi_artifact": "pmi",
+                        "drawing_artifact": "drawing",
                         "load_n": 250,
                     },
                     decision_id=decision,
@@ -250,6 +300,24 @@ class FreeCADBracketTests(unittest.IsolatedAsyncioTestCase):
                 )
                 result = await check_job.collect()
                 self.assertEqual(result.outcome, "passed", result.checks)
+                # The PMI maps onto the model, the STEP carries it as AP242 and the
+                # DXF shows exactly that PMI.
+                self.assertTrue(
+                    result.checks[
+                        "PMI features map one-to-one onto the model, unchanged"
+                    ]
+                )
+                self.assertTrue(
+                    result.checks[
+                        "STEP AP242 carries the PMI exactly: datums, hole sizes, "
+                        "frames and the general profile on their faces"
+                    ]
+                )
+                self.assertTrue(
+                    result.checks[
+                        "drawing: every geometrical specification of the PMI is shown"
+                    ]
+                )
                 evidence = project.evidence(
                     Evidence(
                         id="bracket-check",
@@ -262,6 +330,14 @@ class FreeCADBracketTests(unittest.IsolatedAsyncioTestCase):
                         decision_id=decision,
                     )
                 )
+                # Bounded requirements block the review until the systems
+                # engineer's model shows the verified values satisfy them.
+                waiting = await project.reviews.generate(decision)
+                self.assertIn(
+                    "R1: SysML model revision 1 does not show it satisfied",
+                    "\n".join(project.store.resolve(waiting).data["open_items"]),
+                )
+                await commit_fixture_model(project, result.measurements)
                 project.store.put(
                     "rationale",
                     "fixture-rationale",

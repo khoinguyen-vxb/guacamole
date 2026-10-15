@@ -202,8 +202,8 @@ finally:
     project.close()
 ```
 
-The Chief records typed requirements, alternatives, deliverables and its selected
-work plans. Workers are created from validated task IDs, with their
+The Chief records alternatives, deliverables and its selected work plans; the
+Systems Engineer records the typed requirements. Workers are created from validated task IDs, with their
 own objective, context, result schema, tool/peer grants and budgets. A plan the
 Chief writes may grant it only reader tools (`requires_plan=False`): writing,
 execution and verification run in worker tasks, in parallel where independent. The
@@ -362,8 +362,12 @@ Every project has a Systems Engineer that makes a SysML v2 model the project's
 deterministic source of truth for every agent and decision. It is not optional:
 `Project` uses `SystemsEngineer()` unless you pass one with other settings.
 
-Every run starts a Systems Engineer agent beside the Chief; resuming a run saved
-without one adds it. It writes the model
+Every run starts with the Systems Engineer. It records the brief's typed requirements
+and commits a model of them; the Chief starts once that model is valid. Only the
+Systems Engineer records requirements. After that it runs only when woken by a
+message or human input: to review a requirement change from the human or the Chief,
+to update the model at the Chief's request, or to assess a verified design. Resuming
+a run saved without one adds it. It writes the model
 as SysML v2 text through a `model` action that cites the records the revision reflects.
 A revision is recorded only after the
 [SysML Toolkit](https://github.com/Open-MBEE/sysml-sdk) (the `sysml` package) parses
@@ -395,7 +399,10 @@ requirement, bound, element and text differences, and notifies the Chief. A Chie
 candidate rejects it; the Systems Engineer then implements exactly the adopted change.
 Amendments that change requirements cannot be adopted until requirement records with
 human-sourced quotes agree. An unusable model or an undecided or unimplemented
-amendment keeps PDR/CDR packages from becoming ready. Packages include the reviewed
+amendment keeps PDR/CDR packages from becoming ready, and so does any bounded
+requirement the model does not show satisfied: the Systems Engineer assesses a design
+by recording its verified values and `satisfy` claims, and the Chief's
+`state.review_blockers` lists what is missing. Packages include the reviewed
 model, acceptance requires that revision to be current, and refining the model later
 does not withdraw an accepted review.
 
@@ -406,10 +413,49 @@ Scripts that call `project.decisions.choose` directly must first commit a model 
 every recorded requirement.
 Existing `.sysml` and `.kerml` files supplied through `ProjectRequest.documents` are
 ingested as text. `SystemsEngineer(budget=..., context=...)` overrides the run's budget
-and the Chief's context. The first validation in a process loads the SysML standard
+and the Chief's context. Its budget bounds each episode from waking to waiting, not
+the run, so a long run cannot wear it out. The first validation in a process loads the SysML standard
 library (seconds); later ones take milliseconds. Only comparisons of a feature with a
 literal or valued quantity, joined by `and`, are machine-checked; other constraints
-are reported as unchecked warnings. Units are compared as written, without conversion.
+are reported as unchecked warnings. Units are compared as written, without conversion,
+except that `1` and an empty unit both mean dimensionless.
+
+## Standards and compliance
+
+A requirement selects a code or standard with `standard`, pinned to one edition:
+`Standard(id="AS 1210", edition="2010", amendments=(...), text=licensed, basis=(site,))`.
+Code selection is a human decision, so the quote, or the question a human reply
+answers, must state the designation and edition. One current requirement selects each
+standard; revise it to change the edition. `text` is the source holding the licensed
+normative text, and `basis` cites the requirements and sources the standard's
+applicability rests on, such as jurisdiction or equipment class. A requirement taken
+from a clause sets `clause=Clause(standard=selection_ref, reference="3.3.1")` and quotes
+that licensed text or an excerpt of it. Revising a basis record, the text or the
+selection makes the selection and its clause requirements stale, and with them the
+model, plans and evidence resting on them, so all are reassessed. These pins are
+Guacamole's compliance records, linked to the SysML requirements by ID; the model stays
+the requirements authority. A selection without licensed text keeps PDR/CDR packages
+from becoming ready. Packages list each pinned edition under Standards and in
+`standards.lock.json`. A requirement whose evidence has no check keyed to it reads
+"not checked", never passed.
+
+`project.record_catalogue(source)` records the project's standards catalogue from a
+reviewed JSON source. For each standard it holds the editions and, optionally, a rule
+saying when the standard applies, such as
+`"jurisdiction == 'NSW' and design_pressure * volume > 10000"`, in the units it
+names. Rules read facts. A fact is a requirement stating a project property with
+`fact=Fact(name="design_pressure", value=1500, unit="kPa")`, and its quote must say
+that value and unit. `guacamole.standards` evaluates the rules in a safe expression
+subset, and a missing fact makes the answer unknown rather than false. A review is
+blocked in two cases: a mandatory standard applies and no requirement selects it, or
+its applicability is unknown. Packages add an Applicability table, which names any
+selected edition the catalogue lists as superseded. A fact stated in another unit
+counts as missing: every comparison in the runtime is in the unit its bound names.
+
+Only a human retires a requirement. The systems engineer records it again with
+`withdrawn=Withdrawal(source=statement, quote=...)`. A withdrawn requirement stays in
+the record, leaves the model, plans and checks, appears as withdrawn in packages, and
+makes everything resting on it stale.
 
 ## Context middleware
 
@@ -519,8 +565,8 @@ result = await project.run(resume=result.run_id)
 Replies, corrections, and rejected reviews reopen the Chief for replanning. A reply's
 source record carries the question it answers.
 Human input is pinned in subsequent agent context and captured in new decisions. The
-returned source `Ref` lets the Chief cite the correction when amending typed
-requirements. Previous wording and decisions remain in history. Current plans
+returned source `Ref` lets the Systems Engineer cite the correction when amending
+typed requirements. Previous wording and decisions remain in history. Current plans
 and dependent results become stale, and unfinished workers are superseded so the
 Chief can assign replacement tasks under a fresh validated plan.
 
@@ -608,8 +654,18 @@ project code or separately installed packages.
 
 [examples/bracket](examples/bracket/README.md) runs natural-language briefs for one
 product family through to a ready PDR review package: parametric FreeCAD CAD, STEP,
-drawing and BOM, all checked and traced to requirements, with no manual CAD or
-document work. Needs FreeCAD and a logged-in Codex CLI.
+PMI, an ISO part drawing (DXF, SVG and PDF) and a BOM, all checked and traced to
+requirements, with no manual CAD or document work. The drawing compiler,
+[drafting.py](examples/drafting.py), is example tooling. It compiles drawings from
+typed PMI and the model's geometry, and reads a DXF back to check it. The PMI covers
+datums and datum targets, sizes, locations, ISO 1101 frames and the ISO 22081 general
+specification. Drawings can use the ISO GPS or ASME Y14.5-2018 profile, first or
+third angle, on A4 to A0 sheets. [ap242.py](examples/ap242.py) writes the
+same PMI into STEP AP242 on the model's faces through OCCT, and reads AP242 files
+back independently, listing whatever the typed PMI cannot hold.
+[mbd.py](examples/mbd.py) writes the PMI a second way, through the FreeCAD MBD
+Workbench, and checks that file with the same reader. Needs FreeCAD, the `bracket`
+extra and a logged-in Claude Code CLI.
 
 ### Sounding-rocket example
 

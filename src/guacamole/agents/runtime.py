@@ -171,7 +171,12 @@ class Runtime:
         record = self.project.activity.get(state.request_id)
         if record.status == "blocked":
             self.project.activity.retry(record.id, actor="runtime", reason=reason)
-        self._save_state(agent, state.model_copy(update={"status": "active"}))
+        update: JSON = {"status": "active"}
+        if agent.id == self.engineer_id:
+            # It serves the whole run: its budget bounds each wake-to-wait episode
+            # (a model that never validates), so a long run cannot wear it out.
+            update |= {"steps": 0, "tool_calls": 0, "elapsed_s": 0.0}
+        self._save_state(agent, state.model_copy(update=update))
 
     def _adopt_plan(self, chief: AgentSpec) -> None:
         """Move running workers onto the chief's current plan when it keeps their task.
@@ -324,6 +329,10 @@ class Runtime:
                 actor="script",
             )
             self._add_agent(chief, parent_request=None)
+            # The engineer starts the project by recording and modeling the
+            # requirements; the first usable model wakes the chief (UpdateModel).
+            state = store.model("agent_state", chief.id, AgentState)
+            self._save_state(chief, state.model_copy(update={"status": "waiting"}))
             # It serves the whole run and never finishes: not a required request.
             self._add_agent(engineer, parent_request=None, required=False)
         else:
@@ -350,9 +359,7 @@ class Runtime:
                         reason="Explicit resume of agent reasoning; tools are not replayed",
                     )
                 if record.status != "completed":
-                    self._save_state(
-                        agent, state.model_copy(update={"status": "active"})
-                    )
+                    self._wake(agent, state, "Explicit resume")
             chief = store.model("agent", self.chief_id, AgentSpec)
             if chief.decision_id:
                 try:
@@ -618,7 +625,8 @@ class Runtime:
             # The finish line, which agents never saw: no run had tried to deliver.
             try:
                 context["review_blockers"] = [
-                    *self.project.reviews.checks(agent.decision_id)[2]
+                    *self.project.reviews.checks(agent.decision_id)[2],
+                    *self.project.sysml.review_issues(),
                 ]
             except (ValueError, KeyError, DecisionBlocked) as exc:
                 context["review_blockers"] = [f"Current work plan is unusable: {exc}"]
@@ -696,7 +704,11 @@ class Runtime:
                 encode({"refs": state.observation.get("selected", [])})
             ).refs
             pins = (
-                *tuple(s.ref for s in store.list("requirement") if not s.stale),
+                *tuple(
+                    s.ref
+                    for s in store.list("requirement")
+                    if not s.stale and not s.data.get("withdrawn")
+                ),
                 *self.project.human.references(self.run_id),
                 *requested,
             )
@@ -1043,13 +1055,6 @@ class Runtime:
                 for e in activity.inbox(agent.id)
             ):
                 self._wake(agent, changed, "Message arrived during its turn")
-            # Likewise the records that change what the SysML model must say.
-            elif (
-                changed.status == "waiting"
-                and agent.id == self.engineer_id
-                and self.project.sysml.changed_since(since)
-            ):
-                self._wake(agent, changed, "Project truth changed during its turn")
 
     async def act(
         self,
@@ -1063,8 +1068,19 @@ class Runtime:
         store, activity = project.store, project.activity
         is_chief = agent.id == self.chief_id
         is_engineer = agent.id == self.engineer_id
-        if isinstance(action, (Decide, Spawn, Record, Review)) and not is_chief:
+        if isinstance(action, (Decide, Spawn, Review)) and not is_chief:
             raise PermissionError("Only the Chief has this operation")
+        if isinstance(action, Record) and not (
+            is_engineer
+            if isinstance(action.record, Requirement)
+            else is_chief or is_engineer
+        ):
+            raise PermissionError(
+                "Only the systems engineer records requirements; send it the change "
+                "and its source"
+                if isinstance(action.record, Requirement)
+                else "Only the Chief and the systems engineer record open items"
+            )
         if isinstance(action, (UpdateModel, Amend)) and not is_engineer:
             raise PermissionError("Only the systems engineer changes the SysML model")
         if isinstance(action, Finish) and is_engineer:
@@ -1189,7 +1205,6 @@ class Runtime:
                         event="agent.plan_assigned",
                     )
                     self._adopt_plan(updated)
-                self._wake_waiting(self.engineer_id, "Decision recorded")
                 return {
                     "decision_id": decision,
                     "ref": store.get("decision", decision).ref.model_dump(mode="json"),
@@ -1385,7 +1400,6 @@ class Runtime:
                     ref = project.record_requirement(action.record, actor=agent.id)
                 else:
                     ref = project.record_open_item(action.record, actor=agent.id)
-                self._wake_waiting(self.engineer_id, "Record changed")
                 return {"ref": ref.model_dump(mode="json")}, "active"
             case Read():
                 found = project.contexts.search(action.search)
@@ -1444,7 +1458,6 @@ class Runtime:
                 return {"refs": [r.model_dump(mode="json") for r in refs]}, "active"
             case Verify():
                 ref = project.evidence(action.evidence, actor=agent.id)
-                self._wake_waiting(self.engineer_id, "Evidence recorded")
                 return {"ref": ref.model_dump(mode="json")}, "active"
             case Deliver():
                 if agent.decision_id is None:

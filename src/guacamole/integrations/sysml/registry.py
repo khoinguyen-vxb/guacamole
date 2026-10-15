@@ -93,7 +93,12 @@ class SysMLRegistry:
         return _system(snapshot) if snapshot else None
 
     def requirements(self) -> tuple[Snapshot, ...]:
-        return tuple(s for s in self.project.store.list("requirement") if not s.stale)
+        """Current requirements: neither stale nor withdrawn."""
+        return tuple(
+            s
+            for s in self.project.store.list("requirement")
+            if not s.stale and not s.data.get("withdrawn")
+        )
 
     def _records(self, snapshots: Sequence[Snapshot]) -> list[Requirement]:
         return [Requirement.model_validate_json(encode(s.data)) for s in snapshots]
@@ -405,13 +410,28 @@ class SysMLRegistry:
     def review_issues(self) -> tuple[str, ...]:
         """Why the model cannot yet be baselined in a review."""
         try:
-            self.gate()
+            snapshot = self.gate()
         except DecisionBlocked as exc:
             return (str(exc),)
-        return tuple(
-            f"Amendment {a['id']} is {a['status']}: {a['title']}"
-            for a in self.amendments()
-            if a["status"] in PENDING
+        model = _system(snapshot)
+        # The systems engineer's compliance assessment: each bounded requirement
+        # needs a satisfy claim whose design values meet it.
+        satisfied = {
+            s.requirement for s in model.report.satisfactions if s.status == "satisfied"
+        }
+        bounded = sorted({b.requirement for b in model.report.bounds} - satisfied)
+        return (
+            *(
+                f"{id}: SysML model revision {snapshot.ref.revision} does not show "
+                "it satisfied; send the verified design to the systems engineer "
+                "to assess"
+                for id in bounded
+            ),
+            *(
+                f"Amendment {a['id']} is {a['status']}: {a['title']}"
+                for a in self.amendments()
+                if a["status"] in PENDING
+            ),
         )
 
     def changes(self) -> list[Ref]:
@@ -432,17 +452,6 @@ class SysMLRegistry:
             if snapshot is not None and not snapshot.stale:
                 refs[(snapshot.ref.kind, id)] = snapshot.ref
         return [refs[key] for key in sorted(refs)]
-
-    def changed_since(self, timestamp: str) -> bool:
-        """Whether a record that can change the model arrived at or after timestamp."""
-        return (
-            self.project.store.db.execute(
-                "SELECT 1 FROM events WHERE timestamp >= ? "
-                f"AND type IN ({','.join('?' * len(CHANGES))}) LIMIT 1",
-                (timestamp, *CHANGES),
-            ).fetchone()
-            is not None
-        )
 
     def state(self, *, engineer: bool) -> JSON:
         """The model as every agent sees it; the systems engineer also gets its text."""

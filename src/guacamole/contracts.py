@@ -89,9 +89,17 @@ class ProducedFile(Model):
         )
 
 
+def _dimensionless(unit: object) -> object:
+    return "" if unit == "1" else unit
+
+
+# Unit symbol as written; "1" and "" both mean dimensionless and are stored as "".
+type Unit = Annotated[str, BeforeValidator(_dimensionless)]
+
+
 class Quantity(Model):
     value: float
-    unit: str
+    unit: Unit
     frame: str | None = None
 
 
@@ -286,7 +294,7 @@ class WorkPlan(Model):
 
 class Constraint(Model):
     metric: str
-    unit: str
+    unit: Unit
     minimum: float | None = None
     maximum: float | None = None
 
@@ -301,6 +309,74 @@ class Constraint(Model):
         return self
 
 
+class Standard(Model):
+    """A code or standard a requirement selects, pinned to one edition.
+
+    Code selection is a human decision: the quote, or the question a human reply
+    answers, states the designation and edition. One current requirement selects each
+    standard. Revising it, its text or a basis record makes it and its clause
+    requirements stale for reassessment."""
+
+    id: str = Field(pattern=r"\S")  # Designation as published, e.g. "AS 1210"
+    edition: str = Field(pattern=r"\S")  # e.g. "2010"
+    amendments: tuple[str, ...] = ()
+    text: Ref | None = None  # The source holding its licensed normative text
+    # Requirements and sources its applicability rests on: jurisdiction, equipment class.
+    basis: tuple[Ref, ...] = ()
+
+
+class Clause(Model):
+    """The clause of a selected standard a requirement quotes from its licensed text."""
+
+    standard: Ref  # The current requirement selecting the standard
+    reference: str = Field(pattern=r"\S")  # e.g. "3.3.1" or "Table 3.21"
+
+
+class Fact(Model):
+    """A project property that applicability rules read, as the requirement states it.
+
+    Its value, and its unit when it has one, appear in the requirement's quote: a
+    jurisdiction, an equipment class, a design pressure in the unit rules read it in.
+    """
+
+    name: str = Field(pattern=r"^[a-z][a-z0-9_]*$")  # e.g. "design_pressure"
+    value: float | str
+    unit: Unit = ""
+
+
+class Withdrawal(Model):
+    """Why a requirement no longer applies: a human's statement, quoted from its source.
+
+    A withdrawn requirement stays in the record, out of everything current: the model,
+    plans, review baselines and checks. Everything resting on it goes stale.
+    """
+
+    source: Ref
+    quote: str = Field(pattern=r"\S")
+
+
+class CatalogueEntry(Model):
+    """A standard the project may have to meet, and when it applies.
+
+    applies_when is a rule over facts (guacamole.standards); empty means it applies
+    only when a human selects it. A mandatory one blocks a review when its rule holds
+    and nothing selects it, or when its rule cannot be answered.
+    """
+
+    id: str = Field(pattern=r"\S")  # Designation as published, e.g. "AS 1210"
+    title: str = ""
+    editions: tuple[str, ...] = Field(min_length=1)  # Published editions
+    applies_when: str = ""
+    units: dict[str, Unit] = Field(default_factory=dict)  # Fact: unit the rule reads
+    mandatory: bool = False
+
+
+class Catalogue(Model):
+    """The project's standards catalogue: reviewed data, recorded from a source."""
+
+    entries: tuple[CatalogueEntry, ...]
+
+
 class Requirement(Model):
     id: str
     wording: str
@@ -309,6 +385,10 @@ class Requirement(Model):
     constraint: Constraint | None = None
     target: Quantity | None = None
     unknowns: tuple[str, ...] = ()
+    standard: Standard | None = None
+    clause: Clause | None = None
+    fact: Fact | None = None
+    withdrawn: Withdrawal | None = None
 
 
 class OpenItem(Model):

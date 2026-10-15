@@ -146,7 +146,7 @@ def _evaluate(expression: Any, depth: int = 0) -> Value | None:
         number, unit = _evaluate(arguments[0], depth + 1), _unit(arguments[1])
         if number is None or number[1] or unit is None:
             return None
-        return number[0], unit
+        return number[0], "" if unit == "1" else unit  # [1] is dimensionless too
     if operator in {"-", "+"} and len(arguments) == 1:
         value = _evaluate(arguments[0], depth + 1)
         if value is None:

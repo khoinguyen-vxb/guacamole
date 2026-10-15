@@ -36,6 +36,7 @@ guacamole/
 │       ├── human.py                 # Human questions, replies, corrections and replanning
 │       ├── decision.py              # Typed choices, local validation and decision records
 │       ├── reviews.py               # Deliverable manifests, PDR/CDR packages and gates
+│       ├── standards.py             # Edition ordering and catalogue applicability rules
 │       ├── middleware.py            # Optional Graphiti/mem0 memory, LangChain context edits
 │       │
 │       ├── tools/
@@ -63,6 +64,13 @@ guacamole/
 │       └── websocket.py             # Optional local script control/events bridge
 │
 ├── examples/
+│   ├── ap242.py                      # STEP AP242 semantic PMI: write on faces, read back, compare
+│   ├── drafting.py                   # ISO GPS drawings from typed PMI; DXF read-back checks
+│   ├── mbd.py                        # PMI through the FreeCAD MBD Workbench, checked by ap242.read
+│   ├── mbd_freecad.py                # Its headless FreeCAD side: Workbench objects on faces, export
+│   ├── bracket/
+│   │   ├── bracket.py                # Bracket family tools, drafting rules, benchmark loop
+│   │   └── freecad_bracket.py        # Headless FreeCAD model, views and named features
 │   ├── qualification/
 │   │   ├── qualify.py                # Measures worker tiers on hidden-checked tasks
 │   │   └── inputs/                   # Task inputs copied into each trial's sandbox
@@ -79,6 +87,10 @@ guacamole/
     ├── test_middleware.py           # Summarization, context editing and memory hooks
     ├── test_images.py               # Image attachment, budgets, provider and MCP transport
     ├── test_systems_engineer.py     # SysML truth checks, decision gates, amendments
+    ├── test_standards.py            # Pinned standards, clause provenance, reassessment
+    ├── test_drafting.py             # PMI checks, drawing compile and DXF read-back
+    ├── test_ap242.py                # AP242 round-trip matrix, edited files, NIST coverage
+    ├── test_mbd.py                  # Bracket PMI through the MBD Workbench and read back
     ├── test_sounding_rocket.py       # Example tool execution, document readers and launch guard
     └── test_project_workflow.py     # Source evidence, artifacts, PDR/CDR, invalidation
 

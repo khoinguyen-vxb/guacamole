@@ -2,8 +2,9 @@
 
 bracket.py writes a job file and names it in BRACKET_JOB. Every number arrives in
 the job; the engineering tables stay in bracket.py. "generate" writes the native
-model, STEP, drawing and BOM. "inspect" reopens a native model and reports what it
-measures without judging it.
+model, STEP and BOM, and returns the bracket's projected views and named features
+for the drawing. "inspect" reopens a native model and reports what it measures,
+including the named features, without judging it.
 """
 
 import csv
@@ -14,6 +15,14 @@ import FreeCAD as App
 import Import
 import Part
 import TechDraw
+
+# Third-angle views of the part. Rows map model axes (x along the wall, y out of it,
+# z up) to sheet right, sheet up and toward the viewer; FRONT looks at the wall.
+VIEWS = {
+    "FRONT": ((-1, 0, 0), (0, 0, 1), (0, 1, 0)),
+    "TOP": ((-1, 0, 0), (0, -1, 0), (0, 0, 1)),
+    "RIGHT": ((0, -1, 0), (0, 0, 1), (-1, 0, 0)),
+}
 
 PARAMETERS = (
     "width",
@@ -200,75 +209,103 @@ def bom(components):
     ]
 
 
-def drawing(components, title):
-    """Third-angle front, top and right views with overall dimensions, mm."""
-    shape = Part.makeCompound([o.Shape for o in components])
-    # Rows map model axes (x along the wall, y out of it, z up) to sheet right,
-    # sheet up and toward the viewer. FRONT looks at the wall from the room.
-    views = {
-        "FRONT": ((-1, 0, 0), (0, 0, 1), (0, 1, 0)),
-        "TOP": ((-1, 0, 0), (0, -1, 0), (0, 0, 1)),
-        "RIGHT": ((0, -1, 0), (0, 0, 1), (-1, 0, 0)),
-    }
-    projected = {}
-    for name, rows in views.items():
+def edges(*compounds):
+    """Projected edges in sheet mm at 1:1: lines, full circles, other curves as polylines."""
+    found = {"lines": [], "circles": [], "polylines": []}
+    for compound in compounds:
+        for edge in compound.Edges:
+            curve = edge.Curve
+            if isinstance(curve, Part.Line):
+                a, b = edge.Vertexes[0].Point, edge.Vertexes[-1].Point
+                found["lines"].append([a.x, a.y, b.x, b.y])
+            elif isinstance(curve, Part.Circle) and edge.isClosed():
+                found["circles"].append([curve.Center.x, curve.Center.y, curve.Radius])
+            else:
+                points = edge.discretize(Deflection=0.01)
+                found["polylines"].append([[p.x, p.y] for p in points])
+    return found
+
+
+def project(shape):
+    """Each view's visible and hidden edges: hard edges and silhouettes."""
+    views = {}
+    for name, rows in VIEWS.items():
         matrix = App.Matrix(*rows[0], 0, *rows[1], 0, *rows[2], 0, 0, 0, 0, 1)
         view = shape.copy()
         view.transformShape(matrix)
-        box = view.BoundBox
-        svg = TechDraw.projectToSVG(view, App.Vector(0, 0, 1))
-        projected[name] = (svg, box.XMin, box.XMax, box.YMin, box.YMax)
-    front, top, right = (projected[k] for k in ("FRONT", "TOP", "RIGHT"))
-    width = front[2] - front[1] + right[2] - right[1]
-    height = front[4] - front[3] + top[4] - top[3]
-    scale = next(
-        s for s in (1, 0.5, 0.2, 0.1, 0.05) if width * s <= 300 and height * s <= 180
-    )
-    left, base = 50.0, 40.0
-    origin = {  # Upper-left sheet corner of each view.
-        "TOP": (left, base),
-        "FRONT": (left, base + (top[4] - top[3]) * scale + 30),
-        "RIGHT": (
-            left + (front[2] - front[1]) * scale + 40,
-            base + (top[4] - top[3]) * scale + 30,
-        ),
-    }
-    parts = [
-        (
-            '<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" '
-            'viewBox="0 0 420 297" font-family="sans-serif">'
-        ),
-        '<rect x="10" y="10" width="400" height="277" fill="none" stroke="black" stroke-width="0.7"/>',
-    ]
-    for name, (svg, umin, umax, vmin, vmax) in projected.items():
-        x, y = origin[name]
-        w, h = (umax - umin) * scale, (vmax - vmin) * scale
-        svg = svg.replace('stroke-width="1.0"', f'stroke-width="{0.35 / scale:.3f}"')
-        parts.append(
-            f'<g transform="translate({x - umin * scale:.3f},{y + vmax * scale:.3f}) '
-            f'scale({scale})">{svg}</g>'
+        # projectEx: visible hard, smooth, seam, outline, iso; then the hidden five.
+        groups = TechDraw.projectEx(view, App.Vector(0, 0, 1))
+        views[name] = {
+            "rows": rows,
+            "visible": edges(groups[0], groups[3]),
+            "hidden": edges(groups[5], groups[8]),
+        }
+    return views
+
+
+def features(shape, specs):
+    """Fingerprint named features: the one face on each plane, or each set of holes.
+
+    A plane spec gives its outward normal and offset (normal . point); a holes spec
+    its axis and diameter. A spec matching no face, or a plane matching several,
+    comes back as {"matches": n} so the drawing is never attached to a guess.
+    """
+    found = {}
+    for name, spec in specs.items():
+        if spec["kind"] == "plane":
+            n = App.Vector(*spec["normal"])
+            faces = []
+            for face in shape.Faces:
+                if not isinstance(face.Surface, Part.Plane):
+                    continue
+                u0, u1, v0, v1 = face.ParameterRange
+                normal = face.normalAt((u0 + u1) / 2, (v0 + v1) / 2)
+                if (normal - n).Length < 1e-6 and abs(
+                    face.CenterOfMass.dot(n) - spec["offset"]
+                ) < 1e-6:
+                    faces.append(face)
+            found[name] = (
+                {
+                    "kind": "plane",
+                    "point": list(faces[0].CenterOfMass),
+                    "normal": spec["normal"],
+                    "area": faces[0].Area,
+                }
+                if len(faces) == 1
+                else {"matches": len(faces)}
+            )
+            continue
+        axis = App.Vector(*spec["axis"])
+        holes = {}  # Faces grouped by axis line: a hole may be split at its seam.
+        for face in shape.Faces:
+            surface = face.Surface
+            if (
+                isinstance(surface, Part.Cylinder)
+                and abs(abs(surface.Axis.dot(axis)) - 1) < 1e-6
+                and abs(2 * surface.Radius - spec["diameter"]) < 1e-6
+            ):
+                c = surface.Center
+                key = tuple(round(x, 6) for x in c - axis * c.dot(axis))
+                holes.setdefault(key, []).extend(
+                    v.Point.dot(axis) for v in face.Vertexes
+                )
+        centers, lengths = [], set()
+        for key, along in sorted(holes.items()):
+            middle = (min(along) + max(along)) / 2
+            centers.append(list(App.Vector(*key) + axis * middle))
+            lengths.add(round(max(along) - min(along), 6))
+        found[name] = (
+            {
+                "kind": "holes",
+                "axis": spec["axis"],
+                "diameter": spec["diameter"],
+                "centers": centers,
+                "length": lengths.pop(),
+            }
+            if len(lengths) == 1
+            else {"matches": len(centers)}
         )
-        parts += [  # Overall dimensions, below and left of the view.
-            f'<line x1="{x}" y1="{y + h + 8}" x2="{x + w}" y2="{y + h + 8}" stroke="black" stroke-width="0.25"/>',
-            f'<text x="{x + w / 2}" y="{y + h + 13}" font-size="3.5" text-anchor="middle">{umax - umin:.1f}</text>',
-            f'<line x1="{x - 8}" y1="{y}" x2="{x - 8}" y2="{y + h}" stroke="black" stroke-width="0.25"/>',
-            f'<text x="{x - 10}" y="{y + h / 2}" font-size="3.5" text-anchor="end">{vmax - vmin:.1f}</text>',
-            f'<text x="{x}" y="{y - 4}" font-size="4">{name}</text>',
-        ]
-    block = [
-        title,
-        f"Scale 1:{1 / scale:g}   Units mm   Third-angle projection",
-        "Generated by bracket_generate from the native model",
-    ]
-    parts.append(
-        '<rect x="250" y="252" width="160" height="35" fill="none" stroke="black" stroke-width="0.5"/>'
-    )
-    parts += [
-        f'<text x="254" y="{262 + 9 * i}" font-size="{5 if i == 0 else 3.5}">{line}</text>'
-        for i, line in enumerate(block)
-    ]
-    parts.append("</svg>")
-    return "\n".join(parts)
+    return found
 
 
 def generate(job):
@@ -282,9 +319,13 @@ def generate(job):
     Import.export(components, paths["step"])
     with open(paths["bom"], "w", newline="", encoding="utf-8") as f:
         csv.writer(f).writerows(bom(components))
-    with open(paths["drawing"], "w", encoding="utf-8") as f:
-        f.write(drawing(components, job["title"]))
-    return {"components": len(components)}
+    part = doc.getObject("Bracket").Shape
+    return {
+        "components": len(components),
+        "volume": part.Volume,
+        "views": project(part),
+        "features": features(part, job["features"]),
+    }
 
 
 def inspect(job):
@@ -326,8 +367,9 @@ def inspect(job):
     ]
     step = Part.read(job["step"])
     report["step_volumes"] = sorted(s.Volume for s in step.Solids)
-    # Parameter-change check: thicken the plate, recompute, then discard the change.
     bracket = doc.getObject("Bracket")
+    report["features"] = features(bracket.Shape, job.get("features", {}))
+    # Parameter-change check: thicken the plate, recompute, then discard the change.
     before = bracket.Shape.Volume
     cell = sheet.getCellFromAlias("thickness")
     sheet.set(cell, str(report["parameters"]["thickness"] + 1))

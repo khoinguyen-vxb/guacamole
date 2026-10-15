@@ -25,7 +25,6 @@ from guacamole.contracts import (
     Publish,
     PublishedFile,
     Rationale,
-    Record,
     Review,
     ReviewManifest,
     Spawn,
@@ -65,6 +64,16 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
             class Workflow(TestReasoning):
                 """The Chief plans and reviews; a worker per stage does the work."""
 
+                def requirements(self):
+                    return (
+                        Requirement(
+                            id="r",
+                            wording="fixture",
+                            source=project.store.get("source", "brief").ref,
+                            source_quote="fixture",
+                        ),
+                    )
+
                 async def respond(self, packet):
                     assert project.context(packet.id) == packet
                     data = json.loads(packet.prompt)
@@ -100,16 +109,6 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                                 result=TaskReport(
                                     summary="Fixture gates exercised"
                                 ).model_dump(mode="json")
-                            )
-                        elif requirement is None:
-                            source = store.get("source", "brief").ref
-                            action = Record(
-                                record=Requirement(
-                                    id="r",
-                                    wording="fixture",
-                                    source=source,
-                                    source_quote="fixture",
-                                )
                             )
                         elif not decisions:
                             task = TaskAuthorization(
@@ -435,7 +434,8 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                         root / "reviews" / accepted.id / "v3/review.md"
                     ).read_text()
                     self.assertIn("| mission |", report)
-                    self.assertIn("| verification (passed) |", report)
+                    # Its checks are not keyed to the requirement: no pass for it.
+                    self.assertIn("| not checked | verification (passed) |", report)
                     self.assertIn("### verification — passed", report)
                     self.assertIn("- verification: flight_test — not performed", report)
                     self.assertTrue(

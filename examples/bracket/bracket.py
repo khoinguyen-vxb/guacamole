@@ -9,8 +9,8 @@ published, checked and delivered, with no open review issues. Blocking questions
 get one scripted reply each; final acceptance stays with a human.
 
 Edit the configuration below; this script has no command-line arguments.
-Install FreeCAD (freecadcmd, or the snap's freecad.cmd) and the Codex CLI, and run
-codex login before running. Model calls count against that account's usage.
+Install FreeCAD (freecadcmd, or the snap's freecad.cmd) and the Claude Code CLI, and
+log in to it before running. Model calls count against that account's usage.
 """
 
 import asyncio
@@ -18,6 +18,7 @@ import csv
 import json
 import math
 import os
+import re
 import shutil
 import signal
 import time
@@ -28,6 +29,7 @@ from typing import Annotated, Literal, NamedTuple
 
 from pydantic import Field
 
+from examples import ap242, drafting
 from guacamole import (
     Budget,
     ContextSpec,
@@ -39,9 +41,10 @@ from guacamole import (
     Requirement,
     ToolRegistry,
     VerificationResult,
+    Watchdog,
 )
 from guacamole.contracts import ArtifactRecord
-from guacamole.providers.codex import CodexReasoning
+from guacamole.providers.claude import ClaudeReasoning
 from guacamole.tools.registry import encode
 
 # Configuration. Paths are relative to this file. FreeCAD must see the runs
@@ -54,7 +57,8 @@ BUDGET = Budget(
     max_tool_calls=120,
     max_seconds=5400,
     max_agents=4,
-    max_run_input_tokens=6_000_000,
+    # Claude budgets by UTF-8 bytes, about 2.9x the Codex estimate.
+    max_run_input_tokens=17_000_000,
 )
 CONTEXT = ContextSpec(max_input_tokens=400_000, reserved_output_tokens=20_000)
 MAX_CONCURRENT_CALLS = 2
@@ -65,9 +69,9 @@ SCRIPTED_REPLY = (
 )
 
 
-def reasoning() -> CodexReasoning:
-    """The benchmarked model; ClaudeReasoning(web_search=False) also fits."""
-    return CodexReasoning(web_search=False)
+def reasoning() -> ClaudeReasoning:
+    """The benchmarked model, used by the Chief and the Systems Engineer alike."""
+    return ClaudeReasoning(web_search=False)
 
 
 FREECAD = next(
@@ -81,12 +85,13 @@ class Material(NamedTuple):
     density: float  # kg/m^3
     yield_mpa: float
     modulus_mpa: float
+    name: str  # As the drawing's title block states it
 
 
 MATERIALS = {
-    "aluminium-6061-t6": Material(2700, 276, 68_900),
-    "steel-s275": Material(7850, 275, 210_000),
-    "stainless-304": Material(8000, 215, 193_000),
+    "aluminium-6061-t6": Material(2700, 276, 68_900, "Aluminium 6061-T6"),
+    "steel-s275": Material(7850, 275, 210_000, "Steel S275"),
+    "stainless-304": Material(8000, 215, 193_000, "Stainless steel 304"),
 }
 
 
@@ -110,6 +115,35 @@ FASTENERS = {
 }
 PROOF_MPA = 600  # Property class 8.8 screws.
 EMBEDMENT_MM = 25  # Screw length past the washer face, into the wall plug.
+
+# The family's drafting rules, ISO GPS (examples/drafting.py). Holes are ISO 273 medium
+# clearance holes, class H13 as ISO 273 gives for that series, positioned at maximum
+# material for a floating fastener: T = H - F, the hole's smallest size less the
+# screw's. Everything else falls under the ISO 22081 general specification, set to
+# bent-plate workshop practice; change these with the shop that makes the parts.
+HOLE_CLASS = "H13"
+GENERAL_SIZE_MM = 0.5
+GENERAL_PROFILE_MM = 1.0
+OWNER = "Guacamole bracket benchmark"  # The title block's legal owner
+DATUMS = {"A": "wall_face", "B": "base_face", "C": "side_face"}
+LAYOUT = {  # Where the drawing shows each dimension, hole callout and datum.
+    "dimensions": (
+        drafting.Between(planes=("side_face", "far_side"), view="FRONT", side="below"),
+        drafting.Between(planes=("base_face", "wall_top"), view="RIGHT", side="right"),
+        drafting.Between(
+            planes=("wall_face", "shelf_front"), view="RIGHT", side="below"
+        ),
+        drafting.Between(
+            planes=("wall_face", "wall_inner"), view="RIGHT", side="above"
+        ),
+        drafting.Between(planes=("base_face", "shelf_top"), view="RIGHT", side="left"),
+    ),
+    "callouts": (
+        drafting.Callout(feature="wall_holes", view="FRONT", side="left"),
+        drafting.Callout(feature="shelf_holes", view="TOP", side="right"),
+    ),
+    "datum_views": {"A": "TOP", "B": "FRONT", "C": "FRONT"},
+}
 
 # What bracket_check measures, by requirement constraint metric, and in what unit.
 METRICS = {
@@ -142,22 +176,32 @@ UNITS = {  # Scale to the measurement's unit: kg, mm, MPa, 1, N.
 INSTRUCTIONS = """Product family: wall-mounted L-brackets, one plate bent to an L
 with a row of screw holes in each leg, fixed to the wall through the upright leg
 with hex screws and washers. Design only within this family, using its tools:
-- bracket_generate(design, name) builds the parametric FreeCAD assembly, STEP
-  export, orthographic drawing and CAD-derived BOM. If it returns problems, the
-  design breaks a layout rule: change the design and call it again.
-- bracket_check(native_artifact, step_artifact, bom_artifact, load_n) reopens the
-  published files, checks geometry, export, BOM and every requirement constraint,
-  and returns a VerificationResult. Pass the three artifact refs as its inputs.
-Record each measurable requirement with a constraint whose metric is one of:
+- bracket_generate(design, name) builds the parametric FreeCAD assembly, its STEP
+  AP242 export carrying the PMI on the bracket's faces, the bracket's PMI (ISO GPS
+  datums and tolerances, JSON), its ISO part drawing (editable DXF, SVG for
+  review and PDF for print) and the CAD-derived BOM. If it returns problems, the
+  design breaks a layout or drafting rule: change the design and call it again.
+  Its optional tolerancing argument replaces the family's GD&T rule (H13 holes
+  positioned at maximum material by T = H - F, ISO 22081 general ±0.5 and
+  profile 1): use it only when a requirement asks for tighter GD&T, such as a
+  flatter mounting face.
+- bracket_check(native_artifact, step_artifact, bom_artifact, pmi_artifact,
+  drawing_artifact, load_n) reopens the published files, checks geometry, export,
+  BOM, PMI, the DXF drawing and every requirement constraint, and returns a
+  VerificationResult. Pass the five artifact refs as its inputs.
+The systems engineer records each measurable requirement with a constraint whose
+metric is one of:
 mass (kg, whole assembly), width (mm, along the wall), depth (mm, out from the
 wall), height (mm, up the wall), deflection (mm, shelf tip), max_stress (MPa),
-safety_factor (unit "1"), screw_tension (N, per screw). bracket_check cannot
+safety_factor (dimensionless), screw_tension (N, per screw). bracket_check cannot
 measure other metrics; it reports them as not performed.
-Plan one PDR deliverable with artifact kinds native-cad, step, drawing and bom and
-evidence kind cad-verification. Publish all four files of one bracket_generate run,
-run bracket_check on them with the brief's design load, record its result as
-cad-verification evidence citing those artifacts and the requirements, deliver,
-then request the PDR review."""
+Plan one PDR deliverable with artifact kinds native-cad, step, pmi, drawing and bom
+and evidence kind cad-verification. Publish all seven files of one bracket_generate
+run (the DXF, SVG and PDF all as kind drawing), run bracket_check on them with the
+brief's design load, record its result as
+cad-verification evidence citing those artifacts and the requirements, and send it
+to the systems engineer to assess against the model. Deliver, then request the PDR
+review."""
 
 
 class BracketDesign(Model):
@@ -172,10 +216,45 @@ class BracketDesign(Model):
     holes_per_leg: Annotated[int, Field(ge=1, le=3)]
 
 
+class Tolerancing(Model):
+    """GD&T the designer proposes in place of the family rule: checked, not trusted.
+
+    Holes take an ISO 286 H class (the smallest hole is then its nominal) and a
+    position at maximum material; the mounting face, datum A, may take a flatness
+    tighter than the ISO 22081 general profile. Unset fields keep the family rule.
+    """
+
+    hole_class: Annotated[str, Field(pattern=r"^H(7|8|9|10|11|12|13|14)$")] = HOLE_CLASS
+    position_mm: Annotated[float, Field(gt=0)] | None = None  # Default: H - F
+    wall_flatness_mm: Annotated[float, Field(gt=0)] | None = None
+    general_size_mm: Annotated[float, Field(gt=0, le=2)] = GENERAL_SIZE_MM
+    general_profile_mm: Annotated[float, Field(gt=0, le=5)] = GENERAL_PROFILE_MM
+
+
+def tolerancing_problems(t: Tolerancing, fastener: Fastener) -> list[str]:
+    """Where proposed GD&T breaks the family's engineering rules."""
+    found = []
+    limit = fastener.hole - fastener.d
+    if t.position_mm is not None and t.position_mm > limit + 1e-9:
+        found.append(
+            f"hole position {t.position_mm:g} exceeds the floating-fastener limit "
+            f"T = H - F = {limit:g} mm: screws may not assemble"
+        )
+    if t.wall_flatness_mm is not None and t.wall_flatness_mm >= t.general_profile_mm:
+        found.append(
+            f"wall flatness {t.wall_flatness_mm:g} adds nothing to the general profile "
+            f"{t.general_profile_mm:g}: make it tighter or leave it out"
+        )
+    return found
+
+
 class BracketFiles(Model):
     native: ProducedFile
     step: ProducedFile
-    drawing: ProducedFile
+    pmi: ProducedFile  # Canonical PMI: the drawing is compiled from it
+    drawing: ProducedFile  # DXF
+    drawing_svg: ProducedFile
+    drawing_pdf: ProducedFile
     bom: ProducedFile
 
 
@@ -206,10 +285,98 @@ def problems(design: BracketDesign) -> list[str]:
     return found
 
 
-async def freecad(job: dict[str, object], directory: Path) -> dict:
-    """Run freecad_bracket.py on one job in its own headless FreeCAD process group.
+def feature_specs(design: BracketDesign) -> dict[str, dict]:
+    """The bracket's named features, located from its design: planes and hole sets.
 
-    A timeout or a cancelled call kills that group, not just the wait for it.
+    A plane is its outward normal and offset (normal . point) in model axes: x along
+    the wall, y out of it, z up, origin at the wall-side bottom corner.
+    """
+    d, f = design, FASTENERS[design.fastener]
+
+    def plane(normal: list[int], offset: float) -> dict:
+        return {"kind": "plane", "normal": normal, "offset": offset}
+
+    return {
+        "wall_face": plane([0, -1, 0], 0),  # Against the wall
+        "wall_inner": plane([0, 1, 0], d.thickness_mm),
+        "wall_top": plane([0, 0, 1], d.wall_leg_mm),
+        "base_face": plane([0, 0, -1], 0),  # Underside of the shelf leg
+        "shelf_top": plane([0, 0, 1], d.thickness_mm),
+        "shelf_front": plane([0, 1, 0], d.shelf_leg_mm),
+        "side_face": plane([-1, 0, 0], 0),
+        "far_side": plane([1, 0, 0], d.width_mm),
+        "wall_holes": {"kind": "holes", "axis": [0, 1, 0], "diameter": f.hole},
+        "shelf_holes": {"kind": "holes", "axis": [0, 0, 1], "diameter": f.hole},
+    }
+
+
+def bracket_pmi(
+    features: dict, fastener: Fastener, tolerancing: Tolerancing | None = None
+) -> drafting.PMI:
+    """One bracket's PMI: datums A B C, H-class holes positioned at MMC, the general
+    specification, and any mounting-face flatness the designer proposed."""
+    t = tolerancing or Tolerancing()
+    position = t.position_mm or fastener.hole - fastener.d  # Floating: T = H - F
+    holes = (("wall_holes", ("A", "B", "C")), ("shelf_holes", ("B", "A", "C")))
+    flatness = (
+        (
+            drafting.Tolerance(
+                feature="wall_face", characteristic="flatness", value=t.wall_flatness_mm
+            ),
+        )
+        if t.wall_flatness_mm is not None
+        else ()
+    )
+    return drafting.PMI(
+        features=features,
+        datums=DATUMS,
+        sizes=tuple(drafting.Size(feature=name, fit=t.hole_class) for name, _ in holes),
+        tolerances=tuple(
+            drafting.Tolerance(
+                feature=name,
+                characteristic="position",
+                value=position,
+                diameter=True,
+                material="M",
+                datums=datums,
+            )
+            for name, datums in holes
+        )
+        + flatness,
+        general=drafting.General(
+            size=t.general_size_mm,
+            profile=t.general_profile_mm,
+            datums=("A", "B", "C"),
+        ),
+    )
+
+
+def floating(pmi: drafting.PMI, bom: list[list[str]]) -> bool:
+    """Whether every hole position at MMC lets the BOM's screws float: T <= H - F."""
+    screws = [
+        float(m.group(1))
+        for row in bom
+        for cell in row
+        if (m := re.search(r"ISO4017-M(\d+(?:\.\d+)?)", cell))
+    ]
+    if not screws:
+        return False
+    return all(
+        t.value <= pmi.features[t.feature].diameter - max(screws) + 1e-9
+        for t in pmi.tolerances
+        if t.characteristic == "position"
+        and t.material == "M"
+        and isinstance(pmi.features[t.feature], drafting.Holes)
+    )
+
+
+async def freecad(
+    job: dict[str, object], directory: Path, script: Path = SCRIPT
+) -> dict:
+    """Run a FreeCAD-side script on one job in its own headless process group.
+
+    The script reads the job file named in BRACKET_JOB and writes the job's result
+    file. A timeout or a cancelled call kills that group, not just the wait for it.
     """
     if FREECAD is None:
         raise RuntimeError("FreeCAD is not installed: no freecadcmd on PATH")
@@ -219,8 +386,9 @@ async def freecad(job: dict[str, object], directory: Path) -> dict:
     process = await asyncio.create_subprocess_exec(
         FREECAD,
         "-c",
-        f"exec(open({str(SCRIPT)!r}, encoding='utf-8').read())",
-        env={**os.environ, "BRACKET_JOB": str(path)},
+        f"exec(open({str(script)!r}, encoding='utf-8').read())",
+        # Offscreen Qt lets scripts import GUI-backed addons without a display.
+        env={**os.environ, "BRACKET_JOB": str(path), "QT_QPA_PLATFORM": "offscreen"},
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.STDOUT,
         start_new_session=True,
@@ -246,8 +414,9 @@ def assess(
     published_bom: list[list[str]],
     load_n: float,
     requirements: Iterable[Requirement],
+    drawing: dict[str, bool] | None = None,
 ) -> VerificationResult:
-    """Judge one inspected assembly: geometry, export, BOM, then requirements.
+    """Judge one inspected assembly: geometry, export, BOM, drawing, then requirements.
 
     The structural numbers are a PDR hand calculation from the model's own
     parameters: the shelf leg as a cantilever plate on a rigid upright, the load
@@ -291,6 +460,7 @@ def assess(
         and all(math.isclose(a, b, rel_tol=1e-3) for a, b in zip(step, native)),
         "no interference between components": not measured["interferences"],
         "BOM matches the assembly": published_bom == measured["bom"],
+        **(drawing or {}),
     }
     for requirement in requirements:
         c = requirement.constraint
@@ -342,13 +512,18 @@ def register_tools(project: Project) -> None:
     async def bracket_generate(
         design: BracketDesign,
         name: Annotated[str, Field(pattern=r"^[A-Za-z0-9_-]{1,40}$")],
+        tolerancing: Tolerancing | None = None,
     ) -> BracketBuild:
-        """Build one bracket: parametric FreeCAD model, STEP, drawing and BOM.
+        """Build one bracket: parametric FreeCAD model, STEP AP242 with PMI, drawing and BOM.
 
         Wall holes sit 2 clearance diameters below the upright's top, shelf holes 2
         diameters from the shelf's front edge, both spread evenly across the width.
+        Without tolerancing the family rule sets the GD&T; a proposal is checked
+        against the floating-fastener rule and returned as problems if it breaks it.
         """
         found = problems(design)
+        if not found and tolerancing is not None:
+            found = tolerancing_problems(tolerancing, FASTENERS[design.fastener])
         if found:
             return BracketBuild(problems=tuple(found), files=None)
         f, d = FASTENERS[design.fastener], design
@@ -359,15 +534,18 @@ def register_tools(project: Project) -> None:
         paths = {
             "native": directory / f"{number}.FCStd",
             "step": directory / f"{number}.step",
-            "drawing": directory / f"{number}.svg",
+            "pmi": directory / f"{number}-pmi.json",
+            "drawing": directory / f"{number}.dxf",
+            "drawing_svg": directory / f"{number}.svg",
+            "drawing_pdf": directory / f"{number}.pdf",
             "bom": directory / f"{number}-bom.csv",
         }
         size = f"{d.width_mm:g} x {d.wall_leg_mm:g} x {d.shelf_leg_mm:g} x {d.thickness_mm:g} mm"
-        await freecad(
+        built = await freecad(
             {
                 "mode": "generate",
                 "holes": d.holes_per_leg,
-                "title": f"{number}  L-bracket {size}, {d.material}",
+                "features": feature_specs(d),
                 "parameters": {
                     "width": d.width_mm,
                     "thickness": d.thickness_mm,
@@ -404,9 +582,43 @@ def register_tools(project: Project) -> None:
                         "Density": 7850,
                     },
                 },
-                "outputs": {k: str(v) for k, v in paths.items()},
+                "outputs": {k: str(paths[k]) for k in ("native", "step", "bom")},
             },
             directory,
+        )
+        # The drawing is compiled from the PMI and the model's own geometry; a
+        # feature the model no longer holds, or a malformed PMI, is a problem.
+        features, failed = drafting.features(built["features"])
+        if failed:
+            return BracketBuild(problems=tuple(failed), files=None)
+        pmi = bracket_pmi(features, f, tolerancing)
+        today = time.strftime("%Y-%m-%d")
+        sheet = drafting.Sheet(
+            title=f"L-BRACKET {d.width_mm:g}×{d.wall_leg_mm:g}×{d.shelf_leg_mm:g}×"
+            f"{d.thickness_mm:g}",
+            number=number,
+            revision="A",
+            date=today,
+            status="In review",
+            owner=OWNER,
+            creator="bracket_generate",
+            reference=paths["native"].name,
+            material=MATERIALS[d.material].name,
+            mass_kg=built["volume"] * MATERIALS[d.material].density * 1e-9,
+            revisions=(("A", "First issue for PDR review", today),),
+            **LAYOUT,
+        )
+        try:
+            drawing = drafting.compile_drawing(pmi, sheet, built["views"])
+            # FreeCAD's STEP becomes AP242 with the PMI on the bracket's faces. What it
+            # leaves out (the ISO 22081 general size tolerance) stays in the PMI and
+            # on the drawing.
+            ap242.write(pmi, paths["step"], paths["step"])
+        except ValueError as exc:
+            return BracketBuild(problems=(str(exc),), files=None)
+        paths["pmi"].write_text(pmi.model_dump_json(indent=2), encoding="utf-8")
+        drafting.write(
+            drawing, paths["drawing"], paths["drawing_svg"], paths["drawing_pdf"]
         )
         return BracketBuild(
             problems=(),
@@ -419,13 +631,17 @@ def register_tools(project: Project) -> None:
         native_artifact: str,
         step_artifact: str,
         bom_artifact: str,
+        pmi_artifact: str,
+        drawing_artifact: str,
         load_n: Annotated[float, Field(gt=0)],
     ) -> VerificationResult:
         """Verify published bracket artifacts against geometry rules and requirements.
 
-        Give the artifact ids of one bracket_generate run and the brief's design
-        load at the shelf tip. Every current requirement with a constraint gets a
-        check named after its id; metrics this tool cannot measure stay unperformed.
+        Give the artifact ids of one bracket_generate run (the DXF as the drawing)
+        and the brief's design load at the shelf tip. The PMI is checked against the
+        ISO GPS subset and the reopened model, and the drawing against the PMI. Every
+        current requirement with a constraint gets a check named after its id;
+        metrics this tool cannot measure stay unperformed.
         """
         files = {
             key: project.verify_file(
@@ -435,8 +651,11 @@ def register_tools(project: Project) -> None:
                 ("native", native_artifact),
                 ("step", step_artifact),
                 ("bom", bom_artifact),
+                ("pmi", pmi_artifact),
+                ("drawing", drawing_artifact),
             )
         }
+        pmi = drafting.PMI.model_validate_json(files["pmi"].read_text(encoding="utf-8"))
         directory = project.output_path(Path("cad") / "checks" / native_artifact)
         directory.mkdir(parents=True, exist_ok=True)
         measured = await freecad(
@@ -444,17 +663,33 @@ def register_tools(project: Project) -> None:
                 "mode": "inspect",
                 "native": str(files["native"]),
                 "step": str(files["step"]),
+                "features": drafting.specs(pmi),
             },
             directory,
         )
+        found, failed = drafting.features(measured["features"])
+        malformed, moved = drafting.problems(pmi), drafting.moved(pmi, found)
+        # An independent read of the published STEP: what an AP242 consumer gets.
+        differences = ap242.compare(pmi, ap242.read(files["step"]))
         with files["bom"].open(newline="", encoding="utf-8") as stream:
             published = list(csv.reader(stream))
+        drawing = {
+            "PMI well formed in the ISO_GPS_MECHANICAL subset": not malformed,
+            "hole positions let the BOM's screws float: T <= H - F": floating(
+                pmi, published
+            ),
+            "PMI features map one-to-one onto the model, unchanged": not failed
+            and not moved,
+            "STEP AP242 carries the PMI exactly: datums, hole sizes, frames and the "
+            "general profile on their faces": not differences,
+            **drafting.conformance(files["drawing"], pmi),
+        }
         requirements = [
             Requirement.model_validate_json(encode(s.data))
             for s in project.store.list("requirement")
             if not s.stale
         ]
-        return assess(measured, published, load_n, requirements)
+        return assess(measured, published, load_n, requirements, drawing)
 
     # Generation rewrites its own files and checks only read: both safe to retry.
     project.tools.register(bracket_generate, retry_safe=True)
@@ -479,6 +714,7 @@ async def run_brief(brief: Path, runs: Path) -> dict[str, object]:
         sandbox=workspace / "results",
         tools=ToolRegistry(),
         reasoning=reasoning(),
+        watchdog=Watchdog(),  # Reuses reasoning() at low effort.
         max_concurrent_calls=MAX_CONCURRENT_CALLS,
     ) as project:
         register_tools(project)
@@ -520,7 +756,7 @@ async def main() -> None:
     if FREECAD is None or shutil.which(reasoning().executable) is None:
         raise SystemExit(
             "Needs FreeCAD (freecadcmd or freecad.cmd) and the reasoning CLI on PATH, "
-            "logged in (for Codex: 'codex login')."
+            "logged in."
         )
     runs = RUNS / time.strftime("%Y%m%d-%H%M%S")
     results = [await run_brief(b, runs) for b in sorted(BRIEFS.glob("*.md"))]

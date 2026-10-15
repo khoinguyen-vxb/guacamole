@@ -15,7 +15,7 @@ from guacamole import (
     Requirement,
     ToolRegistry,
 )
-from guacamole.contracts import Decide, Rationale, Record, ToolCall, Wait
+from guacamole.contracts import Decide, Rationale, ToolCall, Wait
 from guacamole.tools.mcp import ToolSession
 from guacamole.websocket import Command, HumanReply, Interject, WebSocketBridge
 
@@ -35,10 +35,25 @@ def brief():
     )
 
 
+def payload(project):
+    """The brief's requirement, which the fixture systems engineer records."""
+    return (
+        Requirement(
+            id="payload",
+            wording="payload mass 2 kg",
+            source=project.store.get("source", "brief").ref,
+            source_quote="payload mass 2 kg",
+        ),
+    )
+
+
 class HumanTests(unittest.IsolatedAsyncioTestCase):
     async def test_question_reply_restart_and_amended_requirement(self):
         class Questioner(TestReasoning):
             calls = 0
+
+            def requirements(self):
+                return payload(project)
 
             async def respond(self, packet):
                 self.calls += 1
@@ -47,17 +62,6 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
                 ):
                     return turn(Wait(reason="Fixture received the correction"))
                 requirement = project.store.maybe("requirement", "payload")
-                if requirement is None:
-                    return turn(
-                        Record(
-                            record=Requirement(
-                                id="payload",
-                                wording="payload mass 2 kg",
-                                source=project.store.get("source", "brief").ref,
-                                source_quote="payload mass 2 kg",
-                            )
-                        )
-                    )
                 if not project.store.list("decision"):
                     return turn(
                         Decide(
@@ -139,6 +143,9 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
             asked = False
             answered = False
 
+            def requirements(self):
+                return payload(project)
+
             async def respond(self, packet):
                 if any(
                     m["kind"] == "reply" and m["sender"].startswith("human:")
@@ -147,17 +154,6 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
                     self.answered = True
                     return turn(Wait(reason="Fixture received the answer"))
                 requirement = project.store.maybe("requirement", "payload")
-                if requirement is None:
-                    return turn(
-                        Record(
-                            record=Requirement(
-                                id="payload",
-                                wording="payload mass 2 kg",
-                                source=project.store.get("source", "brief").ref,
-                                source_quote="payload mass 2 kg",
-                            )
-                        )
-                    )
                 if not project.store.list("decision"):
                     return turn(
                         Decide(
@@ -205,21 +201,13 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
             return 7
 
         class SlowProposal(TestReasoning):
+            def requirements(self):
+                return payload(project)
+
             async def respond(self, packet):
                 if project.human.references(project.runtime.run_id):
                     return turn(Wait(reason="Replan after correction"))
                 requirement = project.store.maybe("requirement", "payload")
-                if requirement is None:
-                    return turn(
-                        Record(
-                            record=Requirement(
-                                id="payload",
-                                wording="payload mass 2 kg",
-                                source=project.store.get("source", "brief").ref,
-                                source_quote="payload mass 2 kg",
-                            )
-                        )
-                    )
                 if not project.store.list("decision"):
                     return turn(
                         Decide(

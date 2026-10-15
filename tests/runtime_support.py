@@ -11,14 +11,24 @@ from guacamole import (
     Requirement,
     WorkPlan,
 )
-from guacamole.contracts import AgentTurn, Decide, Rationale, UpdateModel, Wait
+from guacamole.contracts import (
+    AgentTurn,
+    Decide,
+    Note,
+    Rationale,
+    Record,
+    Send,
+    UpdateModel,
+    Wait,
+)
 
 FIXTURE = Rationale(objective="TEST FIXTURE", explanation="Scripted fixture turn")
 
 
 class TestReasoning:
-    """Every project runs a Systems Engineer. Unless a fixture scripts one itself (a
-    systems_engineer attribute), its packets get fixture_model turns, and the chief's
+    """Every project starts with a Systems Engineer. Unless a fixture scripts one itself
+    (a systems_engineer attribute), it records what the fixture's requirements() lists,
+    commits fixture_model of them, then replies to each agent's message; the chief's
     decisions wait until the engineer has seen that model validated."""
 
     name = "test-double-reasoning"
@@ -43,6 +53,10 @@ class TestReasoning:
 
         cls.respond = wrapped
 
+    def requirements(self):
+        """Requirements the fixture's engineer records; read again on every turn."""
+        return ()
+
     async def count_tokens(self, prompt):
         # Exact count for this fake provider's one-byte token alphabet.
         return len(prompt.encode())
@@ -53,28 +67,65 @@ def _revision(model):
 
 
 def _engineer_turn(provider, data):
-    model = data["state"]["system_model"]
-    if model["status"] == "valid":
-        provider._validated = max(getattr(provider, "_validated", 0), _revision(model))
-        _validation_event(provider).set()
-        return AgentTurn(rationale=FIXTURE, action=Wait(reason="Model is current"))
     records = [
         s
         for s in data["sources"]
         if s["ref"]["kind"] == "requirement" and not s["stale"]
     ]
-    # Idle until a requirement exists: a first model would wake a waiting chief.
-    if not records:
-        return AgentTurn(rationale=FIXTURE, action=Wait(reason="Await requirements"))
-    return AgentTurn(
-        rationale=FIXTURE,
-        action=UpdateModel(
-            summary="TEST FIXTURE model of every recorded requirement",
-            files=fixture_model(
-                Requirement.model_validate_json(json.dumps(s["data"])) for s in records
+    recorded = {s["ref"]["id"] for s in records}
+    if wanted := [r for r in provider.requirements() if r.id not in recorded]:
+        return AgentTurn(rationale=FIXTURE, action=Record(record=wanted[0]))
+    model = data["state"]["system_model"]
+    if model["status"] != "valid":
+        brief = next(
+            s["ref"]
+            for s in data["sources"]
+            if s["ref"]["kind"] == "source" and s["ref"]["id"] == "brief"
+        )
+        return AgentTurn(
+            rationale=FIXTURE,
+            action=UpdateModel(
+                summary="TEST FIXTURE model of every recorded requirement",
+                files=fixture_model(
+                    Requirement.model_validate_json(json.dumps(s["data"]))
+                    for s in records
+                ),
+                derived_from=tuple(s["ref"] for s in records) or (brief,),
             ),
-            derived_from=tuple(s["ref"] for s in records),
-        ),
+        )
+    provider._validated = max(getattr(provider, "_validated", 0), _revision(model))
+    _validation_event(provider).set()
+    agents = {a["id"] for a in data["state"]["agents"]}
+    # A reply wakes its asker even mid-turn, which a model commit alone does not.
+    if asked := [m for m in data["messages"] if m["sender"] in agents]:
+        return AgentTurn(
+            rationale=FIXTURE,
+            action=Send(
+                recipient=asked[0]["sender"],
+                payload=Note(text="TEST FIXTURE: the model is current").model_dump(
+                    mode="json"
+                ),
+                reply_to=asked[0]["id"],
+            ),
+        )
+    return AgentTurn(rationale=FIXTURE, action=Wait(reason="Model is current"))
+
+
+def fixture_requirement(project, id="r"):
+    """TEST FIXTURE: one requirement on the brief, for TestReasoning.requirements."""
+    source = project.store.list("source")[0].ref
+    return (
+        Requirement(id=id, wording="fixture", source=source, source_quote="fixture"),
+    )
+
+
+def to_engineer(data, text="TEST FIXTURE request"):
+    """A message that wakes the fixture's systems engineer."""
+    engineer = next(
+        a for a in data["state"]["agents"] if a["task_id"] == "systems_engineer"
+    )
+    return Send(
+        recipient=engineer["id"], payload=Note(text=text).model_dump(mode="json")
     )
 
 
@@ -95,9 +146,16 @@ async def _model_validated(provider, model, timeout=30):
             await event.wait()
 
 
-def fixture_model(requirements):
-    """TEST FIXTURE: a SysML v2 model of each requirement, not an engineering design."""
-    subjects, body = [], []
+def _quantity(value, unit):
+    return f"{value:g}" + (f" [{unit}]" if unit else "")
+
+
+def fixture_model(requirements, values=None):
+    """TEST FIXTURE: a SysML v2 model of each requirement, not an engineering design.
+
+    values maps metrics to verified Quantity values: the engineer's assessment,
+    recorded as design values with a satisfy claim per bounded requirement."""
+    subjects, body, design = [], [], []
     for n, record in enumerate(requirements):
         body += [
             f"  requirement <'{record.id}'> r{n} {{",
@@ -106,17 +164,23 @@ def fixture_model(requirements):
         if (c := record.constraint) is not None:
             subjects.append(f"  part def S{n} {{ attribute '{c.metric}'; }}")
             bounds = [
-                f"s.'{c.metric}' {op} {value:g} [{c.unit}]"
+                f"s.'{c.metric}' {op} {_quantity(value, c.unit)}"
                 for op, value in ((">=", c.minimum), ("<=", c.maximum))
                 if value is not None
             ]
+            if (q := (values or {}).get(c.metric)) is not None:
+                value = _quantity(q.value, q.unit)
+                design += [
+                    f"  part d{n} : S{n} {{ attribute redefines '{c.metric}' = {value}; }}",
+                    f"  satisfy r{n} by d{n};",
+                ]
             body += [
                 f"    subject s : S{n};",
                 f"    require constraint {{ {' and '.join(bounds)} }}",
             ]
         body.append("  }")
     lines = ["package Fixture {", "  private import ISQ::*;", "  private import SI::*;"]
-    return {"fixture.sysml": "\n".join([*lines, *subjects, *body, "}"]) + "\n"}
+    return {"fixture.sysml": "\n".join([*lines, *subjects, *body, *design, "}"]) + "\n"}
 
 
 def plan_request(requirement, *more, stage="PDR", tools=(), tasks=()):
@@ -161,13 +225,17 @@ def engineer_id(project):
     )
 
 
-async def commit_fixture_model(project):
+async def commit_fixture_model(project, values=None):
     """Commit fixture_model of the current requirements, as scripts deciding need."""
-    records = [s for s in project.store.list("requirement") if not s.stale]
+    records = project.sysml.requirements()
     await project.sysml.commit(
         summary="TEST FIXTURE model of every recorded requirement",
         files=fixture_model(
-            project.store.model("requirement", s.ref.id, Requirement) for s in records
+            (
+                project.store.model("requirement", s.ref.id, Requirement)
+                for s in records
+            ),
+            values,
         ),
         derived_from=tuple(s.ref for s in records)
         or (project.store.list("source")[0].ref,),

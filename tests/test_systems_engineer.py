@@ -166,6 +166,27 @@ class ValidatorTests(unittest.TestCase):
         shared = (*bounds, bounds[0].model_copy(update={"metric": "Payload::mass"}))
         self.assertIn("ambiguous", validator.violations(shared, {"mass": kg})[0])
 
+    def test_one_and_no_unit_are_both_dimensionless(self):
+        recorded = Requirement(
+            id="R1",
+            wording="Safety factor at least 2.5",
+            source=SOURCE,
+            source_quote="Safety factor at least 2.5",
+            constraint=Constraint(metric="sf", unit="1", minimum=2.5),
+        )
+        for written in ("2.5 [1]", "2.5"):
+            report = validator.validate(
+                {
+                    "s.sysml": "package S { part def P { attribute sf; }\n"
+                    "requirement <'R1'> r { doc /* Safety factor at least 2.5 */ "
+                    f"subject p : P; require constraint {{ p.sf >= {written} }} }} }}"
+                },
+                [recorded],
+            )
+            self.assertTrue(report.valid, report.issues)
+        sf = Quantity(value=3.0, unit="1")
+        self.assertEqual(validator.violations(report.bounds, {"sf": sf}), [])
+
 
 class TruthGateTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
@@ -211,16 +232,35 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
         )
         with self.assertRaisesRegex(ValueError, "derived_from"):
             await project.sysml.commit(summary="Fixture", files=rocket())
+        # A bounded requirement without a satisfy claim keeps the review blocked.
+        unassessed = rocket()["rocket.sysml"].replace(
+            "  satisfy liftoffMass by vehicle;", ""
+        )
+        await project.sysml.commit(
+            summary="Fixture",
+            files={"rocket.sysml": unassessed},
+            derived_from=(self.brief, self.r1),
+        )
+        self.assertEqual(
+            project.sysml.review_issues(),
+            (
+                (
+                    "R1: SysML model revision 1 does not show it satisfied; send the "
+                    "verified design to the systems engineer to assess"
+                ),
+            ),
+        )
         model, invalidated = await project.sysml.commit(
             summary="Fixture", files=rocket(), derived_from=(self.brief, self.r1)
         )
-        self.assertEqual((model.revision, invalidated), (1, {}))
+        self.assertEqual((model.revision, invalidated), (2, {}))
+        self.assertEqual(project.sysml.review_issues(), ())
         exported = project.sandbox / "sysml"
         self.assertEqual(
             (exported / "rocket.sysml").read_text(), rocket()["rocket.sysml"]
         )
         self.assertEqual(
-            json.loads((exported / "report.json").read_text())["ref"]["revision"], 1
+            json.loads((exported / "report.json").read_text())["ref"]["revision"], 2
         )
 
         with self.assertRaisesRegex(DecisionBlocked, "Contradicts the SysML model"):
@@ -390,7 +430,6 @@ class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_systems_engineer_maintains_truth_beside_the_chief(self):
         rationale = Rationale(objective="Fixture", explanation="Fixture")
-        chief_blocked = asyncio.Event()
 
         class Team(TestReasoning):
             def __init__(self):
@@ -411,34 +450,31 @@ class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
 
             def chief(self, data, count):
                 store = project.store
-                if count == 0:
-                    return Record(record=requirement(store.get("source", "brief").ref))
                 r1 = store.get("requirement", "R1").ref
                 worker = TaskAuthorization(
                     id="W",
                     objective="Ask the systems engineer",
                     budget=Budget(max_seconds=60),
                 )
-                if count in (1, 3):  # Before and after the model exists.
+                if count == 0:
+                    return Record(record=requirement(store.get("source", "brief").ref))
+                if count == 1:
                     return Decide(
                         selected="fixture", request=plan_request(r1, tasks=(worker,))
                     )
                 if count == 2:
-                    chief_blocked.set()
-                    return Wait(reason="Await the SysML model")
-                if count == 4:
                     return Spawn(decision_id=data["agent"]["decision_id"], task_id="W")
-                if count == 5:
+                if count == 3:
                     return UpdateModel(
                         summary="Not mine", files=rocket(), derived_from=(r1,)
                     )
                 return Wait(reason="Fixture finished")
 
-            async def systems_engineer(self, data, count):
+            def systems_engineer(self, data, count):
                 store = project.store
                 r1 = store.maybe("requirement", "R1")
-                if r1 is None:
-                    return Wait(reason="Await requirements")
+                if r1 is None:  # The engineer starts the project.
+                    return Record(record=requirement(store.get("source", "brief").ref))
                 if not self.rejected_draft:
                     self.rejected_draft = True
                     return UpdateModel(
@@ -447,7 +483,6 @@ class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
                         derived_from=(r1.ref,),
                     )
                 if project.sysml.current() is None:
-                    await asyncio.wait_for(chief_blocked.wait(), 10)
                     return UpdateModel(
                         summary="Initial model", files=rocket(), derived_from=(r1.ref,)
                     )
@@ -532,12 +567,14 @@ class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
         # The draft was rejected with its full report; the valid model was recorded.
         rejection = next(o for o in observations if "report" in o)
         self.assertEqual(rejection["report"]["issues"][0]["code"], "syntax")
+        # The chief starts once the engineer's model is valid, and cannot record
+        # requirements itself.
+        self.assertEqual(chief_packets[0]["state"]["system_model"]["status"], "valid")
+        self.assertNotIn("files", chief_packets[0]["state"]["system_model"])
         self.assertIn(
-            "No SysML model yet",
-            chief_packets[2]["state"]["last_observation"]["detail"],
+            "Only the systems engineer records requirements",
+            chief_packets[1]["state"]["last_observation"]["detail"],
         )
-        self.assertEqual(chief_packets[3]["state"]["system_model"]["status"], "valid")
-        self.assertNotIn("files", chief_packets[3]["state"]["system_model"])
         self.assertEqual(
             engineer_packets[-1]["state"]["system_model"]["files"], rocket()
         )
@@ -546,7 +583,7 @@ class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertIn(
             "Only the systems engineer",
-            chief_packets[6]["state"]["last_observation"]["detail"],
+            chief_packets[4]["state"]["last_observation"]["detail"],
         )
         self.assertEqual(plan.model.revision, 1)
         # A worker reached the systems engineer directly, which acknowledged it.

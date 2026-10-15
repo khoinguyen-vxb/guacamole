@@ -59,9 +59,14 @@ class Decisions:
         if any(d.stage != plan.stage for d in plan.deliverables):
             raise ValueError("Deliverable review stage differs from work plan")
         covered = {r.id for d in plan.deliverables for r in d.requirements}
-        required = {s.ref.id for s in self.project.store.list("requirement")}
+        listed = self.project.store.list("requirement")
+        required = {s.ref.id for s in listed if not s.data.get("withdrawn")}
         if not required or not required <= covered:
             raise ValueError("Every current requirement needs a deliverable allocation")
+        if withdrawn := covered & {s.ref.id for s in listed if s.data.get("withdrawn")}:
+            raise ValueError(
+                f"Withdrawn requirements need no work: {sorted(withdrawn)}"
+            )
         for ref in (
             *plan.inputs,
             *(r for d in plan.deliverables for r in d.requirements),

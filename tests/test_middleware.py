@@ -140,14 +140,15 @@ class MiddlewareTests(unittest.IsolatedAsyncioTestCase):
         )
         agent = project.store.model("agent", packet.agent_id, AgentSpec)
         scope = {"user_id": project.store.project_id, "agent_id": agent.task_id}
-        self.assertEqual(mem0.filters[0], scope)
+        self.assertIn(scope, mem0.filters)
         # The reader's five turns; the Systems Engineer's turn is its own memory.
         self.assertEqual(len([a for a in mem0.added if a[2] == "chief"]), 5)
         episodes = [e for e in graph.episodes if e["name"].startswith("chief:")]
         self.assertEqual(len(episodes), 5)
         self.assertIn("Read finished", episodes[-1]["episode_body"])
         failures = [e for e in project.events() if e.type == "middleware.failed"]
-        self.assertEqual(len(failures), 6)
+        # Five reader turns and the Systems Engineer's two (commit, then wait).
+        self.assertEqual(len(failures), 7)
         self.assertEqual(failures[0].details["hook"], "Broken.before_model")
         self.assertNotIn("fixture-secret", json.dumps([e.details for e in failures]))
 

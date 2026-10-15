@@ -12,7 +12,9 @@ from runtime_support import (
     TestReasoning,
     commit_fixture_model,
     engineer_id,
+    fixture_requirement,
     plan_request,
+    to_engineer,
 )
 
 from guacamole import (
@@ -56,7 +58,6 @@ from guacamole.contracts import (
     PublishedFile,
     Rationale,
     Read,
-    Record,
     RequestRecord,
     Send,
     Spawn,
@@ -604,7 +605,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     await project.run(
                         ProjectRequest(
                             description="Invalid rationale recovery fixture",
-                            context=ContextSpec(selected=(current,)),
+                            context=ContextSpec(
+                                selected=(current,), max_input_tokens=200_000
+                            ),
                         )
                     )
                     observations = provider.observations
@@ -768,7 +771,12 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             tempfile.TemporaryDirectory() as directory,
             Project(Path(directory), reasoning=Broken()) as project,
         ):
-            result = await project.run(ProjectRequest(description="fixture"))
+            result = await project.run(
+                ProjectRequest(
+                    description="fixture",
+                    context=ContextSpec(max_input_tokens=200_000),
+                )
+            )
             self.assertIn("Exception text omitted", result.open_items[-1])
             self.assertNotIn(
                 secret, json.dumps(project.trace(project.requests()[0].id))
@@ -782,30 +790,35 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             def __init__(self):
                 self.steps = {}
                 self.worker_results = []
+                self.proposed = False
+
+            def requirements(self):
+                source = project.store.list("source")[0].ref
+                return tuple(
+                    Requirement(
+                        id=id, wording="fixture", source=source, source_quote="fixture"
+                    )
+                    for id in ("r1", "r2")[: 1 + self.proposed]
+                )
 
             async def respond(self, packet):
                 data = json.loads(packet.prompt)
                 task = data["agent"]["task_id"]
                 count = self.steps.get(task, 0)
                 self.steps[task] = count + 1
-                source = project.store.list("source")[0].ref
                 tasks = (
                     TaskAuthorization(
                         id="A", objective="probe", tools=(tool.definition.grant,)
                     ),
                 )
                 if task == "chief":
-                    if count in (0, 3):
+                    if count == 2:
                         # The second requirement leaves the first plan uncovered.
-                        action = Record(
-                            record=Requirement(
-                                id=f"r{count // 3 + 1}",
-                                wording="fixture",
-                                source=source,
-                                source_quote="fixture",
-                            )
-                        )
-                    elif count in (1, 4):
+                        self.proposed = True
+                        action = to_engineer(data, "Record r2")
+                    elif count == 3:
+                        action = Wait(reason="Await the engineer's reply")
+                    elif count in (0, 4):
                         action = Decide(
                             selected="fixture",
                             request=plan_request(
@@ -813,7 +826,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                                 tasks=tasks,
                             ),
                         )
-                    elif count == 2:
+                    elif count == 1:
                         self.first_plan = data["agent"]["decision_id"]
                         action = Spawn(decision_id=self.first_plan, task_id="A")
                     else:
@@ -878,30 +891,30 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             def __init__(self, model):
                 self.model, self.effort = model, "low"
 
+            def requirements(self):
+                source = project.store.list("source")[0].ref
+                return (
+                    Requirement(
+                        id="r", wording="fixture", source=source, source_quote="fixture"
+                    ),
+                )
+
             async def respond(self, packet):
                 data = json.loads(packet.prompt)
                 task = data["agent"]["task_id"]
                 count = sum(t == task for _, t, _ in seen)
                 seen.append((self.model, task, data["state"]["last_observation"]))
                 worker = TaskAuthorization(id="A", objective="w", tier="fast")
+                if task == "chief" and count == 0:
+                    self.prompt = packet.prompt
                 if task != "chief":
                     action = Wait(reason="Fixture worker")
-                elif count == 0:
-                    self.prompt = packet.prompt
-                    action = Record(
-                        record=Requirement(
-                            id="r",
-                            wording="fixture",
-                            source=project.store.list("source")[0].ref,
-                            source_quote="fixture",
-                        )
-                    )
-                elif count in (1, 2, 4):
+                elif count in (0, 1, 3):
                     # The first plan names a tier the project does not configure;
                     # the last escalates the running worker once it has had a turn.
-                    while count == 4 and not any(t == "A" for _, t, _ in seen):
+                    while count == 3 and not any(t == "A" for _, t, _ in seen):
                         await asyncio.sleep(0.01)
-                    tier = ("ghost", "fast", "", "slow")[count - 1]
+                    tier = ("ghost", "fast", "", "slow")[count]
                     action = Decide(
                         selected="fixture",
                         request=plan_request(
@@ -909,7 +922,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                             tasks=(worker.model_copy(update={"tier": tier}),),
                         ),
                     )
-                elif count == 3:
+                elif count == 2:
                     action = Spawn(
                         decision_id=data["agent"]["decision_id"], task_id="A"
                     )
@@ -946,7 +959,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         self.assertIn(
             "Worker reasoning tier fast: test-double-reasoning small", chief.prompt
         )
-        self.assertIn("unconfigured reasoning tier: ghost", seen[2][2]["detail"])
+        self.assertIn("unconfigured reasoning tier: ghost", seen[1][2]["detail"])
         self.assertEqual(worker["tier"], "slow")
         self.assertEqual(
             [(d["model"], d["tier"], d["effort"]) for d in dispatched],
@@ -1068,29 +1081,28 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             def __init__(self):
                 self.prompts = []
 
+            def requirements(self):
+                source = project.store.list("source")[0].ref
+                return (
+                    Requirement(
+                        id="r", wording="fixture", source=source, source_quote="fixture"
+                    ),
+                )
+
             async def respond(self, packet):
                 self.prompts.append(json.loads(packet.prompt)["state"])
                 requirement = next(iter(project.store.list("requirement")), None)
                 count = len(self.prompts) - 1
-                if count == 0:
-                    action = Record(
-                        record=Requirement(
-                            id="r",
-                            wording="fixture",
-                            source=project.store.list("source")[0].ref,
-                            source_quote="fixture",
-                        )
-                    )
-                elif count in (1, 2):
+                if count in (0, 1):
                     # The Chief first grants itself an execution tool.
-                    tool = writer if count == 1 else reader
+                    tool = writer if count == 0 else reader
                     action = Decide(
                         selected="fixture",
                         request=plan_request(
                             requirement.ref, tools=(tool.definition.grant,)
                         ),
                     )
-                elif count == 3:
+                elif count == 2:
                     action = Read(search="zzz-nothing-matches")
                 else:
                     action = Wait(reason="Fixture finished")
@@ -1114,13 +1126,13 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 )
             )
         rejected, planned, searched = (
-            p["last_observation"] for p in provider.prompts[2:5]
+            p["last_observation"] for p in provider.prompts[1:4]
         )
         self.assertIn("Grant build@1 to worker tasks", rejected["detail"])
-        self.assertNotIn("review_blockers", provider.prompts[2])
+        self.assertNotIn("review_blockers", provider.prompts[1])
         self.assertIn("decision_id", planned)
         self.assertEqual(
-            provider.prompts[3]["review_blockers"], ["PDR-design: missing deliverable"]
+            provider.prompts[2]["review_blockers"], ["PDR-design: missing deliverable"]
         )
         self.assertTrue(searched["search"].startswith("Nothing matched"))
 
@@ -1260,6 +1272,49 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(chief.context.max_input_tokens, 200_000)
             self.assertFalse(
                 [r for r in project.requests() if "Pinned context" in (r.reason or "")]
+            )
+
+    async def test_a_run_without_the_sysml_toolkit_stops_before_any_agent(self):
+        from sysml.library import LibraryUnavailable
+
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=TestReasoning()) as project,
+            patch("sysml.standard_library", side_effect=LibraryUnavailable("none")),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "SysML Toolkit"):
+                await project.run(ProjectRequest(description="a fixture"))
+            self.assertFalse(project.store.list("agent"))
+
+    async def test_waking_the_systems_engineer_gives_it_a_fresh_budget(self):
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory)) as project,
+        ):
+            runtime = Runtime(project, TestReasoning())
+            runtime.run_id = "fixture-run"
+            chief = AgentSpec(
+                task_id="chief",
+                parent_id=None,
+                objective="fixture",
+                context=ContextSpec(),
+                decision_id=None,
+            )
+            engineer = project.systems_engineer.spec(chief, Budget(max_steps=3))
+            runtime.chief_id, runtime.engineer_id = chief.id, engineer.id
+            spent = {"status": "waiting", "steps": 3, "tool_calls": 2, "elapsed_s": 9.0}
+            for agent in (chief, engineer):
+                runtime._add_agent(agent, parent_request=None)
+                state = project.store.model("agent_state", agent.id, AgentState)
+                runtime._wake(agent, state.model_copy(update=spent), "Fixture")
+            woken = project.store.model("agent_state", engineer.id, AgentState)
+            self.assertEqual(
+                (woken.status, woken.steps, woken.tool_calls, woken.elapsed_s),
+                ("active", 0, 0, 0.0),
+            )
+            # Workers and the chief spend one budget on their whole task.
+            self.assertEqual(
+                project.store.model("agent_state", chief.id, AgentState).steps, 3
             )
 
     async def test_reasoning_required_and_explicit_choices_validated(self):
@@ -1575,6 +1630,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             def __init__(self):
                 self.prompts = []
 
+            def requirements(self):
+                return fixture_requirement(project)
+
             async def respond(self, packet):
                 data = json.loads(packet.prompt)
                 self.prompts.append(data)
@@ -1608,15 +1666,6 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                                 mode="json"
                             )
                         )
-                elif requirement is None:
-                    action = Record(
-                        record=Requirement(
-                            id="r",
-                            wording="fixture",
-                            source=store.get("source", "brief").ref,
-                            source_quote="fixture",
-                        )
-                    )
                 elif not store.list("decision"):
                     task = TaskAuthorization(
                         id="publish",
@@ -1710,6 +1759,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 # Chief and both workers must be mid-call at once; a serial loop deadlocks.
                 self.all_in_flight = asyncio.Barrier(3)
 
+            def requirements(self):
+                return fixture_requirement(project)
+
             async def respond(self, packet):
                 data = json.loads(packet.prompt)
                 task = data["agent"]["task_id"]
@@ -1726,18 +1778,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     self.chief_seen.append(data)
                     requirement = next(iter(project.store.list("requirement")), None)
                     worker = TaskAuthorization(id="A", objective="w", peers=("chief",))
-                    if count == 0:
-                        action = Record(
-                            record=Requirement(
-                                id="r",
-                                wording="fixture",
-                                source=project.store.list("source")[0].ref,
-                                source_quote="fixture",
-                            )
-                        )
-                    elif count in (1, 2):
+                    if count in (0, 1):
                         # The first plan names an unknown peer; the Chief sees why.
-                        peers = ("chief", "ghost") if count == 1 else ("chief",)
+                        peers = ("chief", "ghost") if count == 0 else ("chief",)
                         action = Decide(
                             selected="fixture",
                             request=plan_request(
@@ -1748,12 +1791,12 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                                 ),
                             ),
                         )
-                    elif count in (3, 4):
+                    elif count in (2, 3):
                         action = Spawn(
                             decision_id=data["agent"]["decision_id"],
-                            task_id="A" if count == 3 else "B",
+                            task_id="A" if count == 2 else "B",
                         )
-                    elif count == 5:
+                    elif count == 4:
                         await asyncio.wait_for(self.all_in_flight.wait(), 5)
                         # Workers finish during this turn, so their replies arrive
                         # while the Chief is not yet waiting.
@@ -1786,13 +1829,13 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             )
             states = [s.data["status"] for s in project.store.list("agent_state")]
         self.assertIn(
-            "['ghost']", provider.chief_seen[2]["state"]["last_observation"]["detail"]
+            "['ghost']", provider.chief_seen[1]["state"]["last_observation"]["detail"]
         )
         self.assertEqual(states.count("completed"), 2)
         # Woken after its mid-turn Wait, the Chief saw both worker replies, and the
         # handoffs that did not block their finish.
         replies = [
-            m for m in provider.chief_seen[6]["messages"] if m["kind"] == "reply"
+            m for m in provider.chief_seen[5]["messages"] if m["kind"] == "reply"
         ]
         self.assertEqual(len(replies), 2)
         for reply in replies:
@@ -1808,6 +1851,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 self.asked = False
                 self.replied_at = None
 
+            def requirements(self):
+                return fixture_requirement(project)
+
             async def respond(self, packet):
                 data = json.loads(packet.prompt)
                 task = data["agent"]["task_id"]
@@ -1816,16 +1862,6 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 state = data["state"]
                 if task == "chief":
                     if count == 0:
-                        source = project.store.list("source")[0].ref
-                        action = Record(
-                            record=Requirement(
-                                id="r",
-                                wording="fixture",
-                                source=source,
-                                source_quote="fixture",
-                            )
-                        )
-                    elif count == 1:
                         action = Decide(
                             selected="fixture",
                             request=plan_request(
@@ -1840,10 +1876,10 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                                 ),
                             ),
                         )
-                    elif count in (2, 3):
+                    elif count in (1, 2):
                         action = Spawn(
                             decision_id=project.store.list("decision")[0].ref.id,
-                            task_id="A" if count == 2 else "B",
+                            task_id="A" if count == 1 else "B",
                         )
                     else:
                         action = Wait(reason="Fixture has no actual engineering tools")
@@ -2037,6 +2073,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         class Spawner(TestReasoning):
             count = 0
 
+            def requirements(self):
+                return fixture_requirement(project, "r1")
+
             async def respond(self, packet):
                 data = json.loads(packet.prompt)
                 action = Wait(reason="Fixture waits")
@@ -2047,25 +2086,16 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                         for task in ("A", "B")
                     )
                     if self.count == 1:
-                        action = Record(
-                            record=Requirement(
-                                id="r1",
-                                wording="fixture",
-                                source=project.store.list("source")[0].ref,
-                                source_quote="fixture",
-                            )
-                        )
-                    elif self.count == 2:
                         action = Decide(
                             selected="fixture",
                             request=plan_request(
                                 project.store.get("requirement", "r1").ref, tasks=tasks
                             ),
                         )
-                    elif self.count in (3, 5):
+                    elif self.count in (2, 4):
                         action = Spawn(
                             decision_id=data["agent"]["decision_id"],
-                            task_id="A" if self.count == 3 else "B",
+                            task_id="A" if self.count == 2 else "B",
                         )
                 return AgentTurn(
                     rationale=Rationale(objective="fixture", explanation="Fixture"),
@@ -2112,6 +2142,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             def __init__(self):
                 self.steps = {}
 
+            def requirements(self):
+                return fixture_requirement(project, "r1")
+
             async def respond(self, packet):
                 data = json.loads(packet.prompt)
                 task = data["agent"]["task_id"]
@@ -2127,27 +2160,18 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                             id="A", objective="probe", tools=(tool.definition.grant,)
                         ),
                     )
-                    if count == 1:
-                        action = Record(
-                            record=Requirement(
-                                id="r1",
-                                wording="fixture",
-                                source=project.store.list("source")[0].ref,
-                                source_quote="fixture",
-                            )
-                        )
-                    elif count in (2, 4):
+                    if count in (1, 3):
                         action = Decide(
                             selected="fixture",
                             request=plan_request(
                                 project.store.get("requirement", "r1").ref, tasks=tasks
                             ),
                         )
-                    elif count == 3:
+                    elif count == 2:
                         action = Spawn(
                             decision_id=data["agent"]["decision_id"], task_id="A"
                         )
-                    elif count == 5:
+                    elif count == 4:
                         replanned.set()
                 return AgentTurn(
                     rationale=Rationale(objective=task, explanation="Fixture"),
@@ -2178,19 +2202,13 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         class Planner(TestReasoning):
             plan = False
 
+            def requirements(self):
+                return fixture_requirement(project, "r1")
+
             async def respond(self, packet):
                 requirement = project.store.maybe("requirement", "r1")
                 action = Wait(reason="Fixture waits")
-                if requirement is None:
-                    action = Record(
-                        record=Requirement(
-                            id="r1",
-                            wording="fixture",
-                            source=project.store.list("source")[0].ref,
-                            source_quote="fixture",
-                        )
-                    )
-                elif self.plan and not project.store.list("decision"):
+                if self.plan and not project.store.list("decision"):
                     action = Decide(
                         selected="fixture", request=plan_request(requirement.ref)
                     )

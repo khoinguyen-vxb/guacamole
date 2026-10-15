@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
 from .contracts import (
     ArtifactRecord,
     AskHuman,
+    Catalogue,
     DecisionRecord,
     Deliverable,
     Evidence,
@@ -17,9 +18,11 @@ from .contracts import (
     Requirement,
     ReviewManifest,
     ReviewStage,
+    Standard,
     SystemModel,
     VerificationResult,
 )
+from .standards import assess
 from .tools.registry import encode
 
 if TYPE_CHECKING:
@@ -59,12 +62,43 @@ class Reviews:
         issues: list[str] = []
         baseline: list[Ref] = [store.get("decision", plan_decision).ref]
         baseline.extend(s.ref for s in store.list("requirement"))
+        catalogue = store.maybe("catalogue", "standards")
+        if catalogue is not None:
+            baseline.append(catalogue.ref)
+        current: list[Requirement] = []
         for requirement in store.list("requirement"):
             record = Requirement.model_validate_json(encode(requirement.data))
+            if record.withdrawn:
+                continue
+            if not requirement.stale:
+                current.append(record)
             issues.extend(
                 f"{requirement.ref.id}: unresolved input {unknown}"
                 for unknown in record.unknowns
             )
+            if (pin := record.standard) and not pin.text and not requirement.stale:
+                issues.append(
+                    f"{requirement.ref.id}: no licensed text of {pin.id}:{pin.edition} "
+                    "in the project to verify against"
+                )
+        if catalogue is not None and catalogue.stale:
+            issues.append("standards catalogue: its source changed; record it again")
+        elif catalogue is not None:
+            # An unresolved mandatory standard cannot pass: it applies and nothing
+            # selects it, or the facts its rule needs are missing.
+            for a in assess(
+                Catalogue.model_validate_json(encode(catalogue.data)), current
+            ):
+                if a.mandatory and a.status == "applies" and a.selected is None:
+                    issues.append(
+                        f"{a.standard}: the catalogue's rule says it applies, and no "
+                        "requirement selects it"
+                    )
+                elif a.mandatory and a.status == "unknown":
+                    issues.append(
+                        f"{a.standard}: whether it applies is unknown without "
+                        + ", ".join(a.missing)
+                    )
         deliverables: list[Deliverable] = []
         for spec in plan.deliverables:
             for grant in spec.required_tools:
@@ -257,6 +291,16 @@ class Reviews:
             store.resolve(ref).model_dump(mode="json") for ref in manifest.baseline
         ]
         output(package / "records.json").write_text(encode(records), encoding="utf-8")
+        lock = [
+            {"requirement": ref.model_dump(mode="json")}
+            | pin.model_dump(mode="json")
+            | {"clauses": clauses}
+            for ref, pin, clauses in self._standards(manifest.baseline)
+        ]
+        if lock:
+            output(package / "standards.lock.json").write_text(
+                encode(lock), encoding="utf-8"
+            )
         files: dict[str, Path] = {}
         for deliverable in manifest.deliverables:
             for ref in deliverable.artifacts:
@@ -336,6 +380,16 @@ class Reviews:
             requirement = Requirement.model_validate_json(
                 encode(store.resolve(ref).data)
             )
+            if (withdrawn := requirement.withdrawn) is not None:
+                cells = (
+                    requirement.id,
+                    requirement.wording,
+                    "—",
+                    "withdrawn",
+                    f'{withdrawn.source.id}: "{withdrawn.quote}"',
+                )
+                lines.append("| " + " | ".join(_cell(c) for c in cells) + " |")
+                continue
             limit = "—"
             if requirement.constraint is not None:
                 c = requirement.constraint
@@ -366,6 +420,9 @@ class Reviews:
                     )
                     value = f"{_amount(quantity)} " if quantity is not None else ""
                     measured.append(f"{value}{status}")
+            if by and not measured:
+                # Passing evidence that never checks this requirement is no pass for it.
+                measured.append("not checked")
             lines.append(
                 "| "
                 + " | ".join(
@@ -380,6 +437,69 @@ class Reviews:
                 )
                 + " |"
             )
+
+        if standards := self._standards(manifest.baseline):
+            lines += [
+                "",
+                "## Standards",
+                "",
+                "| Standard | Amendments | Selected by | Licensed text | Clauses |",
+                "|---|---|---|---|---|",
+            ]
+            for ref, pin, clauses in standards:
+                text = "none"
+                if pin.text is not None:
+                    data = store.resolve(pin.text).data
+                    digest = str(data.get("sha256") or pin.text.sha256)[:12]
+                    text = f"{data.get('name') or pin.text.id} ({digest})"
+                cells = (
+                    f"{pin.id}:{pin.edition}",
+                    ", ".join(pin.amendments) or "none",
+                    ref.id,
+                    text,
+                    "; ".join(f"{c} ({id})" for id, c in clauses.items()) or "none",
+                )
+                lines.append("| " + " | ".join(_cell(c) for c in cells) + " |")
+
+        catalogue = next((r for r in manifest.baseline if r.kind == "catalogue"), None)
+        if catalogue is not None:
+            current = [
+                record
+                for ref in manifest.baseline
+                if ref.kind == "requirement"
+                and not (
+                    record := Requirement.model_validate_json(
+                        encode(store.resolve(ref).data)
+                    )
+                ).withdrawn
+            ]
+            entries = Catalogue.model_validate_json(
+                encode(store.resolve(catalogue).data)
+            )
+            lines += [
+                "",
+                "## Applicability",
+                "",
+                f"From catalogue revision {catalogue.revision}.",
+                "",
+                "| Standard | Rule | Applicability | Selected by | Edition |",
+                "|---|---|---|---|---|",
+            ]
+            for entry, a in zip(entries.entries, assess(entries, current)):
+                status = a.status + (" (mandatory)" if a.mandatory else "")
+                if a.missing:
+                    status += f"; missing {', '.join(a.missing)}"
+                edition = a.edition or "—"
+                if a.superseded:
+                    edition += f" (catalogue lists {a.latest})"
+                cells = (
+                    a.standard,
+                    entry.applies_when or "by selection",
+                    status,
+                    a.selected or "none",
+                    edition,
+                )
+                lines.append("| " + " | ".join(_cell(c) for c in cells) + " |")
 
         lines += ["", "## Decisions"]
         run_id = activity.get(manifest.plan_decision).run_id
@@ -498,6 +618,34 @@ class Reviews:
         if model:
             lines += ["", "## SysML model", "", *model]
         return "\n".join(lines) + "\n"
+
+    def _standards(
+        self, baseline: tuple[Ref, ...]
+    ) -> list[tuple[Ref, Standard, dict[str, str]]]:
+        """The standards lock: each selection, its pin and clause requirements by ID."""
+        records = [
+            (
+                ref,
+                Requirement.model_validate_json(
+                    encode(self.project.store.resolve(ref).data)
+                ),
+            )
+            for ref in baseline
+            if ref.kind == "requirement"
+        ]
+        return [
+            (
+                ref,
+                pin,
+                {
+                    r.id: r.clause.reference
+                    for _, r in records
+                    if r.clause and r.clause.standard == ref
+                },
+            )
+            for ref, record in records
+            if (pin := record.standard) and not record.withdrawn
+        ]
 
     def _changes(self, manifest: ReviewManifest) -> list[str]:
         """What changed since the last baseline of this stage a human dispositioned."""

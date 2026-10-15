@@ -3,6 +3,7 @@
 import fcntl
 import hashlib
 import mimetypes
+import re
 from collections.abc import Mapping, Sequence
 from contextlib import ExitStack
 from pathlib import Path
@@ -17,6 +18,7 @@ from .contracts import (
     AgentSpec,
     ArtifactRecord,
     AskHuman,
+    Catalogue,
     ContextPacket,
     Deliverable,
     Evidence,
@@ -43,6 +45,7 @@ from .decision import Decisions
 from .human import Humans
 from .integrations.sysml.registry import SysMLRegistry
 from .reviews import Reviews
+from .standards import parse, squash
 from .storage import Store
 from .tools.execution import Executor, Job
 from .tools.registry import Tool, ToolRegistry, encode
@@ -312,12 +315,116 @@ class Project:
             raise ValueError(
                 "Requirement quotation must be present in its cited source"
             )
+        dependencies = [requirement.source]
+        if (withdrawal := requirement.withdrawn) is not None:
+            # Only a human retires a requirement, in words its source holds.
+            said = self.store.resolve(withdrawal.source, current=True)
+            if (
+                withdrawal.source.kind != "source"
+                or self.store.maybe("requirement", requirement.id) is None
+                or withdrawal.quote not in str(said.data.get("text") or "")
+            ):
+                raise ValueError(
+                    f"Withdrawing {requirement.id} needs it recorded first and a human "
+                    "statement quoted from a source that says it no longer applies"
+                )
+            dependencies.append(withdrawal.source)
+        if (fact := requirement.fact) is not None:
+            stated = squash(requirement.source_quote)
+            value = fact.value
+            numbers = {float(n) for n in re.findall(r"-?\d+(?:\.\d+)?", stated)}
+            if (
+                isinstance(value, str)
+                and squash(value) not in stated
+                or isinstance(value, float | int)
+                and float(value) not in numbers
+                or squash(fact.unit) not in stated
+            ):
+                raise ValueError(
+                    f"{requirement.id} states fact {fact.name} = {value!r} "
+                    f"{fact.unit}, which its quote does not say"
+                )
+        if (pin := requirement.standard) is not None:
+            stated = _squash(
+                f"{requirement.source_quote} {source.data.get('question') or ''}"
+            )
+            if _squash(pin.id) not in stated or _squash(pin.edition) not in stated:
+                raise ValueError(
+                    f"{requirement.id} selects {pin.id}:{pin.edition}, which its quote "
+                    "does not state; ask the human to confirm the standard and edition"
+                )
+            for other in self.store.list("requirement"):
+                record = Requirement.model_validate_json(encode(other.data))
+                selected = record.standard
+                if (
+                    selected
+                    and not other.stale
+                    and not record.withdrawn
+                    and other.ref.id != requirement.id
+                    and _squash(selected.id) == _squash(pin.id)
+                ):
+                    raise ValueError(
+                        f"{other.ref.id} already selects {pin.id}; revise it instead"
+                    )
+            if (pin.text and pin.text.kind != "source") or any(
+                r.kind not in {"requirement", "source"} for r in pin.basis
+            ):
+                raise ValueError(
+                    "A standard's text is a source; its basis cites requirements and sources"
+                )
+            dependencies += [*([pin.text] if pin.text else []), *pin.basis]
+        if (clause := requirement.clause) is not None:
+            selection = self.store.resolve(clause.standard, current=True)
+            selecting = (
+                Requirement.model_validate_json(encode(selection.data))
+                if clause.standard.kind == "requirement"
+                else None
+            )
+            selected = selecting.standard if selecting else None
+            if selecting and selecting.withdrawn and not requirement.withdrawn:
+                raise ValueError(
+                    f"{clause.standard.id} withdrew {selected.id if selected else 'it'}: "
+                    f"withdraw {requirement.id} too"
+                )
+            if selected is None or selected.text is None:
+                raise ValueError(
+                    "A clause cites the current requirement selecting its standard, "
+                    "recorded with the standard's licensed text"
+                )
+            licensed = selected.text
+            quoted = {
+                (r.kind, r.id, r.revision)
+                for r in (requirement.source, *source.dependencies)
+            }
+            if (licensed.kind, licensed.id, licensed.revision) not in quoted:
+                raise ValueError(
+                    f"Quote clause {clause.reference} from the licensed text of "
+                    f"{selected.id} or an excerpt of it"
+                )
+            dependencies.append(clause.standard)
         return self.store.put(
             "requirement",
             requirement.id,
             requirement,
             actor=actor,
-            dependencies=(requirement.source,),
+            dependencies=tuple(dict.fromkeys(dependencies)),
+        )
+
+    def record_catalogue(self, source: Ref, *, actor: str = "script") -> Ref:
+        """Record the project's standards catalogue from a source holding it as JSON.
+
+        A reviewed source, not agent output: its rules decide which standards a
+        review requires (Reviews.checks). Every rule must parse.
+        """
+        text = self.store.resolve(source, current=True).data.get("text")
+        if source.kind != "source" or not isinstance(text, str):
+            raise ValueError("A catalogue is recorded from a source holding its text")
+        catalogue = Catalogue.model_validate_json(text)
+        for entry in catalogue.entries:
+            if entry.applies_when:
+                parse(entry.applies_when)
+        return self.store.put(
+            "catalogue", "standards", catalogue, actor=actor, dependencies=(source,)
         )
 
     def record_open_item(self, item: OpenItem, *, actor: str = "script") -> Ref:
@@ -503,6 +610,16 @@ class Project:
             raise RuntimeError("Configure a reasoning provider before autonomous work")
         if self.runtime is not None:
             raise RuntimeError("A project run is already active")
+        # Without the SysML Toolkit the Systems Engineer can never commit a model, so
+        # every decision blocks while it spends its budget retrying.
+        import sysml
+        from sysml.toolkit import Library
+
+        try:
+            sysml.standard_library()
+            Library()
+        except (sysml.SdkError, OSError) as exc:
+            raise RuntimeError(f"The Systems Engineer needs the SysML Toolkit: {exc}")
         self.runtime = Runtime(self, self.reasoning)
         try:
             return await self.runtime.run(request, resume=resume)
@@ -574,3 +691,6 @@ class Project:
             for e in events
         ]
         path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+_squash = squash  # Case- and space-insensitive, so "AS1210" states "AS 1210"
