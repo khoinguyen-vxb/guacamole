@@ -1,0 +1,89 @@
+{
+  "run_id": "25f6c68037df4b0a878096f2e06aef53",
+  "status": "repaired_not_resumed",
+  "replacement_plan": {
+    "kind": "decision",
+    "id": "826c97964a9544b8b3e2e4a7d8180ea0",
+    "revision": 1,
+    "sha256": "dd293b14a487888294667e1d514226354d0c5132240343012e314fb57ac30cee",
+    "locator": ""
+  },
+  "summary": {
+    "kind": "summary",
+    "id": "5e03150e6bb9486f80d37c75ddf55842",
+    "revision": 1,
+    "sha256": "294d30b0de9e650f662510565499c82ea20b8be07edb0ce6c7ce342318b2b8fd",
+    "locator": ""
+  },
+  "historical_source": {
+    "kind": "source",
+    "id": "pdr-propulsion-context-history-20261015",
+    "revision": 1,
+    "sha256": "92763301ec0eb8eb46a9e4210c50ae58b686c4634a1cebf7fcf224da2b0cc640",
+    "locator": ""
+  },
+  "answered_requests": [
+    "35b537203d6941b1bb89f83c11144f61",
+    "299ed81587c34525800772cc90aa0a0e"
+  ],
+  "agents": [
+    {
+      "agent": "chief",
+      "status": "active",
+      "input_tokens": 188053,
+      "budget": 1030000,
+      "prompt_characters": 521159,
+      "context_ref": {
+        "kind": "context",
+        "id": "0da8431e69584319b5f9840d5bf863d4",
+        "revision": 1,
+        "sha256": "8e96e550b63ea9ed0e11671e876ed73bd69231e004ab095f938955cf16a0f4ca",
+        "locator": ""
+      }
+    },
+    {
+      "agent": "pdr_propulsion_trade",
+      "status": "active",
+      "input_tokens": 81046,
+      "budget": 100000,
+      "prompt_characters": 264147,
+      "context_ref": {
+        "kind": "context",
+        "id": "f097667091214ba0a4efeb2d5c807fc6",
+        "revision": 1,
+        "sha256": "bca0e7693c76c30aed0505441290d9eeb249ec7562435898451ad6f82fbfc1c8",
+        "locator": ""
+      }
+    },
+    {
+      "agent": "pdr_cad_trade",
+      "status": "active",
+      "input_tokens": 101481,
+      "budget": 160000,
+      "prompt_characters": 335244,
+      "context_ref": {
+        "kind": "context",
+        "id": "06b83de34f9e46efaf1f2fef97d34b43",
+        "revision": 1,
+        "sha256": "2fa172ca69b50dedca7c546073b427d3e9a41471ad220fa8e97adf191d2652c9",
+        "locator": ""
+      }
+    },
+    {
+      "agent": "pdr_plant_repair",
+      "status": "active",
+      "input_tokens": 109536,
+      "budget": 180000,
+      "prompt_characters": 375360,
+      "context_ref": {
+        "kind": "context",
+        "id": "3807f84ca1cc41a0924c13a506028df6",
+        "revision": 1,
+        "sha256": "d32ce106b8ed6e2c605182fe67ee274d63cd95d39fb836c5a60158a7fd512f85",
+        "locator": ""
+      }
+    }
+  ],
+  "backup": "/tmp/ehopper-before-context-recovery-20261015.sqlite3",
+  "engineering_verification": "Not performed; stale outputs remain invalidated."
+}

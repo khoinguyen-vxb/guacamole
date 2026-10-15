@@ -1,0 +1,201 @@
+{
+  "schema": "hopper_cad_structural_study/1",
+  "status": "Unselected parametric study configuration; no execution or verification results",
+  "authority": {
+    "system_model": {"kind":"system_model","id":"system","revision":2,"sha256":"4c93f9bb676b0e59572034a4c2f51438a8d94cd2aa7d9af7830964ee72219b21"},
+    "work_plan": {"kind":"decision","id":"a37ef3716fce4eb2b2b35919d6cb0b97","revision":1,"sha256":"8e7cf79a28ee431b8be3dfece7bf4fca94e60e40a2fa62a0e416e3e4e171772d"},
+    "interface_decision": {"kind":"decision","id":"17534e6b12854073a06a0471fec47a84","revision":1,"sha256":"4645970a438c47923776a9155577d08631885e1920c3fc3c392185bfeb194d5f"}
+  },
+  "output_policy": {
+    "cad_directory": "cad/pdr_trade/",
+    "analysis_directory": "analysis/pdr_cad_trade/",
+    "preserve_existing_files": true,
+    "declare_every_generated_file": true,
+    "save_failed_candidates_and_witnesses": true,
+    "commercial_holes_without_source_drawing": "prohibited",
+    "physical_qualification": "not performed"
+  },
+  "frames": {
+    "cad_C": "Right-handed forward-left-up; lengths mm",
+    "body_B": "Right-handed forward-right-down; simulator lengths m",
+    "local_L": "North-East-Down",
+    "datum_D": "Named fixed feature at neutral propulsion centreline intersection with upper reference plane of fixed leg-attachment ring",
+    "datum_C_mm": [0,0,0],
+    "marked_forward_axis_C": [1,0,0],
+    "R_BC": [[1,0,0],[0,-1,0],[0,0,-1]],
+    "point_conversion": "r_DB_m = 0.001 R_BC (p_C_mm - D_C_mm)",
+    "gimbal_rotation_body": "R_BM = Rx(alpha) Ry(beta); alpha about body x, beta about carried y",
+    "gimbal_rotation_cad": "For a neutral FLU module frame: R_CM = Rx(alpha) Ry(-beta)",
+    "joint_position_rule": "r_Di = r_DOx + Rx(alpha) d_OxOy + R_BM r_Oyi,M, with all vectors expressed in their declared frames",
+    "mass_conversion": "Uniform material mass kg = solid.Volume_mm3 * density_kg_m3 * 1e-9",
+    "inertia_conversion": "Uniform material centroidal inertia kg m^2 = solid.MatrixOfInertia_mm5 * density_kg_m3 * 1e-15; rotate tensors and shift reference points separately",
+    "scoring": "Fixed D does not follow instantaneous complete-vehicle CG or gimbal articulation"
+  },
+  "candidate_matrix": {
+    "spine_count": [1,2,3,4],
+    "spine_sections": ["CFRP_RW_8_6","CFRP_RW_14_12","AL_6063T5_12_10"],
+    "landing_leg_count": [3,4],
+    "rotor_diameter_mm": [279.4,330.2],
+    "matrix_rule": "Cartesian product; retain every case, including failures",
+    "first_family_topology": "Two separate conventional motors with common moving outboard upper-disc bypass",
+    "integrated_module_branch": "Still open; require current component applicability, mounting-face and rotor-plane evidence before generating a comparable commercial interface",
+    "selection": null
+  },
+  "materials": {
+    "CFRP_RW": {
+      "density_kg_m3": {"nominal":1600,"sensitivity":[1400,1800],"basis":"Engineering hypotheses, not supplier-qualified bounds"},
+      "axial_modulus_GPa": {"sensitivity":[50,100,140],"basis":"Unqualified study values; no strength conclusion"},
+      "shear_modulus_GPa": null,
+      "compression_strength_MPa": null,
+      "joint_bearing_allowable_MPa": null,
+      "laminate_schedule": null
+    },
+    "AL_6063T5": {
+      "density_kg_m3": {"nominal":2700,"sensitivity":[2650,2750],"basis":"Nominal Hydro alloy-level benchmark; range is an engineering hypothesis, not Metal Mate certification"},
+      "elastic_modulus_GPa":69,
+      "shear_modulus_GPa":26,
+      "joint_allowables":null
+    },
+    "PETG_PRINTED": {
+      "density_kg_m3": {"nominal":1250,"sensitivity":[1150,1400],"basis":"Unqualified study values for explicitly modelled solid material"},
+      "void_policy":"Do not multiply a solid envelope by an undocumented infill fraction; model intended voids or declare an effective-density assumption separately",
+      "strength_and_creep_allowables":null,
+      "printed_part_procurement_cost_AUD":0,
+      "cost_basis":"Brief excludes printed PETG parts from cost, not mass"
+    },
+    "STEEL_GENERIC": {
+      "density_kg_m3": {"nominal":7850,"sensitivity":[7700,8000],"basis":"Unqualified generic pin/fastener study values"},
+      "grade":null,
+      "strength_allowables":null
+    }
+  },
+  "sections": {
+    "CFRP_RW_8_6":{"material":"CFRP_RW","od_mm":8,"id_mm":6,"supplier_family":"Enhanced Composites roll-wrapped 8/6; exact SKU and stock unresolved"},
+    "CFRP_RW_14_12":{"material":"CFRP_RW","od_mm":14,"id_mm":12,"supplier_family":"Enhanced Composites roll-wrapped 14/12; exact SKU and stock unresolved"},
+    "AL_6063T5_12_10":{"material":"AL_6063T5","od_mm":12,"id_mm":10,"supplier_family":"Metal Mate; Bunnings item 1067750 nominal 1 m tube"},
+    "LANDING_CFRP_8_6":{"material":"CFRP_RW","od_mm":8,"id_mm":6,"supplier_family":"Same material/section as CFRP_RW_8_6 only if exact purchased variant matches"}
+  },
+  "geometry_hypothesis": {
+    "units":"mm unless stated otherwise; every dimension in this section is an unselected design hypothesis",
+    "fixed_ring":{"outer_radius":100,"inner_radius":85,"thickness":4,"upper_plane_z":0,"material":"PETG_PRINTED"},
+    "spines":{"centre_radius":92,"bottom_z":0,"length":300,"azimuth_rule_deg":"360*k/spine_count, k=0..spine_count-1; one spine is on +C x"},
+    "battery_installation":{"orientation":"Longest dimension along +C z","bottom_z":32,"centre_xy":[0,0],"mounting":"Open cradle with positive lower support, two retention straps and anti-slip restraint; all parts accounted separately"},
+    "electronics_installation":{"reference_z":215,"commercial_envelope_mm":[45,45,20],"envelope_basis":"Packaging study allowance, not selected board dimensions","mounting":"Open removable tray; fastener pattern remains unspecified until hardware selection"},
+    "gimbal":{
+      "outer_origin_C":[0,0,-45],
+      "outer_to_inner_offset_C_neutral":[0,0,-15],
+      "inner_origin_C_neutral":[0,0,-60],
+      "outer_ring":{"outer_radius":60,"inner_radius":52,"thickness":6},
+      "inner_ring":{"outer_radius":42,"inner_radius":34,"thickness":6},
+      "ring_material":"PETG_PRINTED",
+      "load_path":"Fixed ring and radial bearing supports -> outer x pivot pair -> outer ring and carried y pivot supports -> inner ring -> module support",
+      "pivot_and_bearing_interfaces":"Custom study geometry only; purchased bearing identities, fits, retention and loaded capacity unresolved",
+      "servo_interfaces":"Reserve two actuator envelopes and linkage paths; no commercial ear, spline or horn dimensions invented"
+    },
+    "separate_motor_module":{
+      "upper_mount_reference_z":-95,
+      "lower_mount_reference_z":-225,
+      "upper_rotor_plane_z":-155,
+      "lower_rotor_plane_z":-285,
+      "motor_body_diameter":35,
+      "motor_body_length":36,
+      "motor_overall_length":54,
+      "motor_dimension_basis":"Provisional original-X2814 vendor-claim lead from peer interface PROP-CAD-IF-01; current applicability and detailed offsets require reconciliation. These are not mounting measurements.",
+      "motor_mount_plate_size":[40,40,4],
+      "motor_mount_hole_pattern":null,
+      "motor_mount_gap_allowance":2,
+      "mount_gap_basis":"Explicit unresolved interface space; not a demonstrated connection",
+      "bypass_arm_centre_radius_rule":"rotor_diameter_mm/2 + 30",
+      "bypass_azimuth_deg":[0,180],
+      "bypass_member_section":"CFRP_RW_8_6",
+      "load_path":"Inner carrier -> central suspension -> upper split crossmember and upper motor interface; two outboard descending arms bypass upper disc -> lower split crossmember and lower motor interface. No structural member may pass through either rotor swept slab.",
+      "junction_policy":"Trim member ends to joint interfaces; distinguish intentional contact from overlapping material. Count sleeves, inserts, adhesive, pins and retention separately.",
+      "commercial_attachment_status":"Unresolved; blank interface plates cannot be reported as accepted motor mounts"
+    },
+    "rotor_envelopes":{
+      "slab_half_thickness":10,
+      "hub_diameter":20.32,
+      "hub_thickness":10.414,
+      "nominal_bore":6.35,
+      "hub_dimension_basis":"APC catalogue conversions in current propulsion register M2-02; tolerances and retention unresolved",
+      "slab_basis":"Unqualified swept-envelope hypothesis, not a measured blade envelope",
+      "mass_policy":"Swept slabs have no installed mass. Propeller commercial mass is included once in separately identified mass proxies.",
+      "spin_assignment":null,
+      "deformation_allowance_qualified":null
+    },
+    "landing_gear":{
+      "section":"LANDING_CFRP_8_6",
+      "attachment_reference_radius":100,
+      "attachment_reference_z":-2,
+      "foot_reference_radius":380,
+      "foot_reference_z":-380,
+      "tripod_azimuth_deg":[90,210,330],
+      "quadpod_azimuth_deg":[45,135,225,315],
+      "endpoint_definition":"Joint reference points, not automatically tube cut ends; sleeve insertion, foot size and trim lengths must be modelled explicitly",
+      "feet":"Separate finite contact solids and retention; material and dimensions remain study parameters",
+      "load_path":"Foot -> splayed tube and end joints -> fixed attachment ring -> upper structure; a vertical first-contact load is not assumed axial in the tube",
+      "stance_measure":"Minimum horizontal support-polygon width over all directions, reported separately from circumdiameter and signed CG-to-edge margin"
+    }
+  },
+  "commercial_mass_candidates": {
+    "motors":{"quantity":2,"nominal_each_kg":0.108,"basis":"Provisional peer vendor claim for original X2814; current applicability and accessory inclusion unresolved","uncertainty_qualified":null},
+    "propellers_279_4":{"parts":["LP11055E","LP11055EP"],"each_mass_source_value":0.81,"source_unit":"oz","mass_inclusion":"Adapter-ring inclusion unresolved"},
+    "propellers_330_2":{"parts":["LP13065E","LP13065EP"],"each_mass_source_value":1.06,"source_unit":"oz","mass_inclusion":"Adapter-ring inclusion unresolved"},
+    "esc":{"part":"80060442","quantity":2,"nominal_each_kg":0.036,"body_envelope_mm":[60,25,8],"lead_and_connector_mass_inclusions":"Reconcile before adding harness mass"},
+    "battery":{"variant":"Zeee 3S 5200 mAh 50C Deans two-pack, register M2-03 B02","installed_quantity":1,"purchased_package_quantity":1,"batteries_per_package":2,"nominal_each_kg":0.343,"envelope_mm":[132,43,29],"status":"Comparison candidate; AU availability, currency, usable energy and tolerances unresolved"},
+    "actuator_options":[{"variant":"EMAX ES08MA II standard-voltage analog","quantity":2,"nominal_each_kg":0.012,"mass_sensitivity_each_kg":[0.011,0.013],"basis":"Supplier-hosted manufacturer sheet; current lot applicability unresolved"},{"part":"Hitec 35245S HS-5245MG","quantity":2,"nominal_each_kg":0.032,"basis":"Manufacturer excludes horn; dimensions/current/spline conflicts retained"}],
+    "selection":null,
+    "inertia_policy":"Commercial envelope shapes provide labelled distribution approximations, not manufacturer inertia. Unknown rotating/stationary subdivisions and rotor polar inertias remain unknown. Never add commercial override mass to envelope-density mass."
+  },
+  "accounting_requirements": {
+    "component_identity_fields":["instance_id","parent_group","physical_or_envelope","geometry_source","mass_method","mass_inclusions","mass_uncertainty","purchase_owner","interface_status"],
+    "groups":["fixed_airframe","outer_gimbal","inner_module_nonspinning","upper_spinning_group","lower_spinning_group"],
+    "mandatory_ancillary_rows":["battery_cradle","battery_straps_and_anti_slip","electronics_tray_and_retention","controller","IMU","position_height_sensors","receiver_and_abort_path","servo_bodies","servo_horns","links_and_rod_ends","pivot_pins","bearings_or_bushings","axial_pivot_retention","motor_adapters_and_prop_retention","ESC_retention","regulation","power_distribution_and_protection","additional_power_wires","signal_wires","connectors","insulation_and_strain_relief","leg_joint_sleeves","spine_joint_clamps","adhesive","fasteners","feet_and_retention"],
+    "unknown_rows":"Retain null sourced mass/cost. Separate any assumed scenario allowance from a supported ledger total; never silently use zero.",
+    "mass_outputs":["CAD_material_subtotal","commercial_claim_subtotal","explicit_assumption_subtotal","unresolved_rows","conditional_complete_scenario_mass","supported_complete_installed_mass"],
+    "supported_complete_installed_mass":"Must remain null while required mass rows or inclusions are unresolved",
+    "purchase_policy":"Whole minimum packs and stock lengths, one required two-battery pack, no assumed owned items; ground equipment separate; PETG printed-part cost exempt but mass included",
+    "cutting_assumptions_mm":{"stock_length":1000,"trim_each_stock_end":5,"kerf_per_cut":3},
+    "cutting_policy":"Use actual finished member lengths and insertion geometry; share stock only for identical purchased material/section; charge unused offcuts"
+  },
+  "clearance_study": {
+    "gimbal_domain":{"alpha_deg":[-15,15],"beta_deg":[-15,15],"definition":"Independent joint limits, not a 15-degree resultant cone","status":"Exploratory domain; hardware travel not selected"},
+    "initial_joint_sample_step_deg":5,
+    "body_tilt_sensitivity_deg":[0,5,10],
+    "body_tilt_azimuth_step_deg":15,
+    "landing_compression_sensitivity_mm":[0,10,20],
+    "uneven_ground_height_sensitivity_mm":[0,10,20],
+    "extra_clearance_consumption_sensitivity_mm":[0,5,10],
+    "allowance_status":"Exploratory debits, not qualified tolerance or deformation bounds and not human-approved acceptance thresholds",
+    "required_pairs":["upper_rotor_vs_fixed_structure","lower_rotor_vs_fixed_structure","each_rotor_vs_module_support","each_rotor_vs_outer_gimbal","each_rotor_vs_leg_solids","each_rotor_vs_wiring_envelopes","each_rotor_vs_ground","moving_mechanism_vs_fixed_structure","unintended_physical_solid_overlap"],
+    "ground_method":"Place actual foot contact geometry against level ground at each body attitude; evaluate each rotor in the same pose. Treat compression and terrain assumptions explicitly rather than subtracting an unexplained global allowance.",
+    "sample_result_policy":"Store minimum distance, nearest points, colliding pair, pose and common volume; zero distance alone does not quantify penetration",
+    "continuous_bound_policy":"Report a bound only when supported by an implemented geometric/kinematic argument covering the declared domain; otherwise continuous result is null",
+    "acceptance_policy":"Positive sampled separation is not continuous clearance or physical qualification"
+  },
+  "structural_and_contact_study": {
+    "load_factors_sensitivity":[1,2,3],
+    "first_contact":"Apply the complete selected scenario reaction to one foot in separate cases; do not divide by leg count",
+    "all_contact":"Compute reactions only with explicit contact/compliance assumptions; four-foot sharing is not statically determined by geometry alone",
+    "report":["support_polygon_vertices","minimum_directional_width","CG_edge_margins","one_foot_unloaded_support","joint_force_and_moment_demands","tube_axial_bending_torsion_demands","member_buckling_sensitivity","mount_access_and_anti_rotation","complete_mass_and_purchase_sensitivity"],
+    "limitations":"Demand and ideal-member calculations do not establish printed-joint strength, laminate allowables, contact stiffness, stopping distance or physical landing safety"
+  },
+  "artifact_checks_required": [
+    "Generate native editable geometry and declare FCStd, STEP, drawing and numerical outputs",
+    "Reopen FCStd and STEP and enumerate actual valid solids",
+    "Exclude construction shapes and swept envelopes from installed material totals",
+    "Edit a named geometric parameter after reopening, recompute and verify affected dimensions and mass",
+    "Compare export volume and bounds with the assembly physical-solid set",
+    "Measure custom interfaces and retain unresolved commercial interfaces",
+    "Compute each solid's material mass, centroid and full inertia and aggregate with parallel-axis shifts",
+    "Transform groups and properties with the selected frame contract and explicit joint origins",
+    "Inspect GUI view pixels when available, separately from numerical checks",
+    "Retain an editable verification program reading the actual tested artifacts; physical tests return null"
+  ],
+  "source_registers": [
+    {"kind":"artifact","id":"PDR-CAD-STRUCTURAL-SOURCE-REGISTER-M2-01","revision":1,"sha256":"72c56c68f42962ed3ed026e488bad0889e8f4a7589cdc707ef2affb0bb52d947"},
+    {"kind":"artifact","id":"PDR-PROPULSION-SOURCE-REGISTER-M2-02","revision":1,"sha256":"040c8a4ba7e3a2baab103758f5abf8678e9a7dcbc5c309c940519ad5d46a7438"},
+    {"kind":"artifact","id":"PDR-PROPULSION-SOURCE-REGISTER-M2-03","revision":1,"sha256":"6f6113742d4ef4c008cd9e7f735fd33082596f51bfe53281ca671955658dd134"}
+  ],
+  "next_coordination": "Send generated measured geometry and separately owned mass results to propulsion and plant; request missing supplier interfaces through Chief. Obtain Chief down-selection only after actual numerical comparison."
+}

@@ -1,0 +1,369 @@
+{
+  "ref": {
+    "kind": "system_model",
+    "id": "system",
+    "revision": 4,
+    "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75",
+    "locator": ""
+  },
+  "summary": "User-authorized recovery of self-invalidated model revision 3. Revalidate exactly the same model files against current source records and requirements. Historical prior-plan/interface citations are preserved in the provenance source, without creating live dependencies back through the prior model. No requirements, numerical limits, geometry acceptance, or review acceptance are changed.",
+  "report": {
+    "valid": true,
+    "digest": "5672276734011bf6600e5639e45c1b79eb782c441e6a185922c44df69d8d3319",
+    "elements": 986,
+    "requirements": [
+      {
+        "id": "REQ-ATTITUDE-RECOVERY-ERROR",
+        "element": "ElectronicHopper::attitudeRecoveryErrorRequirement",
+        "text": "For simulation acceptance only, each isolated 10 deg roll, pitch and yaw perturbation and the combined 10 deg roll plus 10 deg pitch perturbation, starting at zero body rates, shall recover to total attitude error no greater than 2 deg within 5 s and remain within that limit for 2 s, concurrently with the required body-rate limit. Total attitude error is the shortest three-dimensional rotation angle between actual and reference attitudes, independent of quaternion sign, not the norm of Euler-angle errors. The combined perturbation is R = Ry(10 deg)Rx(10 deg), using active right-handed rotations relative to the hover reference: apply the x rotation first, then y, with zero initial body rates. This does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-ATTITUDE-RECOVERY-HOLD",
+        "element": "ElectronicHopper::attitudeRecoveryHoldRequirement",
+        "text": "For simulation acceptance only, each isolated 10 deg roll, pitch and yaw perturbation and the combined 10 deg roll plus 10 deg pitch perturbation, starting at zero initial body rates, shall achieve a continuous attitude_recovery_hold_duration of at least 2 s during which total attitude error remains no greater than 2 deg and body-rate norm remains no greater than 2 deg/s simultaneously. This interval shall begin within 5 s of perturbation initialization. Total attitude error is the shortest three-dimensional rotation angle between actual and reference attitudes, independent of quaternion sign, not the norm of Euler-angle errors. The combined perturbation is R = Ry(10 deg)Rx(10 deg), using active right-handed rotations relative to the hover reference: apply the x rotation first, then y, with zero initial body rates. This does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-ATTITUDE-RECOVERY-RATE",
+        "element": "ElectronicHopper::attitudeRecoveryRateRequirement",
+        "text": "For simulation acceptance only, each isolated 10 deg roll, pitch and yaw perturbation and the combined 10 deg roll plus 10 deg pitch perturbation, starting at zero body rates, shall recover to body-rate norm no greater than 2 deg/s within 5 s and remain within that limit for 2 s, concurrently with the required total attitude-error limit. Total attitude error is the shortest three-dimensional rotation angle between actual and reference attitudes, independent of quaternion sign, not the norm of Euler-angle errors. The combined perturbation is R = Ry(10 deg)Rx(10 deg), using active right-handed rotations relative to the hover reference: apply the x rotation first, then y, with zero initial body rates. This does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-ATTITUDE-RECOVERY-TIME",
+        "element": "ElectronicHopper::attitudeRecoveryTimeRequirement",
+        "text": "For simulation acceptance only, each isolated 10 deg roll, pitch and yaw perturbation and the combined 10 deg roll plus 10 deg pitch perturbation, starting at zero body rates, shall have an attitude_recovery_time no greater than 5 s. Recovery time is measured from perturbation initialization to the start of a continuous 2 s interval during which total attitude error remains no greater than 2 deg and body-rate norm remains no greater than 2 deg/s simultaneously. Total attitude error is the shortest three-dimensional rotation angle between actual and reference attitudes, independent of quaternion sign, not the norm of Euler-angle errors. The combined perturbation is R = Ry(10 deg)Rx(10 deg), using active right-handed rotations relative to the hover reference: apply the x rotation first, then y, with zero initial body rates. This does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-COAXIAL-PROPULSION",
+        "element": "ElectronicHopper::coaxialPropulsionRequirement",
+        "text": "The hopper shall take off, hold position and land using electric propulsion with counter-rotating coaxial propellers. This architecture does not select an integrated contra-rotating motor unit or a separate-motor implementation.",
+        "parent": null
+      },
+      {
+        "id": "REQ-COMMON-GIMBAL",
+        "element": "ElectronicHopper::commonGimbalRequirement",
+        "text": "Thrust vectoring shall use a common motor-unit gimbal with exactly two controlled rotational axes. The gimbal_axis_count shall equal 2. Changing this architecture requires human agreement.",
+        "parent": null
+      },
+      {
+        "id": "REQ-EXPOSED-STRUCTURE",
+        "element": "ElectronicHopper::exposedStructureRequirement",
+        "text": "The vehicle shall use exposed minimum structure only, with no fins, nose cone or fairing. A rocket-like appearance is not required. This is a hard vehicle-configuration constraint; changes require human agreement.",
+        "parent": null
+      },
+      {
+        "id": "REQ-HARDWARE-BUDGET",
+        "element": "ElectronicHopper::hardwareBudgetRequirement",
+        "text": "Total purchased vehicle hardware and materials cost, quantized to 0.01 AUD, shall not exceed 499.99 AUD, excluding tax and shipping. This is the human-authorized representation of the original strictly-below-500-AUD cap. All other accounting rules remain unchanged: assume everything is bought and nothing is already owned; charge whole minimum purchase packs and spools, including a two-battery pack although only one battery flies; price reusable ground equipment, including transmitter, charger or power supply, test and ground safety equipment, separately from the vehicle cap; exclude 3D-printed PETG parts from cost but include their installed mass.",
+        "parent": null
+      },
+      {
+        "id": "REQ-HOVER-ALTITUDE-MAX",
+        "element": "ElectronicHopper::hoverAltitudeMaximumRequirement",
+        "text": "For simulation acceptance only, maximum absolute altitude error relative to the 5.00 m target rise of the fixed airframe datum from its stationary pre-takeoff position shall not exceed 0.25 m over the uninterrupted 300 s hover interval after acquisition, with no transient exclusions. Acquisition is completed at the end of the first continuous 2 s interval during which the datum's absolute altitude error is no greater than 0.25 m and its horizontal radial error relative to its stationary pre-takeoff location is no greater than 0.50 m simultaneously. The scored 300 s interval shall begin immediately after acquisition, without restarting it or excluding transients, as defined in REQ-HOVER-DURATION. This does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-HOVER-ALTITUDE-RMS",
+        "element": "ElectronicHopper::hoverAltitudeRMSRequirement",
+        "text": "For simulation acceptance only, altitude RMS error relative to the 5.00 m target rise of the fixed airframe datum from its stationary pre-takeoff position shall not exceed 0.10 m over the uninterrupted 300 s hover interval after acquisition, with no transient exclusions. Acquisition is completed at the end of the first continuous 2 s interval during which the datum's absolute altitude error is no greater than 0.25 m and its horizontal radial error relative to its stationary pre-takeoff location is no greater than 0.50 m simultaneously. The scored 300 s interval shall begin immediately after acquisition, without restarting it or excluding transients, as defined in REQ-HOVER-DURATION. This does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-HOVER-DURATION",
+        "element": "ElectronicHopper::hoverDurationRequirement",
+        "text": "For simulation acceptance only, the hopper shall sustain hover after acquisition for an uninterrupted interval of at least 300 s. Acquisition is completed at the end of the first continuous 2 s interval during which the fixed airframe datum's absolute altitude error relative to its 5.00 m target rise is no greater than 0.25 m and its horizontal radial error relative to its stationary pre-takeoff location is no greater than 0.50 m simultaneously. Immediately after acquisition, score one uninterrupted 300 s hover interval without restarting it or excluding transients. Acquisition, climb and controlled landing are additional battery loads, not portions of the required hover interval. Simulation acceptance does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-HOVER-HEIGHT",
+        "element": "ElectronicHopper::hoverHeightRequirement",
+        "text": "For simulation acceptance only, hover_target_rise shall equal 5.00 m. Height shall be measured as the rise of a fixed airframe datum from its stationary pre-takeoff position, not the instantaneous CG. Horizontal position shall be relative to that datum's initial location. This equality constrains the target reference; achieved tracking errors are governed by the separate hover-error requirements. Simulation acceptance does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-HOVER-HORIZONTAL-MAX",
+        "element": "ElectronicHopper::hoverHorizontalMaximumRequirement",
+        "text": "For simulation acceptance only, maximum horizontal radial position error of the fixed airframe datum relative to its stationary pre-takeoff horizontal location shall not exceed 0.50 m over the uninterrupted 300 s hover interval after acquisition, with no transient exclusions. Acquisition is completed at the end of the first continuous 2 s interval during which the datum's absolute altitude error relative to its 5.00 m target rise is no greater than 0.25 m and its horizontal radial error relative to its stationary pre-takeoff location is no greater than 0.50 m simultaneously. The scored 300 s interval shall begin immediately after acquisition, without restarting it or excluding transients, as defined in REQ-HOVER-DURATION. This does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-HOVER-HORIZONTAL-RMS",
+        "element": "ElectronicHopper::hoverHorizontalRMSRequirement",
+        "text": "For simulation acceptance only, horizontal radial RMS position error of the fixed airframe datum relative to its stationary pre-takeoff horizontal location shall not exceed 0.25 m over the uninterrupted 300 s hover interval after acquisition, with no transient exclusions. Acquisition is completed at the end of the first continuous 2 s interval during which the datum's absolute altitude error relative to its 5.00 m target rise is no greater than 0.25 m and its horizontal radial error relative to its stationary pre-takeoff location is no greater than 0.50 m simultaneously. The scored 300 s interval shall begin immediately after acquisition, without restarting it or excluding transients, as defined in REQ-HOVER-DURATION. This does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-LANDING-CONTACT-CLEARANCE",
+        "element": "ElectronicHopper::landingContactClearanceRequirement",
+        "text": "For simulation acceptance only, both rotor envelopes shall remain clear throughout landing approach and settling. The simulation shall explicitly model contact stiffness and leg compression and evaluate uneven-ground sensitivity. The separately recorded touchdown speed and airframe-tilt limits apply to landing on level ground. Simulation results do not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-LANDING-DOWNWARD-SPEED",
+        "element": "ElectronicHopper::landingDownwardSpeedRequirement",
+        "text": "For simulation acceptance only, during landing on level ground, the contacting foot's downward speed immediately before first foot contact shall not exceed 0.30 m/s. This is a foot-point velocity criterion, not a CG velocity criterion, and does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-LANDING-GEAR-ARRANGEMENT",
+        "element": "ElectronicHopper::landingGearArrangementRequirement",
+        "text": "The landing legs shall be splayed thin CFRP tubes attached at a ring or plate just above the common gimbal. The feet shall sit below the propeller plane, the stance shall be wider than the propeller disc, and both rotor envelopes shall remain clear of the ground at full gimbal tilt. Compare tripod and quadpod arrangements and recommend one using CAD-derived mass, CG and clearance results. These are hard vehicle-configuration constraints; changes require human agreement.",
+        "parent": null
+      },
+      {
+        "id": "REQ-LANDING-HORIZONTAL-SPEED",
+        "element": "ElectronicHopper::landingHorizontalSpeedRequirement",
+        "text": "For simulation acceptance only, during landing on level ground, the contacting foot's horizontal speed immediately before first foot contact shall not exceed 0.20 m/s. This is a foot-point velocity criterion, not a CG velocity criterion, and does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-LANDING-LEG-COUNT",
+        "element": "ElectronicHopper::landingLegCountRequirement",
+        "text": "The vehicle shall have an integer landing_leg_count of three or four, forming a tripod or quadpod respectively. Compare both configurations and recommend one using CAD-derived mass, CG and clearance results. Changing these permitted configurations requires human agreement.",
+        "parent": null
+      },
+      {
+        "id": "REQ-LANDING-TILT",
+        "element": "ElectronicHopper::landingTiltRequirement",
+        "text": "For simulation acceptance only, during landing on level ground, airframe tilt immediately before first foot contact shall not exceed 5 deg. This criterion concerns airframe tilt, not gimbal deflection, and does not establish hardware validation or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-OPERATING-ENVIRONMENT",
+        "element": "ElectronicHopper::operatingEnvironmentRequirement",
+        "text": "The hopper demonstrator shall be designed and assessed for operation in calm air near sea level. Numerical atmospheric conditions and wind limits are not established by this qualitative operating condition; simulation disturbance cases shall not silently redefine the operating envelope.",
+        "parent": null
+      },
+      {
+        "id": "REQ-PDR-DELIVERY-PRESERVATION",
+        "element": "ElectronicHopper::pdrDeliveryPreservationRequirement",
+        "text": "This run shall deliver the PDR package for the propulsion-selection, vehicle-CAD and repaired simulator with integrated and tuned PID scope specified in the brief. Supplied checkouts shall remain unchanged. Runnable corrected copies, CAD, analyses and logs shall be placed in results/, and generated outputs and actual verification evidence shall be registered in project history. CDR shall follow only after PDR acceptance and is not a deliverable of this run.",
+        "parent": null
+      },
+      {
+        "id": "REQ-PROPULSION-BUDGET",
+        "element": "ElectronicHopper::propulsionBudgetRequirement",
+        "text": "Select the motors, counter-rotating coaxial propellers, ESCs and battery using a traceable integrated thrust, torque, current, energy, installed-mass and purchased-cost budget. Include the installed battery and acquisition, climb and landing energy in addition to the uninterrupted 300 s hover. Keep coaxial interference and calibration uncertainty explicit, and record current vendor sources and access dates. Assess cost under REQ-HARDWARE-BUDGET; do not treat isolated-rotor data as demonstrated combined coaxial performance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-PROPULSION-PLACEMENT",
+        "element": "ElectronicHopper::propulsionPlacementRequirement",
+        "text": "The coaxial propulsion module and both propellers shall sit at the bottom, below the structure. The structure, battery and electronics shall sit above the rotors. This placement is a hard vehicle-configuration constraint; changes require human agreement. It shall be implemented together with the brief's landing-leg arrangement, whose feet extend below the propeller plane.",
+        "parent": null
+      },
+      {
+        "id": "REQ-SIMULATOR-PID",
+        "element": "ElectronicHopper::simulatorPIDRequirement",
+        "text": "Diagnose and repair the supplied tooling/6dof_hopper simulator before integrating and tuning PID control. The integrated controller shall include actuator limits, lag, anti-windup and fixed control sampling. Deliver a runnable modified copy or patch, gain configuration, verification scripts and repeatable takeoff, hover and landing results. Evaluate simulation performance against the separately recorded acceptance requirements; software execution alone does not establish hardware performance or review acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-SPINE-COUNT",
+        "element": "ElectronicHopper::spineCountRequirement",
+        "text": "The vehicle shall have an integer spine_count from one through four inclusive. Select and justify the count based on mounting the battery, avionics, gimbal and legs and on structural need. Compare CFRP tube with aluminium, retaining the stated preference for CFRP. Changing the permitted configuration requires human agreement.",
+        "parent": null
+      },
+      {
+        "id": "REQ-VEHICLE-CAD",
+        "element": "ElectronicHopper::vehicleCADRequirement",
+        "text": "Design the vehicle using the supplied freecad-mcp and deliver an editable parametric FCStd assembly, STEP exports and mounting/assembly drawings. Include propulsion support, battery and electronics mounts, the common gimbal and landing legs. Transfer vehicle mass, CG and inertia to the simulator with documented units and coordinate conventions. Archived geometry and successful CAD execution alone do not establish geometry acceptance.",
+        "parent": null
+      },
+      {
+        "id": "REQ-ZERO-PAYLOAD",
+        "element": "ElectronicHopper::zeroPayloadRequirement",
+        "text": "The hopper shall be a zero-payload demonstrator, with payload_mass equal to 0 kg.",
+        "parent": null
+      }
+    ],
+    "bounds": [
+      {
+        "requirement": "REQ-ATTITUDE-RECOVERY-ERROR",
+        "metric": "ElectronicHopper::SimulationAssessment::attitude_recovery_total_error",
+        "name": "attitude_recovery_total_error",
+        "unit": "\u00b0",
+        "minimum": null,
+        "maximum": 2.0,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-ATTITUDE-RECOVERY-HOLD",
+        "metric": "ElectronicHopper::SimulationAssessment::attitude_recovery_hold_duration",
+        "name": "attitude_recovery_hold_duration",
+        "unit": "s",
+        "minimum": 2.0,
+        "maximum": null,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-ATTITUDE-RECOVERY-RATE",
+        "metric": "ElectronicHopper::SimulationAssessment::attitude_recovery_body_rate_norm",
+        "name": "attitude_recovery_body_rate_norm",
+        "unit": "\u00b0/s",
+        "minimum": null,
+        "maximum": 2.0,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-ATTITUDE-RECOVERY-TIME",
+        "metric": "ElectronicHopper::SimulationAssessment::attitude_recovery_time",
+        "name": "attitude_recovery_time",
+        "unit": "s",
+        "minimum": null,
+        "maximum": 5.0,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-COMMON-GIMBAL",
+        "metric": "ElectronicHopper::HopperVehicle::gimbal_axis_count",
+        "name": "gimbal_axis_count",
+        "unit": "",
+        "minimum": 2.0,
+        "maximum": 2.0,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-HARDWARE-BUDGET",
+        "metric": "ElectronicHopper::ProcurementAssessment::purchased_vehicle_hardware_materials_cost",
+        "name": "purchased_vehicle_hardware_materials_cost",
+        "unit": "AUD",
+        "minimum": null,
+        "maximum": 499.99,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-HOVER-ALTITUDE-MAX",
+        "metric": "ElectronicHopper::SimulationAssessment::altitude_max_absolute_error",
+        "name": "altitude_max_absolute_error",
+        "unit": "m",
+        "minimum": null,
+        "maximum": 0.25,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-HOVER-ALTITUDE-RMS",
+        "metric": "ElectronicHopper::SimulationAssessment::altitude_rms_error",
+        "name": "altitude_rms_error",
+        "unit": "m",
+        "minimum": null,
+        "maximum": 0.1,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-HOVER-DURATION",
+        "metric": "ElectronicHopper::SimulationAssessment::hover_duration",
+        "name": "hover_duration",
+        "unit": "s",
+        "minimum": 300.0,
+        "maximum": null,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-HOVER-HEIGHT",
+        "metric": "ElectronicHopper::SimulationAssessment::hover_target_rise",
+        "name": "hover_target_rise",
+        "unit": "m",
+        "minimum": 5.0,
+        "maximum": 5.0,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-HOVER-HORIZONTAL-MAX",
+        "metric": "ElectronicHopper::SimulationAssessment::horizontal_radial_max_error",
+        "name": "horizontal_radial_max_error",
+        "unit": "m",
+        "minimum": null,
+        "maximum": 0.5,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-HOVER-HORIZONTAL-RMS",
+        "metric": "ElectronicHopper::SimulationAssessment::horizontal_radial_rms_error",
+        "name": "horizontal_radial_rms_error",
+        "unit": "m",
+        "minimum": null,
+        "maximum": 0.25,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-LANDING-DOWNWARD-SPEED",
+        "metric": "ElectronicHopper::SimulationAssessment::contacting_foot_downward_speed",
+        "name": "contacting_foot_downward_speed",
+        "unit": "m/s",
+        "minimum": null,
+        "maximum": 0.3,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-LANDING-HORIZONTAL-SPEED",
+        "metric": "ElectronicHopper::SimulationAssessment::contacting_foot_horizontal_speed",
+        "name": "contacting_foot_horizontal_speed",
+        "unit": "m/s",
+        "minimum": null,
+        "maximum": 0.2,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-LANDING-LEG-COUNT",
+        "metric": "ElectronicHopper::HopperVehicle::landing_leg_count",
+        "name": "landing_leg_count",
+        "unit": "",
+        "minimum": 3.0,
+        "maximum": 4.0,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-LANDING-TILT",
+        "metric": "ElectronicHopper::SimulationAssessment::landing_airframe_tilt",
+        "name": "landing_airframe_tilt",
+        "unit": "\u00b0",
+        "minimum": null,
+        "maximum": 5.0,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-SPINE-COUNT",
+        "metric": "ElectronicHopper::HopperVehicle::spine_count",
+        "name": "spine_count",
+        "unit": "",
+        "minimum": 1.0,
+        "maximum": 4.0,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      },
+      {
+        "requirement": "REQ-ZERO-PAYLOAD",
+        "metric": "ElectronicHopper::HopperVehicle::payload_mass",
+        "name": "payload_mass",
+        "unit": "kg",
+        "minimum": 0.0,
+        "maximum": 0.0,
+        "exclusive_minimum": false,
+        "exclusive_maximum": false
+      }
+    ],
+    "satisfactions": [],
+    "issues": []
+  }
+}

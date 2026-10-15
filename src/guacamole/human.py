@@ -244,9 +244,23 @@ class Humans:
                 if recipient and store.maybe("agent_state", recipient)
                 else None
             )
-            if recipient and state and state.status not in {"completed", "superseded"}:
+            if (
+                reply
+                and not reply.required
+                or (
+                    recipient
+                    and state
+                    and state.status not in {"completed", "superseded"}
+                )
+            ):
                 runtime = project.runtime
-                if state.status == "waiting" and runtime and runtime.run_id == run_id:
+                if (
+                    recipient
+                    and state
+                    and state.status == "waiting"
+                    and runtime
+                    and runtime.run_id == run_id
+                ):
                     agent = store.model("agent", recipient, AgentSpec)
                     runtime._wake(agent, state, "Human input")
                 return source

@@ -44,6 +44,7 @@ from .contracts import (
 from .decision import Decisions
 from .human import Humans
 from .integrations.sysml.registry import SysMLRegistry
+from .integrations.sysml.runtime import standard_library
 from .reviews import Reviews
 from .standards import parse, squash
 from .storage import Store
@@ -616,7 +617,7 @@ class Project:
         from sysml.toolkit import Library
 
         try:
-            sysml.standard_library()
+            standard_library()
             Library()
         except (sysml.SdkError, OSError) as exc:
             raise RuntimeError(f"The Systems Engineer needs the SysML Toolkit: {exc}")

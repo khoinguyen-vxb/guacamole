@@ -54,6 +54,7 @@ from guacamole.contracts import (
     Decide,
     Finish,
     MessageEnvelope,
+    OpenItem,
     Publish,
     PublishedFile,
     Rationale,
@@ -70,6 +71,162 @@ from guacamole.providers.litellm import _usage as litellm_usage
 
 
 class RuntimeTests(unittest.IsolatedAsyncioTestCase):
+    async def test_resolved_plan_input_allows_replanning_and_worker_recovery(self):
+        calls = []
+
+        def probe() -> str:
+            calls.append("probe")
+            return "ok"
+
+        class Replanner(TestReasoning):
+            def __init__(self):
+                self.spawned = False
+                self.packets = []
+
+            def requirements(self):
+                return fixture_requirement(project)
+
+            async def respond(self, packet):
+                data = json.loads(packet.prompt)
+                if data["agent"]["task_id"] == "chief":
+                    self.packets.append(packet)
+                    decision_id = data["agent"]["decision_id"]
+                    plan = (
+                        project.store.maybe("decision", decision_id)
+                        if decision_id
+                        else None
+                    )
+                    if plan is None or plan.stale:
+                        request = plan_request(
+                            project.store.list("requirement")[0].ref,
+                            tasks=(
+                                TaskAuthorization(
+                                    id="A",
+                                    objective="probe",
+                                    tools=(tool.definition.grant,),
+                                ),
+                            ),
+                        )
+                        candidate = request.candidates[0]
+                        candidate = candidate.model_copy(
+                            update={
+                                "plan": candidate.plan.model_copy(
+                                    update={
+                                        "inputs": (
+                                            *candidate.plan.inputs,
+                                            project.store.get("open_item", "gui").ref,
+                                        )
+                                    }
+                                )
+                            }
+                        )
+                        action = Decide(
+                            selected="fixture",
+                            request=request.model_copy(
+                                update={"candidates": (candidate,)}
+                            ),
+                        )
+                    elif not self.spawned:
+                        self.spawned = True
+                        action = Spawn(decision_id=plan.ref.id, task_id="A")
+                    else:
+                        action = Wait(reason="Fixture waits")
+                elif len(project.store.list("decision")) > 1 and not calls:
+                    action = ToolCall(tool=tool.definition.grant, arguments={})
+                else:
+                    action = Wait(reason="Fixture waits")
+                return AgentTurn(
+                    rationale=Rationale(objective="fixture", explanation="Fixture"),
+                    action=action,
+                )
+
+        with tempfile.TemporaryDirectory() as directory:
+            tools = ToolRegistry()
+            tool = tools.register(probe)
+            provider = Replanner()
+            with Project(Path(directory), tools=tools, reasoning=provider) as project:
+                original = OpenItem(
+                    id="gui", kind="missing_tool", description="Offline"
+                )
+                old_input = project.record_open_item(original)
+                result = await project.run(
+                    ProjectRequest(
+                        description="fixture",
+                        context=ContextSpec(max_input_tokens=300_000),
+                    )
+                )
+                old_plan = project.store.list("decision")[0].ref
+                worker = next(
+                    s for s in project.store.list("agent") if s.data["parent_id"]
+                )
+                # Model the same saved failure, including a stale pending explicit read.
+                artifact = project.store.put(
+                    "source",
+                    "pending",
+                    {"text": "old plan output"},
+                    actor="script",
+                    dependencies=(old_plan,),
+                )
+                valid = project.store.get("source", "brief").ref
+                state = project.store.model("agent_state", worker.ref.id, AgentState)
+                project.store.put(
+                    "agent_state",
+                    worker.ref.id,
+                    state.model_copy(
+                        update={
+                            "status": "blocked",
+                            "observation": {
+                                "selected": [
+                                    artifact.model_dump(mode="json"),
+                                    valid.model_dump(mode="json"),
+                                ]
+                            },
+                        }
+                    ),
+                    actor="script",
+                )
+                current_input = project.record_open_item(
+                    original.model_copy(
+                        update={
+                            "description": "Resolved",
+                            "resolved_by": (valid,),
+                        }
+                    )
+                )
+                with self.assertRaises(ValueError):
+                    project.decisions.plan(old_plan.id)
+                build = project.contexts.build
+
+                async def delayed_build(agent, *args, **kwargs):
+                    if agent.task_id == "A" and agent.decision_id == old_plan.id:
+                        # Its old context must fail after the new plan repaired its reads.
+                        async with asyncio.timeout(10):
+                            while (
+                                project.store.get("agent", agent.id).data["decision_id"]
+                                == old_plan.id
+                            ):
+                                await asyncio.sleep(0.01)
+                    return await build(agent, *args, **kwargs)
+
+                with patch.object(project.contexts, "build", delayed_build):
+                    await project.run(resume=result.run_id)
+                self.assertEqual(calls, ["probe"])
+                assigned = project.store.model("agent", worker.ref.id, AgentSpec)
+                self.assertIn(current_input, assigned.context.pinned)
+                self.assertNotIn(old_input, assigned.context.pinned)
+                self.assertNotEqual(assigned.decision_id, old_plan.id)
+                self.assertTrue(project.store.resolve(old_plan).stale)
+                recovered = next(
+                    p
+                    for p in provider.packets
+                    if any(o.item == f"decision:{old_plan.id}@1" for o in p.deferred)
+                )
+                self.assertNotIn(old_plan, recovered.sources)
+                self.assertIn(
+                    "unusable",
+                    json.loads(recovered.prompt)["state"]["review_blockers"][0],
+                )
+
     def test_context_shows_decision_evidence_snapshots_as_refs(self):
         ref = {"kind": "source", "id": "evidence", "revision": 1, "sha256": "hash"}
         content = {"text": "Historical engineering evidence " * 100}

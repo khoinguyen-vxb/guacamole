@@ -15,6 +15,8 @@ from typing import Any, Self
 import sysml
 from sysml.base import SdkError, UnresolvedReference
 
+from .runtime import standard_library
+
 # The Toolkit's standard-library cache and its stderr diagnostics are process-wide.
 LOCK = threading.RLock()
 
@@ -199,7 +201,7 @@ class SysMLAdapter:
 
     @classmethod
     def load(cls, files: Mapping[str, str]) -> Self:
-        library = sysml.standard_library()
+        library = standard_library()
         with tempfile.TemporaryFile() as diagnostics:
             # The Toolkit gives its reason for rejecting a file only on stderr.
             sys.stderr.flush()

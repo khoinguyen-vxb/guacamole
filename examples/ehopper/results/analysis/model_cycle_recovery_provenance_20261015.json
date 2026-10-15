@@ -1,0 +1,280 @@
+{
+  "status": "historical_provenance_only_not_engineering_verification",
+  "reason": "Model 3 invalidated its own prior-model-dependent inputs on publication.",
+  "original_model": {
+    "kind": "system_model",
+    "id": "system",
+    "revision": 3,
+    "sha256": "80d76085fda714ad1951e1e1d3607115c7875ba3c811f4c21f3b37e1fbe62ea6",
+    "locator": ""
+  },
+  "original_derived_from": [
+    {
+      "kind": "source",
+      "id": "79626f8bf0b5472c8ba568b4311c0d68",
+      "revision": 1,
+      "sha256": "09b7864c7330660333867769e8c515b3e1132b3b8e32a7a0412aa65cf8a2a5a1",
+      "locator": ""
+    },
+    {
+      "kind": "source",
+      "id": "49b30062efe1476d9a2faa01ee276653",
+      "revision": 1,
+      "sha256": "f0fc864bbe173351d10748ea2ea0c1ad4bbfbbae2977c917ec4528702b25710c",
+      "locator": ""
+    },
+    {
+      "kind": "source",
+      "id": "ea4eeff069b645a2bddfacac56bade5e",
+      "revision": 1,
+      "sha256": "64c166e6c1ea036193029d56a295f76e6dcd2a66c7832513cd57918aea3c0ba3",
+      "locator": ""
+    },
+    {
+      "kind": "source",
+      "id": "cedca4b22feb4a23b667cc67049eb339",
+      "revision": 1,
+      "sha256": "965206871fcbc016de478143d8b4eccfd5f86719b7be2bd408e59be63921dc87",
+      "locator": ""
+    },
+    {
+      "kind": "decision",
+      "id": "17534e6b12854073a06a0471fec47a84",
+      "revision": 1,
+      "sha256": "4645970a438c47923776a9155577d08631885e1920c3fc3c392185bfeb194d5f",
+      "locator": ""
+    },
+    {
+      "kind": "decision",
+      "id": "a37ef3716fce4eb2b2b35919d6cb0b97",
+      "revision": 1,
+      "sha256": "8e7cf79a28ee431b8be3dfece7bf4fca94e60e40a2fa62a0e416e3e4e171772d",
+      "locator": ""
+    },
+    {
+      "kind": "artifact",
+      "id": "PDR-PLANT-INTERFACE-CHECKPOINT-M2-01",
+      "revision": 1,
+      "sha256": "e971e5a21b703c9ddd094d4748fed375bf2545686017a06e35efae43a385ac07",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-ATTITUDE-RECOVERY-ERROR",
+      "revision": 3,
+      "sha256": "cc65d31f269dd63cc8c1d51db7abefccde7875c3358d9e7d8507761a64af8c42",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-ATTITUDE-RECOVERY-HOLD",
+      "revision": 2,
+      "sha256": "8cbb8eb2369b89bfb30971b530e06c6e459ce150c2516ddf9e0199e0ff077911",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-ATTITUDE-RECOVERY-RATE",
+      "revision": 3,
+      "sha256": "20773594cd1835be780e9d9b936668239de59ecec3ccab00dd309a4cddceb8b5",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-ATTITUDE-RECOVERY-TIME",
+      "revision": 2,
+      "sha256": "09a4199faf7a5c1e774858a036d920de790b70a1c67eaf04f5217ac9b6e7e812",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-COAXIAL-PROPULSION",
+      "revision": 1,
+      "sha256": "8d0465aa4890e40e640dea145e57a931572c5aef1e63515122aaf05080029aaf",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-COMMON-GIMBAL",
+      "revision": 1,
+      "sha256": "e894a99ae48b5324c8697b2fa8e88346c9cf107c22010ab3881aece7b7e78e86",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-EXPOSED-STRUCTURE",
+      "revision": 1,
+      "sha256": "0027f6767af9a81f843954516a89b2abae04ba6440a6e75c98633a1b209e8026",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-HARDWARE-BUDGET",
+      "revision": 2,
+      "sha256": "e03d6e7fa891dc5772d0410ab8963b445fa19641d6d9e5a493c90df76e58435d",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-HOVER-ALTITUDE-MAX",
+      "revision": 2,
+      "sha256": "0617ff0d7c07974b4214f71dbb40a8ee98a1736b349870307e0d1c19fe780445",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-HOVER-ALTITUDE-RMS",
+      "revision": 2,
+      "sha256": "f645c2fed083f7c69971f300a2de5f0d6441634817a0cd239598df65ce1d1108",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-HOVER-DURATION",
+      "revision": 2,
+      "sha256": "d62be118d2856fac47d6aa6129d90a4a08436c38a649e4d99f25921f12f10f8c",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-HOVER-HEIGHT",
+      "revision": 1,
+      "sha256": "c41ad28a46e5a6f2a35f2d67714f88307ed3037f2e8d0d3af62c83e0f6928840",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-HOVER-HORIZONTAL-MAX",
+      "revision": 2,
+      "sha256": "5445980bd34f3932808f9943fac2ba5745d4883da662139a494b6e42280163b6",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-HOVER-HORIZONTAL-RMS",
+      "revision": 2,
+      "sha256": "1f9dcef0d654ef3b3c772d3474b67f1126357fe85622a13e765eee7f839d03d3",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-LANDING-CONTACT-CLEARANCE",
+      "revision": 1,
+      "sha256": "b084ff1ba1ac73a08c5ce400a42e02f84be7d975f7783647c05b079d5beff45f",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-LANDING-DOWNWARD-SPEED",
+      "revision": 1,
+      "sha256": "8562b2166be305b167d135b229455aee89b587b13fe36c60efd2a8a209f613da",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-LANDING-GEAR-ARRANGEMENT",
+      "revision": 1,
+      "sha256": "205ea35e8bfea1d35359e310be0dfb66b77952dcecfbbcda34185d40f9b35aa6",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-LANDING-HORIZONTAL-SPEED",
+      "revision": 1,
+      "sha256": "5e5c5b2cefd90010ce9e5e16f676c0e0aa8c9aac7a9235d06743d00a5b0c0fd1",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-LANDING-LEG-COUNT",
+      "revision": 1,
+      "sha256": "dbe08aad041a57198bf5f5fc6249b21605e7ba51c698ba3048f0383bb14dd0e2",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-LANDING-TILT",
+      "revision": 2,
+      "sha256": "7d1eabdf6ae0b7363a86286948be18d67ef3198798f2b825444c4c38fa7e5ccb",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-OPERATING-ENVIRONMENT",
+      "revision": 1,
+      "sha256": "152067779769a660c1647c8610422e80f976f735066c500e7ef1789c167c3b2a",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-PDR-DELIVERY-PRESERVATION",
+      "revision": 1,
+      "sha256": "8f91063dc9a8226356fd935145b30b4d1ffbd904c4182901d933e56bedfcc36f",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-PROPULSION-BUDGET",
+      "revision": 1,
+      "sha256": "b80290769776268e2e177d17d68a91eafac21ae83eb0fa30e9ca9f7fd20573d7",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-PROPULSION-PLACEMENT",
+      "revision": 1,
+      "sha256": "63d8ef8fafcfcb894d873446dd04395486b7cbc3983b9c92da0ae69297e1522c",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-SIMULATOR-PID",
+      "revision": 1,
+      "sha256": "35926c9287fba5fca74b3d5af68f162645f8f137d69647811bd31aae68a03241",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-SPINE-COUNT",
+      "revision": 1,
+      "sha256": "0bd985475fae353b37d9a851bfd8e37e78c4ff124b0242d39e4b6c2788aa38bc",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-VEHICLE-CAD",
+      "revision": 1,
+      "sha256": "71c2296d8d40a0924f9b594b88fd8310a830d04c254542c319b7ab6a1d7205f0",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-ZERO-PAYLOAD",
+      "revision": 1,
+      "sha256": "7e1a069dcc1457de196c67b60224f47a49d8868d778b65505fd2996ec09573ac",
+      "locator": ""
+    }
+  ],
+  "original_plan": {
+    "kind": "decision",
+    "id": "a37ef3716fce4eb2b2b35919d6cb0b97",
+    "revision": 1,
+    "sha256": "8e7cf79a28ee431b8be3dfece7bf4fca94e60e40a2fa62a0e416e3e4e171772d",
+    "locator": ""
+  },
+  "original_interface": {
+    "kind": "decision",
+    "id": "17534e6b12854073a06a0471fec47a84",
+    "revision": 1,
+    "sha256": "4645970a438c47923776a9155577d08631885e1920c3fc3c392185bfeb194d5f",
+    "locator": ""
+  },
+  "original_interface_checkpoint": {
+    "kind": "artifact",
+    "id": "PDR-PLANT-INTERFACE-CHECKPOINT-M2-01",
+    "revision": 1,
+    "sha256": "e971e5a21b703c9ddd094d4748fed375bf2545686017a06e35efae43a385ac07",
+    "locator": ""
+  },
+  "model_files_unchanged": true
+}

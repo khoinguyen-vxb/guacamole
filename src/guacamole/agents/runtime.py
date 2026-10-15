@@ -35,6 +35,7 @@ from ..contracts import (
     InboxEntry,
     MessageEnvelope,
     Note,
+    Omission,
     OpenItem,
     ProjectRequest,
     ProjectResult,
@@ -187,7 +188,8 @@ class Runtime:
         store = self.project.store
         if chief.decision_id is None:
             return
-        tasks = {t.id: t for t in self.project.decisions.plan(chief.decision_id).tasks}
+        plan = self.project.decisions.plan(chief.decision_id)
+        tasks = {t.id: t for t in plan.tasks}
         decision = store.get("decision", chief.decision_id).ref
         for worker in self._agents():
             task = tasks.get(worker.task_id)
@@ -199,7 +201,20 @@ class Runtime:
                 or state.status in {"completed", "superseded"}
             ):
                 continue
-            pins = tuple(r for r in worker.context.pinned if r.kind != "decision")
+            previous_inputs = ()
+            if worker.decision_id:
+                previous = store.model("decision", worker.decision_id, DecisionRecord)
+                previous_plan = next(
+                    c.plan
+                    for c in previous.request.candidates
+                    if c.id == previous.result.selected
+                )
+                previous_inputs = previous_plan.inputs if previous_plan else ()
+            pins = tuple(
+                r
+                for r in worker.context.pinned
+                if r.kind != "decision" and r not in previous_inputs
+            )
             store.put(
                 "agent",
                 worker.id,
@@ -214,7 +229,11 @@ class Runtime:
                         # A replan is how the Chief escalates a running task's tier.
                         "tier": self._route(task)[0],
                         "context": worker.context.model_copy(
-                            update={"pinned": (*pins, decision)}
+                            update={
+                                "pinned": tuple(
+                                    dict.fromkeys((*pins, *plan.inputs, decision))
+                                )
+                            }
                         ),
                     }
                 ),
@@ -222,6 +241,31 @@ class Runtime:
                 request_id=state.request_id,
                 event="agent.plan_assigned",
             )
+            if "selected" in state.observation:
+                reads = Read.model_validate_json(
+                    encode({"refs": state.observation["selected"]})
+                )
+                retained = []
+                for ref in reads.refs:
+                    try:
+                        store.resolve(ref, current=True)
+                    except ValueError:
+                        store.event(
+                            "runtime",
+                            "agent.pending_reads_repaired",
+                            worker.id,
+                            {"removed": [ref.model_dump(mode="json")]},
+                            request_id=state.request_id,
+                        )
+                        continue
+                    retained.append(ref.model_dump(mode="json"))
+                state = state.model_copy(
+                    update={"observation": state.observation | {"selected": retained}}
+                )
+                self._save_state(worker, state)
+            if state.status in {"blocked", "waiting"}:
+                assigned = store.model("agent", worker.id, AgentSpec)
+                self._wake(assigned, state, "Replacement work plan")
 
     def _awaiting_human(self, agent_id: str) -> bool:
         return any(
@@ -754,6 +798,32 @@ class Runtime:
                 # Queue before assembly so the prompt is current when it is sent;
                 # the slot is released before the action runs tools.
                 async with self.calls:
+                    plan = (
+                        store.maybe("decision", agent.decision_id)
+                        if agent.id == self.chief_id and agent.decision_id
+                        else None
+                    )
+                    if plan is not None and plan.stale:
+                        # Let the Chief replace its plan; tool authorization still rejects it.
+                        call.agent = call.agent.model_copy(
+                            update={
+                                "context": call.agent.context.model_copy(
+                                    update={
+                                        "pinned": tuple(
+                                            r
+                                            for r in call.agent.context.pinned
+                                            if r != plan.ref
+                                        )
+                                    }
+                                )
+                            }
+                        )
+                        call.omissions.append(
+                            Omission(
+                                item=f"decision:{plan.ref.id}@{plan.ref.revision}",
+                                reason="Work plan is stale; decide a replacement before continuing work",
+                            )
+                        )
                     context_state = self._context_state(
                         agent, state, call.agent.context.pinned
                     )
@@ -1048,7 +1118,23 @@ class Runtime:
             changed = changed.model_copy(
                 update={"elapsed_s": state.elapsed_s + time.monotonic() - started}
             )
+            current = store.model("agent", agent.id, AgentSpec)
+            reassigned = (
+                changed.status == "blocked" and current.decision_id != agent.decision_id
+            )
+            if reassigned:
+                assigned = store.model("agent_state", agent.id, AgentState)
+                changed = changed.model_copy(
+                    update={
+                        "observation": changed.observation
+                        | {"selected": assigned.observation.get("selected", [])}
+                    }
+                )
             self._save_state(agent, changed)
+            if reassigned:
+                self._wake(
+                    current, changed, "Replacement work plan arrived during turn"
+                )
             # Senders only wake agents already waiting; catch messages sent mid-turn.
             if changed.status == "waiting" and any(
                 e.delivered_at and e.delivered_at >= since

@@ -48,6 +48,45 @@ def payload(project):
 
 
 class HumanTests(unittest.IsolatedAsyncioTestCase):
+    async def test_non_blocking_watchdog_reply_does_not_redirect_agents(self):
+        class Waiting(TestReasoning):
+            def requirements(self):
+                return payload(project)
+
+            async def respond(self, packet):
+                requirement = project.store.get("requirement", "payload").ref
+                action = (
+                    Wait(reason="Fixture waits")
+                    if project.store.list("decision")
+                    else Decide(request=plan_request(requirement), selected="fixture")
+                )
+                return turn(action)
+
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=Waiting()) as project,
+        ):
+            result = await project.run(brief())
+            plan = project.store.list("decision")[0].ref
+            states = {s.ref.id: s.data for s in project.store.list("agent_state")}
+            question = project.human.ask(
+                AskHuman(question="Compact optional context?", blocking=False),
+                sender="watchdog",
+                run_id=result.run_id,
+            )
+            project.human.reply(
+                question, "Compacted historical notes", author="test human"
+            )
+            self.assertEqual(project.activity.get(question).status, "completed")
+            self.assertFalse(project.store.resolve(plan).stale)
+            self.assertEqual(
+                states,
+                {s.ref.id: s.data for s in project.store.list("agent_state")},
+            )
+            self.assertFalse(
+                any(e.type == "agent.human_redirected" for e in project.events())
+            )
+
     async def test_question_reply_restart_and_amended_requirement(self):
         class Questioner(TestReasoning):
             calls = 0

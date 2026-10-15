@@ -1,0 +1,19 @@
+Project Electronic Hopper: build a self-landing hopper using
+electric motors and counter-rotating coaxial propellers. Reach approximately 5 m
+above takeoff level, sustain hover there for 5 minutes, then land under control.
+There is no specified propeller diameter limit. Keep purchased vehicle hardware and
+materials below 500 AUD, excluding tax and shipping. It is a zero-payload
+demonstrator flown in calm air near sea level. The photos in
+context/reference_images show flown designs of this kind.
+
+Scope: select the motors, coaxial propellers, ESCs and battery; design the
+editable vehicle CAD using the supplied FreeCAD MCP; diagnose, fix, improve
+and integrate PID control into the supplied tooling/6dof_hopper simulator.
+Deliver the propulsion trade study and priced BOM, native FCStd assembly and
+STEP/drawings, mass/CG/inertia data, runnable corrected simulator and PID code,
+gain configuration, repeatable verification scripts, logs and test procedures.
+Prepare the PDR package for these deliverables; CDR is out of scope for this run.
+context/brief.md is the current project brief: it records the agreed vehicle
+configuration, budget rules and simulation acceptance targets. Controller hardware
+remains open. Ask focused questions where missing requirements block selection;
+keep provisional assumptions explicit.

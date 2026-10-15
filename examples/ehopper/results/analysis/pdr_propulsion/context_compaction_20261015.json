@@ -1,0 +1,151 @@
+{
+  "status": "prepared_not_applied",
+  "reason": "Normal compaction rejects stale job_inputs; pinned decision also stale and must remain unchanged.",
+  "agent_id": "dd83659eacb74c8986318303f39aebe0",
+  "human_request_ids": [
+    "35b537203d6941b1bb89f83c11144f61",
+    "299ed81587c34525800772cc90aa0a0e"
+  ],
+  "summary": {
+    "text": "OPTIONAL CONTEXT COMPACTION. Exact revisions/hashes are in sources. job_inputs:83835e889f3541a78a4e61332244d9f2@1 contains the 2026-10-15 motor register; it is STALE after work-plan invalidation. summary:ed2e16f735e742908535c49e223c6688@1 covers archival 2026-10-11/12 sourcing and already-read PyThrust metadata. These are historical observations, not current authority, supplier quotations, accepted interfaces, computed results or calibration. Preserve all pins unchanged. Do not re-read these records or their summarized sources just to recover these facts; inspect new evidence only for a specific unresolved question.\n\n2026-10-15 register M01: original SunnySky X2814 KV900, exclude III/V3. https://sunnyskyusa.com/products/sunnysky-x2814-brushless-motors and https://www.buddyrc.com/products/sunnysky-x2814-brushless-motors . SS-X2814-900 $29.99 each, two proposed; currency/tax/stock/accessories/mass inclusions unresolved, shipping excluded. Claims:108g,35mm diameter,36mm body/54mm overall,4mm shaft,900rpm/V,52mOhm,Io .7A at10V,3–4S,570W,40A for30s only. Isolated (A,gf,W) records retained below; temperature entries47/48 have unknown scale/duration/conditions; RPM,torque,exact prop suffix/opposite-spin equivalence unknown. Never double isolated thrust for coaxial operation.\nM02: CR28161100 https://himaxmotors.com/products/himax-cr28161100-contra-rotating-motor-and-propeller-combo (Buddy RC same slug corroborates). $153.99/combo, currency/tax/stock unconfirmed;164g incl attachments,27.8×65mm,shafts4/9.5mm,4×3.5mm through-holes on43mm circle;1100rpm/V,350W,20000rpm,65C case max; per rotor6–16A efficient,20A/15s;3S35–40A supply,two25A ESCs. APC10x5E plus ambiguous MPI/MX9x7R. Rm/Io/coupled maps unknown. Independent commands needed for differential yaw; a Y-harness does not establish that interface.\nM03: CR35161030 https://www.buddyrc.com/products/copy-of-himax-cr28161100-contra-rotating-motor-and-propeller-combo :$199.99,SOLD OUT,currency/tax unconfirmed;275g incl adapter,35.3×64.3mm,shafts4.73/9.48mm,4×3.17mm holes on43mm circle;1030rpm/V,800W,12000rpm,65C;malformed Rm .0.035;Io front/rear4.8/2.3A at10V;30–36A efficient/rotor,40A/15s;3S70–80A supply,two35A ESCs (rating conflict). APC12x6EP/P plus11x8E suffix conflict. No coupled map or inspected drawing/manual.\nM04 search-only: Buddy RC comparison opening failed/old crawl; CR2816 indexed440W/69oz/Rm .048/Io1.8 versus M02; CR3516 indexed800W/98oz/Rm .035/Io2.0 versus M03. Ibcinyou indexed72oz/440W/two20A ESCs. None establishes current combined-module maps or thrust/current pairing.\nM05 https://www.redwingrc.com/product.php?productid=2219 :$83.99 refers ambiguously to DW-CRM2208 1600KV, not established for CRM2413; two-stock field/restock conflict. Currency/tax/MOQ/package unknown. Listed1lb is not installed motor mass. Images/specifications uninspected; dimensions/performance unknown.\n\nArchive leads, not current specs/prices: APC13x6.5E/EP(3S) or11x5.5E/EP(4S), each$5.73/$4.17,1.06/.81oz,hub .80×.41in,bore1/4in,LPAR06E rings; mass inclusion,retention/orientation unresolved. apcprop.com product pages and technical-information/rpm-limits/ (Thin Electric150000/diameter_in rpm; confirm category).\nHobbywing Skywalker V2:80060442 50A3–4S,36g,5V5A BEC differs from30216400 50A-6S3–6S,68g,5V6A BEC; duty/cooling/response unknown. Joybox AUD45.95 tax-inclusive observation has URL/variant/availability conflict; no established ex-tax price. Never assume parallel BEC outputs safe.\nZeee 3S5200mAh11.1V330±15g136×43.5×26mm(height conflict) and4S3300mAh14.8V~355g132×43×29mm;2packs$76.99/$72.99 not established AU/currency/ex-tax quotations.100C marketing is not qualification; sag/resistance/usable energy/thermal duty unknown.\nHitec35245S HS-5245MG:32g,32.4×16.8×30.8mm,24spline,4.8–6V,4.4/5.5kgf cm,.15/.12s per60deg,idle/no-load/stall3/300/1200mA;old AU lead AUD79.99.32225S HS-225MG:31g,32.4×16.8×31mm,4.8–6V,8/300/1200mA;old AUD59.99;6V torque/speed conflict4.8/.11 vs chart4.4/.13. Continuous torque,loaded response,protocol,geometry,thermal duty unknown. Hobbywing30607000 UBEC5A V2:2–8S,5/6/7.4V,5A continuous/15A instantaneous,50×17×10mm,21g;peak duration/brownout/price basis unknown;7.4V exceeds servo ratings.30603000 discontinued is another model. Exact archival supplier URLs remain in cited summary; use them for targeted new research, not accepted current evidence.\n\nNext: retain separate and integrated branches; stationary support/load path unresolved, old geometry failed interference. Exchange with actual CAD/plant peer IDs. Model upper/lower thrust and torque interference separately, spacing/domain, torque-balanced trim with simultaneous yaw reserve,independent commands,lag,current/voltage/thermal limits/calibration. Equal RPM does not prove torque cancellation. Full installed mass includes one battery,both propulsion channels,actuators/mechanism,control/sensors/abort,regulation/distribution,harness/connectors,retention/fasteners/structure; avoid CAD/commercial mass duplication;unknown is not zero. Purchase complete minimum packs/two batteries while one flies;PETG mass included,printed-part cost excluded;ground equipment separate,none presumed owned. Cap499.99AUD after .01AUD quantization. Full mission:spool-up,climb to5m,acquisition,≥300s hover,descent/landing,auxiliary losses,sag/usable energy/reserve. No complete numeric mass/cost/energy trade or physical verification established.\nPyThrust tooling/6dof_hopper/PyThrust README/pyproject already read:setuav-pythrust,Python≥3.10,numpy≥1.20,scipy≥1.7;optional matplotlib/OpenMDAO/pytest/docs,setuptools dynamic version and pythrust* discovery. Actual entry points/loaders/raw datasets/imports remain unverified; inspect source for archived missing-value-zero/suppressed-error warning. Preserve original repositories;outputs results/;no installation/source modification authorized by this note. Need current prop retention,ESC,battery,actuator/control evidence and CAD moving-group mass/inertia,pivot/thrust offsets,travel/rate,linkage/friction/cable loads before selection;stall torque is not continuous joint capability. No final selection/procurement approval.\n\nM01 exact isolated tables from saved job inputs:\n- APC13x6.5, 11.1 V: (5,500,55.5); (8.7,750,96.57); (13,1000,144.3); (18.3,1250,203.13); (24.2,1500,268.62); (27.6,1650,306.36); (29.5,1750,327.45).\n- APC11x5.5, 14.8 V: (4.5,500,66.6); (7.9,750,116.92); (11.7,1000,173.16); (15.8,1250,233.84); (20.6,1500,304.88); (25.7,1750,380.36); (29.3,1950,433.64).",
+    "sources": [
+      {
+        "kind": "job_inputs",
+        "id": "83835e889f3541a78a4e61332244d9f2",
+        "revision": 1,
+        "sha256": "6400627dd7cfab531f67b95b12204d1e0e3bdd6d522971e653385ca6d6981352",
+        "locator": ""
+      },
+      {
+        "kind": "summary",
+        "id": "ed2e16f735e742908535c49e223c6688",
+        "revision": 1,
+        "sha256": "dc35ed74a3305eab0149e780c4afe2b8df0e6c61a9cd5ae723cf51c37bf7c630",
+        "locator": ""
+      },
+      {
+        "kind": "source",
+        "id": "e1f8af934c4e436299f3aede0e5634df",
+        "revision": 1,
+        "sha256": "4a1770dd08216e6a372ffea99f6d1cde8b04bf0a0ac6090d680fdda5bb4f79ab",
+        "locator": ""
+      },
+      {
+        "kind": "source",
+        "id": "9c4a2e029b464910b3cf466e1a04417a",
+        "revision": 1,
+        "sha256": "ad54b1ba2131c1afb7b047b91bf7bf20c1bf289184c874343ba0577816136e7d",
+        "locator": ""
+      },
+      {
+        "kind": "source",
+        "id": "8d84e6fec88942a6bc1e9cd3ec1e94b4",
+        "revision": 1,
+        "sha256": "ecfcabcf884fa65941c1bccb224d4025c9c42db7a5a09f85e4436c92efd745eb",
+        "locator": ""
+      },
+      {
+        "kind": "source",
+        "id": "inventory",
+        "revision": 6,
+        "sha256": "5af7f20ab8d67eee9b965d7bc92fb8726027ccf1aa5769c7776d180c525bac87",
+        "locator": ""
+      },
+      {
+        "kind": "source",
+        "id": "1e3aeb48872c4f2a81441477b8f02bf5",
+        "revision": 1,
+        "sha256": "c09494fdbcb6f76a6733a1606a37e09cb0552db73f17eb48474e71fca5f09d1c",
+        "locator": ""
+      },
+      {
+        "kind": "source",
+        "id": "07b768fde00242cdb3bc10a2b997386a",
+        "revision": 1,
+        "sha256": "ac4bf67326d45df1c42a1133162e8072a34f8980999d9e5681d8bd4e22f00121",
+        "locator": ""
+      }
+    ]
+  },
+  "stale_sources": [
+    {
+      "kind": "job_inputs",
+      "id": "83835e889f3541a78a4e61332244d9f2",
+      "revision": 1,
+      "sha256": "6400627dd7cfab531f67b95b12204d1e0e3bdd6d522971e653385ca6d6981352",
+      "locator": ""
+    }
+  ],
+  "pinned_unchanged": [
+    {
+      "kind": "decision",
+      "id": "b8988137b7274bddb05c87f7884c81fd",
+      "revision": 1,
+      "sha256": "e8d05ce8385800e717ccf72701f2c3101e4e7ddadbb6841acc242003deafed0b",
+      "locator": ""
+    },
+    {
+      "kind": "system_model",
+      "id": "system",
+      "revision": 1,
+      "sha256": "555c3753f99fdc172ff087527158537f0264eb7ffe12861692c2db71f3dde57b",
+      "locator": ""
+    },
+    {
+      "kind": "source",
+      "id": "79626f8bf0b5472c8ba568b4311c0d68",
+      "revision": 1,
+      "sha256": "09b7864c7330660333867769e8c515b3e1132b3b8e32a7a0412aa65cf8a2a5a1",
+      "locator": ""
+    },
+    {
+      "kind": "source",
+      "id": "cedca4b22feb4a23b667cc67049eb339",
+      "revision": 1,
+      "sha256": "965206871fcbc016de478143d8b4eccfd5f86719b7be2bd408e59be63921dc87",
+      "locator": ""
+    },
+    {
+      "kind": "requirement",
+      "id": "REQ-HARDWARE-BUDGET",
+      "revision": 2,
+      "sha256": "e03d6e7fa891dc5772d0410ab8963b445fa19641d6d9e5a493c90df76e58435d",
+      "locator": ""
+    },
+    {
+      "kind": "source",
+      "id": "49b30062efe1476d9a2faa01ee276653",
+      "revision": 1,
+      "sha256": "f0fc864bbe173351d10748ea2ea0c1ad4bbfbbae2977c917ec4528702b25710c",
+      "locator": ""
+    },
+    {
+      "kind": "source",
+      "id": "inventory",
+      "revision": 6,
+      "sha256": "5af7f20ab8d67eee9b965d7bc92fb8726027ccf1aa5769c7776d180c525bac87",
+      "locator": ""
+    },
+    {
+      "kind": "source",
+      "id": "4591c11805114e1181cff6c9c9b23835",
+      "revision": 1,
+      "sha256": "6bddaec3c04133d06d611cc3be3a5ae23836ea87ecbf66b71b032acccc4cc3bf",
+      "locator": ""
+    },
+    {
+      "kind": "source",
+      "id": "e295fdb801bf43ffa0fd803613689666",
+      "revision": 1,
+      "sha256": "d4be878271780ca19741153de7c6c188e7a30d21ed900906c017f192f82ba56e",
+      "locator": ""
+    },
+    {
+      "kind": "open_item",
+      "id": "OI-FREECAD-GUI-CONNECTIVITY",
+      "revision": 1,
+      "sha256": "d3cd88edde0e641b1a03aeb79f74583f9db09df66083e6c804d0c03e155aa51c",
+      "locator": ""
+    }
+  ]
+}

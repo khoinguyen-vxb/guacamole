@@ -190,6 +190,12 @@ class SysMLRegistry:
                 ),
             )
             invalidated = self._revalidate(ref, report, actor)
+            if store.resolve(ref).stale:
+                raise ValueError(
+                    "Model revision would invalidate its own inputs. Cite independent "
+                    "sources or requirements in derived_from; keep prior-model "
+                    "decisions and outputs as historical references in the summary."
+                )
         self._export(ref, model, base)
         return ref, invalidated
 

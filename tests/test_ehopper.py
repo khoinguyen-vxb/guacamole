@@ -27,11 +27,28 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
             await ehopper.main()
         self.assertTrue(project.call_args.kwargs["reasoning"].web_search)
 
-    def test_inventory_and_tool_gates(self):
+    def test_sysml_runtime_uses_repository_assets(self):
+        library = Path("/tmp/sysml/stdlib")
+        native = Path("/tmp/sysml/libsysmlv2_abi.so")
+
+        def glob(pattern):
+            return [library] if pattern.endswith("sysml/stdlib") else [native]
+
+        with (
+            patch.dict(os.environ, {}, clear=True),
+            patch.object(ehopper.Path, "glob", side_effect=glob),
+        ):
+            ehopper.configure_sysml_runtime()
+            self.assertEqual(os.environ["GUACAMOLE_SYSML_LIBRARY"], str(library))
+            self.assertEqual(os.environ["SYSMLV2_ABI"], str(native))
+
+    async def test_inventory_and_tool_gates(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             with Project(root / "state", sandbox=root / "outputs") as project:
                 ehopper.register_tools(project)
+                (project.sandbox / "sysml/model.sysml").parent.mkdir(parents=True)
+                (project.sandbox / "sysml/model.sysml").write_text("package Model {}")
                 request = ehopper.project_request(project, ContextSpec())
                 self.assertIn(ehopper.DOCUMENTS / "brief.md", request.documents)
                 self.assertEqual(
@@ -51,6 +68,17 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                     self.assertFalse(project.tools.get(name).definition.requires_plan)
                 self.assertTrue(
                     project.tools.get("freecad_run@1").definition.requires_plan
+                )
+                listed = await project.call(
+                    project.tools.get("list_files@1"), {"path": "sysml"}
+                )
+                self.assertEqual(listed, (str(project.sandbox / "sysml/model.sysml"),))
+                self.assertEqual(
+                    await project.call(
+                        project.tools.get("read_text@1"),
+                        {"path": "sysml/model.sysml"},
+                    ),
+                    "package Model {}",
                 )
 
     async def test_cad_outputs_errors_and_path_boundary(self):

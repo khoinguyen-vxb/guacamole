@@ -1,0 +1,203 @@
+{
+  "schema": "hopper.propulsion_source_register/1",
+  "register_id": "M2-04",
+  "task": "pdr_propulsion_trade",
+  "access_date": "2026-10-15",
+  "authority": {
+    "system_model": {"kind":"system_model","id":"system","revision":2,"sha256":"4c93f9bb676b0e59572034a4c2f51438a8d94cd2aa7d9af7830964ee72219b21"},
+    "work_plan": {"kind":"decision","id":"a37ef3716fce4eb2b2b35919d6cb0b97","revision":1,"sha256":"8e7cf79a28ee431b8be3dfece7bf4fca94e60e40a2fa62a0e416e3e4e171772d"}
+  },
+  "status": "Comparative sourcing and calculation inputs only; no selected components, executed budget, physical verification or compliance claim.",
+  "method": "Provider-side live web retrieval. Search infrastructure may serve cached content. Access date is not quotation date or stock confirmation. Product images and drawings were not visually inspected or measured in this action.",
+  "history": "The current brief and previous-run index were reviewed. Compacted history supplied targeted leads only. This is a new register using fresh retrieval, not revalidation or replacement of the stale revision-1 motor register. Original sources and earlier outputs remain unchanged.",
+  "peer_followup": {
+    "message_id": "68b70fe958ff40188ce6cb7d85304eba",
+    "sender": "5204f2fe64ac4fae9fc167dbc52ba848",
+    "treatment": "ESC product and policy pages independently retrieved below. The earlier search-stock value of two is retained as a peer-reported observation, not independently reproduced here. APC observations remain in published M2-02; no currency inference resolves them."
+  },
+  "sources": [
+    {"id":"S01","access_date":"2026-10-15","url":"https://sunnyskyusa.com/products/sunnysky-x2814-brushless-motors","locator":"KV900 specifications and APC13x6.5/APC11x5.5 tables, retrieved HTML lines 65-103","citation":"[SunnySky KV900 specifications and isolated test tables](https://sunnyskyusa.com/products/sunnysky-x2814-brushless-motors)"},
+    {"id":"S02","access_date":"2026-10-15","url":"https://www.buddyrc.com/products/sunnysky-x2814-brushless-motors","locator":"SKU, selected KV and price, retrieved HTML lines 288-322","citation":"[Buddy RC SS-X2814-900 listing](https://www.buddyrc.com/products/sunnysky-x2814-brushless-motors)"},
+    {"id":"S03","access_date":"2026-10-15","url":"https://himaxmotors.com/products/himax-cr28161100-contra-rotating-motor-and-propeller-combo","locator":"Price, package and specifications, retrieved HTML lines 67-100","citation":"[Himax CR28161100 combo specifications](https://himaxmotors.com/products/himax-cr28161100-contra-rotating-motor-and-propeller-combo)"},
+    {"id":"S04","access_date":"2026-10-15","url":"https://hobbystation.co.nz/hobbywing-skywalker-50a-v2-50-amp-brushless-esc-3-4s/?setCurrencyId=2","locator":"Product price/SKU/stock/specifications, lines 1262-1333; currency footer line 1464","citation":"[Hobby Station 80060442, AUD-selected view](https://hobbystation.co.nz/hobbywing-skywalker-50a-v2-50-amp-brushless-esc-3-4s/?setCurrencyId=2)"},
+    {"id":"S05","access_date":"2026-10-15","url":"https://hobbystation.co.nz/contact-us-account/","locator":"GST policy line 497 and NZD footer line 579","citation":"[Hobby Station currency and GST policy](https://hobbystation.co.nz/contact-us-account/)"},
+    {"id":"S06","access_date":"2026-10-15","url":"https://hobbytechtoys.com.au/products/hobbywing-80060442-skywalker-v2-50a-3-4s-5a-bec-brushless-esc","locator":"Product identity, SKU, price and unavailable label, lines 495-509","citation":"[Hobbytech HW80060442 listing](https://hobbytechtoys.com.au/products/hobbywing-80060442-skywalker-v2-50a-3-4s-5a-bec-brushless-esc)"},
+    {"id":"S07","access_date":"2026-10-15","url":"https://hobbytechtoys.com.au/pages/payment-methods","locator":"GST Pricing, lines 499-501","citation":"[Hobbytech AUD and 10-percent GST policy](https://hobbytechtoys.com.au/pages/payment-methods)"}
+  ],
+  "motor_candidates": [
+    {
+      "id":"SS_X2814_900_ORIGINAL",
+      "manufacturer_model":"SunnySky X2814 KV900, original X series",
+      "supplier_part_number":"SS-X2814-900",
+      "exclude_variants":["X2814 III","X2814 V3","other KV windings"],
+      "sources":["S01","S02"],
+      "candidate_installed_quantity":2,
+      "candidate_purchase_quantity":2,
+      "quantity_status":"Study branch, not a selected assembly",
+      "vendor_claims": {
+        "mass":{"value":108,"unit":"g","scope":"Per motor; accessories and lead inclusions unresolved"},
+        "rotor_diameter":{"value":35,"unit":"mm"},
+        "body_length_without_shaft":{"value":36,"unit":"mm"},
+        "listed_overall_length":{"value":54,"unit":"mm"},
+        "shaft_diameter":{"value":4,"unit":"mm"},
+        "kv":{"value":900,"unit":"rpm/V"},
+        "resistance":{"value":52,"unit":"mOhm","measurement_convention":null},
+        "no_load_current":{"value":0.7,"unit":"A","test_voltage_V":10},
+        "lipo_cell_count_range":[3,4],
+        "listed_power":{"value":570,"unit":"W","qualified_duration_s":null},
+        "listed_current":{"value":40,"unit":"A","duration_s":30}
+      },
+      "isolated_tables": [
+        {
+          "id":"SS900_APC13x6p5_11p1V",
+          "source":"S01",
+          "source_propeller_label":"APC13x6.5",
+          "exact_propeller_suffix":null,
+          "test_voltage_V":11.1,
+          "columns":["current_A","thrust_gf","electrical_power_W"],
+          "rows":[[5,500,55.5],[8.7,750,96.57],[13,1000,144.3],[18.3,1250,203.13],[24.2,1500,268.62],[27.6,1650,306.36],[29.5,1750,327.45]],
+          "temperature_entry":{"value":47,"printed_unit":"degree symbol only","scale":null,"duration_s":null}
+        },
+        {
+          "id":"SS900_APC11x5p5_14p8V",
+          "source":"S01",
+          "source_propeller_label":"APC11x5.5",
+          "exact_propeller_suffix":null,
+          "test_voltage_V":14.8,
+          "columns":["current_A","thrust_gf","electrical_power_W"],
+          "rows":[[4.5,500,66.6],[7.9,750,116.92],[11.7,1000,173.16],[15.8,1250,233.84],[20.6,1500,304.88],[25.7,1750,380.36],[29.3,1950,433.64]],
+          "temperature_entry":{"value":48,"printed_unit":"degree symbol only","scale":null,"duration_s":null}
+        }
+      ],
+      "unknowns":["RPM at table points","Measured aerodynamic torque","Current measurement boundary and test ESC","Opposite-handed propeller equivalence","Throttle mapping","Air density and test uncertainty","Mission-duration thermal capability","Mounting-hole pattern and retention drawing","Complete installed accessory mass"],
+      "qualification":"Tables describe isolated tests only. Thirty-second current wording does not qualify continuous 300-second hover. No extrapolation, doubled coaxial thrust or torque cancellation is established."
+    },
+    {
+      "id":"HIMAX_CR28161100",
+      "manufacturer_part_number":"CR28161100",
+      "sources":["S03"],
+      "candidate_installed_quantity":1,
+      "candidate_purchase_quantity":1,
+      "package":"Contra-rotating motor combo with APC10X5E and MPI 9X7R; later recommendation calls rear propeller MX9x7R. Identity conflict unresolved.",
+      "vendor_claims": {
+        "mass":{"value":164,"unit":"g","scope":"Motor with prop attachments; propeller mass inclusion not established"},
+        "diameter":{"value":27.8,"unit":"mm"},
+        "length":{"value":65,"unit":"mm"},
+        "shaft_diameters_front_rear":{"value":[4.0,9.5],"unit":"mm"},
+        "mount":{"hole_count":4,"through_hole_diameter_mm":3.5,"bolt_circle_diameter_mm":43,"drawing_inspected":false},
+        "kv":{"value":1100,"unit":"rpm/V"},
+        "listed_max_power":{"value":350,"unit":"W","scope_and_duration":"Not sufficiently defined"},
+        "listed_max_speed":{"value":20000,"unit":"rpm"},
+        "listed_max_case_temperature":{"value":65,"unit":"degC"},
+        "efficient_current_per_rotor_A":[6,16],
+        "maximum_current_per_rotor":{"value":20,"unit":"A","duration_s":15},
+        "recommended_battery":{"lipo_cells":3,"continuous_current_A":[35,40]},
+        "recommended_esc":{"quantity":2,"current_rating_A":25},
+        "resistance":null,
+        "no_load_current":null
+      },
+      "coupled_performance_map":null,
+      "qualification":"Vendor recommends common-throttle Y connection; that does not establish independent differential-yaw control. Neither aircraft-weight recommendations nor historical advertised thrust substitutes for paired thrust/torque/current data. Mount dimensions are textual claims, not accepted geometry."
+    }
+  ],
+  "price_observations": [
+    {
+      "id":"PRICE_SS900_BUDDY",
+      "component":"SS_X2814_900_ORIGINAL",
+      "source":"S02",
+      "amount":"29.99",
+      "display_symbol":"$",
+      "currency":null,
+      "listing_unit":"one motor",
+      "listed_pack_quantity":1,
+      "minimum_order_quantity_confirmed":null,
+      "minimum_order_note":"No larger minimum stated",
+      "stock":"Add-to-cart present; dispatchable quantity unconfirmed",
+      "tax_treatment":"Unknown",
+      "shipping_treatment":"Excluded from project budget; destination charge unconfirmed",
+      "net_AUD":null
+    },
+    {
+      "id":"PRICE_CR2816_HIMAX",
+      "component":"HIMAX_CR28161100",
+      "source":"S03",
+      "amount":"153.99",
+      "display_symbol":"$",
+      "currency":null,
+      "listing_unit":"one motor-and-propeller combo",
+      "listed_pack_quantity":1,
+      "minimum_order_quantity_confirmed":null,
+      "minimum_order_note":"No larger minimum stated",
+      "stock":"Add-to-cart present; dispatchable quantity unconfirmed",
+      "tax_treatment":"Unknown",
+      "shipping_treatment":"Excluded from project budget; destination charge unconfirmed",
+      "net_AUD":null
+    },
+    {
+      "id":"PRICE_ESC_HOBBYSTATION",
+      "manufacturer_part_number":"80060442",
+      "sources":["S04","S05"],
+      "amount":"38.22",
+      "currency":"AUD",
+      "currency_scope":"Explicit selected product display; transaction currency still requires confirmation",
+      "listing_unit":"one ESC",
+      "listed_pack_quantity":1,
+      "minimum_order_quantity_confirmed":null,
+      "minimum_order_note":"No larger minimum stated",
+      "stock_observed":7,
+      "dispatch_claim":"Next day",
+      "stock_conflict":"Chief reported an earlier search excerpt with two units; this retrieval displayed seven. Neither is a reservation.",
+      "tax_treatment":"Generic policy states NZD prices include GST; selected page displays AUD. Export tax treatment and applicable deduction unresolved.",
+      "shipping_treatment":"Calculated at checkout; excluded from project budget",
+      "net_AUD":null,
+      "corroborating_specs":{"lipo_cells":[3,4],"continuous_A":50,"peak_A":70,"BEC_V":5,"BEC_A":5,"dimensions_mm":[60,25,8],"mass_g":36},
+      "qualification":"Advertised ratings only; peak duration, installed cooling and mass inclusions remain unresolved."
+    },
+    {
+      "id":"PRICE_ESC_HOBBYTECH",
+      "manufacturer_part_number":"80060442",
+      "supplier_part_number":"HW80060442",
+      "sources":["S06","S07"],
+      "amount":"54.99",
+      "currency":"AUD",
+      "listing_unit":"one ESC",
+      "listed_pack_quantity":1,
+      "minimum_order_quantity_confirmed":null,
+      "minimum_order_note":"No larger minimum stated",
+      "stock":"Unavailable label despite add-to-cart control; not established procurable",
+      "tax_treatment":"Includes 10 percent GST, explicitly established by supplier policy",
+      "tax_fraction":"0.10",
+      "net_AUD_expression":"Decimal('54.99') / Decimal('1.10')",
+      "net_AUD":null,
+      "shipping_treatment":"Separately calculated at checkout; excluded from project budget",
+      "qualification":"Expression is a reproducible calculation basis, not an executed result, supplier net quotation or availability confirmation."
+    }
+  ],
+  "calculation_rules": {
+    "unknown_representation":"null means unavailable, never zero",
+    "currency_conversion":"Do not convert unidentified dollar currencies. Any later FX conversion requires its own dated source, rate direction and rounding basis.",
+    "money":"Use decimal arithmetic. Retain unrounded source-derived amounts and document final 0.01 AUD quantization. Missing prices prevent a complete purchased_vehicle_hardware_materials_cost result.",
+    "units":"Preserve source units. Convert gf to N explicitly using standard gravity; these are unit conversions, not new measurements.",
+    "interpolation":"Any interpolation must retain table identity, voltage, supported range and provenance. RPM, shaft torque and a 300-second thermal limit cannot be recovered from these tables alone.",
+    "paired_model":"Expose separate upper/lower thrust and torque interference parameters, geometry dependence and uncertainty. Solve collective demand and torque balance simultaneously, then evaluate differential-yaw headroom at that same operating point. Equal commands or equal RPM do not establish trim.",
+    "electrical_model":"Battery bus current is not motor phase current. Couple both propulsion channels and auxiliaries to loaded voltage. Distinguish assumed voltage scaling and loss models from vendor evidence; do not infer calibrated torque from battery current and KV alone.",
+    "response_model":"Motor/ESC lag, command slew, transport delay and loaded gimbal response remain separate uncalibrated parameters. The Skywalker manual acceleration settings in M2-02 are not measured first-order time constants.",
+    "mission":"Include spool-up, climb, acquisition, uninterrupted 300-second hover, descent, touchdown/settling and auxiliary conversion losses. One battery flies; charge the required whole two-battery purchase package. Reserve thresholds remain unapproved.",
+    "mass":"Final sizing must use complete CAD-reconciled installed mass, with commercial and density-based ownership counted once. Study allowances must remain labelled and cannot be described as measured CAD mass.",
+    "integrated_branch":"Leave unsupported CR28161100 thrust/torque performance unknown; do not transplant SunnySky curves or assign historical combined-thrust claims to this module."
+  },
+  "next_work": [
+    "Publish this register and exchange updated component evidence with CAD.",
+    "Create explicit installed and whole-purchase ledgers, including controller/sensing/abort alternatives, power and electrical ancillaries, mechanism, structure and retention; separately price reusable ground equipment.",
+    "Write and execute bounded complete-mass and full-mission sensitivity calculations, preserving unsupported regions and assumptions; retain an artifact-bound verification program.",
+    "Inspect PyThrust entry points, loaders and relevant raw data before importing or executing that backend. No PyThrust execution, installation or source modification occurred here.",
+    "Return numerical alternatives and focused missing-data requests to the Chief before any selection."
+  ],
+  "selection_blockers": [
+    "Exact motor/propeller mounting, retention and included-mass definitions",
+    "Paired thrust/torque/current calibration and mission-duration electrical/thermal domains",
+    "Battery usable terminal energy, sag and exact deliverable two-pack quotation",
+    "Unresolved supplier currency/tax/stock and complete ancillary procurement",
+    "Actual CAD mass, support geometry and loaded gimbal capability"
+  ]
+}

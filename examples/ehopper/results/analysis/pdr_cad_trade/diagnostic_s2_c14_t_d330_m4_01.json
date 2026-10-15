@@ -1,0 +1,4271 @@
+{
+  "schema": "hopper_cad_measurements/1",
+  "authority": {
+    "system_model": {
+      "kind": "system_model",
+      "id": "system",
+      "revision": 4,
+      "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75"
+    },
+    "work_plan": {
+      "kind": "decision",
+      "id": "99f7bb629eef45b89fa38d27c803868c",
+      "revision": 1,
+      "sha256": "e5af8e2f56f7c851b65518b129f39550be73911f56461279cbbb1e85e1cdd5f0"
+    },
+    "interface": {
+      "kind": "decision",
+      "id": "88561ff8b3ba4e8286cebd95a93e3b08",
+      "revision": 1,
+      "sha256": "ad6662afab9685585264c86e052c246996d23f4369c6432b56094a42a9187c04"
+    }
+  },
+  "candidate_id": "diagnostic_s2_c14_t_d330_m4_01",
+  "datum_C_mm": [
+    0,
+    0,
+    0
+  ],
+  "rows": [
+    {
+      "object_name": "FixedLegAttachment_Cut2",
+      "instance_id": "FixedLegAttachment_Cut2",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 42020.17885420541,
+        "bounds_C_mm": [
+          -105.48789696750747,
+          -100.0,
+          -26.255522687998806,
+          105.48789696750744,
+          120.50558911905667,
+          5.1179939922671265
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.05252522356775677,
+        "centroid_C_mm": [
+          7.47902663895838e-08,
+          2.049122084227448e-08,
+          -3.8138405604937407
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            0.0002412465555324327,
+            -6.136098170053846e-14,
+            -3.700184529755921e-15
+          ],
+          [
+            -6.136098170053846e-14,
+            0.00024124655540522328,
+            3.812739976707802e-15
+          ],
+          [
+            -3.700184529755921e-15,
+            3.812739976707802e-15,
+            0.000480062773630809
+          ]
+        ],
+        "volume_mm3": 42020.17885420541,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "LandingTube0",
+      "instance_id": "LandingTube0",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1600,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material CFRP_RW assumed; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 10256.85495338818,
+        "bounds_C_mm": [
+          -3.999999999999994,
+          97.9762263278725,
+          -380.77379581581346,
+          4.000000000000023,
+          382.0237736721276,
+          -1.2262041841865403
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.01641096792542109,
+        "centroid_C_mm": [
+          1.180472019066636e-14,
+          240.0000000000001,
+          -191.00000000000006
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            0.00029760159799485934,
+            -6.777199007782231e-21,
+            7.14285511301277e-21
+          ],
+          [
+            -6.777199007782231e-21,
+            0.00019223526995383456,
+            0.00014224454285538275
+          ],
+          [
+            7.14285511301277e-21,
+            0.00014224454285538275,
+            0.00010557146514009209
+          ]
+        ],
+        "volume_mm3": 10256.85495338818,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "Foot0",
+      "instance_id": "Foot0",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 5438.207577349318,
+        "bounds_C_mm": [
+          -9.999999999999977,
+          359.49441088094335,
+          -390.0,
+          10.000000000000023,
+          390.0,
+          -355.7444773120012
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.006797759471686648,
+        "centroid_C_mm": [
+          -9.752913706372897e-10,
+          377.1741777603952,
+          -376.185139968478
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            7.049993270528317e-07,
+            3.2549668758024643e-18,
+            -4.7803245755730345e-18
+          ],
+          [
+            3.2549668758024643e-18,
+            5.52806781988442e-07,
+            2.0545993567019702e-07
+          ],
+          [
+            -4.7803245755730345e-18,
+            2.0545993567019702e-07,
+            4.276284139597416e-07
+          ]
+        ],
+        "volume_mm3": 5438.207577349318,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "LandingTube1",
+      "instance_id": "LandingTube1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1600,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material CFRP_RW assumed; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 10256.854953388187,
+        "bounds_C_mm": [
+          -331.48629027388483,
+          -193.22351787842615,
+          -380.77379581581346,
+          -84.20590354264573,
+          -46.776482121573906,
+          -1.2262041841865408
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0164109679254211,
+        "centroid_C_mm": [
+          -207.84609690826534,
+          -120.00000000000004,
+          -190.99999999999997
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            0.00021857685196409124,
+            -4.562495839350586e-05,
+            -0.00012318738766246568
+          ],
+          [
+            -4.562495839350586e-05,
+            0.00027126001598460275,
+            -7.112227142769166e-05
+          ],
+          [
+            -0.00012318738766246568,
+            -7.112227142769166e-05,
+            0.0001055714651400919
+          ]
+        ],
+        "volume_mm3": 10256.854953388187,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "Foot1",
+      "instance_id": "Foot1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 5438.20757142693,
+        "bounds_C_mm": [
+          -339.08965343808666,
+          -200.00000000000003,
+          -390.0,
+          -310.204296849023,
+          -175.8768511163376,
+          -355.7444773120012
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.006797759464283663,
+        "centroid_C_mm": [
+          -326.6424195876103,
+          -188.5870888777683,
+          -376.1851399704625
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            5.908549180200697e-07,
+            -6.590130510210991e-08,
+            -1.7793352378740908e-07
+          ],
+          [
+            -6.590130510210991e-08,
+            6.669511904990674e-07,
+            -1.0272996785335244e-07
+          ],
+          [
+            -1.7793352378740908e-07,
+            -1.0272996785335244e-07,
+            4.276284135471285e-07
+          ]
+        ],
+        "volume_mm3": 5438.20757142693,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "LandingTube2",
+      "instance_id": "LandingTube2",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1600,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material CFRP_RW assumed; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 10256.854953388185,
+        "bounds_C_mm": [
+          84.2059035426457,
+          -193.22351787842632,
+          -380.77379581581357,
+          331.4862902738848,
+          -46.776482121573935,
+          -1.2262041841865399
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.016410967925421096,
+        "centroid_C_mm": [
+          207.84609690826534,
+          -120.00000000000023,
+          -191.0000000000001
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            0.00021857685196409124,
+            4.562495839350586e-05,
+            0.00012318738766246596
+          ],
+          [
+            4.562495839350586e-05,
+            0.0002712600159846039,
+            -7.112227142769152e-05
+          ],
+          [
+            0.00012318738766246596,
+            -7.112227142769152e-05,
+            0.00010557146514009209
+          ]
+        ],
+        "volume_mm3": 10256.854953388185,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "Foot2",
+      "instance_id": "Foot2",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 5438.207572361004,
+        "bounds_C_mm": [
+          310.20429684902297,
+          -200.00000000000017,
+          -390.0,
+          339.0896534380866,
+          -175.87685111633772,
+          -355.7444773120012
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.006797759465451256,
+        "centroid_C_mm": [
+          326.64241958800176,
+          -188.58708887771135,
+          -376.1851399697205
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            5.908549180567265e-07,
+            6.590130510203541e-08,
+            1.779335237799585e-07
+          ],
+          [
+            6.590130510203541e-08,
+            6.669511905413866e-07,
+            -1.0272996785245837e-07
+          ],
+          [
+            1.779335237799585e-07,
+            -1.0272996785245837e-07,
+            4.2762841357350355e-07
+          ]
+        ],
+        "volume_mm3": 5438.207572361004,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "Spine0",
+      "instance_id": "Spine0",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1600.0,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material CFRP_RW; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 12252.211349000198,
+        "bounds_C_mm": [
+          85.0,
+          -7.0,
+          0.0,
+          99.0,
+          7.0,
+          300.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.019603538158400317,
+        "centroid_C_mm": [
+          92.00000000000004,
+          1.6437909386341298e-15,
+          150.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            0.0001474431113738683,
+            -2.5486144494968352e-22,
+            1.4305114746093752e-19
+          ],
+          [
+            -2.5486144494968352e-22,
+            0.00014744311137386876,
+            1.3140236318744408e-24
+          ],
+          [
+            1.4305114746093752e-19,
+            1.3140236318744408e-24,
+            8.331503717319251e-07
+          ]
+        ],
+        "volume_mm3": 12252.211349000198,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "Spine1",
+      "instance_id": "Spine1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1600.0,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material CFRP_RW; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 12252.211349000198,
+        "bounds_C_mm": [
+          -99.0,
+          -6.9999999999999885,
+          0.0,
+          -85.0,
+          7.0000000000000115,
+          300.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.019603538158400317,
+        "centroid_C_mm": [
+          -92.00000000000006,
+          1.331864808773918e-14,
+          150.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            0.0001474431113738683,
+            -2.6114742107156934e-22,
+            -9.5367431640625e-20
+          ],
+          [
+            -2.6114742107156934e-22,
+            0.0001474431113738683,
+            1.3140236318929697e-24
+          ],
+          [
+            -9.5367431640625e-20,
+            1.3140236318929697e-24,
+            8.331503717318535e-07
+          ]
+        ],
+        "volume_mm3": 12252.211349000198,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BatterySupport_Cut1",
+      "instance_id": "BatterySupport_Cut1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 38302.342569539156,
+        "bounds_C_mm": [
+          -102.0,
+          -35.0,
+          0.0,
+          102.0,
+          35.0,
+          32.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.047877928211923944,
+        "centroid_C_mm": [
+          -8.850773038440344e-15,
+          3.317178730843084e-15,
+          23.39685344776104
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.5500834582451353e-05,
+            -1.315583333333325e-06,
+            -8.750419631227327e-21
+          ],
+          [
+            -1.315583333333325e-06,
+            0.0001461182523015092,
+            -3.937375090041887e-22
+          ],
+          [
+            -8.750419631227327e-21,
+            -3.937375090041887e-22,
+            0.0001575537856042775
+          ]
+        ],
+        "volume_mm3": 38302.342569539156,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "ElectronicsSupport_Cut1",
+      "instance_id": "ElectronicsSupport_Cut1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 33409.67729447497,
+        "bounds_C_mm": [
+          -102.0,
+          -35.0,
+          201.0,
+          102.0,
+          35.0,
+          225.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.04176209661809371,
+        "centroid_C_mm": [
+          -6.38670081401007e-15,
+          2.985008979906559e-15,
+          212.99999999999991
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.2430420103730562e-05,
+            -1.4218333333333284e-06,
+            -2.887211226869699e-20
+          ],
+          [
+            -1.4218333333333284e-06,
+            0.00011266293921260924,
+            -3.830487378286985e-21
+          ],
+          [
+            -2.887211226869699e-20,
+            -3.830487378286985e-21,
+            0.00012410956087908332
+          ]
+        ],
+        "volume_mm3": 33409.67729447497,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BatteryBottomPad",
+      "instance_id": "BatteryBottomPad",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 5580.000000000001,
+        "bounds_C_mm": [
+          -22.5,
+          -15.5,
+          28.0,
+          22.5,
+          15.5,
+          32.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.006975000000000001,
+        "centroid_C_mm": [
+          0.0,
+          -1.7763568394002505e-15,
+          30.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            5.678812500000003e-07,
+            -5.820766091346741e-22,
+            -3.6379788070917133e-23
+          ],
+          [
+            -5.820766091346741e-22,
+            1.18633125e-06,
+            -3.6379788070917133e-23
+          ],
+          [
+            -3.6379788070917133e-23,
+            -3.6379788070917133e-23,
+            1.7356125000000006e-06
+          ]
+        ],
+        "volume_mm3": 5580.000000000001,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BatteryLowerGuide_1",
+      "instance_id": "BatteryLowerGuide_1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 1890.0,
+        "bounds_C_mm": [
+          -25.5,
+          -17.5,
+          32.0,
+          -22.5,
+          17.5,
+          50.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0023625,
+        "centroid_C_mm": [
+          -24.0,
+          0.0,
+          41.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            3.04959375e-07,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            6.555937500000001e-08,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            2.4294375000000003e-07
+          ]
+        ],
+        "volume_mm3": 1890.0,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BatteryLowerGuide1",
+      "instance_id": "BatteryLowerGuide1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 1890.0,
+        "bounds_C_mm": [
+          22.5,
+          -17.5,
+          32.0,
+          25.5,
+          17.5,
+          50.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0023625,
+        "centroid_C_mm": [
+          24.0,
+          0.0,
+          41.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            3.04959375e-07,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            6.555937500000001e-08,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            2.4294375000000003e-07
+          ]
+        ],
+        "volume_mm3": 1890.0,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BatteryEnvelope",
+      "instance_id": "BatteryEnvelope",
+      "role": "commercial_envelope",
+      "owner": "fixed_airframe",
+      "mass_class": "commercial_claim",
+      "density_kg_m3": null,
+      "mass_override_kg": 0.343,
+      "provenance": "Zeee B02 comparison, one installed battery only; peer-reported observation dated 2026-10-15; not a selected component",
+      "uncertainty": "Mass inclusion and geometric distribution unresolved; uniform-volume inertia approximation",
+      "interface_status": "No commercial hole pattern or attachment acceptance",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 164604.0,
+        "bounds_C_mm": [
+          -21.5,
+          -14.5,
+          32.0,
+          21.5,
+          14.5,
+          164.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.343,
+        "centroid_C_mm": [
+          0.0,
+          0.0,
+          98.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            0.0005220745833333333,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0005508865833333335,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            7.688916666666668e-05
+          ]
+        ],
+        "volume_mm3": 164604.0,
+        "solid_count": 1,
+        "mass_method": "commercial_or_assumed_mass_override_uniform_envelope_distribution"
+      }
+    },
+    {
+      "object_name": "BatteryStrap0",
+      "instance_id": "BatteryStrap0",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1150,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material Generic strap material, assumed; fastening unresolved; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 2688.0000000000005,
+        "bounds_C_mm": [
+          -25.5,
+          -18.5,
+          65.0,
+          25.5,
+          18.5,
+          73.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0030912000000000005,
+        "centroid_C_mm": [
+          -2.4847848646372606e-16,
+          -1.5278783529365247e-15,
+          69.00000000000007
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            7.020887999999894e-07,
+            -1.337627920354607e-23,
+            -5.299867211761029e-23
+          ],
+          [
+            -1.337627920354607e-23,
+            1.1526311999999872e-06,
+            -2.8850050745551377e-22
+          ],
+          [
+            -5.299867211761029e-23,
+            -2.8850050745551377e-22,
+            1.821747200000001e-06
+          ]
+        ],
+        "volume_mm3": 2688.0000000000005,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BatteryStrap1",
+      "instance_id": "BatteryStrap1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1150,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material Generic strap material, assumed; fastening unresolved; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 2688.0000000000005,
+        "bounds_C_mm": [
+          -25.5,
+          -18.5,
+          140.0,
+          25.5,
+          18.5,
+          148.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0030912000000000005,
+        "centroid_C_mm": [
+          -2.4847848646372606e-16,
+          -1.5278783529365247e-15,
+          144.0000000000001
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            7.020887999999144e-07,
+            -1.337627920354607e-23,
+            -1.106059244193606e-22
+          ],
+          [
+            -1.337627920354607e-23,
+            1.152631199999923e-06,
+            -6.025458305353953e-22
+          ],
+          [
+            -1.106059244193606e-22,
+            -6.025458305353953e-22,
+            1.821747200000001e-06
+          ]
+        ],
+        "volume_mm3": 2688.0000000000005,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "ESCShelf0",
+      "instance_id": "ESCShelf0",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 1800.0,
+        "bounds_C_mm": [
+          40.0,
+          -40.0,
+          28.0,
+          58.0,
+          -15.0,
+          32.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0022500000000000003,
+        "centroid_C_mm": [
+          49.0,
+          -27.5,
+          30.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.201875e-07,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            6.375e-08,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.779375e-07
+          ]
+        ],
+        "volume_mm3": 1800.0,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "ESCEnvelope0",
+      "instance_id": "ESCEnvelope0",
+      "role": "commercial_envelope",
+      "owner": "fixed_airframe",
+      "mass_class": "commercial_claim",
+      "density_kg_m3": null,
+      "mass_override_kg": 0.036,
+      "provenance": "Hobbywing 80060442; envelope axes permuted for vertical installation; peer-reported observation dated 2026-10-15; not a selected component",
+      "uncertainty": "Mass inclusion and geometric distribution unresolved; uniform-volume inertia approximation",
+      "interface_status": "No commercial hole pattern or attachment acceptance",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 12000.0,
+        "bounds_C_mm": [
+          45.0,
+          -40.0,
+          32.0,
+          53.0,
+          -15.0,
+          92.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.036,
+        "centroid_C_mm": [
+          49.0,
+          -27.5,
+          62.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.2675e-05,
+            -3.492459654808044e-22,
+            0.0
+          ],
+          [
+            -3.492459654808044e-22,
+            1.0991999999999999e-05,
+            -2.7939677238464353e-21
+          ],
+          [
+            0.0,
+            -2.7939677238464353e-21,
+            2.067000000000002e-06
+          ]
+        ],
+        "volume_mm3": 12000.0,
+        "solid_count": 1,
+        "mass_method": "commercial_or_assumed_mass_override_uniform_envelope_distribution"
+      }
+    },
+    {
+      "object_name": "ESCShelf1",
+      "instance_id": "ESCShelf1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 1800.0,
+        "bounds_C_mm": [
+          40.0,
+          15.0,
+          28.0,
+          58.0,
+          40.0,
+          32.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0022500000000000003,
+        "centroid_C_mm": [
+          49.0,
+          27.5,
+          30.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.201875e-07,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            6.375e-08,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.779375e-07
+          ]
+        ],
+        "volume_mm3": 1800.0,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "ESCEnvelope1",
+      "instance_id": "ESCEnvelope1",
+      "role": "commercial_envelope",
+      "owner": "fixed_airframe",
+      "mass_class": "commercial_claim",
+      "density_kg_m3": null,
+      "mass_override_kg": 0.036,
+      "provenance": "Hobbywing 80060442; envelope axes permuted for vertical installation; peer-reported observation dated 2026-10-15; not a selected component",
+      "uncertainty": "Mass inclusion and geometric distribution unresolved; uniform-volume inertia approximation",
+      "interface_status": "No commercial hole pattern or attachment acceptance",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 12000.0,
+        "bounds_C_mm": [
+          45.0,
+          15.0,
+          32.0,
+          53.0,
+          40.0,
+          92.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.036,
+        "centroid_C_mm": [
+          49.0,
+          27.5,
+          62.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.2675e-05,
+            -3.492459654808044e-22,
+            0.0
+          ],
+          [
+            -3.492459654808044e-22,
+            1.0991999999999999e-05,
+            -2.7939677238464353e-21
+          ],
+          [
+            0.0,
+            -2.7939677238464353e-21,
+            2.067000000000002e-06
+          ]
+        ],
+        "volume_mm3": 12000.0,
+        "solid_count": 1,
+        "mass_method": "commercial_or_assumed_mass_override_uniform_envelope_distribution"
+      }
+    },
+    {
+      "object_name": "UnselectedElectronicsEnvelope",
+      "instance_id": "UnselectedElectronicsEnvelope",
+      "role": "commercial_envelope",
+      "owner": "fixed_airframe",
+      "mass_class": "unknown",
+      "density_kg_m3": null,
+      "mass_override_kg": null,
+      "provenance": "Packaging reservation only, not selected controller/sensors/receiver",
+      "uncertainty": "Mass, interfaces and functions unresolved",
+      "interface_status": "unresolved",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 40500.0,
+        "bounds_C_mm": [
+          -22.5,
+          -22.5,
+          215.0,
+          22.5,
+          22.5,
+          235.0
+        ]
+      },
+      "properties": null
+    },
+    {
+      "object_name": "FixedPivotSupport0",
+      "instance_id": "FixedPivotSupport0",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 9726.27792991787,
+        "bounds_C_mm": [
+          -96.0,
+          -7.0,
+          -53.0,
+          -65.0,
+          7.0,
+          -4.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.012157847412397336,
+        "centroid_C_mm": [
+          -74.3912253215119,
+          2.7226574123918917e-16,
+          -22.939762615665675
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            2.8042293231691456e-06,
+            -3.7581162804944996e-23,
+            6.15966412643888e-07
+          ],
+          [
+            -3.7581162804944996e-23,
+            3.2892822933614163e-06,
+            2.3746515657222468e-23
+          ],
+          [
+            6.15966412643888e-07,
+            2.3746515657222468e-23,
+            9.014282610268054e-07
+          ]
+        ],
+        "volume_mm3": 9726.27792991787,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "OuterPivotBushing0",
+      "instance_id": "OuterPivotBushing0",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material Printed bushing hypothesis; wear/friction unresolved; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 348.33979343003614,
+        "bounds_C_mm": [
+          -77.0,
+          -4.0,
+          -49.0,
+          -65.0,
+          4.0,
+          -41.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0004354247417875452,
+        "centroid_C_mm": [
+          -71.0,
+          4.0125913043864196e-16,
+          -45.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            4.955133561542607e-09,
+            4.281545891598011e-26,
+            0.0
+          ],
+          [
+            4.281545891598011e-26,
+            7.702663682222484e-09,
+            -2.4859846156651164e-25
+          ],
+          [
+            0.0,
+            -2.4859846156651164e-25,
+            7.702663682222191e-09
+          ]
+        ],
+        "volume_mm3": 348.33979343003614,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "OuterPivotPin0",
+      "instance_id": "OuterPivotPin0",
+      "role": "manufactured_solid",
+      "owner": "outer_gimbal",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 7850,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material Generic steel pin; retention unresolved; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 549.7787143782139,
+        "bounds_C_mm": [
+          -82.0,
+          -2.5,
+          -47.5,
+          -54.0,
+          2.5,
+          -42.49999999999999
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.004315762907868979,
+        "centroid_C_mm": [
+          -68.0,
+          6.622358839313859e-17,
+          -45.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.3486759087090688e-08,
+            -1.7399353953026243e-25,
+            2.0868070909233331e-22
+          ],
+          [
+            -1.7399353953026243e-25,
+            2.8870655619098554e-07,
+            4.589115510771718e-25
+          ],
+          [
+            2.0868070909233331e-22,
+            4.589115510771718e-25,
+            2.8870655619098576e-07
+          ]
+        ],
+        "volume_mm3": 549.7787143782139,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "FixedPivotSupport1",
+      "instance_id": "FixedPivotSupport1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 9726.277929917867,
+        "bounds_C_mm": [
+          65.0,
+          -7.0,
+          -53.0,
+          96.0,
+          7.0,
+          -4.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.012157847412397334,
+        "centroid_C_mm": [
+          74.39122532151191,
+          1.101680717667224e-16,
+          -22.939762615665675
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            2.804229323169148e-06,
+            -1.0371478511501723e-23,
+            -6.15966412643888e-07
+          ],
+          [
+            -1.0371478511501723e-23,
+            3.2892822933613883e-06,
+            3.3068377277932396e-23
+          ],
+          [
+            -6.15966412643888e-07,
+            3.3068377277932396e-23,
+            9.014282610267961e-07
+          ]
+        ],
+        "volume_mm3": 9726.277929917867,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "OuterPivotBushing1",
+      "instance_id": "OuterPivotBushing1",
+      "role": "manufactured_solid",
+      "owner": "fixed_airframe",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material Printed bushing hypothesis; wear/friction unresolved; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 348.339793430036,
+        "bounds_C_mm": [
+          65.0,
+          -4.0,
+          -49.0,
+          77.0,
+          4.0,
+          -41.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0004354247417875451,
+        "centroid_C_mm": [
+          71.0,
+          2.609761106156852e-16,
+          -45.00000000000001
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            4.955133561542025e-09,
+            5.327933274091629e-26,
+            -2.9103830456733707e-22
+          ],
+          [
+            5.327933274091629e-26,
+            7.702663682221902e-09,
+            -1.0688788302925131e-25
+          ],
+          [
+            -2.9103830456733707e-22,
+            -1.0688788302925131e-25,
+            7.70266368222161e-09
+          ]
+        ],
+        "volume_mm3": 348.339793430036,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "OuterPivotPin1",
+      "instance_id": "OuterPivotPin1",
+      "role": "manufactured_solid",
+      "owner": "outer_gimbal",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 7850,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material Generic steel pin; retention unresolved; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 549.7787143782137,
+        "bounds_C_mm": [
+          54.0,
+          -2.5,
+          -47.5,
+          82.0,
+          2.5,
+          -42.49999999999999
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.004315762907868978,
+        "centroid_C_mm": [
+          68.0,
+          9.103360453874408e-17,
+          -45.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.3486759087090683e-08,
+            -6.479124061678143e-25,
+            4.002672034723328e-23
+          ],
+          [
+            -6.479124061678143e-25,
+            2.8870655619098496e-07,
+            -2.523377292315916e-25
+          ],
+          [
+            4.002672034723328e-23,
+            -2.523377292315916e-25,
+            2.8870655619098523e-07
+          ]
+        ],
+        "volume_mm3": 549.7787143782137,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "InnerPivotBushing0",
+      "instance_id": "InnerPivotBushing0",
+      "role": "manufactured_solid",
+      "owner": "outer_gimbal",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material Printed bushing hypothesis; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 406.39642566837557,
+        "bounds_C_mm": [
+          -4.0,
+          -60.0,
+          -64.0,
+          4.0,
+          -46.0,
+          -56.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0005079955320854695,
+        "centroid_C_mm": [
+          -8.636916051770252e-16,
+          -53.00000000000001,
+          -59.99999999999999
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.118775493496214e-08,
+            5.164607117485698e-25,
+            3.587721047456161e-24
+          ],
+          [
+            5.164607117485698e-25,
+            5.780989155132847e-09,
+            0.0
+          ],
+          [
+            3.587721047456161e-24,
+            0.0,
+            1.1187754934961851e-08
+          ]
+        ],
+        "volume_mm3": 406.39642566837557,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "InnerPivotPin0",
+      "instance_id": "InnerPivotPin0",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 7850,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material Generic steel pin; retention unresolved; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 549.7787143782137,
+        "bounds_C_mm": [
+          -2.5,
+          -64.0,
+          -62.5,
+          2.5,
+          -36.0,
+          -57.49999999999999
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.004315762907868978,
+        "centroid_C_mm": [
+          -2.693432466064774e-16,
+          -50.0,
+          -60.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            2.8870655619098523e-07,
+            2.099521345850433e-25,
+            2.2238339311487266e-23
+          ],
+          [
+            2.099521345850433e-25,
+            1.348675908709064e-08,
+            -3.938820021023951e-23
+          ],
+          [
+            2.2238339311487266e-23,
+            -3.938820021023951e-23,
+            2.8870655619098523e-07
+          ]
+        ],
+        "volume_mm3": 549.7787143782137,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "InnerPivotBushing1",
+      "instance_id": "InnerPivotBushing1",
+      "role": "manufactured_solid",
+      "owner": "outer_gimbal",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material Printed bushing hypothesis; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 406.3964256683754,
+        "bounds_C_mm": [
+          -4.0,
+          46.0,
+          -64.0,
+          4.0,
+          60.0,
+          -56.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0005079955320854692,
+        "centroid_C_mm": [
+          -8.728410762311497e-16,
+          53.00000000000001,
+          -60.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.1187754934962724e-08,
+            2.6478062278285665e-24,
+            5.0034628496587474e-24
+          ],
+          [
+            2.6478062278285665e-24,
+            5.780989155132847e-09,
+            -2.9103830456733707e-22
+          ],
+          [
+            5.0034628496587474e-24,
+            -2.9103830456733707e-22,
+            1.1187754934961851e-08
+          ]
+        ],
+        "volume_mm3": 406.3964256683754,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "InnerPivotPin1",
+      "instance_id": "InnerPivotPin1",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 7850,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material Generic steel pin; retention unresolved; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 549.7787143782137,
+        "bounds_C_mm": [
+          -2.5,
+          36.0,
+          -62.5,
+          2.5,
+          64.0,
+          -57.49999999999999
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.004315762907868978,
+        "centroid_C_mm": [
+          2.064086211742747e-18,
+          50.0,
+          -60.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            2.8870655619098523e-07,
+            -3.44505321050078e-24,
+            1.827291813533137e-23
+          ],
+          [
+            -3.44505321050078e-24,
+            1.3486759087090635e-08,
+            2.3160142576763942e-23
+          ],
+          [
+            1.827291813533137e-23,
+            2.3160142576763942e-23,
+            2.8870655619098523e-07
+          ]
+        ],
+        "volume_mm3": 549.7787143782137,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "OuterGimbal_Cut3",
+      "instance_id": "OuterGimbal_Cut3",
+      "role": "manufactured_solid",
+      "owner": "outer_gimbal",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 40020.04830624254,
+        "bounds_C_mm": [
+          -60.0,
+          -60.0,
+          -69.0,
+          60.0,
+          60.0,
+          -39.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.05002506038280318,
+        "centroid_C_mm": [
+          -5.409298755466588e-06,
+          -3.491421859915892e-13,
+          -47.16573331056262
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            9.136753483286422e-05,
+            -1.246907788325784e-20,
+            -2.046158791279744e-12
+          ],
+          [
+            -1.246907788325784e-20,
+            6.745114133659815e-05,
+            -1.4109234214593985e-20
+          ],
+          [
+            -2.046158791279744e-12,
+            -1.4109234214593985e-20,
+            0.00015464792014682115
+          ]
+        ],
+        "volume_mm3": 40020.04830624254,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "InnerCarrier_Cut1",
+      "instance_id": "InnerCarrier_Cut1",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 32320.321236942575,
+        "bounds_C_mm": [
+          -42.0,
+          -42.00190433603882,
+          -66.0,
+          42.0,
+          42.00190433603886,
+          -54.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.04040040154617822,
+        "centroid_C_mm": [
+          0.0007756494817330817,
+          0.00013708337809300455,
+          -59.999959902238025
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            2.0933819630156536e-05,
+            1.88312181206432e-10,
+            9.384443644425176e-12
+          ],
+          [
+            1.88312181206432e-10,
+            2.6046229121843078e-05,
+            -8.602626717959155e-12
+          ],
+          [
+            9.384443644425176e-12,
+            -8.602626717959155e-12,
+            4.6001636153346976e-05
+          ]
+        ],
+        "volume_mm3": 32320.321236942575,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "CentralSuspension",
+      "instance_id": "CentralSuspension",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1600,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material CFRP hypothetical custom section, procurement unresolved; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 1281.7698026646358,
+        "bounds_C_mm": [
+          -7.0,
+          -7.0,
+          -83.0,
+          7.0,
+          7.0,
+          -66.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0020508316842634176,
+        "centroid_C_mm": [
+          1.2417328952467585e-15,
+          7.409085866604031e-16,
+          -74.49999999999999
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            8.733124922155292e-08,
+            -6.681519548844926e-24,
+            -3.456079866737086e-24
+          ],
+          [
+            -6.681519548844926e-24,
+            8.733124922155143e-08,
+            1.3776847159635235e-25
+          ],
+          [
+            -3.456079866737086e-24,
+            1.3776847159635235e-25,
+            7.58807723177469e-08
+          ]
+        ],
+        "volume_mm3": 1281.7698026646358,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "UpperHeader",
+      "instance_id": "UpperHeader",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 58492.8,
+        "bounds_C_mm": [
+          -203.1,
+          -6.0,
+          -95.0,
+          203.1,
+          6.0,
+          -83.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.073116,
+        "centroid_C_mm": [
+          -2.842170943040401e-14,
+          -8.881784197001252e-16,
+          -89.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.7547839999999993e-06,
+            -1.8626451492309572e-20,
+            -1.8626451492309572e-20
+          ],
+          [
+            -1.8626451492309572e-20,
+            0.001006212886920001,
+            0.0
+          ],
+          [
+            -1.8626451492309572e-20,
+            0.0,
+            0.001006212886920001
+          ]
+        ],
+        "volume_mm3": 58492.8,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "LowerHeader",
+      "instance_id": "LowerHeader",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 58492.8,
+        "bounds_C_mm": [
+          -203.1,
+          -6.0,
+          -237.0,
+          203.1,
+          6.0,
+          -225.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.073116,
+        "centroid_C_mm": [
+          -2.842170943040401e-14,
+          -8.881784197001252e-16,
+          -231.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.7547840000000003e-06,
+            -1.8626451492309572e-20,
+            -1.8626451492309572e-20
+          ],
+          [
+            -1.8626451492309572e-20,
+            0.001006212886920001,
+            0.0
+          ],
+          [
+            -1.8626451492309572e-20,
+            0.0,
+            0.001006212886920001
+          ]
+        ],
+        "volume_mm3": 58492.8,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BypassArm0",
+      "instance_id": "BypassArm0",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1600,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material CFRP_RW assumed; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 2858.849314766709,
+        "bounds_C_mm": [
+          -199.1,
+          -4.0,
+          -225.0,
+          -191.1,
+          4.0,
+          -95.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.004574158903626734,
+        "centroid_C_mm": [
+          -195.10000000000005,
+          4.4136658271203294e-17,
+          -160.00000000000003
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            6.470528949088574e-06,
+            1.196308726351628e-23,
+            2.384185791015625e-20
+          ],
+          [
+            1.196308726351628e-23,
+            6.470528949088622e-06,
+            9.32501087896001e-25
+          ],
+          [
+            2.384185791015625e-20,
+            9.32501087896001e-25,
+            5.7176986295247083e-08
+          ]
+        ],
+        "volume_mm3": 2858.849314766709,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BypassSocket0_0",
+      "instance_id": "BypassSocket0_0",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 2427.0688204573307,
+        "bounds_C_mm": [
+          -202.1,
+          -7.0,
+          -119.0,
+          -188.1,
+          7.0,
+          -95.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0030338360255716635,
+        "centroid_C_mm": [
+          -195.09999999999994,
+          8.979760788799812e-16,
+          -106.99999999999999
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.955383164381655e-07,
+            -4.523672582478797e-25,
+            -9.313225746154786e-21
+          ],
+          [
+            -4.523672582478797e-25,
+            1.9553831643819812e-07,
+            6.462348535570529e-38
+          ],
+          [
+            -9.313225746154786e-21,
+            6.462348535570529e-38,
+            9.98283744214289e-08
+          ]
+        ],
+        "volume_mm3": 2427.0688204573307,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BypassSocket0_1",
+      "instance_id": "BypassSocket0_1",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 2427.0688204573307,
+        "bounds_C_mm": [
+          -202.1,
+          -7.0,
+          -225.0,
+          -188.1,
+          7.0,
+          -201.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0030338360255716635,
+        "centroid_C_mm": [
+          -195.09999999999994,
+          8.979760788799812e-16,
+          -212.99999999999994
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.9553831643819812e-07,
+            -4.523672582478797e-25,
+            -1.8626451492309575e-20
+          ],
+          [
+            -4.523672582478797e-25,
+            1.9553831643823536e-07,
+            9.816218617019016e-25
+          ],
+          [
+            -1.8626451492309575e-20,
+            9.816218617019016e-25,
+            9.98283744214289e-08
+          ]
+        ],
+        "volume_mm3": 2427.0688204573307,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BypassArm1",
+      "instance_id": "BypassArm1",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1600,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material CFRP_RW assumed; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 2858.849314766709,
+        "bounds_C_mm": [
+          191.1,
+          -4.0,
+          -225.0,
+          199.1,
+          4.0,
+          -95.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.004574158903626734,
+        "centroid_C_mm": [
+          195.09999999999997,
+          4.4136658271203294e-17,
+          -160.00000000000003
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            6.470528949088574e-06,
+            1.1963087263516424e-23,
+            2.384185791015625e-20
+          ],
+          [
+            1.1963087263516424e-23,
+            6.470528949088717e-06,
+            9.32501087896001e-25
+          ],
+          [
+            2.384185791015625e-20,
+            9.32501087896001e-25,
+            5.717698629536629e-08
+          ]
+        ],
+        "volume_mm3": 2858.849314766709,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BypassSocket1_0",
+      "instance_id": "BypassSocket1_0",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 2427.0688204573316,
+        "bounds_C_mm": [
+          188.1,
+          -7.0,
+          -119.0,
+          202.1,
+          7.0,
+          -95.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0030338360255716644,
+        "centroid_C_mm": [
+          195.09999999999994,
+          8.663337848798269e-16,
+          -106.99999999999997
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.955383164381655e-07,
+            1.4894188694647023e-24,
+            1.8626451492309572e-20
+          ],
+          [
+            1.4894188694647023e-24,
+            1.9553831643821673e-07,
+            1.9387045606711586e-37
+          ],
+          [
+            1.8626451492309572e-20,
+            1.9387045606711586e-37,
+            9.982837442146614e-08
+          ]
+        ],
+        "volume_mm3": 2427.0688204573316,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "BypassSocket1_1",
+      "instance_id": "BypassSocket1_1",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 2427.0688204573316,
+        "bounds_C_mm": [
+          188.1,
+          -7.0,
+          -225.0,
+          202.1,
+          7.0,
+          -201.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0030338360255716644,
+        "centroid_C_mm": [
+          195.09999999999994,
+          8.663337848798269e-16,
+          -212.99999999999994
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.9553831643819812e-07,
+            1.4894188694647023e-24,
+            5.587935447692871e-20
+          ],
+          [
+            1.4894188694647023e-24,
+            1.9553831643823536e-07,
+            7.723497518214666e-25
+          ],
+          [
+            5.587935447692871e-20,
+            7.723497518214666e-25,
+            9.982837442146614e-08
+          ]
+        ],
+        "volume_mm3": 2427.0688204573316,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "UnresolvedMotorPlate0",
+      "instance_id": "UnresolvedMotorPlate0",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 6399.999999999998,
+        "bounds_C_mm": [
+          -20.0,
+          -20.0,
+          -99.0,
+          20.0,
+          20.0,
+          -95.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.007999999999999998,
+        "centroid_C_mm": [
+          0.0,
+          0.0,
+          -97.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.0773333333333339e-06,
+            0.0,
+            3.6379788070917133e-23
+          ],
+          [
+            0.0,
+            1.0773333333333339e-06,
+            3.6379788070917133e-23
+          ],
+          [
+            3.6379788070917133e-23,
+            3.6379788070917133e-23,
+            2.133333333333334e-06
+          ]
+        ],
+        "volume_mm3": 6399.999999999998,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "MotorEnvelope0",
+      "instance_id": "MotorEnvelope0",
+      "role": "commercial_envelope",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "commercial_claim",
+      "density_kg_m3": null,
+      "mass_override_kg": 0.108,
+      "provenance": "Original SunnySky X2814 KV900; shaft projection is an unverified distribution hypothesis; peer-reported observation dated 2026-10-15; not a selected component",
+      "uncertainty": "Mass inclusion and geometric distribution unresolved; uniform-volume inertia approximation",
+      "interface_status": "No commercial hole pattern or attachment acceptance",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 34862.253676885935,
+        "bounds_C_mm": [
+          -17.5,
+          -17.5,
+          -155.0,
+          17.5,
+          17.5,
+          -101.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.10799999999999998,
+        "centroid_C_mm": [
+          2.018016771850051e-15,
+          7.159496468225835e-16,
+          -119.17518248175182
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            2.0330559686185124e-05,
+            7.360124359767684e-22,
+            2.6523677694241584e-21
+          ],
+          [
+            7.360124359767684e-22,
+            2.0330559686184754e-05,
+            -2.6455914882810544e-22
+          ],
+          [
+            2.6523677694241584e-21,
+            -2.6455914882810544e-22,
+            1.643160218978111e-05
+          ]
+        ],
+        "volume_mm3": 34862.253676885935,
+        "solid_count": 1,
+        "mass_method": "commercial_or_assumed_mass_override_uniform_envelope_distribution"
+      }
+    },
+    {
+      "object_name": "PropellerDistributionProxy0",
+      "instance_id": "PropellerDistributionProxy0",
+      "role": "commercial_envelope",
+      "owner": "upper_spinning_group",
+      "mass_class": "commercial_claim",
+      "density_kg_m3": null,
+      "mass_override_kg": 0.0300504945125,
+      "provenance": "APC candidate propeller mass; artificial blade distribution, not manufacturer inertia; peer-reported observation dated 2026-10-15; not a selected component",
+      "uncertainty": "Mass inclusion and geometric distribution unresolved; uniform-volume inertia approximation",
+      "interface_status": "No commercial hole pattern or attachment acceptance",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 18738.46819439049,
+        "bounds_C_mm": [
+          -165.1,
+          -10.16,
+          -160.207,
+          165.1,
+          10.16,
+          -149.793
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0300504945125,
+        "centroid_C_mm": [
+          1.9181261592538644e-12,
+          -2.3658106506425e-15,
+          -155.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.0440511564692337e-06,
+            4.2131130105879384e-20,
+            3.5786469988629085e-21
+          ],
+          [
+            4.2131130105879384e-20,
+            0.00024028892227168522,
+            -9.68653734599608e-22
+          ],
+          [
+            3.5786469988629085e-21,
+            -9.68653734599608e-22,
+            0.00024121842739498764
+          ]
+        ],
+        "volume_mm3": 18738.46819439049,
+        "solid_count": 1,
+        "mass_method": "commercial_or_assumed_mass_override_uniform_envelope_distribution"
+      }
+    },
+    {
+      "object_name": "RotorSweptSlab0",
+      "instance_id": "RotorSweptSlab0",
+      "role": "nonmass_envelope",
+      "owner": "upper_spinning_group",
+      "mass_class": "nonmass",
+      "density_kg_m3": null,
+      "mass_override_kg": null,
+      "provenance": "Unqualified rigid swept slab, full disc including hub region",
+      "uncertainty": "Blade flex, mounting tolerances and retention not qualified",
+      "interface_status": "unresolved",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 1712671.2793495422,
+        "bounds_C_mm": [
+          -165.1,
+          -165.1,
+          -165.0,
+          165.1,
+          165.1,
+          -145.0
+        ]
+      },
+      "properties": null
+    },
+    {
+      "object_name": "UnresolvedMotorPlate1",
+      "instance_id": "UnresolvedMotorPlate1",
+      "role": "manufactured_solid",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "CAD_material",
+      "density_kg_m3": 1250,
+      "mass_override_kg": null,
+      "provenance": "Unselected study material PETG_PRINTED; density is an explicit hypothesis",
+      "uncertainty": "No supplier-qualified laminate, print, joint, strength or density bounds",
+      "interface_status": "Custom study geometry; fits, retention and load capability unqualified",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 6399.999999999998,
+        "bounds_C_mm": [
+          -20.0,
+          -20.0,
+          -241.0,
+          20.0,
+          20.0,
+          -237.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.007999999999999998,
+        "centroid_C_mm": [
+          0.0,
+          0.0,
+          -239.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.0773333333333339e-06,
+            0.0,
+            3.6379788070917133e-23
+          ],
+          [
+            0.0,
+            1.0773333333333339e-06,
+            3.6379788070917133e-23
+          ],
+          [
+            3.6379788070917133e-23,
+            3.6379788070917133e-23,
+            2.133333333333334e-06
+          ]
+        ],
+        "volume_mm3": 6399.999999999998,
+        "solid_count": 1,
+        "mass_method": "density_weighted_actual_solids"
+      }
+    },
+    {
+      "object_name": "MotorEnvelope1",
+      "instance_id": "MotorEnvelope1",
+      "role": "commercial_envelope",
+      "owner": "inner_module_nonspinning",
+      "mass_class": "commercial_claim",
+      "density_kg_m3": null,
+      "mass_override_kg": 0.108,
+      "provenance": "Original SunnySky X2814 KV900; shaft projection is an unverified distribution hypothesis; peer-reported observation dated 2026-10-15; not a selected component",
+      "uncertainty": "Mass inclusion and geometric distribution unresolved; uniform-volume inertia approximation",
+      "interface_status": "No commercial hole pattern or attachment acceptance",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 34862.253676885935,
+        "bounds_C_mm": [
+          -17.5,
+          -17.5,
+          -297.0,
+          17.5,
+          17.5,
+          -243.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.10799999999999998,
+        "centroid_C_mm": [
+          2.018016771850051e-15,
+          7.159496468225835e-16,
+          -261.1751824817518
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            2.0330559686185862e-05,
+            7.360124359767684e-22,
+            8.038922847900491e-21
+          ],
+          [
+            7.360124359767684e-22,
+            2.0330559686185862e-05,
+            -3.011075648882431e-22
+          ],
+          [
+            8.038922847900491e-21,
+            -3.011075648882431e-22,
+            1.643160218978111e-05
+          ]
+        ],
+        "volume_mm3": 34862.253676885935,
+        "solid_count": 1,
+        "mass_method": "commercial_or_assumed_mass_override_uniform_envelope_distribution"
+      }
+    },
+    {
+      "object_name": "PropellerDistributionProxy1",
+      "instance_id": "PropellerDistributionProxy1",
+      "role": "commercial_envelope",
+      "owner": "lower_spinning_group",
+      "mass_class": "commercial_claim",
+      "density_kg_m3": null,
+      "mass_override_kg": 0.0300504945125,
+      "provenance": "APC candidate propeller mass; artificial blade distribution, not manufacturer inertia; peer-reported observation dated 2026-10-15; not a selected component",
+      "uncertainty": "Mass inclusion and geometric distribution unresolved; uniform-volume inertia approximation",
+      "interface_status": "No commercial hole pattern or attachment acceptance",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 18738.46819439049,
+        "bounds_C_mm": [
+          -165.1,
+          -10.16,
+          -302.207,
+          165.1,
+          10.16,
+          -291.793
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.0300504945125,
+        "centroid_C_mm": [
+          1.9212324783141865e-12,
+          -2.3658106506425e-15,
+          -297.0
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.0440511564692337e-06,
+            4.231782295363193e-20,
+            -1.1379156634511854e-20
+          ],
+          [
+            4.231782295363193e-20,
+            0.00024028892227168466,
+            -6.12043882519287e-23
+          ],
+          [
+            -1.1379156634511854e-20,
+            -6.12043882519287e-23,
+            0.00024121842739498759
+          ]
+        ],
+        "volume_mm3": 18738.46819439049,
+        "solid_count": 1,
+        "mass_method": "commercial_or_assumed_mass_override_uniform_envelope_distribution"
+      }
+    },
+    {
+      "object_name": "RotorSweptSlab1",
+      "instance_id": "RotorSweptSlab1",
+      "role": "nonmass_envelope",
+      "owner": "lower_spinning_group",
+      "mass_class": "nonmass",
+      "density_kg_m3": null,
+      "mass_override_kg": null,
+      "provenance": "Unqualified rigid swept slab, full disc including hub region",
+      "uncertainty": "Blade flex, mounting tolerances and retention not qualified",
+      "interface_status": "unresolved",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 1712671.2793495422,
+        "bounds_C_mm": [
+          -165.1,
+          -165.1,
+          -307.0,
+          165.1,
+          165.1,
+          -287.0
+        ]
+      },
+      "properties": null
+    },
+    {
+      "object_name": "ActuatorPackagingEnvelope0",
+      "instance_id": "ActuatorPackagingEnvelope0",
+      "role": "commercial_envelope",
+      "owner": "fixed_airframe",
+      "mass_class": "commercial_claim",
+      "density_kg_m3": null,
+      "mass_override_kg": 0.012,
+      "provenance": "EMAX ES08MA II candidate mass; envelope dimensions are packaging assumptions only; peer-reported observation dated 2026-10-15; not a selected component",
+      "uncertainty": "Mass inclusion and geometric distribution unresolved; uniform-volume inertia approximation",
+      "interface_status": "No commercial hole pattern or attachment acceptance",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 24500.000000000007,
+        "bounds_C_mm": [
+          55.0,
+          -40.0,
+          2.0,
+          90.0,
+          -20.0,
+          37.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.012,
+        "centroid_C_mm": [
+          72.5,
+          -30.0,
+          19.499999999999996
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.6250000000000007e-06,
+            -1.3684739871900904e-21,
+            -9.123159914600604e-22
+          ],
+          [
+            -1.3684739871900904e-21,
+            2.450000000000002e-06,
+            -4.561579957300302e-22
+          ],
+          [
+            -9.123159914600604e-22,
+            -4.561579957300302e-22,
+            1.6250000000000016e-06
+          ]
+        ],
+        "volume_mm3": 24500.000000000007,
+        "solid_count": 1,
+        "mass_method": "commercial_or_assumed_mass_override_uniform_envelope_distribution"
+      }
+    },
+    {
+      "object_name": "ActuatorPackagingEnvelope1",
+      "instance_id": "ActuatorPackagingEnvelope1",
+      "role": "commercial_envelope",
+      "owner": "outer_gimbal",
+      "mass_class": "commercial_claim",
+      "density_kg_m3": null,
+      "mass_override_kg": 0.012,
+      "provenance": "EMAX ES08MA II candidate mass; envelope dimensions are packaging assumptions only; peer-reported observation dated 2026-10-15; not a selected component",
+      "uncertainty": "Mass inclusion and geometric distribution unresolved; uniform-volume inertia approximation",
+      "interface_status": "No commercial hole pattern or attachment acceptance",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 24500.000000000007,
+        "bounds_C_mm": [
+          -17.5,
+          44.0,
+          -31.0,
+          17.5,
+          64.0,
+          4.0
+        ]
+      },
+      "properties": {
+        "mass_kg": 0.012,
+        "centroid_C_mm": [
+          0.0,
+          54.0,
+          -13.500000000000002
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            1.6250000000000016e-06,
+            4.561579957300302e-22,
+            4.561579957300302e-22
+          ],
+          [
+            4.561579957300302e-22,
+            2.4499999999999977e-06,
+            -4.561579957300302e-22
+          ],
+          [
+            4.561579957300302e-22,
+            -4.561579957300302e-22,
+            1.6249999999999988e-06
+          ]
+        ],
+        "volume_mm3": 24500.000000000007,
+        "solid_count": 1,
+        "mass_method": "commercial_or_assumed_mass_override_uniform_envelope_distribution"
+      }
+    },
+    {
+      "object_name": "CentralWiringAllowance",
+      "instance_id": "CentralWiringAllowance",
+      "role": "nonmass_envelope",
+      "owner": "fixed_airframe",
+      "mass_class": "nonmass",
+      "density_kg_m3": null,
+      "mass_override_kg": null,
+      "provenance": "Fixed cable-routing reservation only, not a complete harness",
+      "uncertainty": "Moving-joint cable loops, strain relief and bend radii not modeled",
+      "interface_status": "unresolved",
+      "geometry": {
+        "shape_valid": true,
+        "solid_count": 1,
+        "individual_solids_valid": [
+          true
+        ],
+        "volume_mm3": 9047.786842338603,
+        "bounds_C_mm": [
+          -5.0,
+          -5.0,
+          0.0,
+          5.0,
+          5.0,
+          180.0
+        ]
+      },
+      "properties": null
+    }
+  ],
+  "accounted_partial_mass_properties": {
+    "mass_kg": 1.3079394384440615,
+    "centroid_C_mm": [
+      3.5311505521617876,
+      0.22019791852737103,
+      -40.28028652820083
+    ],
+    "inertia_centroid_C_kg_m2": [
+      [
+        0.032270270869140666,
+        2.4379762582986275e-05,
+        -0.00042834987993069077
+      ],
+      [
+        2.4379762582986275e-05,
+        0.03642471806682548,
+        4.1673789247787065e-06
+      ],
+      [
+        -0.00042834987993069077,
+        4.1673789247787065e-06,
+        0.01132711672842891
+      ]
+    ]
+  },
+  "accounted_partial_body_properties": {
+    "mass_kg": 1.3079394384440615,
+    "r_DG_B_m": [
+      0.003531150552161788,
+      -0.00022019791852737104,
+      0.040280286528200836
+    ],
+    "inertia_centroid_B_kg_m2": [
+      [
+        0.032270270869140666,
+        -2.4379762582986275e-05,
+        0.00042834987993069077
+      ],
+      [
+        -2.4379762582986275e-05,
+        0.03642471806682548,
+        4.1673789247787065e-06
+      ],
+      [
+        0.00042834987993069077,
+        4.1673789247787065e-06,
+        0.01132711672842891
+      ]
+    ],
+    "reference": "Centroid of these accounted components, not necessarily complete vehicle G"
+  },
+  "mass_class_subtotals": {
+    "CAD_material": {
+      "mass_kg": 0.5928384494190615,
+      "centroid_C_mm": [
+        0.3719918478160702,
+        9.348086727953963e-06,
+        -61.01748704356122
+      ],
+      "inertia_centroid_C_kg_m2": [
+        [
+          0.015640366528027347,
+          -2.737226283794456e-06,
+          -2.0069376803446857e-05
+        ],
+        [
+          -2.737226283794456e-06,
+          0.019169686258039536,
+          -1.3478699731177595e-11
+        ],
+        [
+          -2.0069376803446857e-05,
+          -1.3478699731177595e-11,
+          0.010407644613592093
+        ]
+      ]
+    },
+    "commercial_claim": {
+      "mass_kg": 0.715100989025,
+      "centroid_C_mm": [
+        6.150180278727542,
+        0.40274031838869623,
+        -23.0885751650543
+      ],
+      "inertia_centroid_C_kg_m2": [
+        [
+          0.016163560941611893,
+          2.787125192027362e-05,
+          -0.0003372445535758853
+        ],
+        [
+          2.787125192027362e-05,
+          0.016777919180188176,
+          9.118490352464336e-06
+        ],
+        [
+          -0.0003372445535758853,
+          9.118490352464336e-06,
+          0.000908597743758664
+        ]
+      ]
+    },
+    "explicit_assumption": null
+  },
+  "group_partial_properties": {
+    "fixed_airframe": {
+      "mass_kg": 0.7255674512006297,
+      "centroid_C_mm": [
+        6.3653627194320075,
+        -0.49616337629610224,
+        51.728534958000886
+      ],
+      "inertia_centroid_C_kg_m2": [
+        [
+          0.014026663829008907,
+          2.1071052791216455e-05,
+          -3.407760922139432e-06
+        ],
+        [
+          2.1071052791216455e-05,
+          0.014908091415825761,
+          -1.160227141055913e-05
+        ],
+        [
+          -3.407760922139432e-06,
+          -1.160227141055913e-05,
+          0.007668399594077333
+        ]
+      ]
+    },
+    "outer_gimbal": {
+      "mass_kg": 0.07167257726271208,
+      "centroid_C_mm": [
+        -3.775509508125535e-06,
+        9.041114813337499,
+        -41.45025748870545
+      ],
+      "inertia_centroid_C_kg_m2": [
+        [
+          0.0001364962733023599,
+          -2.446530173130879e-12,
+          -3.592769388181506e-12
+        ],
+        [
+          -2.446530173130879e-12,
+          0.0001218694047405011,
+          -1.8111766852681246e-05
+        ],
+        [
+          -3.592769388181506e-12,
+          -1.8111766852681246e-05,
+          0.00022877216064125943
+        ]
+      ]
+    },
+    "inner_module_nonspinning": {
+      "mass_kg": 0.45059842095571967,
+      "centroid_C_mm": [
+        6.954429722768841e-05,
+        1.229081874844295e-05,
+        -163.47826108128012
+      ],
+      "inertia_centroid_C_kg_m2": [
+        [
+          0.0027415428460730185,
+          1.883082706023056e-10,
+          -3.2332685690013837e-09
+        ],
+        [
+          1.883082706023056e-10,
+          0.0055435837270539435,
+          -5.816885881450994e-10
+        ],
+        [
+          -3.2332685690013837e-09,
+          -5.816885881450994e-10,
+          0.0029284445767180705
+        ]
+      ]
+    },
+    "upper_spinning_group": {
+      "mass_kg": 0.0300504945125,
+      "centroid_C_mm": [
+        1.9181261592538644e-12,
+        -2.3658106506425e-15,
+        -155.0
+      ],
+      "inertia_centroid_C_kg_m2": [
+        [
+          1.0440511564692337e-06,
+          4.2131130105879384e-20,
+          3.5786469988629085e-21
+        ],
+        [
+          4.2131130105879384e-20,
+          0.00024028892227168522,
+          -9.68653734599608e-22
+        ],
+        [
+          3.5786469988629085e-21,
+          -9.68653734599608e-22,
+          0.00024121842739498764
+        ]
+      ]
+    },
+    "lower_spinning_group": {
+      "mass_kg": 0.0300504945125,
+      "centroid_C_mm": [
+        1.9212324783141865e-12,
+        -2.3658106506425e-15,
+        -297.0
+      ],
+      "inertia_centroid_C_kg_m2": [
+        [
+          1.0440511564692337e-06,
+          4.231782295363193e-20,
+          -1.1379156634511854e-20
+        ],
+        [
+          4.231782295363193e-20,
+          0.00024028892227168466,
+          -6.12043882519287e-23
+        ],
+        [
+          -1.1379156634511854e-20,
+          -6.12043882519287e-23,
+          0.00024121842739498759
+        ]
+      ]
+    }
+  },
+  "unresolved_rows": [
+    "MotorEnvelope0: internal rotating/stationary mass split unknown; module lump is bookkeeping only",
+    "MotorEnvelope1: internal rotating/stationary mass split unknown; module lump is bookkeeping only",
+    "Motor plate hole patterns, adapters, shaft engagement and opposite-spin retention unresolved",
+    "Commercial motor/ESC/prop accessory mass inclusions not reconciled",
+    "Servo mounts, horns, rod ends, links, linkage ratio and loaded response unresolved",
+    "Pivot axial retainers and bearing fits not realized; pins alone are not retained assemblies",
+    "Complete controller, sensors, receiver/abort and regulation/distribution/protection not selected",
+    "Additional power/signal wiring, connectors, insulation and moving cable loops incomplete",
+    "Adhesive, clamp bolts, nuts, washers and positive tube anti-rotation not included",
+    "Battery strap closure and upper lateral restraint not realized",
+    "Material and joint qualification, leg compliance and dynamic contact not established",
+    "Integrated contra-rotating commercial branch still awaits applicable mounting/rotor-offset evidence",
+    "UnselectedElectronicsEnvelope: mass unresolved"
+  ],
+  "supported_complete_installed_mass_kg": null,
+  "complete_ledger_reconciliation": "Not established by this kernel",
+  "physical_qualification": null,
+  "continuous_clearance": null,
+  "warning": "Calculated properties cover registered accounted geometry only; no geometry acceptance inferred",
+  "step_representation": "Registered manufactured solids and labelled commercial envelope substitutes; excludes swept/wiring nonmass envelopes and boolean operands",
+  "export_object_names": [
+    "FixedLegAttachment_Cut2",
+    "LandingTube0",
+    "Foot0",
+    "LandingTube1",
+    "Foot1",
+    "LandingTube2",
+    "Foot2",
+    "Spine0",
+    "Spine1",
+    "BatterySupport_Cut1",
+    "ElectronicsSupport_Cut1",
+    "BatteryBottomPad",
+    "BatteryLowerGuide_1",
+    "BatteryLowerGuide1",
+    "BatteryEnvelope",
+    "BatteryStrap0",
+    "BatteryStrap1",
+    "ESCShelf0",
+    "ESCEnvelope0",
+    "ESCShelf1",
+    "ESCEnvelope1",
+    "UnselectedElectronicsEnvelope",
+    "FixedPivotSupport0",
+    "OuterPivotBushing0",
+    "OuterPivotPin0",
+    "FixedPivotSupport1",
+    "OuterPivotBushing1",
+    "OuterPivotPin1",
+    "InnerPivotBushing0",
+    "InnerPivotPin0",
+    "InnerPivotBushing1",
+    "InnerPivotPin1",
+    "OuterGimbal_Cut3",
+    "InnerCarrier_Cut1",
+    "CentralSuspension",
+    "UpperHeader",
+    "LowerHeader",
+    "BypassArm0",
+    "BypassSocket0_0",
+    "BypassSocket0_1",
+    "BypassArm1",
+    "BypassSocket1_0",
+    "BypassSocket1_1",
+    "UnresolvedMotorPlate0",
+    "MotorEnvelope0",
+    "PropellerDistributionProxy0",
+    "UnresolvedMotorPlate1",
+    "MotorEnvelope1",
+    "PropellerDistributionProxy1",
+    "ActuatorPackagingEnvelope0",
+    "ActuatorPackagingEnvelope1"
+  ],
+  "candidate_metadata": {
+    "configuration": {
+      "schema": "hopper_candidate_geometry_hypothesis/1",
+      "authority": {
+        "system_model": {
+          "kind": "system_model",
+          "id": "system",
+          "revision": 4,
+          "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75"
+        },
+        "work_plan": {
+          "kind": "decision",
+          "id": "99f7bb629eef45b89fa38d27c803868c",
+          "revision": 1,
+          "sha256": "e5af8e2f56f7c851b65518b129f39550be73911f56461279cbbb1e85e1cdd5f0"
+        },
+        "interface": {
+          "kind": "decision",
+          "id": "88561ff8b3ba4e8286cebd95a93e3b08",
+          "revision": 1,
+          "sha256": "ad6662afab9685585264c86e052c246996d23f4369c6432b56094a42a9187c04"
+        }
+      },
+      "status": "Unselected geometry and material study; no hardware qualification",
+      "length_unit": "mm",
+      "datum_C_mm": [
+        0,
+        0,
+        0
+      ],
+      "outer_origin_C_mm": [
+        0,
+        0,
+        -45
+      ],
+      "outer_to_inner_C_neutral_mm": [
+        0,
+        0,
+        -15
+      ],
+      "inner_origin_C_neutral_mm": [
+        0,
+        0,
+        -60
+      ],
+      "rotor_plane_z_C_mm": [
+        -155,
+        -297
+      ],
+      "spine_length_mm": 300,
+      "spine_centre_radius_mm": 92,
+      "fixed_ring_radii_mm": [
+        85,
+        100
+      ],
+      "fixed_ring_z_mm": [
+        -4,
+        0
+      ],
+      "leg_attachment_radius_mm": 100,
+      "leg_attachment_z_mm": -2,
+      "foot_sphere_centre_radius_mm": 380,
+      "foot_sphere_centre_z_mm": -380,
+      "foot_sphere_radius_mm": 10,
+      "leg_tube_od_id_mm": [
+        8,
+        6
+      ],
+      "joint_socket_length_mm": 25,
+      "tube_end_inset_mm": 2,
+      "printed_density_kg_m3": 1250,
+      "printed_density_sensitivity_kg_m3": [
+        1150,
+        1400
+      ],
+      "steel_density_kg_m3": 7850,
+      "steel_density_sensitivity_kg_m3": [
+        7700,
+        8000
+      ],
+      "cfrp_density_kg_m3": 1600,
+      "rotor_slab_half_thickness_mm": 10,
+      "bypass_arm_radius_increment_mm": 30,
+      "joint_diametral_clearance_mm": 0.2,
+      "gimbal_study_joint_limits_deg": {
+        "alpha": [
+          -15,
+          15
+        ],
+        "beta": [
+          -15,
+          15
+        ]
+      },
+      "travel_status": "Independent study joint limits, not a resultant cone or hardware rating",
+      "material_status": "Unqualified nominal densities and sensitivity hypotheses; no design allowables",
+      "price_status": "No prices assigned by this geometry script; unknown purchases are not zero",
+      "source_reuse": "M2 configuration is an inspected historical proposal, not current authority",
+      "commercial_basis": {
+        "observation_date": "2026-10-15",
+        "basis": "Peer PROP-CAD-IF-M2-02; current applicability must be reconciled with published sourcing",
+        "motor": {
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900, not III/V3",
+          "url": "https://sunnyskyusa.com/products/sunnysky-x2814-brushless-motors",
+          "mass_kg": 0.108,
+          "body_diameter_mm": 35,
+          "body_length_mm": 36,
+          "overall_length_mm": 54,
+          "shaft_diameter_mm": 4,
+          "mounting_pattern": null,
+          "mass_inclusions": "Unresolved accessories and retention"
+        },
+        "propellers": {
+          "diameter_variants_mm": [
+            279.4,
+            330.2
+          ],
+          "parts": [
+            "LP11055E",
+            "LP11055EP",
+            "LP13065E",
+            "LP13065EP"
+          ],
+          "urls": [
+            "https://www.apcprop.com/product/11x5-5e/",
+            "https://www.apcprop.com/product/11x5-5ep/",
+            "https://www.apcprop.com/product/13x6-5e/",
+            "https://www.apcprop.com/product/13x6-5ep/"
+          ],
+          "each_mass_oz": [
+            0.81,
+            1.06
+          ],
+          "hub_diameter_thickness_bore_in": [
+            0.8,
+            0.41,
+            0.25
+          ],
+          "blade_shape": "Artificial distribution proxy; not manufacturer blade geometry",
+          "mass_inclusions": "Adapter-ring inclusion unresolved"
+        },
+        "esc": {
+          "part": "Hobbywing 80060442",
+          "quantity": 2,
+          "envelope_mm": [
+            60,
+            25,
+            8
+          ],
+          "mass_each_kg": 0.036,
+          "url": "https://www.hobbywing.com/en/products/skywalker-v2-series274",
+          "mass_inclusions": "Lead and connector inclusion unresolved"
+        },
+        "battery": {
+          "variant": "Peer B02: Zeee 3S 5200 mAh 50C Deans two-pack",
+          "installed_quantity": 1,
+          "purchased_battery_count": 2,
+          "envelope_mm": [
+            132,
+            43,
+            29
+          ],
+          "mass_each_kg": 0.343,
+          "status": "Comparison only; exact product handle and supply evidence remain peer-owned"
+        },
+        "servos": {
+          "variant": "Peer EMAX ES08MA II standard-voltage analog comparison",
+          "mass_each_kg": 0.012,
+          "mass_sensitivity_kg": [
+            0.011,
+            0.013
+          ],
+          "envelope_status": "35 x 20 x 35 mm packaging hypotheses, NOT supplier dimensions",
+          "loaded_capability": null
+        },
+        "currency": null,
+        "stock_status": "Not reassessed by this CAD script",
+        "tax_shipping": "No monetary subtotal; supplier tax basis and shipping exclusions remain sourcing-ledger fields"
+      }
+    },
+    "section": {
+      "od": 14.0,
+      "id": 12.0,
+      "rho": 1600.0,
+      "material": "CFRP_RW",
+      "density_sensitivity_kg_m3": [
+        1400,
+        1800
+      ]
+    },
+    "spine_count": 2,
+    "landing_leg_count": 3,
+    "gimbal_axis_count": 2,
+    "rotor_diameter_mm": 330.2,
+    "payload_mass_kg": 0,
+    "neutral_foot_contact_proxies_C_mm": [
+      [
+        2.326828918379971e-14,
+        380.0,
+        -390.0
+      ],
+      [
+        -329.08965343808666,
+        -190.00000000000003,
+        -390.0
+      ],
+      [
+        329.0896534380866,
+        -190.00000000000017,
+        -390.0
+      ]
+    ],
+    "contact_assumption": "Sphere-bottom points at neutral attitude only; articulate actual foot solids for tilted contact",
+    "stock_finished_lengths_mm": {
+      "spines": [
+        300.0,
+        300.0
+      ],
+      "landing_legs": [
+        466.4083332595204,
+        466.4083332595204,
+        466.4083332595204
+      ],
+      "bypass_arms": [
+        130,
+        130
+      ]
+    },
+    "rotor_object_names": [
+      "RotorSweptSlab0",
+      "RotorSweptSlab1"
+    ],
+    "propeller_proxy_names": [
+      "PropellerDistributionProxy0",
+      "PropellerDistributionProxy1"
+    ],
+    "motor_envelope_names": [
+      "MotorEnvelope0",
+      "MotorEnvelope1"
+    ],
+    "load_path": "Fixed ring -> fixed pivot brackets -> x pins -> outer ring/lugs -> y pins -> inner carrier -> central suspension/header -> two bypass arms/lower header -> motor interface plates; commercial motor connections unresolved",
+    "interface_status": "Blank motor plates, generic pivots and actuator reservations are NOT accepted interfaces",
+    "rotor_spin_assignment": null,
+    "joint_origins_body_m": {
+      "r_DOx": [
+        0,
+        0,
+        0.045
+      ],
+      "d_OxOy_outer": [
+        0,
+        0,
+        0.015
+      ]
+    },
+    "rotor_offsets_inner_body_m": [
+      [
+        0,
+        0,
+        0.095
+      ],
+      [
+        0,
+        0,
+        0.237
+      ]
+    ],
+    "full_matrix_rule": "1..4 spines x C08/C14/AL12 x 3/4 legs x 279.4/330.2 mm = 48 candidates",
+    "parameter_edit_scope": "SpineLength changes tube lengths only; tray positions are independent native parameters. This is not a claim of automatic whole-assembly redesign."
+  },
+  "partial_CG_support_polygon": {
+    "hull_xy_mm": [
+      [
+        -329.08965343808666,
+        -190.00000000000003
+      ],
+      [
+        329.0896534380866,
+        -190.00000000000017
+      ],
+      [
+        2.326828918379971e-14,
+        380.0
+      ]
+    ],
+    "minimum_width_mm": 570.0,
+    "signed_CG_edge_margin_mm": 186.83183495797675,
+    "all_edge_margins_mm": [
+      190.22019791852748,
+      186.83183495797675,
+      192.94796712349583
+    ],
+    "two_dimensional_support": true,
+    "interpretation": "Study geometry, not an adopted stance-width or contact acceptance criterion"
+  },
+  "one_foot_removed_support": [
+    {
+      "hull_xy_mm": [
+        [
+          -329.08965343808666,
+          -190.00000000000003
+        ],
+        [
+          329.0896534380866,
+          -190.00000000000017
+        ]
+      ],
+      "minimum_width_mm": 0.0,
+      "signed_CG_edge_margin_mm": null,
+      "two_dimensional_support": false
+    },
+    {
+      "hull_xy_mm": [
+        [
+          2.326828918379971e-14,
+          380.0
+        ],
+        [
+          329.0896534380866,
+          -190.00000000000017
+        ]
+      ],
+      "minimum_width_mm": 0.0,
+      "signed_CG_edge_margin_mm": null,
+      "two_dimensional_support": false
+    },
+    {
+      "hull_xy_mm": [
+        [
+          -329.08965343808666,
+          -190.00000000000003
+        ],
+        [
+          2.326828918379971e-14,
+          380.0
+        ]
+      ],
+      "minimum_width_mm": 0.0,
+      "signed_CG_edge_margin_mm": null,
+      "two_dimensional_support": false
+    }
+  ],
+  "support_scope": "Accounted partial-mass centroid and neutral point-contact proxy; not complete-vehicle stability",
+  "spine_cutting_schedule": {
+    "feasible": true,
+    "stock_count": 1,
+    "stock_length_mm": 1000.0,
+    "end_trim_each_mm": 5.0,
+    "bins": [
+      {
+        "pieces": [
+          {
+            "piece_index": 1,
+            "finished_length_mm": 300.0,
+            "kerf_mm": 3.0
+          },
+          {
+            "piece_index": 0,
+            "finished_length_mm": 300.0,
+            "kerf_mm": 3.0
+          }
+        ],
+        "remaining_mm": 384.0
+      }
+    ],
+    "optimality_proven": false,
+    "cost_AUD": null,
+    "note": "Whole-stock quantities only; exact sourced net price remains separate"
+  },
+  "leg_and_bypass_cutting_schedule": {
+    "feasible": true,
+    "stock_count": 2,
+    "stock_length_mm": 1000.0,
+    "end_trim_each_mm": 5.0,
+    "bins": [
+      {
+        "pieces": [
+          {
+            "piece_index": 2,
+            "finished_length_mm": 466.4083332595204,
+            "kerf_mm": 3.0
+          },
+          {
+            "piece_index": 1,
+            "finished_length_mm": 466.4083332595204,
+            "kerf_mm": 3.0
+          }
+        ],
+        "remaining_mm": 51.18333348095916
+      },
+      {
+        "pieces": [
+          {
+            "piece_index": 0,
+            "finished_length_mm": 466.4083332595204,
+            "kerf_mm": 3.0
+          },
+          {
+            "piece_index": 4,
+            "finished_length_mm": 130.0,
+            "kerf_mm": 3.0
+          },
+          {
+            "piece_index": 3,
+            "finished_length_mm": 130.0,
+            "kerf_mm": 3.0
+          }
+        ],
+        "remaining_mm": 254.59166674047958
+      }
+    ],
+    "optimality_proven": false,
+    "cost_AUD": null,
+    "note": "Whole-stock quantities only; exact sourced net price remains separate"
+  },
+  "cutting_limitations": "Spine/leg stock separated here even when sections match; matrix runner must consolidate identical purchased variants. Central suspension and other stock remain unresolved.",
+  "reopen_observations": {
+    "fcstd_objects": [
+      {
+        "name": "FixedLegAttachment_Cut2",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 42020.17885420546
+      },
+      {
+        "name": "LandingTube0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 10256.854953388187
+      },
+      {
+        "name": "Foot0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 5438.207577349319
+      },
+      {
+        "name": "LandingTube1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 10256.854953388185
+      },
+      {
+        "name": "Foot1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 5438.2075714269295
+      },
+      {
+        "name": "LandingTube2",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 10256.8549533882
+      },
+      {
+        "name": "Foot2",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 5438.207572361002
+      },
+      {
+        "name": "Spine0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 12252.211349000198
+      },
+      {
+        "name": "Spine1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 12252.211349000198
+      },
+      {
+        "name": "BatterySupport_Cut1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 38302.342569539156
+      },
+      {
+        "name": "ElectronicsSupport_Cut1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 33409.67729447497
+      },
+      {
+        "name": "BatteryBottomPad",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 5580.000000000001
+      },
+      {
+        "name": "BatteryLowerGuide_1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 1890.0
+      },
+      {
+        "name": "BatteryLowerGuide1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 1890.0
+      },
+      {
+        "name": "BatteryEnvelope",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 164604.0
+      },
+      {
+        "name": "BatteryStrap0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 2688.0000000000005
+      },
+      {
+        "name": "BatteryStrap1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 2688.0000000000005
+      },
+      {
+        "name": "ESCShelf0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 1800.0
+      },
+      {
+        "name": "ESCEnvelope0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 12000.0
+      },
+      {
+        "name": "ESCShelf1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 1800.0
+      },
+      {
+        "name": "ESCEnvelope1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 12000.0
+      },
+      {
+        "name": "UnselectedElectronicsEnvelope",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 40500.0
+      },
+      {
+        "name": "FixedPivotSupport0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 9726.277929917867
+      },
+      {
+        "name": "OuterPivotBushing0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 348.33979343003597
+      },
+      {
+        "name": "OuterPivotPin0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 549.7787143782139
+      },
+      {
+        "name": "FixedPivotSupport1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 9726.277929917867
+      },
+      {
+        "name": "OuterPivotBushing1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 348.33979343003597
+      },
+      {
+        "name": "OuterPivotPin1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 549.7787143782139
+      },
+      {
+        "name": "InnerPivotBushing0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 406.3964256683756
+      },
+      {
+        "name": "InnerPivotPin0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 549.7787143782137
+      },
+      {
+        "name": "InnerPivotBushing1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 406.3964256683756
+      },
+      {
+        "name": "InnerPivotPin1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 549.7787143782137
+      },
+      {
+        "name": "OuterGimbal_Cut3",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 40020.04830624254
+      },
+      {
+        "name": "InnerCarrier_Cut1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 32320.321236942575
+      },
+      {
+        "name": "CentralSuspension",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 1281.7698026646358
+      },
+      {
+        "name": "UpperHeader",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 58492.8
+      },
+      {
+        "name": "LowerHeader",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 58492.8
+      },
+      {
+        "name": "BypassArm0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 2858.849314766709
+      },
+      {
+        "name": "BypassSocket0_0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 2427.0688204573307
+      },
+      {
+        "name": "BypassSocket0_1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 2427.0688204573307
+      },
+      {
+        "name": "BypassArm1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 2858.849314766709
+      },
+      {
+        "name": "BypassSocket1_0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 2427.0688204573316
+      },
+      {
+        "name": "BypassSocket1_1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 2427.0688204573316
+      },
+      {
+        "name": "UnresolvedMotorPlate0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 6399.999999999998
+      },
+      {
+        "name": "MotorEnvelope0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 34862.253676885935
+      },
+      {
+        "name": "PropellerDistributionProxy0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 18738.468194390498
+      },
+      {
+        "name": "UnresolvedMotorPlate1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 6399.999999999998
+      },
+      {
+        "name": "MotorEnvelope1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 34862.253676885935
+      },
+      {
+        "name": "PropellerDistributionProxy1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 18738.468194390498
+      },
+      {
+        "name": "ActuatorPackagingEnvelope0",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 24500.000000000007
+      },
+      {
+        "name": "ActuatorPackagingEnvelope1",
+        "exists": true,
+        "solid_count": 1,
+        "shape_valid": true,
+        "solids_valid": [
+          true
+        ],
+        "volume_mm3": 24500.000000000007
+      }
+    ],
+    "step_shape_valid": true,
+    "step_solid_count": 51,
+    "step_individual_solids_valid": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "step_volume_mm3": 830959.6849988983,
+    "expected_registered_volume_mm3": 830958.1091528325,
+    "scope": "Measurements only; independent artifact-bound verification still required"
+  },
+  "parameter_edit_observations": {
+    "parameter": "Parameters.SpineLength",
+    "original_mm": 300,
+    "edited_mm": 310,
+    "original_spine_volume_mm3": 12252.211349000198,
+    "edited_spine_volume_mm3": 12660.618393966866,
+    "edited_spine_z_extent_mm": 310.0,
+    "edited_shape_valid": true,
+    "expected_volume_ratio": 1.0333333333333334,
+    "saved_candidate_modified": false,
+    "scope": "Tube length only, not a whole-assembly adaptation check"
+  },
+  "artifact_file_sha256": {
+    "fcstd": "45dbd41ccba904f73bcec91d50cc8af0677ea426baadfbfa8ffe865fa9404b3e",
+    "step": "67356901777acf1a7a8853314fa4af95b4c043b5ed087f693158f247573571d2",
+    "drawing": "d5d2408ea177b56ca04ab3cb19e8b573b4783a16b128cd4ce22f648328d4445e"
+  },
+  "generation_source_sha256": {
+    "builder": "a89e657da1cee7a31be68e116303bbb1d5f7d22eed9c61716f7ca41faa60711a",
+    "kernel": "26269836fe1ced116669ce58f2295682162f65103e80da1ae1a95d20028e9c90"
+  },
+  "unperformed_checks": [
+    "Unintended material overlap and custom mounting-interface measurements",
+    "Both rotor envelopes versus structure/mechanism/wiring over articulated domain",
+    "Ground clearance under body tilt, compression and terrain sensitivity",
+    "Continuous clearance bounds and fabrication/deformation allowances",
+    "Complete mass/cost reconciliation and commercial accessory inclusion",
+    "All 48 structural alternatives and integrated-module branch",
+    "Independent unit/frame/inertia fixtures and verify_command acceptance",
+    "GUI screenshot inspection and all physical load/contact tests"
+  ]
+}

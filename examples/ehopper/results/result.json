@@ -1,0 +1,30 @@
+{
+  "run_id": "25f6c68037df4b0a878096f2e06aef53",
+  "status": "incomplete",
+  "reviews": [],
+  "human_requests": [],
+  "open_items": [
+    "REQ-ATTITUDE-RECOVERY-ERROR: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-ATTITUDE-RECOVERY-HOLD: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-ATTITUDE-RECOVERY-RATE: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-ATTITUDE-RECOVERY-TIME: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-COMMON-GIMBAL: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-HARDWARE-BUDGET: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-HOVER-ALTITUDE-MAX: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-HOVER-ALTITUDE-RMS: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-HOVER-DURATION: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-HOVER-HEIGHT: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-HOVER-HORIZONTAL-MAX: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-HOVER-HORIZONTAL-RMS: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-LANDING-DOWNWARD-SPEED: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-LANDING-HORIZONTAL-SPEED: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-LANDING-LEG-COUNT: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-LANDING-TILT: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-SPINE-COUNT: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "REQ-ZERO-PAYLOAD: SysML model revision 4 does not show it satisfied; send the verified design to the systems engineer to assess",
+    "chief: blocked: {\"detail\":\"Codex exited with status 1 (usage limit); run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\",\"selected\":[{\"id\":\"PDR-CAD-DIAGNOSTIC-COMPARISON-M4-03\",\"kind\":\"artifact\",\"locator\":\"\",\"revision\":1,\"sha256\":\"7ded43fef76cebd4579356e5479b63b90d8edd3b751caf46ab9d8fdf60c57835\"},{\"id\":\"PDR-CAD-STRUCTURAL-CANDIDATE-REVISION-M4-03\",\"kind\":\"artifact\",\"locator\":\"\",\"revision\":1,\"sha256\":\"821e8af5af6e553e50c668aa297a22a60f85be67e6feef5b56c963a6186466d5\"},{\"id\":\"PDR-CAD-DIAGNOSTIC-S2-C14-T-D330-MEASUREMENTS-M4-03\",\"kind\":\"artifact\",\"locator\":\"\",\"revision\":1,\"sha256\":\"14ac8b9f01d874f583245da9d6c0f59ee5c627bd5921f7431c102a15d4ed4b31\"},{\"id\":\"PDR-CAD-DIAGNOSTIC-S2-C14-Q-D330-MEASUREMENTS-M4-03\",\"kind\":\"artifact\",\"locator\":\"\",\"revision\":1,\"sha256\":\"bc246409e25132fac537eb94433929edb9d748a70de83c71f96d534f7421b300\"},{\"id\":\"PDR-CAD-DIAGNOSTIC-COMPARISON-LOG-M4-03\",\"kind\":\"artifact\",\"locator\":\"\",\"revision\":1,\"sha256\":\"7c553694c7e7760f72c65530067f6d00daf19662fbe118437d1562e00d13c6c0\"}]}",
+    "pdr_propulsion_trade: blocked: {\"detail\":\"Codex exited with status 1 (usage limit); run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}",
+    "pdr_cad_trade: blocked: {\"detail\":\"Codex exited with status 1 (usage limit); run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}",
+    "pdr_plant_repair: blocked: {\"detail\":\"Codex exited with status 1 (usage limit); run 'codex login status' and check ChatGPT model access, usage limits, and connectivity.\",\"error_type\":\"ProviderError\",\"phase\":\"provider\"}"
+  ]
+}

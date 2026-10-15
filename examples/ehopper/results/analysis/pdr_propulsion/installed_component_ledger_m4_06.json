@@ -1,0 +1,4751 @@
+{
+  "schema": "hopper.installed_checkpoint/1",
+  "provenance": {
+    "authority": {
+      "system_model": {
+        "kind": "system_model",
+        "id": "system",
+        "revision": 4,
+        "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75"
+      },
+      "work_plan": {
+        "kind": "decision",
+        "id": "99f7bb629eef45b89fa38d27c803868c",
+        "revision": 1,
+        "sha256": "e5af8e2f56f7c851b65518b129f39550be73911f56461279cbbb1e85e1cdd5f0"
+      },
+      "interface": {
+        "kind": "decision",
+        "id": "88561ff8b3ba4e8286cebd95a93e3b08",
+        "revision": 1,
+        "sha256": "ad6662afab9685585264c86e052c246996d23f4369c6432b56094a42a9187c04"
+      }
+    },
+    "input_ref": {
+      "kind": "artifact",
+      "id": "PDR-PROPULSION-CHECKPOINT-INPUTS-M4-05",
+      "revision": 1,
+      "sha256": "8af2841536f741da3194d586786d6dd0fabfaddf0da6f28b27d7bbe80547bda8"
+    },
+    "motor_register_read_ref": {
+      "kind": "tool_result",
+      "id": "80202d78fc454f8a94a2e06668bf2caf",
+      "revision": 1,
+      "sha256": "5a91c5a53e23be5e2d11a65eee8e046be531ab74d131c68056f46db2294903cd"
+    },
+    "input_files": [
+      {
+        "path": "analysis/pdr_propulsion/checkpoint_inputs_m4_20261015_05.json",
+        "sha256": "fb3e1b0fbbcefdacdd0c8185bab40a9693148a1f90fda6dcf67c7fd3d5adeb16"
+      },
+      {
+        "path": "analysis/pdr_propulsion/source_register_m2_20261015_04_motor_data_esc_followup.json",
+        "sha256": "52c3613c431909985efd361ca5cf89c7cbccdf0a02b12bb50fbb125d748279ab"
+      }
+    ],
+    "program_file": {
+      "path": "analysis/pdr_propulsion/checkpoint_analysis_m4_06.py",
+      "sha256": "53bd5a04ab58a28c101fc809c2bf87a0ec27057e302053aa3843e9cf1660cc4b"
+    },
+    "source_observation_access_date": "2026-10-15",
+    "historical_register_assessment": "Only inspected vendor observations are reused for unchanged component questions. Historical model/plan headings are not current authority."
+  },
+  "configurations": [
+    {
+      "design_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "motor_assembly_2",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Zeee 3S 5200 mAh 50C Deans two-pack, product handle zeee-3s-lipo-battery-5200mah-11-1v-50c-deans-t",
+          "claimed_mass_g": 343,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_FC",
+          "part": "CONTROLLER_WING_MINI/FC",
+          "claimed_mass_g": 5.6,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_PDB",
+          "part": "CONTROLLER_WING_MINI/PDB",
+          "claimed_mass_g": 5.5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_USB_EXTENDER",
+          "part": "CONTROLLER_WING_MINI/USB_EXTENDER",
+          "claimed_mass_g": 3.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_WING_MINI__low_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 1.0375,
+          "vendor_claim_subtotal_kg": 0.7245,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_WING_MINI__central_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.3545,
+          "vendor_claim_subtotal_kg": 0.7245,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_WING_MINI__high_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.8795000000000002,
+          "vendor_claim_subtotal_kg": 0.7245,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "motor_assembly_2",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Zeee 3S 5200 mAh 50C Deans two-pack, product handle zeee-3s-lipo-battery-5200mah-11-1v-50c-deans-t",
+          "claimed_mass_g": 343,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_package",
+          "part": "CONTROLLER_H743_WLITE",
+          "claimed_mass_g": 22,
+          "classification": "vendor_claim_not_measured",
+          "source": "E01/E02",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE__low_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 1.0452000000000001,
+          "vendor_claim_subtotal_kg": 0.7322000000000001,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE__central_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.3622,
+          "vendor_claim_subtotal_kg": 0.7322000000000001,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE__high_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.8872,
+          "vendor_claim_subtotal_kg": 0.7322000000000001,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "motor_assembly_2",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Zeee 3S 5200 mAh 50C Deans two-pack, product handle zeee-3s-lipo-battery-5200mah-11-1v-50c-deans-t",
+          "claimed_mass_g": 343,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_FC",
+          "part": "CONTROLLER_WING_MINI/FC",
+          "claimed_mass_g": 5.6,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_PDB",
+          "part": "CONTROLLER_WING_MINI/PDB",
+          "claimed_mass_g": 5.5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_USB_EXTENDER",
+          "part": "CONTROLLER_WING_MINI/USB_EXTENDER",
+          "claimed_mass_g": 3.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI__low_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 0.9975,
+          "vendor_claim_subtotal_kg": 0.6845,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI__central_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.3145,
+          "vendor_claim_subtotal_kg": 0.6845,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI__high_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.8395000000000001,
+          "vendor_claim_subtotal_kg": 0.6845,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "motor_assembly_2",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Zeee 3S 5200 mAh 50C Deans two-pack, product handle zeee-3s-lipo-battery-5200mah-11-1v-50c-deans-t",
+          "claimed_mass_g": 343,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_package",
+          "part": "CONTROLLER_H743_WLITE",
+          "claimed_mass_g": 22,
+          "classification": "vendor_claim_not_measured",
+          "source": "E01/E02",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE__low_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 1.0052,
+          "vendor_claim_subtotal_kg": 0.6922,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE__central_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.3222,
+          "vendor_claim_subtotal_kg": 0.6922,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE__high_allowance",
+          "design_id": "SEPARATE_3S_13__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_3S_13",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.8472,
+          "vendor_claim_subtotal_kg": 0.6922,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "motor_assembly_2",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Zeee 4S 3300 mAh 50C XT60 two-pack, product handle zeee-4s-lipo-battery-3300mah-14-8v-50c-xt60",
+          "claimed_mass_g": 348,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_FC",
+          "part": "CONTROLLER_WING_MINI/FC",
+          "claimed_mass_g": 5.6,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_PDB",
+          "part": "CONTROLLER_WING_MINI/PDB",
+          "claimed_mass_g": 5.5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_USB_EXTENDER",
+          "part": "CONTROLLER_WING_MINI/USB_EXTENDER",
+          "claimed_mass_g": 3.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_WING_MINI__low_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 1.0425,
+          "vendor_claim_subtotal_kg": 0.7295,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_WING_MINI__central_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.3595000000000002,
+          "vendor_claim_subtotal_kg": 0.7295,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_WING_MINI__high_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.8845,
+          "vendor_claim_subtotal_kg": 0.7295,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "motor_assembly_2",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Zeee 4S 3300 mAh 50C XT60 two-pack, product handle zeee-4s-lipo-battery-3300mah-14-8v-50c-xt60",
+          "claimed_mass_g": 348,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_package",
+          "part": "CONTROLLER_H743_WLITE",
+          "claimed_mass_g": 22,
+          "classification": "vendor_claim_not_measured",
+          "source": "E01/E02",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE__low_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 1.0502,
+          "vendor_claim_subtotal_kg": 0.7372000000000001,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE__central_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.3672,
+          "vendor_claim_subtotal_kg": 0.7372000000000001,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE__high_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.8922,
+          "vendor_claim_subtotal_kg": 0.7372000000000001,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "motor_assembly_2",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Zeee 4S 3300 mAh 50C XT60 two-pack, product handle zeee-4s-lipo-battery-3300mah-14-8v-50c-xt60",
+          "claimed_mass_g": 348,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_FC",
+          "part": "CONTROLLER_WING_MINI/FC",
+          "claimed_mass_g": 5.6,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_PDB",
+          "part": "CONTROLLER_WING_MINI/PDB",
+          "claimed_mass_g": 5.5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_USB_EXTENDER",
+          "part": "CONTROLLER_WING_MINI/USB_EXTENDER",
+          "claimed_mass_g": 3.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI__low_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 1.0025,
+          "vendor_claim_subtotal_kg": 0.6895,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI__central_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.3195000000000001,
+          "vendor_claim_subtotal_kg": 0.6895,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI__high_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.8445,
+          "vendor_claim_subtotal_kg": 0.6895,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "motor_assembly_2",
+          "part": "Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3",
+          "claimed_mass_g": 108,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Zeee 4S 3300 mAh 50C XT60 two-pack, product handle zeee-4s-lipo-battery-3300mah-14-8v-50c-xt60",
+          "claimed_mass_g": 348,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_package",
+          "part": "CONTROLLER_H743_WLITE",
+          "claimed_mass_g": 22,
+          "classification": "vendor_claim_not_measured",
+          "source": "E01/E02",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE__low_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 1.0102,
+          "vendor_claim_subtotal_kg": 0.6972,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE__central_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.3272,
+          "vendor_claim_subtotal_kg": 0.6972,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE__high_allowance",
+          "design_id": "SEPARATE_4S_11__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+          "branch_id": "SEPARATE_4S_11",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.8522,
+          "vendor_claim_subtotal_kg": 0.6972,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Himax CR28161100",
+          "claimed_mass_g": 164,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Same provisional 3S 5200 mAh two-pack as SEPARATE_3S_13",
+          "claimed_mass_g": 343,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_FC",
+          "part": "CONTROLLER_WING_MINI/FC",
+          "claimed_mass_g": 5.6,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_PDB",
+          "part": "CONTROLLER_WING_MINI/PDB",
+          "claimed_mass_g": 5.5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_USB_EXTENDER",
+          "part": "CONTROLLER_WING_MINI/USB_EXTENDER",
+          "claimed_mass_g": 3.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_WING_MINI__low_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 0.9855,
+          "vendor_claim_subtotal_kg": 0.6725,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_WING_MINI__central_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.3025,
+          "vendor_claim_subtotal_kg": 0.6725,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_WING_MINI__high_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_WING_MINI",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.8275000000000001,
+          "vendor_claim_subtotal_kg": 0.6725,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Himax CR28161100",
+          "claimed_mass_g": 164,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Same provisional 3S 5200 mAh two-pack as SEPARATE_3S_13",
+          "claimed_mass_g": 343,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_HITEC_35245S",
+          "claimed_mass_g": 32,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A01-A04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_package",
+          "part": "CONTROLLER_H743_WLITE",
+          "claimed_mass_g": 22,
+          "classification": "vendor_claim_not_measured",
+          "source": "E01/E02",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE__low_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 0.9932000000000001,
+          "vendor_claim_subtotal_kg": 0.6802,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE__central_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.3102,
+          "vendor_claim_subtotal_kg": 0.6802,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE__high_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_HITEC_35245S__CONTROLLER_H743_WLITE",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.8352,
+          "vendor_claim_subtotal_kg": 0.6802,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Himax CR28161100",
+          "claimed_mass_g": 164,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Same provisional 3S 5200 mAh two-pack as SEPARATE_3S_13",
+          "claimed_mass_g": 343,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_FC",
+          "part": "CONTROLLER_WING_MINI/FC",
+          "claimed_mass_g": 5.6,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_PDB",
+          "part": "CONTROLLER_WING_MINI/PDB",
+          "claimed_mass_g": 5.5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_USB_EXTENDER",
+          "part": "CONTROLLER_WING_MINI/USB_EXTENDER",
+          "claimed_mass_g": 3.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E03",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI__low_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 0.9455,
+          "vendor_claim_subtotal_kg": 0.6325,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI__central_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.2625,
+          "vendor_claim_subtotal_kg": 0.6325,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI__high_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_WING_MINI",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.7875,
+          "vendor_claim_subtotal_kg": 0.6325,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    },
+    {
+      "design_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+      "selected": false,
+      "vendor_claim_instances": [
+        {
+          "instance_id": "motor_assembly_1",
+          "part": "Himax CR28161100",
+          "claimed_mass_g": 164,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Commercial total replaces envelope mass; fixed/spinning subdivisions and accessories unresolved."
+        },
+        {
+          "instance_id": "installed_battery",
+          "part": "Same provisional 3S 5200 mAh two-pack as SEPARATE_3S_13",
+          "claimed_mass_g": 343,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04 and M2_03_excerpt",
+          "CAD_ownership_group": null,
+          "note": "Exactly one battery supplies airborne mass and energy."
+        },
+        {
+          "instance_id": "ESC_1",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_1",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "ESC_2",
+          "part": "Hobbywing 80060442",
+          "claimed_mass_g": 36,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "gimbal_servo_2",
+          "part": "SERVO_EMAX_0102003010",
+          "claimed_mass_g": 12,
+          "classification": "vendor_claim_not_measured",
+          "source": "M2_03_excerpt A05-A06",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "controller_package",
+          "part": "CONTROLLER_H743_WLITE",
+          "claimed_mass_g": 22,
+          "classification": "vendor_claim_not_measured",
+          "source": "E01/E02",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RECEIVER_RP1_V2",
+          "part": "RECEIVER_RP1_V2",
+          "claimed_mass_g": 2.2,
+          "classification": "vendor_claim_not_measured",
+          "source": "E04",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "GNSS_M10Q_5883",
+          "part": "GNSS_M10Q_5883",
+          "claimed_mass_g": 8,
+          "classification": "vendor_claim_not_measured",
+          "source": "E05",
+          "CAD_ownership_group": null,
+          "note": ""
+        },
+        {
+          "instance_id": "RANGE_TFMINI_S",
+          "part": "RANGE_TFMINI_S",
+          "claimed_mass_g": 5,
+          "classification": "vendor_claim_not_measured",
+          "source": "E06/E07",
+          "CAD_ownership_group": null,
+          "note": ""
+        }
+      ],
+      "study_mass_cases": [
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE__low_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "low_allowance",
+          "study_installed_mass_kg": 0.9532,
+          "vendor_claim_subtotal_kg": 0.6402,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 25,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 8,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 5,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE__central_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "central_allowance",
+          "study_installed_mass_kg": 1.2702,
+          "vendor_claim_subtotal_kg": 0.6402,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 90,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 50,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 60,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 65,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 45,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 10,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 15,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        },
+        {
+          "case_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE__high_allowance",
+          "design_id": "INTEGRATED_CR2816_3S__SERVO_EMAX_0102003010__CONTROLLER_H743_WLITE",
+          "branch_id": "INTEGRATED_CR2816_3S",
+          "allowance_level": "high_allowance",
+          "study_installed_mass_kg": 1.7952,
+          "vendor_claim_subtotal_kg": 0.6402,
+          "allowance_rows": [
+            {
+              "category": "propellers_pair",
+              "assumed_mass_g": 85,
+              "actual_mass_g": null
+            },
+            {
+              "category": "motor_mounts_adapters_retention",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "stationary_motor_support",
+              "assumed_mass_g": 200,
+              "actual_mass_g": null
+            },
+            {
+              "category": "gimbal_frames_bearings_pivots",
+              "assumed_mass_g": 160,
+              "actual_mass_g": null
+            },
+            {
+              "category": "servo_horns_rods_links_retention",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "spines_and_joints",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fixed_leg_ring_and_upper_mounts",
+              "assumed_mass_g": 100,
+              "actual_mass_g": null
+            },
+            {
+              "category": "CFRP_legs_and_joints",
+              "assumed_mass_g": 110,
+              "actual_mass_g": null
+            },
+            {
+              "category": "feet_and_compliance_parts",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "battery_retention_padding",
+              "assumed_mass_g": 35,
+              "actual_mass_g": null
+            },
+            {
+              "category": "power_signal_harness_connectors",
+              "assumed_mass_g": 80,
+              "actual_mass_g": null
+            },
+            {
+              "category": "distribution_protection_arm_disconnect",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "sensor_rail_regulation_filtering",
+              "assumed_mass_g": 20,
+              "actual_mass_g": null
+            },
+            {
+              "category": "electronics_mounts_isolation_antennas",
+              "assumed_mass_g": 30,
+              "actual_mass_g": null
+            },
+            {
+              "category": "fasteners_adhesives_insulation",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            },
+            {
+              "category": "additional_horizontal_sensing",
+              "assumed_mass_g": 40,
+              "actual_mass_g": null
+            }
+          ],
+          "supported_complete_installed_mass_kg": null,
+          "payload_mass_kg": 0.0
+        }
+      ],
+      "unknown_unallocated_mass_kg": null,
+      "qualification": "Category enumeration is not a complete component audit. Allowances are not guaranteed bounds. Integrated-module propeller/accessory inclusion can overlap until reconciled. No inertia or physical ownership split is established."
+    }
+  ],
+  "limitations": [
+    "No hardware, supplier, topology or controller is selected. Central grid values are not recommended or calibrated values.",
+    "Masses combine commercial claims with enumerated allowances, not actual complete CAD mass. Unknown omissions and accessory overlap remain."
+  ]
+}

@@ -1,0 +1,105 @@
+{
+  "schema": "hopper.ground_purchase_checkpoint/1",
+  "provenance": {
+    "authority": {
+      "system_model": {
+        "kind": "system_model",
+        "id": "system",
+        "revision": 4,
+        "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75"
+      },
+      "work_plan": {
+        "kind": "decision",
+        "id": "99f7bb629eef45b89fa38d27c803868c",
+        "revision": 1,
+        "sha256": "e5af8e2f56f7c851b65518b129f39550be73911f56461279cbbb1e85e1cdd5f0"
+      },
+      "interface": {
+        "kind": "decision",
+        "id": "88561ff8b3ba4e8286cebd95a93e3b08",
+        "revision": 1,
+        "sha256": "ad6662afab9685585264c86e052c246996d23f4369c6432b56094a42a9187c04"
+      }
+    },
+    "input_ref": {
+      "kind": "artifact",
+      "id": "PDR-PROPULSION-CHECKPOINT-INPUTS-M4-05",
+      "revision": 1,
+      "sha256": "8af2841536f741da3194d586786d6dd0fabfaddf0da6f28b27d7bbe80547bda8"
+    },
+    "motor_register_read_ref": {
+      "kind": "tool_result",
+      "id": "80202d78fc454f8a94a2e06668bf2caf",
+      "revision": 1,
+      "sha256": "5a91c5a53e23be5e2d11a65eee8e046be531ab74d131c68056f46db2294903cd"
+    },
+    "input_files": [
+      {
+        "path": "analysis/pdr_propulsion/checkpoint_inputs_m4_20261015_05.json",
+        "sha256": "fb3e1b0fbbcefdacdd0c8185bab40a9693148a1f90fda6dcf67c7fd3d5adeb16"
+      },
+      {
+        "path": "analysis/pdr_propulsion/source_register_m2_20261015_04_motor_data_esc_followup.json",
+        "sha256": "52c3613c431909985efd361ca5cf89c7cbccdf0a02b12bb50fbb125d748279ab"
+      }
+    ],
+    "program_file": {
+      "path": "analysis/pdr_propulsion/checkpoint_analysis_m4_06.py",
+      "sha256": "53bd5a04ab58a28c101fc809c2bf87a0ec27057e302053aa3843e9cf1660cc4b"
+    },
+    "source_observation_access_date": "2026-10-15",
+    "historical_register_assessment": "Only inspected vendor observations are reused for unchanged component questions. Historical model/plan headings are not current authority."
+  },
+  "items": [
+    {
+      "id": "compatible_transmitter_and_battery",
+      "quantity": 1,
+      "part": null,
+      "price_AUD": null
+    },
+    {
+      "id": "balance_charger_and_required_supply",
+      "quantity": 1,
+      "part": null,
+      "price_AUD": null
+    },
+    {
+      "id": "battery_storage_transport_charge_protection",
+      "quantity": 1,
+      "part": null,
+      "price_AUD": null
+    },
+    {
+      "id": "current_voltage_energy_logger",
+      "quantity": 1,
+      "part": null,
+      "price_AUD": null
+    },
+    {
+      "id": "paired_thrust_torque_fixture_load_cells",
+      "quantity": 1,
+      "part": null,
+      "price_AUD": null
+    },
+    {
+      "id": "RPM_and_temperature_instrumentation",
+      "quantity": 1,
+      "part": null,
+      "price_AUD": null
+    },
+    {
+      "id": "restrained_test_fixture_barrier_remote_shutdown",
+      "quantity": 1,
+      "part": null,
+      "price_AUD": null
+    },
+    {
+      "id": "assembly_tools_and_electrical_test_equipment",
+      "quantity": 1,
+      "part": null,
+      "price_AUD": null
+    }
+  ],
+  "complete_ground_total_AUD": null,
+  "status": "Unpriced work remaining; no equipment presumed owned; separate from vehicle cap."
+}

@@ -1,0 +1,680 @@
+{
+  "schema": "hopper.plant_capability_diagnostic/1",
+  "authority": {
+    "system_model": {
+      "kind": "system_model",
+      "id": "system",
+      "revision": 4,
+      "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75"
+    },
+    "work_plan": {
+      "kind": "decision",
+      "id": "99f7bb629eef45b89fa38d27c803868c",
+      "revision": 1,
+      "sha256": "e5af8e2f56f7c851b65518b129f39550be73911f56461279cbbb1e85e1cdd5f0"
+    },
+    "interface": {
+      "kind": "decision",
+      "id": "88561ff8b3ba4e8286cebd95a93e3b08",
+      "revision": 1,
+      "sha256": "ad6662afab9685585264c86e052c246996d23f4369c6432b56094a42a9187c04"
+    }
+  },
+  "created_utc": "2026-10-15T13:33:50.862131+00:00",
+  "probe_sha256": "4a562cc24e7c2a78be08a2243ff9329d1316ceae290d425d841f9eefd2ff7c00",
+  "inventory_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/source_inventory_m4_02.json",
+  "inventory_sha256": "9731f6ace67462d60dfe929d9e3d610abfc85429234421a4ed04c636354ccd77",
+  "interpreter": {
+    "executable": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/bin/python",
+    "version": "3.13.11 | packaged by Anaconda, Inc. | (main, Dec 10 2025, 21:29:12) [GCC 14.3.0]",
+    "implementation": "CPython",
+    "dont_write_bytecode": true,
+    "cwd": "/home/ngvnngkhoi/guacamole/examples/ehopper/results"
+  },
+  "distribution_metadata": {
+    "numpy": {
+      "version": "2.5.2",
+      "import_established": false
+    },
+    "scipy": {
+      "version": "1.18.0",
+      "import_established": false
+    },
+    "pytest": {
+      "version": "9.1.1",
+      "import_established": false
+    },
+    "matplotlib": {
+      "version": "3.11.1",
+      "import_established": false
+    },
+    "openmdao": {
+      "version": "3.45.0",
+      "import_established": false
+    },
+    "black": {
+      "version": "26.5.1",
+      "import_established": false
+    },
+    "uv": {
+      "version": "0.12.5",
+      "import_established": false
+    }
+  },
+  "observations": [
+    {
+      "id": "import_numpy",
+      "mode": "actual dependency import",
+      "value": {
+        "module": "numpy",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/numpy/__init__.py",
+        "module_version": "2.5.2"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_scipy",
+      "mode": "actual dependency import",
+      "value": {
+        "module": "scipy",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/scipy/__init__.py",
+        "module_version": "1.18.0"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_scipy.integrate",
+      "mode": "actual dependency import",
+      "value": {
+        "module": "scipy.integrate",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/scipy/integrate/__init__.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_pytest",
+      "mode": "actual dependency import",
+      "value": {
+        "module": "pytest",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/.venv/lib/python3.13/site-packages/pytest/__init__.py",
+        "module_version": "9.1.1"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "standalone_scipy_numerical_smoke",
+      "mode": "actual numerical execution; not plant verification",
+      "value": {
+        "fixture": "Standalone y_dot=2*t, y(0)=3; not hopper dynamics",
+        "success": true,
+        "status": 0,
+        "message": "The solver successfully reached the end of the integration interval.",
+        "result_type": "scipy.integrate._ivp.ivp.OdeResult",
+        "times_s": [
+          0.0,
+          0.25,
+          1.0
+        ],
+        "values": [
+          [
+            3.0,
+            3.0625,
+            4.0
+          ]
+        ],
+        "max_absolute_error": 0.0,
+        "dense_value_at_0p5": [
+          3.2500000000000004
+        ],
+        "nfev": 80
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_original_math",
+      "mode": "unmodified original module import",
+      "value": {
+        "module": "helpers.math",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/helpers/math.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_original_state",
+      "mode": "unmodified original module import",
+      "value": {
+        "module": "simulation.state",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/state.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_original_propulsion",
+      "mode": "unmodified original module import",
+      "value": {
+        "module": "propulsion.propulsion",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/propulsion/propulsion.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_original_propeller",
+      "mode": "unmodified original module import",
+      "value": {
+        "module": "propulsion.propeller",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/propulsion/propeller.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_original_hopper",
+      "mode": "unmodified original module import",
+      "value": {
+        "module": "chassis.hopper",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/chassis/hopper.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_original_aero",
+      "mode": "unmodified original module import",
+      "value": {
+        "module": "aero.aero",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/aero/aero.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_original_simulation",
+      "mode": "unmodified original module import",
+      "source_based_expectation_not_result": "Original Simulation has an unresolved top-level State import",
+      "observation_status": "raised",
+      "exception_type": "ModuleNotFoundError",
+      "exception_message": "No module named 'state'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 168, in observe\n    row['value'] = function()\n                   ~~~~~~~~^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 243, in <lambda>\n    load_module(key, name, ORIGINAL / rel),\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 183, in load_module\n    module = importlib.import_module(name)\n  File \"/home/ngvnngkhoi/miniconda3/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1387, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1331, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 935, in _load_unlocked\n  File \"<frozen importlib._bootstrap_external>\", line 1023, in exec_module\n  File \"<frozen importlib._bootstrap>\", line 488, in _call_with_frames_removed\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/simulation.py\", line 4, in <module>\n    from state import State\nModuleNotFoundError: No module named 'state'\n",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC06_original_DCM_local_name",
+      "mode": "direct original function call",
+      "source_based_expectation_not_result": "UnboundLocalError from quaternions before assignment",
+      "observation_status": "raised",
+      "exception_type": "UnboundLocalError",
+      "exception_message": "cannot access local variable 'quaternions' where it is not associated with a value",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 168, in observe\n    row['value'] = function()\n                   ~~~~~~~~^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 251, in <lambda>\n    lambda: math_module.quarternion_to_dcm(np.array([1.,0.,0.,0.])),\n            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/helpers/math.py\", line 13, in quarternion_to_dcm\n    quaternions = np.array(quaternions) / np.linalg.norm(quaternions)\n                           ^^^^^^^^^^^\nUnboundLocalError: cannot access local variable 'quaternions' where it is not associated with a value\n",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC07_original_Euler_signature",
+      "mode": "direct original function call",
+      "source_based_expectation_not_result": "TypeError for three positional arguments",
+      "observation_status": "raised",
+      "exception_type": "TypeError",
+      "exception_message": "euler_to_quaternion() takes from 1 to 2 positional arguments but 3 were given",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 168, in observe\n    row['value'] = function()\n                   ~~~~~~~~^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 254, in <lambda>\n    lambda: math_module.euler_to_quaternion(0.1, 0.2, 0.3),\n            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^\nTypeError: euler_to_quaternion() takes from 1 to 2 positional arguments but 3 were given\n",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC08_original_Euler_order",
+      "mode": "direct original function call",
+      "value": {
+        "input_documented_roll_pitch_yaw_deg": [
+          10.0,
+          0.0,
+          0.0
+        ],
+        "actual_quaternion_wxyz": [
+          0.9961946980917455,
+          0.0,
+          0.0,
+          0.08715574274765817
+        ],
+        "expected_for_documented_pure_roll_wxyz": [
+          0.9961946980917455,
+          0.08715574274765817,
+          0.0,
+          0.0
+        ],
+        "component_max_difference": 0.08715574274765817
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC04_original_update_signature",
+      "mode": "direct original function call",
+      "source_based_expectation_not_result": "TypeError because update_state requires thirteen scalar arguments",
+      "observation_status": "raised",
+      "exception_type": "TypeError",
+      "exception_message": "State.update_state() missing 12 required positional arguments: 'y', 'z', 'u', 'v', 'w', 'q0', 'q1', 'q2', 'q3', 'p', 'q', and 'r'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 168, in observe\n    row['value'] = function()\n                   ~~~~~~~~^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 270, in <lambda>\n    lambda: State(*initial).update_state(np.asarray(initial)),\n            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\nTypeError: State.update_state() missing 12 required positional arguments: 'y', 'z', 'u', 'v', 'w', 'q0', 'q1', 'q2', 'q3', 'p', 'q', and 'r'\n",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC11_original_history_mutation",
+      "mode": "direct original function call",
+      "value": {
+        "before_history_lengths": [
+          0,
+          0
+        ],
+        "after_history_lengths": [
+          1,
+          1
+        ],
+        "scope": "Direct update_state call only; original RHS remains blocked"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC02_original_initial_state_discard",
+      "mode": "private namespace: only failing State import replaced",
+      "value": {
+        "supplied_initial_vector": [
+          1.0,
+          2.0,
+          -3.0,
+          0.4,
+          -0.5,
+          0.6,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.1,
+          -0.2,
+          0.3
+        ],
+        "stored_state_is_none": true
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC03_original_undefined_time",
+      "mode": "private namespace: only failing State import replaced",
+      "source_based_expectation_not_result": "AttributeError for undefined self.time",
+      "observation_status": "raised",
+      "exception_type": "AttributeError",
+      "exception_message": "'Simulation' object has no attribute 'time'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 168, in observe\n    row['value'] = function()\n                   ~~~~~~~~^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 303, in <lambda>\n    lambda: construct().trajectory_ode(0.0, np.asarray(initial)),\n            ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/simulation.py [private import isolation]\", line 16, in trajectory_ode\nAttributeError: 'Simulation' object has no attribute 'time'\n",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC05_original_numeric_vector_attributes",
+      "mode": "private namespace plus synthetic self.time=0 to expose next defect",
+      "source_based_expectation_not_result": "AttributeError from treating numeric vector as State",
+      "observation_status": "raised",
+      "exception_type": "AttributeError",
+      "exception_message": "'numpy.ndarray' object has no attribute 'x'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 168, in observe\n    row['value'] = function()\n                   ~~~~~~~~^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 309, in numeric_object_mismatch\n    return simulation.trajectory_ode(0.0, np.asarray(initial))\n           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/simulation.py [private import isolation]\", line 22, in trajectory_ode\nAttributeError: 'numpy.ndarray' object has no attribute 'x'\n",
+      "captured_stdout": "bricked\n",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC04_original_RHS_update_call",
+      "mode": "private namespace plus explicit state/time isolation",
+      "source_based_expectation_not_result": "TypeError at original update_state(vector) call",
+      "observation_status": "raised",
+      "exception_type": "TypeError",
+      "exception_message": "State.update_state() missing 12 required positional arguments: 'y', 'z', 'u', 'v', 'w', 'q0', 'q1', 'q2', 'q3', 'p', 'q', and 'r'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 168, in observe\n    row['value'] = function()\n                   ~~~~~~~~^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 319, in update_call_mismatch\n    return simulation.trajectory_ode(1.0, np.asarray(initial))\n           ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/simulation.py [private import isolation]\", line 17, in trajectory_ode\nTypeError: State.update_state() missing 12 required positional arguments: 'y', 'z', 'u', 'v', 'w', 'q0', 'q1', 'q2', 'q3', 'p', 'q', and 'r'\n",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC07_original_solver_Euler_call",
+      "mode": "private namespace: only failing State import replaced",
+      "source_based_expectation_not_result": "TypeError at original Euler conversion call",
+      "observation_status": "raised",
+      "exception_type": "TypeError",
+      "exception_message": "euler_to_quaternion() takes from 1 to 2 positional arguments but 3 were given",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 168, in observe\n    row['value'] = function()\n                   ~~~~~~~~^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 326, in <lambda>\n    lambda: construct().solve_ode(0.1,0.2,0.3,1.0),\n            ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper/simulation/simulation.py [private import isolation]\", line 134, in solve_ode\nTypeError: euler_to_quaternion() takes from 1 to 2 positional arguments but 3 were given\n",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC09_RC10_original_reset_and_discard",
+      "mode": "private namespace with explicitly stubbed Euler and solver; NOT integration",
+      "value": {
+        "Euler_arguments": [
+          0.1,
+          0.2,
+          0.3
+        ],
+        "solver_y0": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0,
+          0,
+          0
+        ],
+        "solver_t_span": [
+          0.0,
+          1.0
+        ],
+        "return_is_none": true,
+        "returned_solver_sentinel": false,
+        "stored_state_after_call": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0,
+          0,
+          0
+        ],
+        "constructor_input": [
+          1.0,
+          2.0,
+          -3.0,
+          0.4,
+          -0.5,
+          0.6,
+          1.0,
+          0.0,
+          0.0,
+          0.0,
+          0.1,
+          -0.2,
+          0.3
+        ],
+        "actual_integration_performed": false
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "private_original_import_isolation",
+      "mode": "instrumented in-memory source; not unmodified module execution",
+      "value": {
+        "original_file_sha256": "087767eef40f728775d5bd8ee597a6e0a8c0769fe4d2d6ab2a060d06692f86ca",
+        "removed_import": "from state import State",
+        "source_files_written": false,
+        "sys_modules_state_alias_inserted": false
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC12_original_abstract_propeller",
+      "mode": "direct original constructor call",
+      "source_based_expectation_not_result": "TypeError for unimplemented abstract methods; numbers are synthetic",
+      "observation_status": "raised",
+      "exception_type": "TypeError",
+      "exception_message": "Can't instantiate abstract class Propellor without an implementation for abstract methods 'get_local_cg', 'get_mass', 'get_thrust_and_moment'",
+      "traceback": "Traceback (most recent call last):\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 168, in observe\n    row['value'] = function()\n                   ~~~~~~~~^^\n  File \"/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/capability_probe_m4_04.py\", line 366, in <lambda>\n    lambda: modules['original_propeller'].Propellor(\n            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^\n        modules['original_propulsion'].PropulsionType.PROPELLER,\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        100.,0.1,1.,10.,10.,0.1),\n        ^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: Can't instantiate abstract class Propellor without an implementation for abstract methods 'get_local_cg', 'get_mass', 'get_thrust_and_moment'\n",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC13_original_Hopper_aliasing",
+      "mode": "direct original constructor and input mutation",
+      "value": {
+        "fixture": "Synthetic ownership diagnostic only",
+        "cg_shares_input_memory": true,
+        "cg_before": [
+          0.1,
+          0.2,
+          0.3
+        ],
+        "cg_after_caller_mutation": [
+          0.9,
+          0.2,
+          0.3
+        ],
+        "arm_shares_input_memory": true,
+        "centre_shares_input_memory": true
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "RC14_original_aero_alias_and_early_return",
+      "mode": "direct original function call",
+      "value": {
+        "fixture": "Synthetic zero-translation, nonzero-rotation diagnostic",
+        "caller_axis_before": [
+          2.0,
+          0.0,
+          0.0
+        ],
+        "caller_axis_after": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "returned_force_N": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "returned_moment_N_m": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "interpretation": "Observes input mutation and early-return behavior, not physical drag validity"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_repaired_hopper_r12.helpers.math",
+      "mode": "unmodified recovered module import only",
+      "value": {
+        "module": "repaired_hopper_r12.helpers.math",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/helpers/math.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_repaired_hopper_r12.simulation.state",
+      "mode": "unmodified recovered module import only",
+      "value": {
+        "module": "repaired_hopper_r12.simulation.state",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/simulation/state.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_repaired_hopper_r12.chassis.hopper",
+      "mode": "unmodified recovered module import only",
+      "value": {
+        "module": "repaired_hopper_r12.chassis.hopper",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/chassis/hopper.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_repaired_hopper_r12.propulsion.propulsion",
+      "mode": "unmodified recovered module import only",
+      "value": {
+        "module": "repaired_hopper_r12.propulsion.propulsion",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/propulsion/propulsion.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_repaired_hopper_r12.propulsion.propeller",
+      "mode": "unmodified recovered module import only",
+      "value": {
+        "module": "repaired_hopper_r12.propulsion.propeller",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/propulsion/propeller.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_repaired_hopper_r12.propulsion.actuators",
+      "mode": "unmodified recovered module import only",
+      "value": {
+        "module": "repaired_hopper_r12.propulsion.actuators",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/propulsion/actuators.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_repaired_hopper_r12.simulation.environment",
+      "mode": "unmodified recovered module import only",
+      "value": {
+        "module": "repaired_hopper_r12.simulation.environment",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/simulation/environment.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    },
+    {
+      "id": "import_repaired_hopper_r12.simulation.simulation",
+      "mode": "unmodified recovered module import only",
+      "value": {
+        "module": "repaired_hopper_r12.simulation.simulation",
+        "file": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/simulation/simulation.py",
+        "module_version": "not exposed"
+      },
+      "observation_status": "returned",
+      "captured_stdout": "",
+      "captured_stderr": ""
+    }
+  ],
+  "baseline_mismatches": [],
+  "physical_acceptance": "not_assessed",
+  "plant_regression_performed": false,
+  "limitations": [
+    "Diagnostic report, not a VerificationResult or complete plant regression.",
+    "Distribution metadata alone does not establish import or execution capability.",
+    "Private import isolation and solver stubs do not show the original plant runs.",
+    "All reproduction inputs are synthetic, not selected vehicle parameters.",
+    "Recovered-package imports do not validate its analytical model or scope.",
+    "Preservation covers enumerated regular files, including caches; excludes environments, Git metadata and un-followed symlinks.",
+    "No installation, source checkout modification, PID tuning or hardware test is performed."
+  ],
+  "preservation": {
+    "roots": {
+      "original_hopper": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/6dof_hopper",
+      "pendulum_reference": "/home/ngvnngkhoi/guacamole/examples/ehopper/tooling/PendulumControlProject",
+      "recovered_previous_run": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run",
+      "archived_notes": "/home/ngvnngkhoi/guacamole/examples/ehopper/context/previous_run"
+    },
+    "regular_file_count_before": 8887,
+    "regular_file_count_after": 8887,
+    "content_manifest_digest_before": "855951e3520fdfcaaf6094a22c47470fbeb90e6f41e6f7ad32b9094ebcc5f7c3",
+    "content_manifest_digest_after": "855951e3520fdfcaaf6094a22c47470fbeb90e6f41e6f7ad32b9094ebcc5f7c3",
+    "delta": {
+      "changed": [],
+      "added": [],
+      "missing": []
+    },
+    "omissions_before": [
+      [
+        "original_hopper",
+        ".git",
+        "excluded directory or un-followed symlink"
+      ],
+      [
+        "original_hopper",
+        ".venv",
+        "excluded directory or un-followed symlink"
+      ],
+      [
+        "pendulum_reference",
+        ".git",
+        "excluded directory or un-followed symlink"
+      ]
+    ],
+    "omissions_after": [
+      [
+        "original_hopper",
+        ".git",
+        "excluded directory or un-followed symlink"
+      ],
+      [
+        "original_hopper",
+        ".venv",
+        "excluded directory or un-followed symlink"
+      ],
+      [
+        "pendulum_reference",
+        ".git",
+        "excluded directory or un-followed symlink"
+      ]
+    ],
+    "bytecode_writes_disabled": true,
+    "scope": "Diagnostic comparison, not registered source-preservation verification"
+  }
+}

@@ -284,6 +284,50 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(project.sysml.review_issues())
 
     @needs_library
+    async def test_model_revision_rolls_back_when_its_inputs_depend_on_prior_model(
+        self,
+    ):
+        project = self.project
+        base, _ = await project.sysml.commit(
+            summary="Fixture", files=rocket(), derived_from=(self.r1,)
+        )
+        decision = await project.decisions.choose(
+            choice(Candidate(id="A", description="Fixture", evidence=(base,))),
+            selected="A",
+            explanation="Fixture",
+        )
+        decision_ref = project.store.get("decision", decision).ref
+        output = project.store.put(
+            "tool_result",
+            "fixture-output",
+            {"result": "Fixture"},
+            actor="fixture",
+            dependencies=(decision_ref,),
+        )
+        for dependency in (decision_ref, output):
+            with self.subTest(kind=dependency.kind):
+                before = len(project.events())
+                with self.assertRaisesRegex(ValueError, "invalidate its own inputs"):
+                    await project.sysml.commit(
+                        summary="Fixture circular provenance",
+                        derived_from=(dependency,),
+                    )
+                self.assertEqual(project.sysml.current().ref, base)
+                self.assertFalse(project.store.resolve(base).stale)
+                self.assertFalse(project.store.resolve(dependency).stale)
+                self.assertEqual(len(project.events()), before)
+                self.assertEqual(
+                    (project.sandbox / "sysml/rocket.sysml").read_text(),
+                    rocket()["rocket.sysml"],
+                )
+        updated, _ = await project.sysml.commit(
+            summary="Fixture independent provenance", derived_from=(self.r1,)
+        )
+        self.assertEqual(updated.revision, 2)
+        self.assertFalse(project.store.resolve(updated).stale)
+        self.assertTrue(project.store.resolve(decision_ref).stale)
+
+    @needs_library
     async def test_a_new_revision_invalidates_decisions_it_contradicts(self):
         project = self.project
         await project.sysml.commit(

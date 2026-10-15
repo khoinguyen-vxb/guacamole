@@ -1,0 +1,101 @@
+{
+  "run_id": "25f6c68037df4b0a878096f2e06aef53",
+  "status": "resumed_activity_confirmed",
+  "model": {
+    "kind": "system_model",
+    "id": "system",
+    "revision": 4,
+    "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75",
+    "locator": ""
+  },
+  "plan": {
+    "kind": "decision",
+    "id": "99f7bb629eef45b89fa38d27c803868c",
+    "revision": 1,
+    "sha256": "e5af8e2f56f7c851b65518b129f39550be73911f56461279cbbb1e85e1cdd5f0",
+    "locator": ""
+  },
+  "interface": {
+    "kind": "decision",
+    "id": "88561ff8b3ba4e8286cebd95a93e3b08",
+    "revision": 1,
+    "sha256": "ad6662afab9685585264c86e052c246996d23f4369c6432b56094a42a9187c04",
+    "locator": ""
+  },
+  "contexts": [
+    {
+      "task": "chief",
+      "status": "active",
+      "input_tokens": 181777,
+      "budget": 1030000,
+      "deferred": 14
+    },
+    {
+      "task": "systems_engineer",
+      "status": "active",
+      "input_tokens": 165980,
+      "budget": 1030000,
+      "deferred": 3
+    },
+    {
+      "task": "pdr_propulsion_trade",
+      "status": "active",
+      "input_tokens": 93743,
+      "budget": 1040000,
+      "deferred": 6
+    },
+    {
+      "task": "pdr_cad_trade",
+      "status": "active",
+      "input_tokens": 118187,
+      "budget": 1038000,
+      "deferred": 9
+    },
+    {
+      "task": "pdr_plant_repair",
+      "status": "active",
+      "input_tokens": 121885,
+      "budget": 1032000,
+      "deferred": 6
+    }
+  ],
+  "backup": "/tmp/ehopper-before-model-cycle-recovery-20261015.sqlite3",
+  "model_files_unchanged": true,
+  "tools_replayed": false,
+  "confirmed_at": "2026-10-15T12:43:44.869440+00:00",
+  "current_model": {
+    "kind": "system_model",
+    "id": "system",
+    "revision": 4,
+    "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75",
+    "locator": ""
+  },
+  "agents_after_resume": [
+    {
+      "task": "chief",
+      "status": "active"
+    },
+    {
+      "task": "pdr_plant_repair",
+      "status": "active"
+    },
+    {
+      "task": "pdr_cad_trade",
+      "status": "active"
+    },
+    {
+      "task": "pdr_propulsion_trade",
+      "status": "active"
+    },
+    {
+      "task": "systems_engineer",
+      "status": "active"
+    }
+  ],
+  "completed_tool_after_resume": {
+    "request_id": "24482b0c862941c2a8611a8d67f67b43",
+    "tool": "read_text@1",
+    "status": "completed"
+  },
+  "rejected_actions_after_resume": []
+}

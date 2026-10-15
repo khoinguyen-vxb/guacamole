@@ -1,0 +1,197 @@
+{
+  "schema": "hopper.propulsion_checkpoint_inputs/1",
+  "id": "PROP-CHECKPOINT-INPUTS-M4-05",
+  "created_date": "2026-10-15",
+  "task": "pdr_propulsion_trade",
+  "status": "Editable preliminary comparison inputs, not executed results or a selected vehicle",
+  "authority": {
+    "system_model": {"kind":"system_model","id":"system","revision":4,"sha256":"e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75"},
+    "work_plan": {"kind":"decision","id":"99f7bb629eef45b89fa38d27c803868c","revision":1,"sha256":"e5af8e2f56f7c851b65518b129f39550be73911f56461279cbbb1e85e1cdd5f0"},
+    "interface": {"kind":"decision","id":"88561ff8b3ba4e8286cebd95a93e3b08","revision":1,"sha256":"ad6662afab9685585264c86e052c246996d23f4369c6432b56094a42a9187c04"}
+  },
+  "provenance_boundary": "Brief and previous-run index reviewed. Reuse compacted historical leads without wholesale rereading. M2 source-register observations below were inspected through current read_text results; their old authority headings remain historical. This file assesses their relevance to unchanged component questions, not the validity of old decisions, outputs or verification claims. No original file is modified.",
+  "prior_observation_records": {
+    "M2_04": {"kind":"tool_result","id":"80202d78fc454f8a94a2e06668bf2caf","revision":1,"sha256":"5a91c5a53e23be5e2d11a65eee8e046be531ab74d131c68056f46db2294903cd"},
+    "M2_03_excerpt": {"kind":"tool_result","id":"57b16834e51543b199cdf2446b558e5e","revision":1,"sha256":"f01e21b3a689a27aafa7b6f1a6348d04a85eb1f0908a6a2fa973c2063102e742"}
+  },
+  "web_method": "New observations accessed 2026-10-15 using provider-side live web search/retrieval. Cached content may be returned. Catalogue stock is not a reservation; access date is not quotation date. No supplier contact, purchase, installation or physical test occurred. Images and mounting drawings were not visually measured. URLs and source units are retained below.",
+  "new_sources": [
+    {
+      "id":"E01", "access_date":"2026-10-15",
+      "url":"https://www.mateksys.com/?portfolio=h743-wlite",
+      "citation":"[MATEKSYS H743-WLITE specifications and output-group notes](https://www.mateksys.com/?portfolio=h743-wlite)",
+      "part":"H743-WLITE", "source_kind":"manufacturer",
+      "claims":{"mass_g":22,"mass_scope":"With USB/buzzer adapter; complete accessory inclusion unresolved","dimensions_mm":[44,29,14.5],"mounting_pitch_mm":[25,25],"mounting_hole_diameter_mm":2,"input_V":[6.8,30],"logic_BEC_V":5,"logic_BEC_continuous_A":2,"servo_BEC_settings_V":[5,6,7.2],"servo_BEC_continuous_A":8,"servo_BEC_max_A":10,"sense_resistor_continuous_A":90,"sense_resistor_peak_A":220,"IMU":"ICM42688-P","barometer":"DPS310"},
+      "notes":"Page title identifies EOL and warns of counterfeits. PWM outputs share timer groups; mixed motor/servo protocols or rates require explicit mapping. Input must exceed servo output by 1 V for stated regulation. Ratings are not installed thermal validation. Firmware support does not establish hopper-controller integration.",
+      "price":null,"currency":null,"stock":"Manufacturer EOL designation; quantity unavailable"
+    },
+    {
+      "id":"E02", "access_date":"2026-10-15",
+      "url":"https://phaserfpv.com.au/collections/matek/products/matek-h743-wlite-wing-flight-controller",
+      "citation":"[Phaser FPV H743-WLITE price and availability](https://phaserfpv.com.au/collections/matek/products/matek-h743-wlite-wing-flight-controller)",
+      "part":"H743-WLITE ICM42688-P", "amount":"176.55","currency":"AUD","listing_unit":"one controller package","pack_quantity":1,"minimum_quantity_confirmed":null,"minimum_note":"No larger minimum stated","stock":"Sold out; EOL","tax":"GST included; tax rate not separately established by this observation","shipping":"Calculated at checkout; excluded from vehicle cap","net_AUD":null
+    },
+    {
+      "id":"E03", "access_date":"2026-10-15",
+      "url":"https://www.mlab.com.au/products/speedybee-f405-wing-mini-fixed-wing-flight-controller",
+      "citation":"[MLAB F405 WING MINI listing and supplier specifications](https://www.mlab.com.au/products/speedybee-f405-wing-mini-fixed-wing-flight-controller)",
+      "part":"SpeedyBee F405 WING MINI","supplier_SKU":"E08002-001","amount":"65.00","currency":"AUD","listing_unit":"one listed controller package","pack_quantity":1,"minimum_quantity_confirmed":null,"minimum_note":"No larger minimum stated","stock":"Sold out; general local/import inventory qualification also displayed","tax":"Not established","shipping":"AUD 8 domestic statement; excluded from vehicle cap","net_AUD":null,
+      "claims":{"FC_mass_g":5.6,"PDB_mass_g":5.5,"wireless_USB_extender_mass_g":3.2,"PDB_input_V":[7,36],"logic_BEC_V":5.2,"logic_BEC_tolerance_V":0.1,"logic_BEC_continuous_A":2,"servo_BEC_settings_V":[5,6],"servo_BEC_continuous_A":4,"servo_BEC_peak_A":5,"current_sensor_continuous_A":80,"current_sensor_peak_A":150,"IMU":"ICM-42688-P","barometer":"SPL06-001"},
+      "notes":"Supplier technical claims, not independently inspected manufacturer drawings. Package completeness, leads, pins, mounting mass and actual consumption remain unknown. Integrated regulator alternative must not automatically include a second UBEC. Peak duration and installed cooling are unqualified. A 5.2 +/-0.1 V rail does not satisfy a 5.0 +/-0.1 V sensor supply specification over its complete stated range."
+    },
+    {
+      "id":"E04", "access_date":"2026-10-15",
+      "url":"https://radiomasterrc.com/products/rp1-expresslrs-2-4ghz-nano-receiver",
+      "citation":"[RadioMaster RP1 V2 variants, package and specifications](https://radiomasterrc.com/products/rp1-expresslrs-2-4ghz-nano-receiver)",
+      "part":"RP1 V2","variant_SKUs":["HP0157.RX-RP1-V2","HP0157.RX-RP1-V2-LBT"],"variant_note":"FCC and LBT alternatives; regional variant not selected","amount":"18.99","currency":null,"display_symbol":"$","listing_unit":"one receiver with antenna and CRSF wire","pack_quantity":1,"minimum_quantity_confirmed":1,"stock":"Both variant objects available=true; dispatchable quantity unknown","tax":"Taxable variants; destination taxes calculated at checkout, AU treatment unresolved","shipping":"Calculated at checkout; excluded from cap","net_AUD":null,
+      "claims":{"supply_V":5,"mass_g":2.2,"mass_scope":"Including antenna; wire inclusion unresolved","board_dimensions_mm":[13,11,3],"antenna_length_mm":65,"bus":"CRSF"},
+      "notes":"Electrical consumption not obtained. Telemetry RF power is not total electrical load. Receiver plus flight-controller disarm is not an independent safety-rated abort channel. Antenna clearance and transmitter compatibility remain interface questions."
+    },
+    {
+      "id":"E05", "access_date":"2026-10-15",
+      "url":"https://www.mateksys.com/?portfolio=m10q-5883",
+      "citation":"[MATEKSYS M10Q-5883 specifications and installation cautions](https://www.mateksys.com/?portfolio=m10q-5883)",
+      "part":"M10Q-5883","price":null,"currency":null,"stock":"EOL title; no stock count","pack_quantity":1,"package":"Module and 20 cm cable","tax":"Unknown","shipping":"Unknown; excluded from cap",
+      "claims":{"mass_g":8,"dimensions_mm":[20,20,12.4],"supply_V":[4,9],"listed_current_mA":13,"GNSS_interface":"UART","compass_interface":"I2C","compass":"QMC5883L","default_UBX_rate_Hz":5},
+      "notes":"Listed current lacks a stated test voltage/mode boundary. Manufacturer requests 10 cm separation from power wiring, ESCs, motors and iron. EOL/counterfeit warning retained. No evidence here establishes the required horizontal tracking precision. Cable mass inclusion and connector drawing remain unresolved."
+    },
+    {
+      "id":"E06", "access_date":"2026-10-15",
+      "url":"https://en.benewake.com/uploadfiles/2023/03/20230331102010281.pdf",
+      "citation":"[Benewake TFmini-S datasheet, specification table](https://en.benewake.com/uploadfiles/2023/03/20230331102010281.pdf)",
+      "part":"TFmini-S","source_kind":"manufacturer PDF; text extraction only",
+      "claims":{"supply_V":5,"supply_tolerance_V":0.1,"average_current_max_mA":140,"peak_current_mA":200,"power_max_W":0.7,"mass_g":5,"mass_tolerance_g":0.3,"dimensions_mm":[42,15,16],"cable_length_cm":10,"logic":"3.3 V LVTTL","interfaces":["UART","I2C","I/O"]},
+      "price":null,"currency":null,"stock":"Not specified","tax":"Not specified","shipping":"Not specified; excluded from cap",
+      "notes":"Operating range depends on target reflectivity and illumination. Sensor reports slant range, not fixed-datum height. Drawing and cable routing have not been measured. Peak duration and qualification at installed conditions remain unknown."
+    },
+    {
+      "id":"E07", "access_date":"2026-10-15",
+      "url":"https://auspowers.com/products/tfmini-s-lidar-sensor-0-1-12m-tof-laser-ranging-sensor-module-high-frame-rate-1000hz-single-point-lidar-ranging-module-uart-i2c-i-o-serial-output-for-arduino-raspberry-pi",
+      "citation":"[AusPower TFmini-S catalogue price](https://auspowers.com/products/tfmini-s-lidar-sensor-0-1-12m-tof-laser-ranging-sensor-module-high-frame-rate-1000hz-single-point-lidar-ranging-module-uart-i2c-i-o-serial-output-for-arduino-raspberry-pi)",
+      "part":"TFmini-S as advertised; exact manufacturer SKU/authenticity unresolved","amount":"181.00","currency":"AUD","listing_unit":"one listed module","pack_quantity":1,"minimum_quantity_confirmed":null,"minimum_note":"No larger minimum stated","stock":"In stock; claimed departure in 2-3 business days","tax":"Not established","shipping":"Free-shipping marketing displayed; eligibility not established, shipping excluded from cap","discounts_applied":false,"net_AUD":null
+    },
+    {
+      "id":"E08", "access_date":"2026-10-15",
+      "url":"https://www.speedybee.com/speedybee-f405-v5-55a-stack/",
+      "citation":"[SpeedyBee F405 V5 package identity and discontinuation](https://www.speedybee.com/speedybee-f405-v5-55a-stack/)",
+      "part":"SB-F4V5-OX32-55-PRO-STACK","amount":"93.99","currency":"USD","listing_unit":"Displayed stack variant; several accessory and FC-only options also listed","pack_quantity":1,"minimum_quantity_confirmed":null,"stock":"Discontinued","tax":"Page states listed price excludes taxes; US-specific prepaid tariff notice does not establish AU charges","shipping":"Express delivery notice; excluded from cap","net_AUD":null,
+      "notes":"Not adopted as a procurable controller. Displayed stack price must not be assigned to FC-only option. Page contains unrelated battery/AIO notices, so do not combine their dimensions with the FC. Firmware compatibility and hopper allocation remain unestablished."
+    }
+  ],
+  "retained_search_conflicts": [
+    {"access_date":"2026-10-15","urls":["https://ai.benewake.com/en/products/tfmini-s/","https://en.benewake.com/TechnicalSupport/index.aspx"],"finding":"Manufacturer web pages differ on TFmini-S protection designation: not specified versus IP65. Do not adopt environmental protection without exact revision confirmation."},
+    {"access_date":"2026-10-15","urls":["https://phaserfpv.com.au/collections/receivers","https://phaserfpv.com.au/collections/radio-gear/receiver"],"finding":"Collection search observations displayed RP1 V2 amounts 24.80 and 30.80 respectively, with dollar symbols. Exact product/variant, currency and tax resolution were not completed; neither price enters the cost calculation."},
+    {"access_date":"2026-10-15","url":"https://www.speedybee.com/speedybee-f405-wing-app-fixed-wing-flight-controller/","finding":"Retrieval returned 404; does not prove product availability or discontinuation."},
+    {"access_date":"2026-10-15","url":"https://phaserfpv.com.au/products/radiomaster-expresslrs-rp1-nano-receiver-2-4ghz","finding":"Attempted product URL was inaccessible through research tool; not a confirmed current product URL."}
+  ],
+  "accounting_rules": {
+    "unknown":"null, never zero",
+    "purchase_basis":"Whole listed packages, spools and stock lengths. No equipment presumed owned. One battery installed; entire two-battery package purchased.",
+    "money":"Decimal arithmetic; retain source values and unrounded conversions. Final complete vehicle total quantized to AUD 0.01. Cap 499.99 AUD excluding tax and shipping. Unknown quantity, price, currency, tax or FX prevents complete-cost compliance.",
+    "PETG":"Printed-part cost excluded by requirement; installed mass included. Other adhesives, hardware and purchased stock are not excluded.",
+    "ground":"Reusable transmitter, charger, supply, test and ground-safety equipment separately purchased and priced, not hidden in vehicle cap or assumed owned.",
+    "mass":"Every physical item owned once. Commercial mass replaces CAD envelope-density mass. Study allowances are replaced, not added, when actual CAD component masses arrive.",
+    "availability":"A numerically priced sold-out component is not a procurable selection.",
+    "sources":"Reused M2 observations retain original URLs and access dates in the current read records. No unidentified dollar amount receives an assumed currency."
+  },
+  "propulsion_branches": [
+    {"id":"SEPARATE_3S_13","selected":false,"motor":"Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3","motor_quantity":2,"motor_claimed_mass_g_each":108,"propeller_candidates":["APC LP13065E","APC LP13065EP"],"battery_candidate":"Zeee 3S 5200 mAh 50C Deans two-pack, product handle zeee-3s-lipo-battery-5200mah-11-1v-50c-deans-t","battery_installed_quantity":1,"battery_purchase_pack_quantity":1,"batteries_per_pack":2,"battery_claimed_mass_g_each":343,"nominal_voltage_V":11.1,"capacity_Ah":5.2,"table_id":"SS900_13_11p1","source":"M2_04 and M2_03_excerpt","limits":"Exact test propeller suffix, reverse-handed equivalence, retention and stationary support unresolved."},
+    {"id":"SEPARATE_4S_11","selected":false,"motor":"Original SunnySky X2814 KV900 / SS-X2814-900; exclude III/V3","motor_quantity":2,"motor_claimed_mass_g_each":108,"propeller_candidates":["APC LP11055E","APC LP11055EP"],"battery_candidate":"Zeee 4S 3300 mAh 50C XT60 two-pack, product handle zeee-4s-lipo-battery-3300mah-14-8v-50c-xt60","battery_installed_quantity":1,"battery_purchase_pack_quantity":1,"batteries_per_pack":2,"battery_claimed_mass_g_each":348,"nominal_voltage_V":14.8,"capacity_Ah":3.3,"table_id":"SS900_11_14p8","source":"M2_04 and M2_03_excerpt","limits":"Exact test propeller suffix, reverse-handed equivalence, retention and stationary support unresolved."},
+    {"id":"INTEGRATED_CR2816_3S","selected":false,"motor":"Himax CR28161100","motor_quantity":1,"motor_claimed_mass_g_each":164,"mass_scope":"Including prop attachments; propeller inclusion unresolved","propeller_candidates":["APC10X5E","MPI 9X7R or MX9x7R unresolved"],"battery_candidate":"Same provisional 3S 5200 mAh two-pack as SEPARATE_3S_13","battery_installed_quantity":1,"battery_purchase_pack_quantity":1,"batteries_per_pack":2,"battery_claimed_mass_g_each":343,"nominal_voltage_V":11.1,"capacity_Ah":5.2,"table_id":null,"source":"M2_04 and M2_03_excerpt","limits":"No usable paired performance map. Do not transplant SunnySky curves. Propeller mass and attachment inclusion require reconciliation. Independent yaw commands remain unverified."}
+  ],
+  "isolated_tables": [
+    {"id":"SS900_13_11p1","source":"M2_04 S01","url":"https://sunnyskyusa.com/products/sunnysky-x2814-brushless-motors","access_date":"2026-10-15","voltage_V":11.1,"source_propeller_label":"APC13x6.5","columns":["current_A","thrust_gf","electrical_power_W"],"rows":[[5,500,55.5],[8.7,750,96.57],[13,1000,144.3],[18.3,1250,203.13],[24.2,1500,268.62],[27.6,1650,306.36],[29.5,1750,327.45]]},
+    {"id":"SS900_11_14p8","source":"M2_04 S01","url":"https://sunnyskyusa.com/products/sunnysky-x2814-brushless-motors","access_date":"2026-10-15","voltage_V":14.8,"source_propeller_label":"APC11x5.5","columns":["current_A","thrust_gf","electrical_power_W"],"rows":[[4.5,500,66.6],[7.9,750,116.92],[11.7,1000,173.16],[15.8,1250,233.84],[20.6,1500,304.88],[25.7,1750,380.36],[29.3,1950,433.64]]}
+  ],
+  "component_options": [
+    {"id":"ESC_80060442","installed_quantity":2,"claimed_mass_g_each":36,"source":"M2_04","price_options":[{"supplier":"Hobby Station","amount":"38.22","currency":"AUD","pack_quantity":1,"stock":"7 observed; earlier peer excerpt 2","tax":"Export treatment unresolved","net_AUD":null},{"supplier":"Hobbytech","amount":"54.99","currency":"AUD","pack_quantity":1,"stock":"Unavailable","tax_fraction":"0.10","tax_included":true,"net_expression":"54.99/1.10"}],"notes":"50 A continuous and 70 A peak are catalogue claims; installed cooling and peak duration unknown. Keep BEC outputs isolated under a separately designed power architecture."},
+    {"id":"SERVO_HITEC_35245S","installed_quantity":2,"claimed_mass_g_each":32,"source":"M2_03_excerpt A01-A04","price":{"amount":"79.99","currency":"AUD","pack_quantity":1,"stock":"3 observed","tax_fraction":"0.10","tax_included":true,"net_expression":"79.99/1.10"},"notes":"Mass excludes horn in datasheet. Conflicting dimensions/current/voltage claims retained. No continuous joint capability established."},
+    {"id":"SERVO_EMAX_0102003010","installed_quantity":2,"claimed_mass_g_each":12,"source":"M2_03_excerpt A05-A06","price":{"amount":"11.94","currency":null,"pack_quantity":1,"stock":"In stock observation","tax":"Unknown","net_AUD":null},"notes":"Standard ES08MA II analog normal option, not HV or MD. Loaded torque-speed, exact installed dimensions and continuous duty unresolved."},
+    {"id":"CONTROLLER_WING_MINI","source":"E03","installed_subassemblies":[{"id":"FC","quantity":1,"claimed_mass_g":5.6},{"id":"PDB","quantity":1,"claimed_mass_g":5.5},{"id":"USB_EXTENDER","quantity":1,"claimed_mass_g":3.2}],"purchase_packages":1,"external_servo_UBEC_default_quantity":0,"notes":"Zero means excluded by this explicit alternative architecture, not unknown mass. Separate sensor rail may still be necessary. Accessories remain in remainder ledger."},
+    {"id":"CONTROLLER_H743_WLITE","source":"E01/E02","installed_quantity":1,"claimed_mass_g_each":22,"purchase_packages":1,"external_servo_UBEC_default_quantity":0,"notes":"Claim includes USB adapter. EOL and sold out; no selected hardware or power architecture."},
+    {"id":"EXTERNAL_UBEC_30607000","source":"M2_03_excerpt P01-P02","claimed_mass_g_each":21,"installed_quantity":null,"price":{"amount":"29.94","currency":"AUD","pack_quantity":1,"stock":"Sold out","tax":"GST included; retain rate evidence separately","net_AUD":null},"notes":"Alternative only, not automatically added to integrated-regulator controller. 5/6/7.4 V settings; 7.4 V not used with provisional 6 V-limited servos."},
+    {"id":"RECEIVER_RP1_V2","source":"E04","installed_quantity":1,"claimed_mass_g_each":2.2,"purchase_packages":1},
+    {"id":"GNSS_M10Q_5883","source":"E05","installed_quantity":1,"claimed_mass_g_each":8,"purchase_packages":1,"net_AUD":null},
+    {"id":"RANGE_TFMINI_S","source":"E06/E07","installed_quantity":1,"claimed_mass_g_each":5,"purchase_packages":1,"net_AUD":null}
+  ],
+  "installed_remainder_ledger": {
+    "status":"Enumerated study allowances, not complete CAD or guaranteed bounds. Each triple is proposed low/central/high total grams for the named row. Prices and required pack counts remain unavailable until exact designs and suppliers are reconciled.",
+    "rows":[
+      {"id":"propellers_pair","study_mass_g":[40,60,85],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Replace with exact pair masses; integrated package inclusion must be reconciled."},
+      {"id":"motor_mounts_adapters_retention","study_mass_g":[10,20,35],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Only accessories not already included in commercial motor mass."},
+      {"id":"stationary_motor_support","study_mass_g":[40,100,200],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Topology-dependent load path; separate/integrated arrangements need different CAD replacements."},
+      {"id":"gimbal_frames_bearings_pivots","study_mass_g":[45,90,160],"actual_mass_g":null,"net_purchase_AUD":null},
+      {"id":"servo_horns_rods_links_retention","study_mass_g":[10,20,40],"actual_mass_g":null,"net_purchase_AUD":null},
+      {"id":"spines_and_joints","study_mass_g":[20,50,100],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"CFRP/aluminium alternatives; whole purchased tube lengths required."},
+      {"id":"fixed_leg_ring_and_upper_mounts","study_mass_g":[30,60,100],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Split PETG versus purchased hardware before cost accounting."},
+      {"id":"CFRP_legs_and_joints","study_mass_g":[35,65,110],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Tripod/quadpod CAD replacements and cutting plan required."},
+      {"id":"feet_and_compliance_parts","study_mass_g":[10,20,40],"actual_mass_g":null,"net_purchase_AUD":null},
+      {"id":"battery_retention_padding","study_mass_g":[10,20,35],"actual_mass_g":null,"net_purchase_AUD":null},
+      {"id":"power_signal_harness_connectors","study_mass_g":[25,45,80],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Include both motor branches, servo/sensor wires and compatible battery connector; remove included commercial leads once known. Charge whole minimum wire spools and connector packs."},
+      {"id":"distribution_protection_arm_disconnect","study_mass_g":[10,20,40],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Independent abort alternative, fuse ratings, switching capacity and failure policy unselected."},
+      {"id":"sensor_rail_regulation_filtering","study_mass_g":[5,10,20],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Do not silently connect TFmini-S to incompatible 5.2 V rail."},
+      {"id":"electronics_mounts_isolation_antennas","study_mass_g":[8,15,30],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Exclude antenna already counted with RP1; include its mounting and remaining lead/connector masses."},
+      {"id":"fasteners_adhesives_insulation","study_mass_g":[10,20,40],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Only items not owned by preceding assemblies; whole minimum packs and consumable purchases required."},
+      {"id":"additional_horizontal_sensing","study_mass_g":[5,15,40],"actual_mass_g":null,"net_purchase_AUD":null,"notes":"Placeholder for unresolved optical-flow/other position-sensing alternative. No evidence presently closes horizontal measurement performance."}
+    ],
+    "unallocated_mass_g":null,
+    "closure":"Category coverage does not prove component completeness. CAD/plant ownership audit must identify omitted or duplicated items before final sizing."
+  },
+  "ground_purchase_ledger": [
+    {"id":"compatible_transmitter_and_battery","quantity":1,"part":null,"price_AUD":null},
+    {"id":"balance_charger_and_required_supply","quantity":1,"part":null,"price_AUD":null},
+    {"id":"battery_storage_transport_charge_protection","quantity":1,"part":null,"price_AUD":null},
+    {"id":"current_voltage_energy_logger","quantity":1,"part":null,"price_AUD":null},
+    {"id":"paired_thrust_torque_fixture_load_cells","quantity":1,"part":null,"price_AUD":null},
+    {"id":"RPM_and_temperature_instrumentation","quantity":1,"part":null,"price_AUD":null},
+    {"id":"restrained_test_fixture_barrier_remote_shutdown","quantity":1,"part":null,"price_AUD":null},
+    {"id":"assembly_tools_and_electrical_test_equipment","quantity":1,"part":null,"price_AUD":null}
+  ],
+  "proposed_analysis_parameters": {
+    "status":"Exploratory ranges only; not approved reserves, calibrated parameters or engineering selections",
+    "standard_gravity_m_s2":9.80665,
+    "density_kg_m3":[1.15,1.225,1.30],
+    "density_note":"Proposed atmosphere sensitivity; vendor test density unavailable, so do not apply a purported validated density correction.",
+    "thrust_interference_upper":[0.8,0.9,1.0],
+    "thrust_interference_lower":[0.6,0.75,0.9],
+    "torque_interference_upper":[0.8,1.0,1.2],
+    "torque_interference_lower":[0.8,1.0,1.2],
+    "synthetic_isolated_Q_over_T_m":[0.02,0.04,0.06],
+    "torque_model_boundary":"For identifiability and sensitivity only: Q_i=kQ_i*ell_i*T_iso_i, T_i=kT_i*T_iso_i. ell_i and kQ_i are not inferred from battery current or KV. Solve collective and aerodynamic torque balance simultaneously; evaluate both signs of differential yaw at unchanged collective. Results cannot establish measured yaw authority.",
+    "interpolation":"Piecewise-linear within supplied table range only. Unsupported demands reported, never silently clamped or extrapolated. Current measurement boundary and ESC used in vendor tests remain unknown.",
+    "motor_ESC_response_time_s":[0.05,0.15,0.30],
+    "command_transport_delay_s":[0.0,0.02,0.05],
+    "response_boundary":"Uncalibrated study parameters; ESC acceleration menu durations are not these time constants. Realizable throttle protocol and loaded response need separate implementation and tests.",
+    "terminal_usable_energy_fraction":[0.6,0.7,0.8],
+    "proposed_reserve_fractions":[0.0,0.1,0.2],
+    "battery_pack_resistance_ohm":[0.015,0.03,0.06],
+    "open_circuit_cell_voltage_V":[3.7,4.0,4.2],
+    "exploratory_loaded_cell_floor_V":3.3,
+    "battery_boundary":"No sourced discharge/resistance map or approved cutoff. Treat usable fraction as terminal-energy fraction inclusive of internal losses; do not subtract I-squared-R energy again. Thevenin voltage calculations are sensitivity cases, not an SOC-resolved validated mission battery. Off-test-voltage thrust mapping is unsupported and must be labelled as an additional assumption, not calibrated performance.",
+    "auxiliary_bus_power_W":[5,10,20],
+    "auxiliary_peak_bus_power_W":[15,30,45],
+    "auxiliary_boundary":"Whole auxiliary battery-bus allowances, including controllers, sensing, receiver, both loaded servos and conversion losses. Do not add component power again. BEC output current is not battery current; peak duration and regulator compatibility remain separate checks.",
+    "mission_energy_proxy": {
+      "spool_up_s":5,
+      "spool_up_mean_hover_power_fraction":0.5,
+      "climb_height_m":5,
+      "climb_s":10,
+      "climb_potential_energy_efficiency":0.7,
+      "acquisition_allowance_s":12,
+      "hover_duration_s":300,
+      "descent_s":25,
+      "touchdown_settling_allowance_s":10,
+      "method":"Add stage integrals. Climb proxy uses hover electrical power plus m*g*height/efficiency over the climb; descent receives no regenerative or induced-power credit. Acquisition uses hover power. Spool-up uses the stated mean fraction; settling uses hover power conservatively. Add auxiliary bus energy over all stages. This is a sizing proxy, not a simulated trajectory or proof of acquisition, touchdown or settling.",
+      "transient_boundary":"Rotor inertias and loaded speed history unavailable: explicit rotor spin-up/transient electrical correction remains unresolved rather than asserted covered by calibrated data. Report this limitation alongside every proxy result."
+    },
+    "thermal_boundary":"SunnySky 40 A for 30 s and Himax 20 A per rotor for 15 s do not qualify 300-second hover. Record current ratios and durations, but thermal qualification remains unperformed. Integrated branch performance remains unavailable without its own map."
+  },
+  "required_next_steps": [
+    "Publish this actual file after successful write; it is not yet a calculation result.",
+    "Write an editable calculation program producing separate installed-instance, whole-purchase and ground ledgers plus bounded mass/energy/current/torque sensitivity results. Expose missing values and unsupported domains.",
+    "Verify computed outputs against their actual input artifacts using a retained independent program; physical calibration and flight checks remain null.",
+    "Reconcile outstanding CAD request 94ba47826f2d44ba9b4f2ffd52f06221 using current model/plan/interface references. Replace study allowances with actual group-owned CAD masses before final candidate sizing.",
+    "Inspect PyThrust entry points, loaders and raw data before its execution; this file neither executes PyThrust nor establishes backend readiness.",
+    "Send the Chief numerical alternatives and focused supplier-data questions. No candidate becomes selected without separate Chief disposition."
+  ]
+}

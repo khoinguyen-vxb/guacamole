@@ -1,0 +1,246 @@
+{
+  "schema": "hopper_cad_diagnostic_comparison/1",
+  "authority": {
+    "system_model": {
+      "kind": "system_model",
+      "id": "system",
+      "revision": 4,
+      "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75"
+    },
+    "work_plan": {
+      "kind": "decision",
+      "id": "99f7bb629eef45b89fa38d27c803868c",
+      "revision": 1,
+      "sha256": "e5af8e2f56f7c851b65518b129f39550be73911f56461279cbbb1e85e1cdd5f0"
+    },
+    "interface": {
+      "kind": "decision",
+      "id": "88561ff8b3ba4e8286cebd95a93e3b08",
+      "revision": 1,
+      "sha256": "ad6662afab9685585264c86e052c246996d23f4369c6432b56094a42a9187c04"
+    }
+  },
+  "layout_hypothesis": {
+    "schema": "hopper_cad_layout_revision/1",
+    "revision": "M4-03",
+    "authority": {
+      "system_model": {
+        "kind": "system_model",
+        "id": "system",
+        "revision": 4,
+        "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75"
+      },
+      "work_plan": {
+        "kind": "decision",
+        "id": "99f7bb629eef45b89fa38d27c803868c",
+        "revision": 1,
+        "sha256": "e5af8e2f56f7c851b65518b129f39550be73911f56461279cbbb1e85e1cdd5f0"
+      },
+      "interface": {
+        "kind": "decision",
+        "id": "88561ff8b3ba4e8286cebd95a93e3b08",
+        "revision": 1,
+        "sha256": "ad6662afab9685585264c86e052c246996d23f4369c6432b56094a42a9187c04"
+      }
+    },
+    "status": "Unselected design hypotheses; not measured outcomes or acceptance",
+    "units": "mm unless specified",
+    "leg_attachment_radius_mm": 150.0,
+    "leg_attachment_z_mm": -2.0,
+    "foot_sphere_centre_radius_mm": 440.0,
+    "foot_sphere_centre_z_mm": -400.0,
+    "foot_sphere_radius_mm": 10.0,
+    "outrigger_inner_radius_mm": 90.0,
+    "outrigger_end_extension_mm": 8.0,
+    "outrigger_width_mm": 16.0,
+    "outrigger_thickness_mm": 8.0,
+    "outrigger_upper_z_mm": 0.0,
+    "fixed_actuator_minimum_C_mm": [
+      -90.0,
+      -40.0,
+      4.0
+    ],
+    "fixed_harness_radius_from_centre_mm": 72.0,
+    "fixed_harness_envelope_radius_mm": 5.0,
+    "fixed_harness_z_mm": [
+      8.0,
+      200.0
+    ],
+    "harness_azimuth_rule_deg": "180 / spine_count; halfway between adjacent spine rays",
+    "origin_and_rotor_positions": "Unchanged from inspected M4-01 generator",
+    "design_change_rationale": [
+      "Move leg sockets radially outward on explicit solid outriggers, rather than reducing the tested gimbal domain or excluding collided legs.",
+      "Move the fixed actuator packaging proxy away from the witnessed ESC shelf overlap; commercial mounts remain unresolved.",
+      "Replace the central annular wiring reservation by a full cylindrical routing reservation outside the battery, between spine rays.",
+      "Centre tray arms about their intended rays after identifying a placement-offset error in the base helper."
+    ],
+    "trade_penalties_to_measure": [
+      "Outrigger mass, cantilever demand and local ring attachment loads",
+      "Longer or differently inclined legs and whole-stock cutting consequences",
+      "Mounting access, actuator linkage feasibility and remaining cable continuity"
+    ],
+    "unresolved": [
+      "Outrigger dimensions and printed material are not strength-qualified.",
+      "Fixed harness reservation is one disconnected packaging segment, not a complete electrical harness.",
+      "No commercial mounting pattern, motor mass subdivision or propeller retention is supplied by this revision.",
+      "The generic reference battery remains the 3S comparison proxy. A 279.4 mm geometry variant is not automatically a reconciled 4S vehicle."
+    ]
+  },
+  "candidates": [
+    {
+      "candidate_id": "diagnostic_s2_c14_t_d330_m4_03",
+      "files": {
+        "fcstd": "cad/pdr_trade/diagnostic_s2_c14_t_d330_m4_03.FCStd",
+        "step": "cad/pdr_trade/diagnostic_s2_c14_t_d330_m4_03.step",
+        "drawing": "cad/pdr_trade/diagnostic_s2_c14_t_d330_m4_03_arrangement.svg",
+        "report": "analysis/pdr_cad_trade/diagnostic_s2_c14_t_d330_m4_03.json"
+      },
+      "file_sha256": {
+        "fcstd": "4785527a016266ef220b5206c8cd2ef8c0ee9baa5a538438db716ea0c2546d93",
+        "step": "c20cd7ca7d1162524eac8b33a737104d23f6dea9ac958cb3130b775128891428",
+        "drawing": "ccb54d83dc9fd9fc58ea0857f756cee448ed8af57698f28a91641b68477d533f",
+        "report": "dff9c5e852178a7ed2d6b2530a0a6e6f5d5f2ba293e689181208a564b583b978"
+      },
+      "accounted_partial_mass_properties": {
+        "mass_kg": 1.3365740862090543,
+        "centroid_C_mm": [
+          2.1536636875952775,
+          0.21548041804474213,
+          -40.535072678342374
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            0.03449242525573359,
+            -2.5479543600994996e-05,
+            -0.0003233255904997586
+          ],
+          [
+            -2.5479543600994996e-05,
+            0.03865474633535983,
+            4.8139984255217965e-06
+          ],
+          [
+            -0.0003233255904997586,
+            4.8139984255217965e-06,
+            0.014549935628317
+          ]
+        ]
+      },
+      "supported_complete_installed_mass_kg": null,
+      "partial_CG_support_polygon": {
+        "hull_xy_mm": [
+          [
+            -381.051177665153,
+            -220.00000000000006
+          ],
+          [
+            381.05117766515286,
+            -220.0000000000002
+          ],
+          [
+            2.694222958124177e-14,
+            440.0
+          ]
+        ],
+        "minimum_width_mm": 659.9999999999999,
+        "signed_CG_edge_margin_mm": 218.02713232631194,
+        "all_edge_margins_mm": [
+          220.21548041804488,
+          218.02713232631194,
+          221.75738725564318
+        ],
+        "two_dimensional_support": true,
+        "interpretation": "Study geometry, not an adopted stance-width or contact acceptance criterion"
+      },
+      "diagnostic_flags": {
+        "neutral_no_volumetric_overlap": true,
+        "sampled_cross_group_no_volumetric_overlap": true,
+        "represented_fixed_wiring_no_volumetric_overlap": true,
+        "sampled_rotor_external_positive_separation": true
+      },
+      "selection": null
+    },
+    {
+      "candidate_id": "diagnostic_s2_c14_q_d330_m4_03",
+      "files": {
+        "fcstd": "cad/pdr_trade/diagnostic_s2_c14_q_d330_m4_03.FCStd",
+        "step": "cad/pdr_trade/diagnostic_s2_c14_q_d330_m4_03.step",
+        "drawing": "cad/pdr_trade/diagnostic_s2_c14_q_d330_m4_03_arrangement.svg",
+        "report": "analysis/pdr_cad_trade/diagnostic_s2_c14_q_d330_m4_03.json"
+      },
+      "file_sha256": {
+        "fcstd": "3d040e5885ade0ebceaad3beeba4b03778cdcd807b92bd5e961ee344b4c9334c",
+        "step": "f163e8db1dd190d4b41b2628fb8f74a9af9eff5de8e70d42056e417a5df13d48",
+        "drawing": "c5008a35eb90066185df7914389862e8312be1e60dc1dfe7140045b8b70e56a7",
+        "report": "7bc0cd1b6bed4b23c388bd2eca9d4194543bc944adac7d74036555be5387a679"
+      },
+      "accounted_partial_mass_properties": {
+        "mass_kg": 1.3724203799353607,
+        "centroid_C_mm": [
+          2.0974120936185026,
+          0.20985227075790347,
+          -44.009764241817415
+        ],
+        "inertia_centroid_C_kg_m2": [
+          [
+            0.037578516129273674,
+            -2.5495746561868456e-05,
+            -0.00033332759974438877
+          ],
+          [
+            -2.5495746561868456e-05,
+            0.04174099751067654,
+            3.8132672688755007e-06
+          ],
+          [
+            -0.00033332759974438877,
+            3.8132672688755007e-06,
+            0.017675100663325945
+          ]
+        ]
+      },
+      "supported_complete_installed_mass_kg": null,
+      "partial_CG_support_polygon": {
+        "hull_xy_mm": [
+          [
+            -311.126983722081,
+            -311.12698372208087
+          ],
+          [
+            311.1269837220808,
+            -311.126983722081
+          ],
+          [
+            311.1269837220809,
+            311.12698372208087
+          ],
+          [
+            -311.12698372208087,
+            311.1269837220809
+          ]
+        ],
+        "minimum_width_mm": 622.2539674441618,
+        "signed_CG_edge_margin_mm": 309.02957162846235,
+        "all_edge_margins_mm": [
+          311.3368359928388,
+          309.02957162846235,
+          310.917131451323,
+          313.22439581569944
+        ],
+        "two_dimensional_support": true,
+        "interpretation": "Study geometry, not an adopted stance-width or contact acceptance criterion"
+      },
+      "diagnostic_flags": {
+        "neutral_no_volumetric_overlap": true,
+        "sampled_cross_group_no_volumetric_overlap": true,
+        "represented_fixed_wiring_no_volumetric_overlap": true,
+        "sampled_rotor_external_positive_separation": true
+      },
+      "selection": null
+    }
+  ],
+  "scope": "Two revised actual-solid diagnostics only. Neither configuration is selected. Failures remain in each report.",
+  "full_trade_complete": false,
+  "physical_qualification": null,
+  "source_files_preserved": true
+}

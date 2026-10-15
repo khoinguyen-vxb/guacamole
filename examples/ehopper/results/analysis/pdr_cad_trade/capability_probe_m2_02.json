@@ -1,0 +1,293 @@
+{
+  "schema": "pdr_cad_capability_probe/2",
+  "authority": {
+    "system_model": {
+      "kind": "system_model",
+      "id": "system",
+      "revision": 2,
+      "sha256": "4c93f9bb676b0e59572034a4c2f51438a8d94cd2aa7d9af7830964ee72219b21"
+    },
+    "work_plan": {
+      "kind": "decision",
+      "id": "a37ef3716fce4eb2b2b35919d6cb0b97",
+      "revision": 1,
+      "sha256": "8e7cf79a28ee431b8be3dfece7bf4fca94e60e40a2fa62a0e416e3e4e171772d"
+    }
+  },
+  "scope": "Synthetic headless FreeCAD capability only; not vehicle geometry or physical acceptance.",
+  "freecad_version": [
+    "1",
+    "1",
+    "1",
+    "44227 +647 (Git)",
+    "Unknown",
+    "2026/04/14 22:09:59",
+    "tag: 1.1.1",
+    "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+  ],
+  "python_version": "3.12.3 (main, Mar 23 2026, 19:04:32) [GCC 13.3.0]",
+  "occt_version": "7.8.0",
+  "files": {
+    "fcstd": "cad/pdr_trade/capability_probe_m2_02.FCStd",
+    "step": "cad/pdr_trade/capability_probe_m2_02.step",
+    "report": "analysis/pdr_cad_trade/capability_probe_m2_02.json"
+  },
+  "comparison_tolerances": {
+    "relative": 1e-07,
+    "absolute_in_compared_units": 1e-12
+  },
+  "checks": {
+    "native_boolean_valid_single_solid_and_analytical_volume": true,
+    "parameter_edit_propagates_and_recomputes": true,
+    "restored_parameter_volume": true,
+    "fcstd_reopens_valid_single_solid": true,
+    "reopened_parameter_edit_propagates": true,
+    "reopened_parameter_restored": true,
+    "step_reopens_valid_single_solid": true,
+    "distance_matches_analytical_gap": true,
+    "separated_solids_have_zero_overlap_volume": true,
+    "solid_mass_matches_analytical_fixture": true,
+    "solid_centroid_matches_analytical_fixture": true,
+    "solid_full_inertia_matches_analytical_fixture": true
+  },
+  "capability_checks_all_true": true,
+  "observations": {
+    "initial": {
+      "shape_valid": true,
+      "solid_count": 1,
+      "solids_valid": [
+        true
+      ],
+      "volume_mm3": 2827.4333882308147,
+      "centroid_mm": [
+        9.593697377604043e-16,
+        -6.223942651232864e-17,
+        49.999999999999964
+      ],
+      "unit_density_inertia_about_centroid_mm5": [
+        [
+          2385175.682421717,
+          2.485059026858893e-12,
+          -3.8995281330301934e-11
+        ],
+        [
+          2.485059026858893e-12,
+          2385175.6824217187,
+          2.599890619952977e-13
+        ],
+        [
+          -3.8995281330301934e-11,
+          2.599890619952977e-13,
+          57962.384458732035
+        ]
+      ]
+    },
+    "edited": {
+      "shape_valid": true,
+      "solid_count": 1,
+      "solids_valid": [
+        true
+      ],
+      "volume_mm3": 3392.9200658769755,
+      "centroid_mm": [
+        7.873419370956215e-16,
+        9.105358962850836e-17,
+        60.00000000000001
+      ],
+      "unit_density_inertia_about_centroid_mm5": [
+        [
+          4106281.5097276103,
+          6.793613526854497e-12,
+          -4.3443517772445026e-11
+        ],
+        [
+          6.793613526854497e-12,
+          4106281.5097276065,
+          -8.605822593422999e-13
+        ],
+        [
+          -4.3443517772445026e-11,
+          -8.605822593422999e-13,
+          69554.86135047843
+        ]
+      ]
+    },
+    "reopened_fcstd": {
+      "shape_valid": true,
+      "solid_count": 1,
+      "solids_valid": [
+        true
+      ],
+      "volume_mm3": 2827.4333882308147,
+      "centroid_mm": [
+        9.593697377604043e-16,
+        3.9942692720288764e-17,
+        49.999999999999964
+      ],
+      "unit_density_inertia_about_centroid_mm5": [
+        [
+          2385175.682421717,
+          2.485059026858893e-12,
+          -3.8995281330301934e-11
+        ],
+        [
+          2.485059026858893e-12,
+          2385175.6824217187,
+          2.59989061995288e-13
+        ],
+        [
+          -3.8995281330301934e-11,
+          2.59989061995288e-13,
+          57962.384458732035
+        ]
+      ]
+    },
+    "reopened_edited": {
+      "shape_valid": true,
+      "solid_count": 1,
+      "solids_valid": [
+        true
+      ],
+      "volume_mm3": 3110.176727053895,
+      "centroid_mm": [
+        -1.6705557173867066e-15,
+        -9.12173688924433e-17,
+        54.99999999999999
+      ],
+      "unit_density_inertia_about_centroid_mm5": [
+        [
+          3167974.1778983176,
+          4.886974940215302e-12,
+          -1.1114181050006045e-10
+        ],
+        [
+          4.886974940215302e-12,
+          3167974.1778983176,
+          9.284978336709287e-13
+        ],
+        [
+          -1.1114181050006045e-10,
+          9.284978336709287e-13,
+          63758.622904605174
+        ]
+      ]
+    },
+    "reopened_step": {
+      "shape_valid": true,
+      "solid_count": 1,
+      "solids_valid": [
+        true
+      ],
+      "volume_mm3": 2827.4333882308147,
+      "centroid_mm": [
+        9.593697377604043e-16,
+        -1.2064461577862364e-16,
+        49.999999999999964
+      ],
+      "unit_density_inertia_about_centroid_mm5": [
+        [
+          2385175.682421717,
+          -6.731900439524768e-12,
+          -9.89145087356823e-12
+        ],
+        [
+          -6.731900439524768e-12,
+          2385175.682421717,
+          2.9844770429542954e-12
+        ],
+        [
+          -9.89145087356823e-12,
+          2.9844770429542954e-12,
+          57962.384458732005
+        ]
+      ]
+    },
+    "distance_mm": 10.0,
+    "common_volume_mm3": 0,
+    "nearest_point_pairs_mm": [
+      [
+        [
+          5.0,
+          -1.2246467991473533e-15,
+          0.0
+        ],
+        [
+          15.0,
+          -8.881784197001252e-16,
+          0.0
+        ]
+      ],
+      [
+        [
+          5.0,
+          -1.2246467991473533e-15,
+          100.0
+        ],
+        [
+          15.0,
+          -8.881784197001252e-16,
+          100.0
+        ]
+      ]
+    ],
+    "synthetic_uniform_density_kg_m3": 2700.0,
+    "synthetic_mass_kg": 0.0076340701482232,
+    "synthetic_inertia_about_centroid_kg_m2": [
+      [
+        6.4399743425386355e-06,
+        6.709659372519011e-24,
+        -1.0528725959181523e-22
+      ],
+      [
+        6.709659372519011e-24,
+        6.4399743425386414e-06,
+        7.019704673873038e-25
+      ],
+      [
+        -1.0528725959181523e-22,
+        7.019704673873038e-25,
+        1.564984380385765e-07
+      ]
+    ],
+    "analytical_inertia_about_centroid_kg_m2": [
+      [
+        6.4399743425386186e-06,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        6.4399743425386186e-06,
+        0.0
+      ],
+      [
+        0.0,
+        0.0,
+        1.5649843803857555e-07
+      ]
+    ],
+    "inertia_error_kg_m2": [
+      [
+        1.6940658945086007e-20,
+        6.709659372519011e-24,
+        -1.0528725959181523e-22
+      ],
+      [
+        6.709659372519011e-24,
+        2.286988957586611e-20,
+        7.019704673873038e-25
+      ],
+      [
+        -1.0528725959181523e-22,
+        7.019704673873038e-25,
+        9.529120656610879e-22
+      ]
+    ]
+  },
+  "not_performed": [
+    "GUI addon connectivity and screenshots",
+    "Vehicle geometry, mounting interfaces and articulated clearance",
+    "Commercial component compatibility and complete installed-mass accounting",
+    "Material qualification, structural loads and physical tests"
+  ]
+}

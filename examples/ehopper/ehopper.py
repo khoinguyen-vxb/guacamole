@@ -69,6 +69,7 @@ from guacamole.websocket import WebSocketBridge
 
 # Project configuration. Paths are relative to this file, never the shell's cwd.
 ROOT = Path(__file__).resolve().parent
+REPO_ROOT = ROOT.parents[1]
 DOCUMENTS = ROOT / "context"
 TOOLING = ROOT / "tooling"
 WORKSPACE = ROOT / ".guacamole"
@@ -98,6 +99,24 @@ CLEAR_AT_TOKENS = 400_000  # Above this, reads beyond the latest 8 are hidden pe
 # Optional interpreter overrides, e.g. {"6dof_hopper": Path("/path/to/python")}.
 # Otherwise use the repository's .venv/bin/python if present, then this interpreter.
 PYTHON_EXECUTABLES: dict[str, Path] = {}
+
+
+def configure_sysml_runtime() -> None:
+    """Reuse the repository's SysML assets when uv selected the source distribution."""
+    if not os.environ.get("GUACAMOLE_SYSML_LIBRARY"):
+        libraries = sorted(
+            (REPO_ROOT / ".venv/lib").glob("python*/site-packages/sysml/stdlib")
+        )
+        if libraries:
+            os.environ["GUACAMOLE_SYSML_LIBRARY"] = str(libraries[-1])
+    if not os.environ.get("SYSMLV2_ABI"):
+        native = sorted(
+            (REPO_ROOT / ".venv/lib").glob(
+                "python*/site-packages/sysml/_native/libsysmlv2_abi.*"
+            )
+        )
+        if native:
+            os.environ["SYSMLV2_ABI"] = str(native[-1])
 
 DESCRIPTION = """Project Electronic Hopper: build a self-landing hopper using
 electric motors and counter-rotating coaxial propellers. Reach approximately 5 m
@@ -337,12 +356,19 @@ def register_tools(project: Project) -> None:
     )
 
     def input_path(path: str) -> Path:
-        resolved = (ROOT / path).resolve()
-        if not any(
-            resolved == root or resolved.is_relative_to(root) for root in readable
-        ):
-            raise ValueError("Read path is outside supplied inputs and project outputs")
-        return resolved
+        raw = Path(path)
+        candidates = (
+            (raw,)
+            if raw.is_absolute()
+            else (ROOT / raw, project.sandbox / raw)
+        )
+        for candidate in candidates:
+            resolved = candidate.resolve()
+            if any(
+                resolved == root or resolved.is_relative_to(root) for root in readable
+            ):
+                return resolved
+        raise ValueError("Read path is outside supplied inputs and project outputs")
 
     async def list_files(
         path: str, offset: Offset = 0, limit: Count = 50
@@ -854,6 +880,7 @@ async def notifications(project: Project) -> None:
 
 
 async def main() -> None:
+    configure_sysml_runtime()
     if shutil.which("codex") is None:
         raise SystemExit(
             "Install the Codex CLI on PATH and run 'codex login' with your ChatGPT account."
