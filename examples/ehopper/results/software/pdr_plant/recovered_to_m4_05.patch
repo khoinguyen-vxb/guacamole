@@ -1,0 +1,971 @@
+--- previous_run/repaired_hopper_r12/helpers/math.py
++++ software/pdr_plant/repaired_hopper_m4/helpers/math.py
+@@ -1,30 +1,32 @@
+-"""Explicit NED/FRD frame helpers for the preliminary PDR-R12 repair.
+-
+-Authorization: 66c7448f443f44ac9a016a1b384593a2 r1.
+-Pre-edit evidence: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 r1 and
+-PDR-R12-PLANT-CALLER-RECONCILIATION-02 r1.
+-Frame decision: f046cc4fe5294a6f9a61027529056f61 r1.
+-Gimbal convention: 28e10be57d6548a3aa5be06c96f6d0d0 r1.
+-
+-Reconciled from the inspected historical r9 helpers/math.py, SHA-256
+-7941782e298900bdbbe35383aaa376a9679e225b6e85247c191b3a53486755a6.
+-Original audited helpers/math.py, SHA-256
+-5e6420ade1c4d642762ba4d6b0812a80f2f693a58151bbf16a4274efb521239a.
+-Neither source is modified. Writing this module is not a verification pass.
+-
+-L: fixed launch-ground North-East-Down frame.
+-B: structure-fixed Forward-Right-Down axes.
+-q_LB: scalar-first Hamilton [w,x,y,z]; R_LB maps B components into L.
+-qdot = 0.5 * q_LB Hamilton-product [0, omega_B].
+-Euler inputs: named radians; R_LB = Rz(yaw) Ry(pitch) Rx(roll).
+-CAD C: forward-left-up; R_BC = diag(1,-1,-1), determinant +1.
+-
+-Migration obligations: State and Simulation callers must use the named
+-radian interface and explicit DCM direction. Numeric serialization must
+-preserve raw quaternion norm error. The deprecated misspelled helper keeps
+-the original algebraic R_BL default, not its uninitialized-variable defect.
+-
+-No vehicle geometry, mass, inertia, travel, gains or calibration is selected.
++"""PDR M4 fixed-D analytical plant: helpers/math.py.
++
++Current authority: system_model:system revision 4;
++work-plan 99f7bb629eef45b89fa38d27c803868c revision 1;
++interface 88561ff8b3ba4e8286cebd95a93e3b08 revision 1.
++Pre-edit audit: PDR-PLANT-PRE-EDIT-AUDIT-M4-03 revision 1.
++
++Reused from inspected previous_run/repaired_hopper_r12/helpers/math.py.
++Recovered file SHA256: 281a5578b6d33c45578350429cb30ead28ba6a378c571c2c6929c60819ceecfb
++Original checkout and recovered files remain unchanged. The recovered module
++header is retained as historical provenance in migration_manifest_m4_05.json.
++
++Migration: explicit fixed plate/ring datum D replaces the recovered neutral-CG
++reference semantics; coordinated datum-related identifiers and schema strings
++are versioned across all eight modules. L is NED, B is FRD, q_LB is scalar-first
++Hamilton, and R_LB maps B components into L. Translation remains at instantaneous
++complete-vehicle CG G. D is fixed to the airframe and never follows G.
++
++D is the neutral propulsion centreline intersection with the upper reference
++plane of the FIXED leg-attachment plate/ring. Its numerical CAD location is an
++explicit input, not a selected coordinate. CAD C is forward-left-up in mm;
++r_B[m] = 0.001*diag(1,-1,-1)*(p_C[mm]-D_C[mm]).
++
++This migration does not add vehicle dynamics, a calibrated propulsion map,
++realizable ESC commands, loaded servo capability, battery/thermal evolution or
++contact. Analytical-only runtime guards are retained. No fixture is vehicle
++data merely because it executes. New fixtures/checkers must use these schemas.
++Generation, syntax compilation and imports are not analytical verification,
++physical validation, requirement satisfaction or review acceptance.
+ """
+ from __future__ import annotations
+ 
+@@ -152,24 +154,24 @@
+     return np.diag([1.0, -1.0, -1.0])
+ 
+ 
+-def cad_point_to_body_datum_m(point_C_mm, neutral_cg_C_mm):
+-    """CAD point in mm -> B coordinates in m relative to fixed O_B0.
+-
+-    O_B0 coincides with the complete-vehicle neutral CG once derived from
+-    the actual assembly. That numerical CAD origin is required explicitly;
+-    it is never assumed zero or moved with the instantaneous CG.
++def cad_point_to_body_datum_m(point_C_mm, *, datum_D_C_mm):
++    """CAD point in mm -> B coordinates in m relative to fixed D.
++
++    D is fixed at the neutral propulsion centreline intersection with the
++    upper plane of the FIXED leg-attachment plate/ring. Supply its CAD
++    coordinates explicitly; never substitute a neutral or moving CG.
+     """
+     point = finite_array(point_C_mm, (3,), 'point_C_mm')
+-    origin = finite_array(neutral_cg_C_mm, (3,), 'neutral_cg_C_mm')
++    origin = finite_array(datum_D_C_mm, (3,), 'datum_D_C_mm')
+     with np.errstate(over='raise', invalid='raise'):
+         result = cad_to_body_rotation() @ (0.001 * (point - origin))
+     return finite_array(result, (3,), 'body datum point')
+ 
+ 
+-def body_datum_point_to_cad_mm(point_B0_m, neutral_cg_C_mm):
++def body_datum_point_to_cad_mm(point_D_m, *, datum_D_C_mm):
+     """Inverse point conversion, returning CAD mm using the same datum."""
+-    point = finite_array(point_B0_m, (3,), 'point_B0_m')
+-    origin = finite_array(neutral_cg_C_mm, (3,), 'neutral_cg_C_mm')
++    point = finite_array(point_D_m, (3,), 'point_D_m')
++    origin = finite_array(datum_D_C_mm, (3,), 'datum_D_C_mm')
+     with np.errstate(over='raise', invalid='raise'):
+         result = origin + 1000.0 * (cad_to_body_rotation().T @ point)
+     return finite_array(result, (3,), 'CAD point')
+@@ -219,16 +221,16 @@
+ 
+ 
+ def fixed_datum_kinematics(*, position_G_L_m, velocity_G_L_m_s, q_LB,
+-                          omega_B_rad_s, offset_B0G_B_m,
+-                          offset_rate_B0G_B_m_s):
+-    """Convert instantaneous complete-vehicle CG translation to fixed O_B0.
++                          omega_B_rad_s, offset_DG_B_m,
++                          offset_rate_DG_B_m_s):
++    """Convert instantaneous complete-vehicle CG translation to fixed D.
+ 
+     All inputs refer to the same instant. offset_rate is the derivative of
+     offset components in B caused by configuration motion; it excludes
+     omega cross offset. Omitting it generally corrupts datum velocity.
+ 
+-      p_O = p_G - R_LB r_B0G
+-      v_O = v_G - R_LB (omega_B cross r_B0G + r_dot_B0G)
++      p_O = p_G - R_LB r_DG
++      v_O = v_G - R_LB (omega_B cross r_DG + r_dot_DG)
+ 
+     These kinematics do not establish a valid articulated dynamics model.
+     Later mission tracking uses this fixed datum, not configuration-varying G.
+@@ -236,8 +238,8 @@
+     p_G = finite_array(position_G_L_m, (3,), 'position_G_L_m')
+     v_G = finite_array(velocity_G_L_m_s, (3,), 'velocity_G_L_m_s')
+     omega = finite_array(omega_B_rad_s, (3,), 'omega_B_rad_s')
+-    offset = finite_array(offset_B0G_B_m, (3,), 'offset_B0G_B_m')
+-    offset_rate = finite_array(offset_rate_B0G_B_m_s, (3,), 'offset_rate_B0G_B_m_s')
++    offset = finite_array(offset_DG_B_m, (3,), 'offset_DG_B_m')
++    offset_rate = finite_array(offset_rate_DG_B_m_s, (3,), 'offset_rate_DG_B_m_s')
+     rotation = quaternion_to_dcm(q_LB)
+     with np.errstate(over='raise', invalid='raise'):
+         p_O = p_G - rotation @ offset
+--- previous_run/repaired_hopper_r12/simulation/state.py
++++ software/pdr_plant/repaired_hopper_m4/simulation/state.py
+@@ -1,28 +1,32 @@
+-"""Explicit instantaneous-CG state for the preliminary PDR r12 plant.
++"""PDR M4 fixed-D analytical plant: simulation/state.py.
+ 
+-Original audited module: 6dof_hopper/simulation/state.py
+-Original SHA-256: 7b8713aecd017a7ff1f0b3ad4e14e1c63c716d1181a6df516d25b7a7d1973b2a
+-Recovered implementation: pdr_r9_plant/repaired_hopper/simulation/state.py
+-Recovered SHA-256: 3b5a37931c66e32c2f5bb4b68bd47b8da71417e31dfe11a4b06fddb1c4f62425
+-Audit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 revision 1.
+-Caller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 revision 1.
+-Authorization: 66c7448f443f44ac9a016a1b384593a2 revision 1.
+-Frame contract: f046cc4fe5294a6f9a61027529056f61 revision 1.
++Current authority: system_model:system revision 4;
++work-plan 99f7bb629eef45b89fa38d27c803868c revision 1;
++interface 88561ff8b3ba4e8286cebd95a93e3b08 revision 1.
++Pre-edit audit: PDR-PLANT-PRE-EDIT-AUDIT-M4-03 revision 1.
+ 
+-Migration affecting Simulation construction, solve_ode, trajectory_ode and
+-fixture/runner callers:
+-  * Construction is keyword-only, with explicit units, frames and origin.
+-  * All thirteen supplied rigid-body components are retained.
+-  * Original body-resolved u/v/w are NOT interpreted as local NED velocity.
+-  * Numeric decoding requires the r12 schema, not merely matching length.
+-  * Mutable update_state/history accumulation is deliberately removed.
+-  * Euler initialization uses named radian arguments; integration uses q.
+-  * Serialization preserves quaternion norm error rather than hiding it.
++Reused from inspected previous_run/repaired_hopper_r12/simulation/state.py.
++Recovered file SHA256: b62a1a4fcc70a4a88e07f77996e955a64184891ce614957c85ccb7d63e90f294
++Original checkout and recovered files remain unchanged. The recovered module
++header is retained as historical provenance in migration_manifest_m4_05.json.
+ 
+-Actuator states are separate; the combined plant must preserve them too.
+-Fixed-airframe-datum mission scoring requires CG-offset kinematics and is
+-not obtained by renaming position_G_L_m. No vehicle inputs, PID gains,
+-verification results or physical acceptance are supplied by this module.
++Migration: explicit fixed plate/ring datum D replaces the recovered neutral-CG
++reference semantics; coordinated datum-related identifiers and schema strings
++are versioned across all eight modules. L is NED, B is FRD, q_LB is scalar-first
++Hamilton, and R_LB maps B components into L. Translation remains at instantaneous
++complete-vehicle CG G. D is fixed to the airframe and never follows G.
++
++D is the neutral propulsion centreline intersection with the upper reference
++plane of the FIXED leg-attachment plate/ring. Its numerical CAD location is an
++explicit input, not a selected coordinate. CAD C is forward-left-up in mm;
++r_B[m] = 0.001*diag(1,-1,-1)*(p_C[mm]-D_C[mm]).
++
++This migration does not add vehicle dynamics, a calibrated propulsion map,
++realizable ESC commands, loaded servo capability, battery/thermal evolution or
++contact. Analytical-only runtime guards are retained. No fixture is vehicle
++data merely because it executes. New fixtures/checkers must use these schemas.
++Generation, syntax compilation and imports are not analytical verification,
++physical validation, requirement satisfaction or review acceptance.
+ """
+ from __future__ import annotations
+ 
+@@ -38,7 +42,7 @@
+ )
+ 
+ 
+-STATE_VECTOR_SCHEMA = 'pdr_r12_cg_ned_frd_wxyz_v1'
++STATE_VECTOR_SCHEMA = 'hopper_m4_fixed_D_cg_ned_frd_wxyz_v1'
+ STATE_SIZE = 13
+ STATE_COMPONENTS = (
+     'position_G_north_m', 'position_G_east_m', 'position_G_down_m',
+@@ -84,7 +88,7 @@
+     def from_vector(cls, vector, *, schema):
+         """Decode exactly thirteen SI components under the explicit schema.
+ 
+-        Shape alone cannot distinguish original body velocity from r12
++        Shape alone cannot distinguish original body velocity from M4
+         local velocity, or a fixed-datum state from a CG state. No implicit
+         legacy conversion, quaternion projection or history update occurs.
+         """
+--- previous_run/repaired_hopper_r12/chassis/hopper.py
++++ software/pdr_plant/repaired_hopper_m4/chassis/hopper.py
+@@ -1,29 +1,32 @@
+-"""Complete-vehicle mass and momentum interfaces for the PDR-R12 repair.
+-
+-Authorization: 66c7448f443f44ac9a016a1b384593a2 r1.
+-Pre-edit evidence: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 r1 and
+-PDR-R12-PLANT-CALLER-RECONCILIATION-02 r1.
+-Frame contract: f046cc4fe5294a6f9a61027529056f61 r1.
+-Gimbal contract: 28e10be57d6548a3aa5be06c96f6d0d0 r1.
+-
+-Reconciled from inspected historical chassis/hopper.py, SHA-256
+-2c2b09a5993ccedea61cf543fe2f342f079a646d877bf65cba19dc302ae39432.
+-Original audited chassis/hopper.py, SHA-256
+-6e2b2f93e98b844ce04f68d26b704c65270e9329e1abff76caa45cbcd5dcf0bd.
+-Supplied and historical sources remain unchanged.
+-
+-Migration affecting Simulation.trajectory_ode/evaluate and fixture builders:
+-  Replace separate mass(time), CG(time), inertia(time) calls with one
+-  mass_properties(time_s=..., kinematics=...) snapshot.
+-  Complete installed mass includes propulsion, battery and every installed
+-  item exactly once. Do not add a separate propulsion.get_mass term.
+-  Propulsion loads are external point forces/free couples, not members of
+-  this mass ledger. Legacy time-only wrench forwarding is not retained.
+-  Full inertia is about instantaneous complete-vehicle CG G in FRD axes B.
+-  CG coordinates are relative to fixed neutral-CG airframe datum O_B0.
+-
+-This module supplies no numerical vehicle inputs or articulated mass model.
+-Neither writing it nor satisfying its validation establishes physical validity.
++"""PDR M4 fixed-D analytical plant: chassis/hopper.py.
++
++Current authority: system_model:system revision 4;
++work-plan 99f7bb629eef45b89fa38d27c803868c revision 1;
++interface 88561ff8b3ba4e8286cebd95a93e3b08 revision 1.
++Pre-edit audit: PDR-PLANT-PRE-EDIT-AUDIT-M4-03 revision 1.
++
++Reused from inspected previous_run/repaired_hopper_r12/chassis/hopper.py.
++Recovered file SHA256: f2b6e4b54634220105655e994e3ff5c78e84c60084879696a25ef39fdc29ff05
++Original checkout and recovered files remain unchanged. The recovered module
++header is retained as historical provenance in migration_manifest_m4_05.json.
++
++Migration: explicit fixed plate/ring datum D replaces the recovered neutral-CG
++reference semantics; coordinated datum-related identifiers and schema strings
++are versioned across all eight modules. L is NED, B is FRD, q_LB is scalar-first
++Hamilton, and R_LB maps B components into L. Translation remains at instantaneous
++complete-vehicle CG G. D is fixed to the airframe and never follows G.
++
++D is the neutral propulsion centreline intersection with the upper reference
++plane of the FIXED leg-attachment plate/ring. Its numerical CAD location is an
++explicit input, not a selected coordinate. CAD C is forward-left-up in mm;
++r_B[m] = 0.001*diag(1,-1,-1)*(p_C[mm]-D_C[mm]).
++
++This migration does not add vehicle dynamics, a calibrated propulsion map,
++realizable ESC commands, loaded servo capability, battery/thermal evolution or
++contact. Analytical-only runtime guards are retained. No fixture is vehicle
++data merely because it executes. New fixtures/checkers must use these schemas.
++Generation, syntax compilation and imports are not analytical verification,
++physical validation, requirement satisfaction or review acceptance.
+ """
+ from __future__ import annotations
+ 
+@@ -35,7 +38,7 @@
+ from ..helpers.math import finite_array
+ 
+ 
+-MASS_PROPERTY_SCHEMA = 'pdr_r12_complete_vehicle_instantaneous_cg_v1'
++MASS_PROPERTY_SCHEMA = 'hopper_m4_fixed_D_complete_vehicle_instantaneous_cg_v1'
+ MODEL_SCOPES = ('analytical_fixture', 'provisional_vehicle')
+ DYNAMICS_MODES = (
+     'rigid_body_fixture',
+@@ -124,10 +127,10 @@
+ class MassProperties:
+     """Immutable complete-vehicle snapshot about instantaneous CG G.
+ 
+-    All vector/tensor components use structure-fixed FRD axes B. cg_B0_m
+-    locates G relative to fixed O_B0, the neutral complete-vehicle CG datum.
+-    cg_rate_B0_m_s is the derivative of those B components due to internal
+-    motion, excluding omega_B cross cg_B0_m. It is required for fixed-datum
++    All vector/tensor components use structure-fixed FRD axes B. cg_D_m
++    locates G relative to fixed D at the leg-attachment reference plane.
++    cg_rate_D_m_s is the derivative of those B components due to internal
++    motion, excluding omega_B cross cg_D_m. It is required for fixed-datum
+     and hub velocity conversions; it is not the local translational state.
+ 
+     inertia_B_G_kg_m2 is full locked-configuration inertia about G,
+@@ -161,8 +164,8 @@
+     """
+ 
+     mass_kg: float
+-    cg_B0_m: tuple[float, float, float]
+-    cg_rate_B0_m_s: tuple[float, float, float]
++    cg_D_m: tuple[float, float, float]
++    cg_rate_D_m_s: tuple[float, float, float]
+     inertia_B_G_kg_m2: tuple
+     inertia_rate_B_G_kg_m2_s: tuple
+     relative_momentum_B_kg_m2_s: tuple[float, float, float]
+@@ -175,7 +178,7 @@
+     def __post_init__(self):
+         object.__setattr__(self, 'mass_kg', _positive_scalar(self.mass_kg, 'mass_kg'))
+         for name in (
+-            'cg_B0_m', 'cg_rate_B0_m_s',
++            'cg_D_m', 'cg_rate_D_m_s',
+             'relative_momentum_B_kg_m2_s', 'relative_momentum_rate_B_N_m',
+         ):
+             object.__setattr__(self, name, _vector_tuple(getattr(self, name), 3, name))
+@@ -200,7 +203,7 @@
+             if self.model_scope != 'analytical_fixture':
+                 raise ValueError('A rigid_body_fixture cannot represent a vehicle baseline')
+             for name in (
+-                'cg_rate_B0_m_s', 'inertia_rate_B_G_kg_m2_s',
++                'cg_rate_D_m_s', 'inertia_rate_B_G_kg_m2_s',
+                 'relative_momentum_B_kg_m2_s', 'relative_momentum_rate_B_N_m',
+             ):
+                 if np.any(np.asarray(getattr(self, name)) != 0.0):
+@@ -210,15 +213,15 @@
+                 if np.any(np.asarray(getattr(self, name)) != 0.0):
+                     raise ValueError('Use prescribed_internal_momentum for retained h_rel terms')
+ 
+-    def moment_arm_m(self, application_point_B0_m):
+-        """Application point minus instantaneous G, both relative to O_B0.
++    def moment_arm_m(self, application_point_D_m):
++        """Application point minus instantaneous G, both relative to D.
+ 
+         Do not substitute a historical scalar lever arm or shift an already
+         CG-referenced wrench a second time. Geometry supplies actual points.
+         """
+-        point = finite_array(application_point_B0_m, (3,), 'application_point_B0_m')
++        point = finite_array(application_point_D_m, (3,), 'application_point_D_m')
+         with np.errstate(over='raise', invalid='raise'):
+-            arm = point - np.asarray(self.cg_B0_m)
++            arm = point - np.asarray(self.cg_D_m)
+         return finite_array(arm, (3,), 'moment arm')
+ 
+     def angular_momentum_B_kg_m2_s(self, omega_B_rad_s):
+--- previous_run/repaired_hopper_r12/propulsion/propulsion.py
++++ software/pdr_plant/repaired_hopper_m4/propulsion/propulsion.py
+@@ -1,29 +1,32 @@
+-"""Explicit propulsion/load contracts for the preliminary PDR-R12 plant.
+-
+-Authorization: 66c7448f443f44ac9a016a1b384593a2 revision 1.
+-Audit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 revision 1.
+-Caller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 revision 1.
+-Frame contract: f046cc4fe5294a6f9a61027529056f61 revision 1.
+-Gimbal contract: 28e10be57d6548a3aa5be06c96f6d0d0 revision 1.
+-
+-Original propulsion/propulsion.py SHA-256:
+-e07b895d8399016a3b0511afb195d7ebf992050cef04ab3015600347f01750ce
+-Recovered r9 propulsion/propulsion.py SHA-256:
+-930f02ef368640a533ced862ff1868b7a11166698c90d57fc2214393207e6a60
+-Both sources remain unchanged. This module reconciles the inspected r9
+-interface into the separate r12 package; writing it is not verification.
+-
+-Migration affecting Propellor, Hopper, Simulation and fixture providers:
+-  * Replace the incomplete mass/CG/time-only propulsion ABC with evaluate.
+-  * Installed mass belongs exclusively to Hopper's complete vehicle ledger.
+-  * Evaluate the coupled pair at ACTUAL rotor/gimbal states, not commands.
+-  * Return explicit external point forces and aerodynamic free couples.
+-  * Resolve each load about the SAME instantaneous complete-vehicle CG once.
+-  * Obtain application points from actual separated-origin gimbal geometry.
+-  * Internal motor/servo reactions are not additional external moments.
+-
+-No vehicle parameters, isolated-thrust doubling, calibrated map, hardware
+-selection, numerical pass or physical acceptance is supplied here.
++"""PDR M4 fixed-D analytical plant: propulsion/propulsion.py.
++
++Current authority: system_model:system revision 4;
++work-plan 99f7bb629eef45b89fa38d27c803868c revision 1;
++interface 88561ff8b3ba4e8286cebd95a93e3b08 revision 1.
++Pre-edit audit: PDR-PLANT-PRE-EDIT-AUDIT-M4-03 revision 1.
++
++Reused from inspected previous_run/repaired_hopper_r12/propulsion/propulsion.py.
++Recovered file SHA256: d860528b277893bbfe59527b7fcc2017955cc66681d3994fb66744a8006271de
++Original checkout and recovered files remain unchanged. The recovered module
++header is retained as historical provenance in migration_manifest_m4_05.json.
++
++Migration: explicit fixed plate/ring datum D replaces the recovered neutral-CG
++reference semantics; coordinated datum-related identifiers and schema strings
++are versioned across all eight modules. L is NED, B is FRD, q_LB is scalar-first
++Hamilton, and R_LB maps B components into L. Translation remains at instantaneous
++complete-vehicle CG G. D is fixed to the airframe and never follows G.
++
++D is the neutral propulsion centreline intersection with the upper reference
++plane of the FIXED leg-attachment plate/ring. Its numerical CAD location is an
++explicit input, not a selected coordinate. CAD C is forward-left-up in mm;
++r_B[m] = 0.001*diag(1,-1,-1)*(p_C[mm]-D_C[mm]).
++
++This migration does not add vehicle dynamics, a calibrated propulsion map,
++realizable ESC commands, loaded servo capability, battery/thermal evolution or
++contact. Analytical-only runtime guards are retained. No fixture is vehicle
++data merely because it executes. New fixtures/checkers must use these schemas.
++Generation, syntax compilation and imports are not analytical verification,
++physical validation, requirement satisfaction or review acceptance.
+ """
+ from __future__ import annotations
+ 
+@@ -37,7 +40,7 @@
+ from ..helpers.math import finite_array
+ 
+ 
+-PROPULSION_SCHEMA = 'pdr_r12_external_coaxial_loads_v1'
++PROPULSION_SCHEMA = 'hopper_m4_fixed_D_external_coaxial_loads_v1'
+ REQUIRED_DOMAIN_CHECKS = (
+     'coaxial_map_domain',
+     'rotor_speed',
+@@ -93,7 +96,7 @@
+     """One EXTERNAL point force and optional external free couple.
+ 
+     Components use structure-fixed FRD axes B. The application point is
+-    measured in metres from fixed structural datum O_B0, NOT from moving G.
++    measured in metres from fixed structural datum D, NOT from moving G.
+     free_moment_B_N_m excludes the application-point cross-product term.
+ 
+     Powered rotor i uses F_i,B = R_BM [0,0,-T_i], T_i >= 0, and external
+@@ -106,13 +109,13 @@
+     """
+ 
+     force_B_N: tuple[float, float, float]
+-    application_point_B0_m: tuple[float, float, float]
++    application_point_D_m: tuple[float, float, float]
+     free_moment_B_N_m: tuple[float, float, float]
+     model_scope: str
+     provenance: str
+ 
+     def __post_init__(self):
+-        for name in ('force_B_N', 'application_point_B0_m', 'free_moment_B_N_m'):
++        for name in ('force_B_N', 'application_point_D_m', 'free_moment_B_N_m'):
+             object.__setattr__(self, name, _vector(getattr(self, name), 3, name))
+         _scope(self.model_scope)
+         _text(self.provenance, 'provenance')
+@@ -144,7 +147,7 @@
+ 
+     An explicit empty sequence deliberately omits these loads; provenance
+     must identify the assumption. Nothing adds environmental or internal
+-    actuator loads implicitly. Every application point and CG uses O_B0.
++    actuator loads implicitly. Every application point and CG uses D.
+     """
+     if not isinstance(mass_properties, MassProperties):
+         raise TypeError('Explicit MassProperties snapshot required')
+@@ -157,7 +160,7 @@
+         if load.model_scope != mass_properties.model_scope:
+             raise ValueError('Fixture and vehicle scopes must not be mixed')
+         force_i = np.asarray(load.force_B_N)
+-        arm = mass_properties.moment_arm_m(load.application_point_B0_m)
++        arm = mass_properties.moment_arm_m(load.application_point_D_m)
+         with np.errstate(over='raise', invalid='raise'):
+             force += force_i
+             moment += np.cross(arm, force_i) + np.asarray(load.free_moment_B_N_m)
+--- previous_run/repaired_hopper_r12/propulsion/propeller.py
++++ software/pdr_plant/repaired_hopper_m4/propulsion/propeller.py
+@@ -1,32 +1,32 @@
+-"""Separated-origin coaxial propulsion adapter for the PDR-R12 repair.
+-
+-Authorization: 66c7448f443f44ac9a016a1b384593a2 revision 1.
+-Audit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 revision 1.
+-Caller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 revision 1.
+-Frame contract: f046cc4fe5294a6f9a61027529056f61 revision 1.
+-Gimbal contract: 28e10be57d6548a3aa5be06c96f6d0d0 revision 1.
+-
+-Original audited propulsion/propeller.py SHA-256:
+-caa5ee91e46d102b8ebe0c02e1dfec0ecdca18e2c423791fca6f2c19100ae7b6.
+-Recovered r9 implementation inspected through reader
+-19244a324ca6484fb23d689d4ee1b877 revision 1.
+-Both supplied and historical sources remain unchanged.
+-
+-Intentional migration:
+-  Replace the unusable original constructor and incomplete propulsion ABC.
+-  Supply actual joint geometry and a simultaneous coupled performance map.
+-  Replace historical pivot_B0_m and hub_offsets_M_m with explicitly named
+-  outer origin, outer-to-inner translation and inner-origin hub offsets.
+-  Old geometry keywords are NOT silently reinterpreted.
+-
+-Affected callers: fixture construction, Simulation.evaluate,
+-Propellor.evaluate and hub_velocities_relative_air_M_m_s. Position and
+-velocity calculations share the same actual separated-origin geometry.
+-
+-This adapter supplies external point forces and aerodynamic free couples.
+-It neither evolves actuators nor supplies installed mass, motor reactions,
+-vehicle dimensions, historical lever arms, travel defaults or calibration.
+-Writing it does not establish numerical execution or physical validity.
++"""PDR M4 fixed-D analytical plant: propulsion/propeller.py.
++
++Current authority: system_model:system revision 4;
++work-plan 99f7bb629eef45b89fa38d27c803868c revision 1;
++interface 88561ff8b3ba4e8286cebd95a93e3b08 revision 1.
++Pre-edit audit: PDR-PLANT-PRE-EDIT-AUDIT-M4-03 revision 1.
++
++Reused from inspected previous_run/repaired_hopper_r12/propulsion/propeller.py.
++Recovered file SHA256: ce7be67ceae3866ecf402ee03b7812c3ea1e39c216ca5d412322af53d586ae3b
++Original checkout and recovered files remain unchanged. The recovered module
++header is retained as historical provenance in migration_manifest_m4_05.json.
++
++Migration: explicit fixed plate/ring datum D replaces the recovered neutral-CG
++reference semantics; coordinated datum-related identifiers and schema strings
++are versioned across all eight modules. L is NED, B is FRD, q_LB is scalar-first
++Hamilton, and R_LB maps B components into L. Translation remains at instantaneous
++complete-vehicle CG G. D is fixed to the airframe and never follows G.
++
++D is the neutral propulsion centreline intersection with the upper reference
++plane of the FIXED leg-attachment plate/ring. Its numerical CAD location is an
++explicit input, not a selected coordinate. CAD C is forward-left-up in mm;
++r_B[m] = 0.001*diag(1,-1,-1)*(p_C[mm]-D_C[mm]).
++
++This migration does not add vehicle dynamics, a calibrated propulsion map,
++realizable ESC commands, loaded servo capability, battery/thermal evolution or
++contact. Analytical-only runtime guards are retained. No fixture is vehicle
++data merely because it executes. New fixtures/checkers must use these schemas.
++Generation, syntax compilation and imports are not analytical verification,
++physical validation, requirement satisfaction or review acceptance.
+ """
+ from __future__ import annotations
+ 
+@@ -47,7 +47,7 @@
+ )
+ 
+ 
+-GEOMETRY_SCHEMA = 'pdr_r12_separated_origin_common_gimbal_v1'
++GEOMETRY_SCHEMA = 'hopper_m4_fixed_D_separated_origin_common_gimbal_v1'
+ 
+ 
+ def _text(value, name):
+@@ -66,18 +66,18 @@
+ class CoaxialGeometry:
+     """Ideal rigid common-gimbal geometry with explicit joint translations.
+ 
+-    B is structure-fixed FRD. O_B0 is the FIXED airframe datum, not moving G.
++    B is structure-fixed FRD. D is the FIXED airframe datum, not moving G.
+     A is the outer carried frame: R_BA=Rx(alpha). M is the inner/module
+     frame: R_BM=Rx(alpha)Ry(beta). All lengths are metres.
+ 
+-    outer_origin_B0_m locates the body-fixed outer x-axis origin O_x,
+-    relative to O_B0 and expressed in B.
++    outer_origin_D_m locates the body-fixed outer x-axis origin O_x,
++    relative to D and expressed in B.
+     outer_to_inner_outer_m is d_OxOy, the displacement from O_x to inner
+     y-axis origin O_y, expressed in A and constant in that carried frame.
+     hub_offsets_from_inner_M_m gives the ordered U/L hub positions measured
+     from O_y and expressed in M.
+ 
+-      r_B0,i = r_B0,Ox + R_BA d_OxOy + R_BM r_Oy,i,M.
++      r_D,i = r_D,Ox + R_BA d_OxOy + R_BM r_Oy,i,M.
+ 
+     Coincident origins require an explicit zero displacement; there is no
+     coincident-axis default. Both hubs lie on one module-parallel z line;
+@@ -96,7 +96,7 @@
+     Those require the current complete assembly and Chief-selected inputs.
+     """
+ 
+-    outer_origin_B0_m: tuple[float, float, float]
++    outer_origin_D_m: tuple[float, float, float]
+     outer_to_inner_outer_m: tuple[float, float, float]
+     hub_offsets_from_inner_M_m: tuple
+     spin_signs: tuple[int, int]
+@@ -104,7 +104,7 @@
+     provenance: str
+ 
+     def __post_init__(self):
+-        for name in ('outer_origin_B0_m', 'outer_to_inner_outer_m'):
++        for name in ('outer_origin_D_m', 'outer_to_inner_outer_m'):
+             values = finite_array(getattr(self, name), (3,), name)
+             object.__setattr__(self, name, tuple(float(x) for x in values))
+         hubs = finite_array(
+@@ -148,17 +148,17 @@
+         alpha, beta = motion.gimbal_rad
+         return gimbal_to_body(alpha_rad=alpha, beta_rad=beta)
+ 
+-    def joint_origins_B0_m(self, kinematics):
+-        """Return outer and inner origins, both expressed in B from O_B0."""
++    def joint_origins_D_m(self, kinematics):
++        """Return outer and inner origins, both expressed in B from D."""
+         rotation_outer = self.outer_rotation_BA(kinematics)
+-        outer = np.asarray(self.outer_origin_B0_m)
++        outer = np.asarray(self.outer_origin_D_m)
+         with np.errstate(over='raise', invalid='raise'):
+             inner = outer + rotation_outer @ np.asarray(self.outer_to_inner_outer_m)
+         return finite_array(np.vstack((outer, inner)), (2, 3), 'joint origins')
+ 
+-    def application_points_B0_m(self, kinematics):
++    def application_points_D_m(self, kinematics):
+         """Return actual U/L hub points from the separated-origin contract."""
+-        inner = self.joint_origins_B0_m(kinematics)[1]
++        inner = self.joint_origins_D_m(kinematics)[1]
+         rotation = self.rotation_BM(kinematics)
+         with np.errstate(over='raise', invalid='raise'):
+             points = inner + (
+@@ -166,14 +166,14 @@
+             ).T
+         return finite_array(points, (2, 3), 'rotor application points')
+ 
+-    def application_point_rates_B0_m_s(self, kinematics):
++    def application_point_rates_D_m_s(self, kinematics):
+         """Body-component derivatives caused by internal joint motion.
+ 
+         These are NOT inertial hub velocities and do not include airframe
+         rotation, CG translation or wind. For d_B=Rx(alpha)d_OxOy and
+         s_i,B=R_BM r_Oy,i,M:
+ 
+-          r_dot_B0,i = alpha_dot e_x cross d_B
++          r_dot_D,i = alpha_dot e_x cross d_B
+                        + omega_MB,B cross s_i,B,
+           omega_MB,B = [alpha_dot, cos(alpha) beta_dot,
+                         sin(alpha) beta_dot].
+@@ -257,8 +257,8 @@
+         map must separately declare its wake and interference treatment.
+ 
+           v_i,B = R_BL(v_G,L - wind_i,L)
+-                  + omega_B cross (r_B0,i-r_B0,G)
+-                  + r_dot_B0,i - r_dot_B0,G.
++                  + omega_B cross (r_D,i-r_D,G)
++                  + r_dot_D,i - r_dot_D,G.
+ 
+         The final result is R_MB v_i,B. Internal point rates use the
+         separated joint origins; CG component rates exclude the body-rate
+@@ -274,8 +274,8 @@
+         wind = finite_array(wind_at_hubs_L_m_s, (2, 3), 'wind_at_hubs_L_m_s')
+         rotation = self.geometry.rotation_BM(kinematics)
+         R_BL = quaternion_to_dcm(state.q_LB).T
+-        points = self.geometry.application_points_B0_m(kinematics)
+-        point_rates = self.geometry.application_point_rates_B0_m_s(kinematics)
++        points = self.geometry.application_points_D_m(kinematics)
++        point_rates = self.geometry.application_point_rates_D_m_s(kinematics)
+         velocities = []
+         for index in range(2):
+             arm = mass_properties.moment_arm_m(points[index])
+@@ -285,7 +285,7 @@
+                     R_BL @ local_relative
+                     + np.cross(state.omega_B_rad_s, arm)
+                     + point_rates[index]
+-                    - np.asarray(mass_properties.cg_rate_B0_m_s)
++                    - np.asarray(mass_properties.cg_rate_D_m_s)
+                 )
+                 velocities.append(rotation.T @ velocity_B)
+         return finite_array(velocities, (2, 3), 'hub-relative module velocities')
+@@ -293,7 +293,7 @@
+     def evaluate(self, *, time_s, kinematics, conditions):
+         """Map actual paired motion to external forces/couples at actual hubs.
+ 
+-        Return application points relative to fixed O_B0. Do not resolve
++        Return application points relative to fixed D. Do not resolve
+         their moments here using a cached or assumed CG. The plant resolves
+         all loads once with the same current mass snapshot used in dynamics.
+         """
+@@ -316,7 +316,7 @@
+         if performance.conditions != conditions:
+             raise ValueError('Paired map returned different operating conditions')
+         rotation = self.geometry.rotation_BM(kinematics)
+-        points = self.geometry.application_points_B0_m(kinematics)
++        points = self.geometry.application_points_D_m(kinematics)
+         loads = []
+         for index, spin_sign in enumerate(self.geometry.spin_signs):
+             thrust = performance.thrust_N[index]
+@@ -328,7 +328,7 @@
+                 ])
+             loads.append(AppliedLoad(
+                 force_B_N=force_B,
+-                application_point_B0_m=points[index],
++                application_point_D_m=points[index],
+                 free_moment_B_N_m=aerodynamic_couple_B,
+                 model_scope=self.geometry.model_scope,
+                 provenance=(('upper' if index == 0 else 'lower')
+--- previous_run/repaired_hopper_r12/propulsion/actuators.py
++++ software/pdr_plant/repaired_hopper_m4/propulsion/actuators.py
+@@ -1,32 +1,32 @@
+-"""Explicit analytical actuator response for the preliminary PDR-R12 plant.
+-
+-Authorization: 66c7448f443f44ac9a016a1b384593a2 r1.
+-Audit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 r1.
+-Caller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 r1.
+-Frame: f046cc4fe5294a6f9a61027529056f61 r1.
+-Gimbal convention: 28e10be57d6548a3aa5be06c96f6d0d0 r1.
+-
+-Reconciles the inspected historical r9 propulsion/actuators.py into the
+-separate r12 package. Original checkouts and historical files are unchanged.
+-Affected callers are Simulation, fixture constructors and retained checkers.
+-They must use the new schema and preserve all six initial actuator states.
+-
+-State order: upper/lower rotor speed magnitudes [rad/s], alpha/beta demand
+-filter states [rad], actual alpha/beta [rad]. Filter states are numerical
+-response states, not additional physical joints. R_BM=Rx(alpha)Ry(beta).
+-
+-This realization is ANALYTICAL-FIXTURE ONLY, with every parameter explicit.
+-It is a speed-response abstraction, not an ESC PWM/voltage implementation
+-or evidence of hardware speed regulation. The protocol and parameter record
+-retain the calibration boundary; real loaded response requires reviewed data
+-and potentially a versioned state extension. No vehicle defaults are supplied.
+-
+-Evaluation is pure: return derivatives and actual kinematics without advancing
+-state, accumulating energy or updating PID. A solver holds one immutable
+-command per interval; any controller updates occur outside adaptive RHS calls.
+-No internal motor/servo torque is returned as an external vehicle moment.
+-The same actual kinematics must reach the mass/momentum and propulsion
+-providers. Writing this file establishes neither numerical nor physical validity.
++"""PDR M4 fixed-D analytical plant: propulsion/actuators.py.
++
++Current authority: system_model:system revision 4;
++work-plan 99f7bb629eef45b89fa38d27c803868c revision 1;
++interface 88561ff8b3ba4e8286cebd95a93e3b08 revision 1.
++Pre-edit audit: PDR-PLANT-PRE-EDIT-AUDIT-M4-03 revision 1.
++
++Reused from inspected previous_run/repaired_hopper_r12/propulsion/actuators.py.
++Recovered file SHA256: bacfd1457ea3d24ae82d4868f3418b46c967fc2442d83d36e96973467645be78
++Original checkout and recovered files remain unchanged. The recovered module
++header is retained as historical provenance in migration_manifest_m4_05.json.
++
++Migration: explicit fixed plate/ring datum D replaces the recovered neutral-CG
++reference semantics; coordinated datum-related identifiers and schema strings
++are versioned across all eight modules. L is NED, B is FRD, q_LB is scalar-first
++Hamilton, and R_LB maps B components into L. Translation remains at instantaneous
++complete-vehicle CG G. D is fixed to the airframe and never follows G.
++
++D is the neutral propulsion centreline intersection with the upper reference
++plane of the FIXED leg-attachment plate/ring. Its numerical CAD location is an
++explicit input, not a selected coordinate. CAD C is forward-left-up in mm;
++r_B[m] = 0.001*diag(1,-1,-1)*(p_C[mm]-D_C[mm]).
++
++This migration does not add vehicle dynamics, a calibrated propulsion map,
++realizable ESC commands, loaded servo capability, battery/thermal evolution or
++contact. Analytical-only runtime guards are retained. No fixture is vehicle
++data merely because it executes. New fixtures/checkers must use these schemas.
++Generation, syntax compilation and imports are not analytical verification,
++physical validation, requirement satisfaction or review acceptance.
+ """
+ from __future__ import annotations
+ 
+@@ -39,7 +39,7 @@
+ from ..helpers.math import finite_array
+ 
+ 
+-ACTUATOR_STATE_SCHEMA = 'pdr_r12_fixture_motor_gimbal_cascade_v1'
++ACTUATOR_STATE_SCHEMA = 'hopper_m4_fixed_D_fixture_motor_gimbal_cascade_v1'
+ ACTUATOR_STATE_SIZE = 6
+ ACTUATOR_COMPONENTS = (
+     'upper_rotor_speed_magnitude_rad_s',
+--- previous_run/repaired_hopper_r12/simulation/environment.py
++++ software/pdr_plant/repaired_hopper_m4/simulation/environment.py
+@@ -1,23 +1,32 @@
+-"""Explicit environment and nonpropulsive-load interface for PDR-R12.
+-
+-Authorization: 66c7448f443f44ac9a016a1b384593a2 revision 1.
+-Audit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 revision 1.
+-Caller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 revision 1.
+-Frame contract: f046cc4fe5294a6f9a61027529056f61 revision 1.
+-Gimbal contract: 28e10be57d6548a3aa5be06c96f6d0d0 revision 1.
+-
+-Reconciled from the recovered r9 simulation/environment.py inspected in
+-reader 2b75af1479394623b11026be2eec2f9a revision 1. Original checkouts and
+-historical outputs remain unchanged.
+-
+-Affected callers: Simulation.evaluate, fixture environment construction,
+-and PrescribedFixtureEnvironment.sample. Simulation must request a sample
+-at actual separated-origin hub locations, then calculate air-relative hub
+-velocities using the same State, MassProperties and AssemblyKinematics.
+-
+-No legacy cylindrical Aerodynamics model is imported or implicitly selected.
+-This module supplies contracts, not a calibrated environmental, battery,
+-thermal or contact model. Writing it is not verification or acceptance.
++"""PDR M4 fixed-D analytical plant: simulation/environment.py.
++
++Current authority: system_model:system revision 4;
++work-plan 99f7bb629eef45b89fa38d27c803868c revision 1;
++interface 88561ff8b3ba4e8286cebd95a93e3b08 revision 1.
++Pre-edit audit: PDR-PLANT-PRE-EDIT-AUDIT-M4-03 revision 1.
++
++Reused from inspected previous_run/repaired_hopper_r12/simulation/environment.py.
++Recovered file SHA256: ba795b5d1d5344a1ecf5b2b5cc122255234d5ff394fb0dc41ee3366196aac03c
++Original checkout and recovered files remain unchanged. The recovered module
++header is retained as historical provenance in migration_manifest_m4_05.json.
++
++Migration: explicit fixed plate/ring datum D replaces the recovered neutral-CG
++reference semantics; coordinated datum-related identifiers and schema strings
++are versioned across all eight modules. L is NED, B is FRD, q_LB is scalar-first
++Hamilton, and R_LB maps B components into L. Translation remains at instantaneous
++complete-vehicle CG G. D is fixed to the airframe and never follows G.
++
++D is the neutral propulsion centreline intersection with the upper reference
++plane of the FIXED leg-attachment plate/ring. Its numerical CAD location is an
++explicit input, not a selected coordinate. CAD C is forward-left-up in mm;
++r_B[m] = 0.001*diag(1,-1,-1)*(p_C[mm]-D_C[mm]).
++
++This migration does not add vehicle dynamics, a calibrated propulsion map,
++realizable ESC commands, loaded servo capability, battery/thermal evolution or
++contact. Analytical-only runtime guards are retained. No fixture is vehicle
++data merely because it executes. New fixtures/checkers must use these schemas.
++Generation, syntax compilation and imports are not analytical verification,
++physical validation, requirement satisfaction or review acceptance.
+ """
+ from __future__ import annotations
+ 
+@@ -32,7 +41,7 @@
+ from .state import State
+ 
+ 
+-ENVIRONMENT_SCHEMA = 'pdr_r12_explicit_environment_external_loads_v1'
++ENVIRONMENT_SCHEMA = 'hopper_m4_fixed_D_explicit_environment_external_loads_v1'
+ 
+ 
+ def _text(value, name):
+@@ -82,7 +91,7 @@
+ 
+     additional_external_loads contains ONLY nonpropulsive external point
+     forces/free couples with explicit provenance, such as an exposed-frame
+-    aerodynamic model. Points use body FRD coordinates relative to O_B0;
++    aerodynamic model. Points use body FRD coordinates relative to D;
+     free couples exclude application-point cross products. Do not include
+     uniform gravity, a duplicate rotor wrench or internal motor/servo
+     reactions. Simulation resolves each point force about current G once.
+@@ -216,8 +225,8 @@
+     previous time or counting calls.
+ 
+     Simulation supplies an owned (2,3) hub-position array:
+-      p_hub_i,L = p_G,L + R_LB (r_B0,i - r_B0,G).
+-    r_B0,i follows the actual separated-origin common-gimbal geometry.
++      p_hub_i,L = p_G,L + R_LB (r_D,i - r_D,G).
++    r_D,i follows the actual separated-origin common-gimbal geometry.
+     Do not mutate the array; echo its values in EnvironmentSample.
+ 
+     Any aerodynamic, disturbance or contact load requires a named model,
+--- previous_run/repaired_hopper_r12/simulation/simulation.py
++++ software/pdr_plant/repaired_hopper_m4/simulation/simulation.py
+@@ -1,35 +1,32 @@
+-"""Audited preliminary PDR-R12 numerical plant and solver boundary.
+-
+-Authorization: 66c7448f443f44ac9a016a1b384593a2 revision 1.
+-Audit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 revision 1.
+-Caller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 revision 1.
+-Frame contract: f046cc4fe5294a6f9a61027529056f61 revision 1.
+-Gimbal contract: 28e10be57d6548a3aa5be06c96f6d0d0 revision 1.
+-
+-Reconciled from the inspected original Simulation and recovered r9 module,
+-including its continuation excerpt. Supplied checkouts and historical outputs
+-remain unchanged. New fixture/runner/checker callers must use the r12 schemas.
+-
+-Repairs and coordinated migrations:
+-  * Package-relative imports; preserve authoritative initial snapshots.
+-  * Decode numerical RHS vectors; use the solver's time argument.
+-  * Integrate instantaneous complete-vehicle CG translation in local NED.
+-  * Integrate scalar-first Hamilton q_LB and FRD body angular velocity.
+-  * Use one full mass/momentum snapshot and actual actuator kinematics.
+-  * Evaluate both rotors together at actual separated-origin hub conditions.
+-  * Resolve external point loads and aerodynamic couples about current G once.
+-  * Return the actual SciPy solution, including failures, events and dense output.
+-
+-This implementation permits ANALYTICAL FIXTURES ONLY. The available actuator
+-realization is uncalibrated; complete electrical, thermal, aerodynamic, joint
+-and contact dynamics are not supplied. No vehicle feasibility or acceptance
+-is established. Do not bypass this restriction by relabelling vehicle data.
+-
+-No PID is implemented or tuned. A command is immutable and held over one
+-integration interval. Future fixed-cadence control must update memory outside
+-adaptive RHS calls and explicitly carry every accepted endpoint state forward.
+-No file writes, history accumulation, energy accumulation or quaternion-state
+-projection occurs here. Writing this source is not a verification result.
++"""PDR M4 fixed-D analytical plant: simulation/simulation.py.
++
++Current authority: system_model:system revision 4;
++work-plan 99f7bb629eef45b89fa38d27c803868c revision 1;
++interface 88561ff8b3ba4e8286cebd95a93e3b08 revision 1.
++Pre-edit audit: PDR-PLANT-PRE-EDIT-AUDIT-M4-03 revision 1.
++
++Reused from inspected previous_run/repaired_hopper_r12/simulation/simulation.py.
++Recovered file SHA256: a186c50ab7c5500e7da14bb5c98a5c2772ff97d63645558be3cfdc3b6e5ca1a8
++Original checkout and recovered files remain unchanged. The recovered module
++header is retained as historical provenance in migration_manifest_m4_05.json.
++
++Migration: explicit fixed plate/ring datum D replaces the recovered neutral-CG
++reference semantics; coordinated datum-related identifiers and schema strings
++are versioned across all eight modules. L is NED, B is FRD, q_LB is scalar-first
++Hamilton, and R_LB maps B components into L. Translation remains at instantaneous
++complete-vehicle CG G. D is fixed to the airframe and never follows G.
++
++D is the neutral propulsion centreline intersection with the upper reference
++plane of the FIXED leg-attachment plate/ring. Its numerical CAD location is an
++explicit input, not a selected coordinate. CAD C is forward-left-up in mm;
++r_B[m] = 0.001*diag(1,-1,-1)*(p_C[mm]-D_C[mm]).
++
++This migration does not add vehicle dynamics, a calibrated propulsion map,
++realizable ESC commands, loaded servo capability, battery/thermal evolution or
++contact. Analytical-only runtime guards are retained. No fixture is vehicle
++data merely because it executes. New fixtures/checkers must use these schemas.
++Generation, syntax compilation and imports are not analytical verification,
++physical validation, requirement satisfaction or review acceptance.
+ """
+ from __future__ import annotations
+ 
+@@ -61,7 +58,7 @@
+ from .state import STATE_COMPONENTS, STATE_SIZE, STATE_UNITS, STATE_VECTOR_SCHEMA, State
+ 
+ 
+-PLANT_STATE_SCHEMA = 'pdr_r12_cg_ned_frd_wxyz_fixture_actuators_v1'
++PLANT_STATE_SCHEMA = 'hopper_m4_fixed_D_cg_ned_frd_wxyz_fixture_actuators_v1'
+ PLANT_STATE_SIZE = STATE_SIZE + ACTUATOR_STATE_SIZE
+ PLANT_COMPONENTS = STATE_COMPONENTS + ACTUATOR_COMPONENTS
+ PLANT_UNITS = STATE_UNITS + ACTUATOR_UNITS
+@@ -106,7 +103,7 @@
+ 
+ 
+ def unpack_state(vector, *, schema):
+-    """Decode the explicit nineteen-component r12 schema without mutation."""
++    """Decode the explicit nineteen-component M4 schema without mutation."""
+     if schema != PLANT_STATE_SCHEMA:
+         raise ValueError('Explicit supported plant-state schema required')
+     values = finite_array(vector, (PLANT_STATE_SIZE,), 'plant state')
+@@ -177,7 +174,7 @@
+     Even all True flags do not establish complete electrical feasibility:
+     the paired-map battery-current flag excludes auxiliary consumers.
+ 
+-    Translation refers to instantaneous complete-vehicle G, not fixed O_B0.
++    Translation refers to instantaneous complete-vehicle G, not fixed D.
+     Mission scoring must separately apply fixed_datum_kinematics with current
+     CG offset and offset rate. An event alone is not a contact/landing model.
+     """
+@@ -265,9 +262,9 @@
+         self.propulsion.geometry.validate_spin_kinematics(kinematics)
+         mass = self.hopper.mass_properties(time_s=time, kinematics=kinematics)
+         R_LB = quaternion_to_dcm(state.q_LB)
+-        points_B0 = self.propulsion.geometry.application_points_B0_m(kinematics)
++        points_D = self.propulsion.geometry.application_points_D_m(kinematics)
+         with np.errstate(over='raise', invalid='raise'):
+-            arms_B = points_B0 - np.asarray(mass.cg_B0_m)
++            arms_B = points_D - np.asarray(mass.cg_D_m)
+             hub_positions = state.position_G_L_m + (R_LB @ arms_B.T).T
+         hub_positions = finite_array(hub_positions, (2, 3), 'hub positions in L')
+         environment = self.environment_provider.sample(
+@@ -424,7 +421,7 @@
+             'quaternion_samples_renormalized': False,
+             'controller_updates_performed': 0,
+             'translation_reference': 'instantaneous complete-vehicle CG G',
+-            'mission_scoring_reference': 'fixed O_B0; separate conversion required',
++            'mission_scoring_reference': 'fixed D; separate conversion required',
+             'physical_acceptance': 'not_assessed',
+             'limitations': (
+                 'Provider-reported domains are not independent verification.',
+--- /dev/null
++++ software/pdr_plant/repaired_hopper_m4/__init__.py
+@@ -0,0 +1,4 @@
++"""M4 fixed-D analytical package; no automatic initialization.
++See ../README_repaired_m4_05.md at the plant task directory.
++Source presence is not verification or vehicle authorization.
++"""
+--- /dev/null
++++ software/pdr_plant/repaired_hopper_m4/helpers/__init__.py
+@@ -0,0 +1,4 @@
++"""M4 fixed-D analytical package; no automatic initialization.
++See ../README_repaired_m4_05.md at the plant task directory.
++Source presence is not verification or vehicle authorization.
++"""
+--- /dev/null
++++ software/pdr_plant/repaired_hopper_m4/simulation/__init__.py
+@@ -0,0 +1,4 @@
++"""M4 fixed-D analytical package; no automatic initialization.
++See ../README_repaired_m4_05.md at the plant task directory.
++Source presence is not verification or vehicle authorization.
++"""
+--- /dev/null
++++ software/pdr_plant/repaired_hopper_m4/chassis/__init__.py
+@@ -0,0 +1,4 @@
++"""M4 fixed-D analytical package; no automatic initialization.
++See ../README_repaired_m4_05.md at the plant task directory.
++Source presence is not verification or vehicle authorization.
++"""
+--- /dev/null
++++ software/pdr_plant/repaired_hopper_m4/propulsion/__init__.py
+@@ -0,0 +1,4 @@
++"""M4 fixed-D analytical package; no automatic initialization.
++See ../README_repaired_m4_05.md at the plant task directory.
++Source presence is not verification or vehicle authorization.
++"""

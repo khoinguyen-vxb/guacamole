@@ -3,6 +3,7 @@
 import base64
 import json
 import os
+import runpy
 import tempfile
 import unittest
 from pathlib import Path
@@ -15,6 +16,20 @@ from guacamole import ContextSpec, Project
 
 
 class EhopperTests(unittest.IsolatedAsyncioTestCase):
+    def test_interject_targets_active_run_and_retries_with_same_id(self):
+        with (
+            patch("getpass.getpass", return_value="test-token"),
+            patch("websockets.sync.client.connect") as connect,
+            patch("builtins.print"),
+        ):
+            for _ in range(2):
+                runpy.run_module("examples.ehopper.interject", run_name="__main__")
+        messages = connect.return_value.__enter__.return_value.send.call_args_list
+        first, retry = [json.loads(call.args[0]) for call in messages]
+        self.assertNotIn("run_id", first["command"])
+        self.assertTrue(first["command"]["keep_workers"])
+        self.assertEqual(first, retry)
+
     async def test_launcher_enables_live_web_research(self):
         with (
             patch.object(ehopper.shutil, "which", return_value="/usr/bin/codex"),

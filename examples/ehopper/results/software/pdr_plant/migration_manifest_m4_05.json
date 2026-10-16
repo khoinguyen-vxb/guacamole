@@ -1,0 +1,249 @@
+{
+  "schema": "hopper.plant_source_migration/1",
+  "created_utc": "2026-10-16T06:50:05.249754+00:00",
+  "authority": {
+    "system_model": {
+      "kind": "system_model",
+      "id": "system",
+      "revision": 4,
+      "sha256": "e89e68e192965d8e012cc1213e59c02610f55042ad26d7392ebef0401237ee75"
+    },
+    "work_plan": {
+      "kind": "decision",
+      "id": "99f7bb629eef45b89fa38d27c803868c",
+      "revision": 1,
+      "sha256": "e5af8e2f56f7c851b65518b129f39550be73911f56461279cbbb1e85e1cdd5f0"
+    },
+    "interface": {
+      "kind": "decision",
+      "id": "88561ff8b3ba4e8286cebd95a93e3b08",
+      "revision": 1,
+      "sha256": "ad6662afab9685585264c86e052c246996d23f4369c6432b56094a42a9187c04"
+    }
+  },
+  "pre_edit_audit": {
+    "kind": "artifact",
+    "id": "PDR-PLANT-PRE-EDIT-AUDIT-M4-03",
+    "revision": 1,
+    "sha256": "e6ee2af73b7e5af2f2f475166a4ae66be2c7f92b3cdae37360107798fedfeb18"
+  },
+  "capability_report": {
+    "kind": "artifact",
+    "id": "PDR-PLANT-CAPABILITY-REPORT-M4-04",
+    "revision": 1,
+    "sha256": "e4ea0097e9ae4c8830261874f173a5abe2cd82cbb351ea810d715cd0e1ea4618"
+  },
+  "generator_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/software/pdr_plant/prepare_repaired_copy_m4_05.py",
+  "generator_file_sha256": "c189697d47b9d5e7ec3496f19f8a2709e826d58fec8bd671a1876ce3eb312522",
+  "migration": "Recovered analytical implementation to selected fixed-D semantics",
+  "modules": [
+    {
+      "recovered_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/helpers/math.py",
+      "recovered_file_sha256": "281a5578b6d33c45578350429cb30ead28ba6a378c571c2c6929c60819ceecfb",
+      "output_path": "software/pdr_plant/repaired_hopper_m4/helpers/math.py",
+      "output_file_sha256": "cbcb24f88a8e35394141da832b97e6baea88cee6f050651488a8a654a2a9e80e",
+      "recovered_module_header_historical_only": "Explicit NED/FRD frame helpers for the preliminary PDR-R12 repair.\n\nAuthorization: 66c7448f443f44ac9a016a1b384593a2 r1.\nPre-edit evidence: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 r1 and\nPDR-R12-PLANT-CALLER-RECONCILIATION-02 r1.\nFrame decision: f046cc4fe5294a6f9a61027529056f61 r1.\nGimbal convention: 28e10be57d6548a3aa5be06c96f6d0d0 r1.\n\nReconciled from the inspected historical r9 helpers/math.py, SHA-256\n7941782e298900bdbbe35383aaa376a9679e225b6e85247c191b3a53486755a6.\nOriginal audited helpers/math.py, SHA-256\n5e6420ade1c4d642762ba4d6b0812a80f2f693a58151bbf16a4274efb521239a.\nNeither source is modified. Writing this module is not a verification pass.\n\nL: fixed launch-ground North-East-Down frame.\nB: structure-fixed Forward-Right-Down axes.\nq_LB: scalar-first Hamilton [w,x,y,z]; R_LB maps B components into L.\nqdot = 0.5 * q_LB Hamilton-product [0, omega_B].\nEuler inputs: named radians; R_LB = Rz(yaw) Ry(pitch) Rx(roll).\nCAD C: forward-left-up; R_BC = diag(1,-1,-1), determinant +1.\n\nMigration obligations: State and Simulation callers must use the named\nradian interface and explicit DCM direction. Numeric serialization must\npreserve raw quaternion norm error. The deprecated misspelled helper keeps\nthe original algebraic R_BL default, not its uninitialized-variable defect.\n\nNo vehicle geometry, mass, inertia, travel, gains or calibration is selected.\n",
+      "replacement_counts": {
+        "pdr_r12_ -> hopper_m4_fixed_D_": 0,
+        "neutral_cg_C_mm -> datum_D_C_mm": 6,
+        "O_B0 -> D": 2,
+        "B0 -> D": 12
+      },
+      "schema_constants": {},
+      "syntax_compilation": "completed in memory; no target execution"
+    },
+    {
+      "recovered_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/simulation/state.py",
+      "recovered_file_sha256": "b62a1a4fcc70a4a88e07f77996e955a64184891ce614957c85ccb7d63e90f294",
+      "output_path": "software/pdr_plant/repaired_hopper_m4/simulation/state.py",
+      "output_file_sha256": "b3d3c9e85c41f9b54ef269dfba2cdf3b3016efdca30d73df3385ca7538458d1d",
+      "recovered_module_header_historical_only": "Explicit instantaneous-CG state for the preliminary PDR r12 plant.\n\nOriginal audited module: 6dof_hopper/simulation/state.py\nOriginal SHA-256: 7b8713aecd017a7ff1f0b3ad4e14e1c63c716d1181a6df516d25b7a7d1973b2a\nRecovered implementation: pdr_r9_plant/repaired_hopper/simulation/state.py\nRecovered SHA-256: 3b5a37931c66e32c2f5bb4b68bd47b8da71417e31dfe11a4b06fddb1c4f62425\nAudit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 revision 1.\nCaller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 revision 1.\nAuthorization: 66c7448f443f44ac9a016a1b384593a2 revision 1.\nFrame contract: f046cc4fe5294a6f9a61027529056f61 revision 1.\n\nMigration affecting Simulation construction, solve_ode, trajectory_ode and\nfixture/runner callers:\n  * Construction is keyword-only, with explicit units, frames and origin.\n  * All thirteen supplied rigid-body components are retained.\n  * Original body-resolved u/v/w are NOT interpreted as local NED velocity.\n  * Numeric decoding requires the r12 schema, not merely matching length.\n  * Mutable update_state/history accumulation is deliberately removed.\n  * Euler initialization uses named radian arguments; integration uses q.\n  * Serialization preserves quaternion norm error rather than hiding it.\n\nActuator states are separate; the combined plant must preserve them too.\nFixed-airframe-datum mission scoring requires CG-offset kinematics and is\nnot obtained by renaming position_G_L_m. No vehicle inputs, PID gains,\nverification results or physical acceptance are supplied by this module.\n",
+      "replacement_counts": {
+        "pdr_r12_ -> hopper_m4_fixed_D_": 1,
+        "neutral_cg_C_mm -> datum_D_C_mm": 0,
+        "O_B0 -> D": 0,
+        "B0 -> D": 0
+      },
+      "schema_constants": {
+        "STATE_VECTOR_SCHEMA": "hopper_m4_fixed_D_cg_ned_frd_wxyz_v1"
+      },
+      "syntax_compilation": "completed in memory; no target execution"
+    },
+    {
+      "recovered_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/chassis/hopper.py",
+      "recovered_file_sha256": "f2b6e4b54634220105655e994e3ff5c78e84c60084879696a25ef39fdc29ff05",
+      "output_path": "software/pdr_plant/repaired_hopper_m4/chassis/hopper.py",
+      "output_file_sha256": "2a6a1c90868317ad07c64f3c92153ff33d6ec9f74dcdfac941fd438c0de368af",
+      "recovered_module_header_historical_only": "Complete-vehicle mass and momentum interfaces for the PDR-R12 repair.\n\nAuthorization: 66c7448f443f44ac9a016a1b384593a2 r1.\nPre-edit evidence: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 r1 and\nPDR-R12-PLANT-CALLER-RECONCILIATION-02 r1.\nFrame contract: f046cc4fe5294a6f9a61027529056f61 r1.\nGimbal contract: 28e10be57d6548a3aa5be06c96f6d0d0 r1.\n\nReconciled from inspected historical chassis/hopper.py, SHA-256\n2c2b09a5993ccedea61cf543fe2f342f079a646d877bf65cba19dc302ae39432.\nOriginal audited chassis/hopper.py, SHA-256\n6e2b2f93e98b844ce04f68d26b704c65270e9329e1abff76caa45cbcd5dcf0bd.\nSupplied and historical sources remain unchanged.\n\nMigration affecting Simulation.trajectory_ode/evaluate and fixture builders:\n  Replace separate mass(time), CG(time), inertia(time) calls with one\n  mass_properties(time_s=..., kinematics=...) snapshot.\n  Complete installed mass includes propulsion, battery and every installed\n  item exactly once. Do not add a separate propulsion.get_mass term.\n  Propulsion loads are external point forces/free couples, not members of\n  this mass ledger. Legacy time-only wrench forwarding is not retained.\n  Full inertia is about instantaneous complete-vehicle CG G in FRD axes B.\n  CG coordinates are relative to fixed neutral-CG airframe datum O_B0.\n\nThis module supplies no numerical vehicle inputs or articulated mass model.\nNeither writing it nor satisfying its validation establishes physical validity.\n",
+      "replacement_counts": {
+        "pdr_r12_ -> hopper_m4_fixed_D_": 1,
+        "neutral_cg_C_mm -> datum_D_C_mm": 0,
+        "O_B0 -> D": 1,
+        "B0 -> D": 12
+      },
+      "schema_constants": {
+        "MASS_PROPERTY_SCHEMA": "hopper_m4_fixed_D_complete_vehicle_instantaneous_cg_v1"
+      },
+      "syntax_compilation": "completed in memory; no target execution"
+    },
+    {
+      "recovered_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/propulsion/propulsion.py",
+      "recovered_file_sha256": "d860528b277893bbfe59527b7fcc2017955cc66681d3994fb66744a8006271de",
+      "output_path": "software/pdr_plant/repaired_hopper_m4/propulsion/propulsion.py",
+      "output_file_sha256": "7df8e1ccb52ff3fd2145372adb006650891e1f7b8a660b54cdacdc0ff0de97e0",
+      "recovered_module_header_historical_only": "Explicit propulsion/load contracts for the preliminary PDR-R12 plant.\n\nAuthorization: 66c7448f443f44ac9a016a1b384593a2 revision 1.\nAudit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 revision 1.\nCaller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 revision 1.\nFrame contract: f046cc4fe5294a6f9a61027529056f61 revision 1.\nGimbal contract: 28e10be57d6548a3aa5be06c96f6d0d0 revision 1.\n\nOriginal propulsion/propulsion.py SHA-256:\ne07b895d8399016a3b0511afb195d7ebf992050cef04ab3015600347f01750ce\nRecovered r9 propulsion/propulsion.py SHA-256:\n930f02ef368640a533ced862ff1868b7a11166698c90d57fc2214393207e6a60\nBoth sources remain unchanged. This module reconciles the inspected r9\ninterface into the separate r12 package; writing it is not verification.\n\nMigration affecting Propellor, Hopper, Simulation and fixture providers:\n  * Replace the incomplete mass/CG/time-only propulsion ABC with evaluate.\n  * Installed mass belongs exclusively to Hopper's complete vehicle ledger.\n  * Evaluate the coupled pair at ACTUAL rotor/gimbal states, not commands.\n  * Return explicit external point forces and aerodynamic free couples.\n  * Resolve each load about the SAME instantaneous complete-vehicle CG once.\n  * Obtain application points from actual separated-origin gimbal geometry.\n  * Internal motor/servo reactions are not additional external moments.\n\nNo vehicle parameters, isolated-thrust doubling, calibrated map, hardware\nselection, numerical pass or physical acceptance is supplied here.\n",
+      "replacement_counts": {
+        "pdr_r12_ -> hopper_m4_fixed_D_": 1,
+        "neutral_cg_C_mm -> datum_D_C_mm": 0,
+        "O_B0 -> D": 2,
+        "B0 -> D": 3
+      },
+      "schema_constants": {
+        "PROPULSION_SCHEMA": "hopper_m4_fixed_D_external_coaxial_loads_v1"
+      },
+      "syntax_compilation": "completed in memory; no target execution"
+    },
+    {
+      "recovered_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/propulsion/propeller.py",
+      "recovered_file_sha256": "ce7be67ceae3866ecf402ee03b7812c3ea1e39c216ca5d412322af53d586ae3b",
+      "output_path": "software/pdr_plant/repaired_hopper_m4/propulsion/propeller.py",
+      "output_file_sha256": "f8404f109ccd2195488ca62f819a4585184014e65d88f5c2c2bdd73c8cad6d08",
+      "recovered_module_header_historical_only": "Separated-origin coaxial propulsion adapter for the PDR-R12 repair.\n\nAuthorization: 66c7448f443f44ac9a016a1b384593a2 revision 1.\nAudit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 revision 1.\nCaller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 revision 1.\nFrame contract: f046cc4fe5294a6f9a61027529056f61 revision 1.\nGimbal contract: 28e10be57d6548a3aa5be06c96f6d0d0 revision 1.\n\nOriginal audited propulsion/propeller.py SHA-256:\ncaa5ee91e46d102b8ebe0c02e1dfec0ecdca18e2c423791fca6f2c19100ae7b6.\nRecovered r9 implementation inspected through reader\n19244a324ca6484fb23d689d4ee1b877 revision 1.\nBoth supplied and historical sources remain unchanged.\n\nIntentional migration:\n  Replace the unusable original constructor and incomplete propulsion ABC.\n  Supply actual joint geometry and a simultaneous coupled performance map.\n  Replace historical pivot_B0_m and hub_offsets_M_m with explicitly named\n  outer origin, outer-to-inner translation and inner-origin hub offsets.\n  Old geometry keywords are NOT silently reinterpreted.\n\nAffected callers: fixture construction, Simulation.evaluate,\nPropellor.evaluate and hub_velocities_relative_air_M_m_s. Position and\nvelocity calculations share the same actual separated-origin geometry.\n\nThis adapter supplies external point forces and aerodynamic free couples.\nIt neither evolves actuators nor supplies installed mass, motor reactions,\nvehicle dimensions, historical lever arms, travel defaults or calibration.\nWriting it does not establish numerical execution or physical validity.\n",
+      "replacement_counts": {
+        "pdr_r12_ -> hopper_m4_fixed_D_": 1,
+        "neutral_cg_C_mm -> datum_D_C_mm": 0,
+        "O_B0 -> D": 4,
+        "B0 -> D": 20
+      },
+      "schema_constants": {
+        "GEOMETRY_SCHEMA": "hopper_m4_fixed_D_separated_origin_common_gimbal_v1"
+      },
+      "syntax_compilation": "completed in memory; no target execution"
+    },
+    {
+      "recovered_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/propulsion/actuators.py",
+      "recovered_file_sha256": "bacfd1457ea3d24ae82d4868f3418b46c967fc2442d83d36e96973467645be78",
+      "output_path": "software/pdr_plant/repaired_hopper_m4/propulsion/actuators.py",
+      "output_file_sha256": "d2ca96e796248f843865991846b34025fa03889043ba30ae868599e309977750",
+      "recovered_module_header_historical_only": "Explicit analytical actuator response for the preliminary PDR-R12 plant.\n\nAuthorization: 66c7448f443f44ac9a016a1b384593a2 r1.\nAudit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 r1.\nCaller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 r1.\nFrame: f046cc4fe5294a6f9a61027529056f61 r1.\nGimbal convention: 28e10be57d6548a3aa5be06c96f6d0d0 r1.\n\nReconciles the inspected historical r9 propulsion/actuators.py into the\nseparate r12 package. Original checkouts and historical files are unchanged.\nAffected callers are Simulation, fixture constructors and retained checkers.\nThey must use the new schema and preserve all six initial actuator states.\n\nState order: upper/lower rotor speed magnitudes [rad/s], alpha/beta demand\nfilter states [rad], actual alpha/beta [rad]. Filter states are numerical\nresponse states, not additional physical joints. R_BM=Rx(alpha)Ry(beta).\n\nThis realization is ANALYTICAL-FIXTURE ONLY, with every parameter explicit.\nIt is a speed-response abstraction, not an ESC PWM/voltage implementation\nor evidence of hardware speed regulation. The protocol and parameter record\nretain the calibration boundary; real loaded response requires reviewed data\nand potentially a versioned state extension. No vehicle defaults are supplied.\n\nEvaluation is pure: return derivatives and actual kinematics without advancing\nstate, accumulating energy or updating PID. A solver holds one immutable\ncommand per interval; any controller updates occur outside adaptive RHS calls.\nNo internal motor/servo torque is returned as an external vehicle moment.\nThe same actual kinematics must reach the mass/momentum and propulsion\nproviders. Writing this file establishes neither numerical nor physical validity.\n",
+      "replacement_counts": {
+        "pdr_r12_ -> hopper_m4_fixed_D_": 1,
+        "neutral_cg_C_mm -> datum_D_C_mm": 0,
+        "O_B0 -> D": 0,
+        "B0 -> D": 0
+      },
+      "schema_constants": {
+        "ACTUATOR_STATE_SCHEMA": "hopper_m4_fixed_D_fixture_motor_gimbal_cascade_v1"
+      },
+      "syntax_compilation": "completed in memory; no target execution"
+    },
+    {
+      "recovered_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/simulation/environment.py",
+      "recovered_file_sha256": "ba795b5d1d5344a1ecf5b2b5cc122255234d5ff394fb0dc41ee3366196aac03c",
+      "output_path": "software/pdr_plant/repaired_hopper_m4/simulation/environment.py",
+      "output_file_sha256": "0e07ad53046edb02c90e5b9b6d17ce9ccc5b9e441a103dc7cee36dc31384fe55",
+      "recovered_module_header_historical_only": "Explicit environment and nonpropulsive-load interface for PDR-R12.\n\nAuthorization: 66c7448f443f44ac9a016a1b384593a2 revision 1.\nAudit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 revision 1.\nCaller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 revision 1.\nFrame contract: f046cc4fe5294a6f9a61027529056f61 revision 1.\nGimbal contract: 28e10be57d6548a3aa5be06c96f6d0d0 revision 1.\n\nReconciled from the recovered r9 simulation/environment.py inspected in\nreader 2b75af1479394623b11026be2eec2f9a revision 1. Original checkouts and\nhistorical outputs remain unchanged.\n\nAffected callers: Simulation.evaluate, fixture environment construction,\nand PrescribedFixtureEnvironment.sample. Simulation must request a sample\nat actual separated-origin hub locations, then calculate air-relative hub\nvelocities using the same State, MassProperties and AssemblyKinematics.\n\nNo legacy cylindrical Aerodynamics model is imported or implicitly selected.\nThis module supplies contracts, not a calibrated environmental, battery,\nthermal or contact model. Writing it is not verification or acceptance.\n",
+      "replacement_counts": {
+        "pdr_r12_ -> hopper_m4_fixed_D_": 1,
+        "neutral_cg_C_mm -> datum_D_C_mm": 0,
+        "O_B0 -> D": 1,
+        "B0 -> D": 3
+      },
+      "schema_constants": {
+        "ENVIRONMENT_SCHEMA": "hopper_m4_fixed_D_explicit_environment_external_loads_v1"
+      },
+      "syntax_compilation": "completed in memory; no target execution"
+    },
+    {
+      "recovered_path": "/home/ngvnngkhoi/guacamole/examples/ehopper/results/previous_run/repaired_hopper_r12/simulation/simulation.py",
+      "recovered_file_sha256": "a186c50ab7c5500e7da14bb5c98a5c2772ff97d63645558be3cfdc3b6e5ca1a8",
+      "output_path": "software/pdr_plant/repaired_hopper_m4/simulation/simulation.py",
+      "output_file_sha256": "a5d4e862f80365f8b9e6f5455813833fdd52baae9d43efb3b7e4f5a1ef02a1e2",
+      "recovered_module_header_historical_only": "Audited preliminary PDR-R12 numerical plant and solver boundary.\n\nAuthorization: 66c7448f443f44ac9a016a1b384593a2 revision 1.\nAudit: PDR-R12-PLANT-PRE-EDIT-AUDIT-01 revision 1.\nCaller reconciliation: PDR-R12-PLANT-CALLER-RECONCILIATION-02 revision 1.\nFrame contract: f046cc4fe5294a6f9a61027529056f61 revision 1.\nGimbal contract: 28e10be57d6548a3aa5be06c96f6d0d0 revision 1.\n\nReconciled from the inspected original Simulation and recovered r9 module,\nincluding its continuation excerpt. Supplied checkouts and historical outputs\nremain unchanged. New fixture/runner/checker callers must use the r12 schemas.\n\nRepairs and coordinated migrations:\n  * Package-relative imports; preserve authoritative initial snapshots.\n  * Decode numerical RHS vectors; use the solver's time argument.\n  * Integrate instantaneous complete-vehicle CG translation in local NED.\n  * Integrate scalar-first Hamilton q_LB and FRD body angular velocity.\n  * Use one full mass/momentum snapshot and actual actuator kinematics.\n  * Evaluate both rotors together at actual separated-origin hub conditions.\n  * Resolve external point loads and aerodynamic couples about current G once.\n  * Return the actual SciPy solution, including failures, events and dense output.\n\nThis implementation permits ANALYTICAL FIXTURES ONLY. The available actuator\nrealization is uncalibrated; complete electrical, thermal, aerodynamic, joint\nand contact dynamics are not supplied. No vehicle feasibility or acceptance\nis established. Do not bypass this restriction by relabelling vehicle data.\n\nNo PID is implemented or tuned. A command is immutable and held over one\nintegration interval. Future fixed-cadence control must update memory outside\nadaptive RHS calls and explicitly carry every accepted endpoint state forward.\nNo file writes, history accumulation, energy accumulation or quaternion-state\nprojection occurs here. Writing this source is not a verification result.\n",
+      "replacement_counts": {
+        "pdr_r12_ -> hopper_m4_fixed_D_": 1,
+        "neutral_cg_C_mm -> datum_D_C_mm": 0,
+        "O_B0 -> D": 2,
+        "B0 -> D": 4
+      },
+      "schema_constants": {
+        "PLANT_STATE_SCHEMA": "hopper_m4_fixed_D_cg_ned_frd_wxyz_fixture_actuators_v1"
+      },
+      "syntax_compilation": "completed in memory; no target execution"
+    }
+  ],
+  "output_files_except_this_manifest": [
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/helpers/math.py",
+      "file_sha256": "cbcb24f88a8e35394141da832b97e6baea88cee6f050651488a8a654a2a9e80e"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/simulation/state.py",
+      "file_sha256": "b3d3c9e85c41f9b54ef269dfba2cdf3b3016efdca30d73df3385ca7538458d1d"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/chassis/hopper.py",
+      "file_sha256": "2a6a1c90868317ad07c64f3c92153ff33d6ec9f74dcdfac941fd438c0de368af"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/propulsion/propulsion.py",
+      "file_sha256": "7df8e1ccb52ff3fd2145372adb006650891e1f7b8a660b54cdacdc0ff0de97e0"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/propulsion/propeller.py",
+      "file_sha256": "f8404f109ccd2195488ca62f819a4585184014e65d88f5c2c2bdd73c8cad6d08"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/propulsion/actuators.py",
+      "file_sha256": "d2ca96e796248f843865991846b34025fa03889043ba30ae868599e309977750"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/simulation/environment.py",
+      "file_sha256": "0e07ad53046edb02c90e5b9b6d17ce9ccc5b9e441a103dc7cee36dc31384fe55"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/simulation/simulation.py",
+      "file_sha256": "a5d4e862f80365f8b9e6f5455813833fdd52baae9d43efb3b7e4f5a1ef02a1e2"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/__init__.py",
+      "file_sha256": "803ad561e7b775fea858a8b47418ea30b949d8d3d2c5818e0e4321894988c44d"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/helpers/__init__.py",
+      "file_sha256": "803ad561e7b775fea858a8b47418ea30b949d8d3d2c5818e0e4321894988c44d"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/simulation/__init__.py",
+      "file_sha256": "803ad561e7b775fea858a8b47418ea30b949d8d3d2c5818e0e4321894988c44d"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/chassis/__init__.py",
+      "file_sha256": "803ad561e7b775fea858a8b47418ea30b949d8d3d2c5818e0e4321894988c44d"
+    },
+    {
+      "path": "software/pdr_plant/repaired_hopper_m4/propulsion/__init__.py",
+      "file_sha256": "803ad561e7b775fea858a8b47418ea30b949d8d3d2c5818e0e4321894988c44d"
+    },
+    {
+      "path": "software/pdr_plant/recovered_to_m4_05.patch",
+      "file_sha256": "619b40402b8ed2d4d04ccbc61961028ab959a8bbe3e27a22b6249317f695bf19"
+    },
+    {
+      "path": "software/pdr_plant/README_repaired_m4_05.md",
+      "file_sha256": "03acaa44935803ca755baa15fa4fd39593a57b93b2babb59e39e66e45f2f9aa5"
+    }
+  ],
+  "source_preservation_scope": "Eight digest-pinned recovered regular files checked before and after; broader preservation verification remains separate",
+  "analytical_only_guards_retained": true,
+  "targets_imported": false,
+  "numerical_regression_performed": false,
+  "physical_acceptance": "not_assessed",
+  "limitations": [
+    "Syntax compilation and source generation are not verification.",
+    "No vehicle dynamics reduction or numerical vehicle data is selected.",
+    "All recovered historical authorization and result claims remain historical.",
+    "Fixed-datum acceleration, coupled dynamics, electrical/thermal evolution, contact and PID are not added.",
+    "Future fixtures and checkers are new callers requiring explicit schema use and review."
+  ]
+}
