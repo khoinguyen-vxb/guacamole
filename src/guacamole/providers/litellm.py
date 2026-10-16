@@ -11,7 +11,7 @@ import base64
 import litellm
 from pydantic import JsonValue, ValidationError
 
-from ..context import IMAGE_TOKENS, ProviderError, image_data
+from ..context import IMAGE_TOKENS, InvalidTurn, ProviderError, image_data
 from ..contracts import JSON, AgentTurn, ContextPacket, Usage
 from .claude import _strip_fence
 
@@ -165,7 +165,7 @@ class LiteLLMReasoning:
                 _strip_fence(choice.message.content or "")
             )
         except ValidationError as exc:
-            raise ProviderError(
+            raise InvalidTurn(
                 f"{self.model} did not return a valid AgentTurn JSON object; no action "
                 f"executed (validation_errors={exc.error_count()})."
             ) from None

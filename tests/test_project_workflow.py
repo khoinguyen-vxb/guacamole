@@ -22,6 +22,7 @@ from guacamole.contracts import (
     Decide,
     Deliver,
     Finish,
+    OpenItem,
     Publish,
     PublishedFile,
     Rationale,
@@ -272,6 +273,56 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                 self.assertTrue((sandbox / "work").is_dir())
                 self.assertFalse((root / "state/reviews").exists())
 
+    async def test_wrapped_quotes_and_unknowns_an_open_item_defers(self):
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory)) as project,
+        ):
+            brief = Path(directory) / "brief.txt"
+            brief.write_text("Each bracket must carry 150 N\nat its tip.")
+            source = project.ingest(brief, source_id="brief")
+            # Briefs hard-wrap: a quote across the line break is still verbatim.
+            r1 = Requirement(
+                id="R1",
+                wording="Each bracket carries 150 N at its tip",
+                source=source,
+                source_quote="carry 150 N at its tip",
+                unknowns=("shock direction",),
+            )
+            ref = project.record_requirement(r1)
+            for quote in ("  ", "carry 200 N"):
+                with (
+                    self.subTest(quote=quote),
+                    self.assertRaisesRegex(ValueError, "quotation"),
+                ):
+                    project.record_requirement(
+                        r1.model_copy(update={"id": "R2", "source_quote": quote})
+                    )
+            await commit_fixture_model(project)
+            decision = await project.decisions.choose(
+                plan_request(ref), selected="fixture", explanation="Fixture"
+            )
+            issues = "\n".join(project.reviews.checks(decision)[2])
+            self.assertIn("R1: unresolved input shock direction", issues)
+            # Tracked by an open item, the unknown blocks only the stages it names.
+            project.record_open_item(
+                OpenItem(
+                    id="OI-shock",
+                    description="Shock assumed vertical; confirm before CDR",
+                    kind="assumption",
+                    blocking_stages=("CDR",),
+                    requirements=("R1",),
+                )
+            )
+            issues = "\n".join(project.reviews.checks(decision)[2])
+            self.assertNotIn("shock", issues.casefold())
+            with self.assertRaisesRegex(ValueError, "R9 is not a current requirement"):
+                project.record_open_item(
+                    OpenItem(
+                        id="OI-x", description="x", kind="risk", requirements=("R9",)
+                    )
+                )
+
     async def test_pdr_cdr_artifact_evidence_human_gate_and_invalidation(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -405,15 +456,16 @@ class WorkflowTests(unittest.IsolatedAsyncioTestCase):
                             decision_id=decision,
                         )
                     )
-                    project.deliver(
-                        Deliverable(
-                            spec_id=stage + "-design",
-                            artifacts=(artifact,),
-                            evidence=(evidence,),
-                            rationale_id="fixture-rationale",
-                        ),
-                        decision_id=decision,
+                    delivered = Deliverable(
+                        spec_id=stage + "-design",
+                        artifacts=(artifact,),
+                        evidence=(evidence,),
+                        rationale_id="fixture-rationale",
                     )
+                    project.deliver(delivered, decision_id=decision)
+                    # An unchanged package is not delivered twice.
+                    with self.assertRaisesRegex(ValueError, "already delivered"):
+                        project.deliver(delivered, decision_id=decision)
                     ready = await project.reviews.generate(decision)
                     self.assertEqual(
                         project.store.resolve(ready).data["status"], "ready"

@@ -397,6 +397,9 @@ class OpenItem(Model):
     kind: Literal["missing_input", "missing_tool", "assumption", "risk", "test_due"]
     blocking_stages: tuple[ReviewStage, ...] = ("PDR", "CDR")
     resolved_by: tuple[Ref, ...] = ()
+    # Requirement IDs whose unknowns this item tracks: they then block only the
+    # stages it blocks, so a CDR-only input stops blocking PDR.
+    requirements: tuple[str, ...] = ()
 
 
 class Candidate(Model):
@@ -728,7 +731,11 @@ class ProjectRequest(Model):
 
 class ProjectResult(Model):
     run_id: str
-    status: Literal["incomplete", "awaiting_human", "awaiting_review", "complete"]
+    # paused: a provider failure (usage limit, outage, token cap) stopped an agent;
+    # fix the cause and resume the run.
+    status: Literal[
+        "incomplete", "paused", "awaiting_human", "awaiting_review", "complete"
+    ]
     reviews: tuple[Ref, ...] = ()
     human_requests: tuple[str, ...] = ()
     open_items: tuple[str, ...] = ()
@@ -756,15 +763,23 @@ class Send(Model):
         return self
 
 
+def _tuples(value: object) -> object:
+    if isinstance(value, list):
+        return tuple(_tuples(v) for v in value)
+    if isinstance(value, dict):
+        return {k: _tuples(v) for k, v in value.items()}
+    return value
+
+
 def _batched(data: object, into: str, *single: str) -> object:
     """Read a turn recorded before batching: its single item's fields become one entry.
 
     A before-validator hands strict tuple fields Python lists rather than JSON
-    arrays, so lists become tuples here.
+    arrays, at every depth (a Requirement's unknowns too), so lists become tuples here.
     """
     if not isinstance(data, dict):
         return data
-    data = {k: tuple(v) if isinstance(v, list) else v for k, v in data.items()}
+    data = {k: _tuples(v) for k, v in data.items()}
     if single[0] in data:
         item = {key: data.pop(key) for key in single if key in data}
         data[into] = (item[single[0]] if len(single) == 1 else item,)
@@ -805,8 +820,15 @@ class Spawn(Model):
 
 
 class Record(Model):
+    """Record every requirement or open item ready now, all of them or none."""
+
     kind: Literal["record"] = "record"
-    record: Requirement | OpenItem
+    records: tuple[Requirement | OpenItem, ...] = Field(min_length=1)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _single(cls, data: object) -> object:
+        return _batched(data, "records", "record")
 
 
 class PublishedFile(Model):
@@ -902,6 +924,30 @@ class Amend(Model):
     amendment: Amendment
 
 
+class Compliance(Model):
+    requirement: str  # A bounded requirement's ID in the current model
+    measurement: str = ""  # Key in the evidence's measurements; "" uses the ID
+
+
+class Assessment(Model):
+    """The systems engineer's verdict that passed evidence meets bounded requirements.
+
+    Its own record, not a model revision: a revision stales the plan, artifacts and
+    evidence built on the previous one, so assessing in the model invalidated what it
+    assessed. The runtime checks every claim against the evidence and current model.
+    """
+
+    id: str
+    evidence: Ref
+    satisfied: tuple[Compliance, ...] = Field(min_length=1)
+    explanation: str = Field(pattern=r"\S")
+
+
+class Assess(Model):
+    kind: Literal["assess"] = "assess"
+    assessment: Assessment
+
+
 type Action = Annotated[
     ToolCall
     | Send
@@ -922,7 +968,8 @@ type Action = Annotated[
     | Retry
     | Supersede
     | UpdateModel
-    | Amend,
+    | Amend
+    | Assess,
     Field(discriminator="kind"),
 ]
 
@@ -930,6 +977,9 @@ type Action = Annotated[
 class AgentTurn(Model):
     rationale: Rationale
     action: Action
+    # Messages this turn deals with, acknowledged once its action succeeds: a turn
+    # spent only on acknowledge cost the Chief $0.61 after it had acted on a report.
+    acknowledge: tuple[str, ...] = ()
     provider_request_id: str | None = None
     provider_summary: str | None = None
     # Filled by the provider after the call; hidden from the response schema.

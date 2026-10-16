@@ -400,15 +400,21 @@ candidate rejects it; the Systems Engineer then implements exactly the adopted c
 Amendments that change requirements cannot be adopted until requirement records with
 human-sourced quotes agree. An unusable model or an undecided or unimplemented
 amendment keeps PDR/CDR packages from becoming ready, and so does any bounded
-requirement the model does not show satisfied: the Systems Engineer assesses a design
-by recording its verified values and `satisfy` claims, and the Chief's
-`state.review_blockers` lists what is missing. Packages include the reviewed
+requirement without a current compliance assessment. The Systems Engineer records one
+with `assess`, citing passed evidence: the runtime checks that the evidence covers each
+claimed requirement and that its measured value meets every bound of the current
+model. An assessment is its own record, not a model revision, so it stales nothing it
+assessed; a later revision stales the assessment instead. The Chief's
+`state.review_blockers` lists what is missing. A requirement's unknowns block every
+review until an open item tracks them (`requirements`); they then block only that
+item's `blocking_stages`. Packages include the reviewed
 model, acceptance requires that revision to be current, and refining the model later
 does not withdraw an accepted review.
 
 Scripts use the same API without the agent: `await project.sysml.commit(summary=...,
 files={...}, derived_from=(ref,))`, `await project.sysml.amend(Amendment(...))`,
-`project.sysml.status(amendment_id)` and `await project.sysml.validate(files)`.
+`project.sysml.status(amendment_id)`, `await project.sysml.validate(files)` and
+`project.sysml.assess(Assessment(...))`.
 Scripts that call `project.decisions.choose` directly must first commit a model of
 every recorded requirement.
 Existing `.sysml` and `.kerml` files supplied through `ProjectRequest.documents` are

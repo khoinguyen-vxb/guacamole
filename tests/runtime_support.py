@@ -14,11 +14,14 @@ from guacamole import (
 from guacamole.contracts import (
     AgentTurn,
     Decide,
+    Evidence,
     Note,
     Rationale,
     Record,
+    RequestRecord,
     Send,
     UpdateModel,
+    VerificationResult,
     Wait,
 )
 
@@ -74,7 +77,7 @@ def _engineer_turn(provider, data):
     ]
     recorded = {s["ref"]["id"] for s in records}
     if wanted := [r for r in provider.requirements() if r.id not in recorded]:
-        return AgentTurn(rationale=FIXTURE, action=Record(record=wanted[0]))
+        return AgentTurn(rationale=FIXTURE, action=Record(records=tuple(wanted)))
     model = data["state"]["system_model"]
     if model["status"] != "valid":
         brief = next(
@@ -150,12 +153,9 @@ def _quantity(value, unit):
     return f"{value:g}" + (f" [{unit}]" if unit else "")
 
 
-def fixture_model(requirements, values=None):
-    """TEST FIXTURE: a SysML v2 model of each requirement, not an engineering design.
-
-    values maps metrics to verified Quantity values: the engineer's assessment,
-    recorded as design values with a satisfy claim per bounded requirement."""
-    subjects, body, design = [], [], []
+def fixture_model(requirements):
+    """TEST FIXTURE: a SysML v2 model of each requirement, not an engineering design."""
+    subjects, body = [], []
     for n, record in enumerate(requirements):
         body += [
             f"  requirement <'{record.id}'> r{n} {{",
@@ -168,19 +168,13 @@ def fixture_model(requirements, values=None):
                 for op, value in ((">=", c.minimum), ("<=", c.maximum))
                 if value is not None
             ]
-            if (q := (values or {}).get(c.metric)) is not None:
-                value = _quantity(q.value, q.unit)
-                design += [
-                    f"  part d{n} : S{n} {{ attribute redefines '{c.metric}' = {value}; }}",
-                    f"  satisfy r{n} by d{n};",
-                ]
             body += [
                 f"    subject s : S{n};",
                 f"    require constraint {{ {' and '.join(bounds)} }}",
             ]
         body.append("  }")
     lines = ["package Fixture {", "  private import ISQ::*;", "  private import SI::*;"]
-    return {"fixture.sysml": "\n".join([*lines, *subjects, *body, *design, "}"]) + "\n"}
+    return {"fixture.sysml": "\n".join([*lines, *subjects, *body, "}"]) + "\n"}
 
 
 def plan_request(requirement, *more, stage="PDR", tools=(), tasks=()):
@@ -225,18 +219,53 @@ def engineer_id(project):
     )
 
 
-async def commit_fixture_model(project, values=None):
+async def commit_fixture_model(project):
     """Commit fixture_model of the current requirements, as scripts deciding need."""
     records = project.sysml.requirements()
     await project.sysml.commit(
         summary="TEST FIXTURE model of every recorded requirement",
         files=fixture_model(
-            (
-                project.store.model("requirement", s.ref.id, Requirement)
-                for s in records
-            ),
-            values,
+            project.store.model("requirement", s.ref.id, Requirement) for s in records
         ),
         derived_from=tuple(s.ref for s in records)
         or (project.store.list("source")[0].ref,),
+    )
+
+
+def passed_evidence(project, requirements, measurements, id="fixture-evidence"):
+    """TEST FIXTURE: passed evidence of a scripted check, for assessments to cite."""
+    activity = project.activity
+    request = activity.request(
+        RequestRecord(
+            run_id="script",
+            requester="fixture",
+            target="fixture-check",
+            kind="tool",
+            arguments={},
+            purpose="TEST FIXTURE check",
+        )
+    )
+    activity.transition(request.id, "dispatched", actor="fixture")
+    activity.transition(request.id, "running", actor="fixture")
+    result = VerificationResult(
+        outcome="passed",
+        explanation="TEST FIXTURE",
+        checks={"fixture": True},
+        measurements=measurements,
+    )
+    activity.transition(
+        request.id, "completed", actor="fixture", result=result.model_dump(mode="json")
+    )
+    evidence = Evidence(
+        id=id,
+        kind="verification",
+        outcome="passed",
+        explanation="TEST FIXTURE",
+        artifacts=(),
+        requirements=tuple(requirements),
+        request_id=request.id,
+        decision_id="fixture",
+    )
+    return project.store.put(
+        "evidence", id, evidence, actor="fixture", dependencies=tuple(requirements)
     )

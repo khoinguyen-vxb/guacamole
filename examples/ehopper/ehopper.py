@@ -61,7 +61,9 @@ from guacamole import (
     VerificationResult,
     Watchdog,
 )
-from guacamole.contracts import FileRecord, now
+from guacamole.console import notifications
+from guacamole.contracts import FileRecord
+from guacamole.logo import logo
 from guacamole.middleware import ContextMiddleware
 from guacamole.providers.codex import CodexReasoning
 from guacamole.tools.mcp import ToolSession
@@ -859,27 +861,8 @@ async def context_middleware(cleanup: AsyncExitStack) -> tuple[ContextMiddleware
     return summarizing, editing, GraphitiMemory(graphiti), Mem0Memory(memory)
 
 
-async def notifications(project: Project) -> None:
-    cursor, started = 0, now()
-    while True:
-        for event in project.events(after=cursor):
-            cursor = event.sequence
-            if event.type == "human.requested":
-                print(
-                    f"\nHUMAN INPUT [{event.entity_id}] {event.details['question']}",
-                    flush=True,
-                )
-            elif event.type == "review.ready":
-                print(
-                    f"\nReview package ready: {project.sandbox / 'reviews' / event.entity_id}",
-                    flush=True,
-                )
-            elif event.type == "watchdog.report" and event.timestamp >= started:
-                print(f"\n{event.details['text']}", flush=True)
-        await asyncio.sleep(0.5)
-
-
 async def main() -> None:
+    print(logo, flush=True)
     configure_sysml_runtime()
     if shutil.which("codex") is None:
         raise SystemExit(

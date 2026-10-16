@@ -5,6 +5,7 @@ carried by the installed wheel. Judgement over these readings lives in validator
 """
 
 import os
+import re
 import sys
 import tempfile
 import threading
@@ -249,7 +250,7 @@ class SysMLAdapter:
                 try:
                     _ = relationship.target  # Reading a target resolves it.
                 except UnresolvedReference as exc:
-                    problems.append(("unresolved", _label(element), str(exc)))
+                    problems.append(("unresolved", _label(element), _hint(str(exc))))
                 except SdkError:
                     pass  # A target the Toolkit does not compute is not a defect.
         return problems
@@ -358,3 +359,14 @@ class SysMLAdapter:
         """Qualified names added and removed going from this model to other."""
         before, after = self.names(), other.names()
         return sorted(after - before), sorted(before - after)
+
+
+_PREFIXED = re.compile(r"'([kMG])(Pa|N|W|J|V|Hz)' did not resolve")
+
+
+def _hint(detail: str) -> str:
+    """SI defines few prefixed units (mm, cm, g), so MPa and kN do not resolve."""
+    if match := _PREFIXED.search(detail):
+        base = "N/mm^2" if match[0].startswith("'MPa'") else match[2]
+        detail += f"; SI has no {match[1]}{match[2]}: state the value in {base}"
+    return detail

@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 import litellm
 from runtime_support import (
+    FIXTURE,
     TestReasoning,
     commit_fixture_model,
     engineer_id,
@@ -43,6 +44,7 @@ from guacamole.agents.runtime import Runtime
 from guacamole.context import (
     ContextBuilder,
     ContextOverflow,
+    InvalidTurn,
     ProviderError,
     encode_context,
     preview,
@@ -909,13 +911,83 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                 ) as project,
             ):
                 result = await project.run(ProjectRequest(description="fixture"))
-                self.assertEqual(result.status, "incomplete")
+                # An outage is no verdict on the work: the run pauses for a resume.
+                self.assertEqual(result.status, "paused")
                 self.assertIn(expected, result.open_items[-1])
                 event = next(e for e in project.events() if e.type == "action.rejected")
                 self.assertEqual(event.details["phase"], "provider")
                 self.assertIn(expected, event.details["detail"])
                 trace = json.dumps(project.trace(project.requests()[0].id))
                 self.assertNotIn(secret, trace)
+
+    async def test_an_invalid_turn_gets_one_correction_turn(self):
+        for always in (False, True):
+
+            class Garbled(TestReasoning):
+                calls, garbles = 0, always
+
+                async def respond(self, packet):
+                    self.calls += 1
+                    if self.garbles or self.calls == 1:
+                        raise InvalidTurn("TEST FIXTURE: not a valid AgentTurn")
+                    return AgentTurn(rationale=FIXTURE, action=Wait(reason="Fixed"))
+
+            provider = Garbled()
+            with (
+                self.subTest(always=always),
+                tempfile.TemporaryDirectory() as directory,
+                Project(Path(directory), reasoning=provider) as project,
+            ):
+                result = await project.run(
+                    ProjectRequest(
+                        description="fixture",
+                        context=ContextSpec(max_input_tokens=200_000),
+                    )
+                )
+                chief = project.store.get("run", result.run_id).data["chief_id"]
+                state = project.store.model("agent_state", chief, AgentState)
+                # One malformed answer is corrected; a second blocks, not a pause.
+                self.assertEqual(provider.calls, 2)
+                self.assertEqual(state.status, "blocked" if always else "waiting")
+                self.assertEqual(result.status, "incomplete")
+
+    async def test_a_turn_acknowledges_the_messages_it_dealt_with(self):
+        class Acking(TestReasoning):
+            calls = 0
+
+            async def respond(self, packet):
+                data = json.loads(packet.prompt)
+                self.calls += 1
+                if self.calls == 1:
+                    return AgentTurn(rationale=FIXTURE, action=to_engineer(data))
+                seen = tuple(m["id"] for m in data["messages"])
+                return AgentTurn(
+                    rationale=FIXTURE,
+                    action=Wait(reason="Answered"),
+                    acknowledge=(*seen, "fixture-unknown") if seen else (),
+                )
+
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=Acking()) as project,
+        ):
+            result = await project.run(
+                ProjectRequest(
+                    description="fixture",
+                    context=ContextSpec(max_input_tokens=200_000),
+                )
+            )
+            chief = project.store.get("run", result.run_id).data["chief_id"]
+            [entry] = [
+                e
+                for e in project.activity.inbox(chief)
+                if e.message.sender == engineer_id(project)
+            ]
+            # The reply was acknowledged with the wait, in the same turn.
+            self.assertIsNotNone(entry.acknowledged_at)
+            state = project.store.model("agent_state", chief, AgentState)
+            self.assertEqual(state.status, "waiting")
+            self.assertEqual(state.observation["not_acknowledged"], ["fixture-unknown"])
 
     async def test_arbitrary_provider_exception_text_stays_private(self):
         secret = "fixture-secret-must-not-persist"

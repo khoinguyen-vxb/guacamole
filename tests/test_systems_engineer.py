@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 
 import sysml
-from runtime_support import TestReasoning, plan_request
+from runtime_support import TestReasoning, passed_evidence, plan_request
 from sysml.library import LibraryUnavailable
 
 from guacamole import (
@@ -31,6 +31,8 @@ from guacamole.agents.systems_engineer import OBJECTIVE
 from guacamole.contracts import (
     Acknowledge,
     AgentState,
+    Assessment,
+    Compliance,
     Decide,
     Finish,
     Rationale,
@@ -232,29 +234,57 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
         )
         with self.assertRaisesRegex(ValueError, "derived_from"):
             await project.sysml.commit(summary="Fixture", files=rocket())
-        # A bounded requirement without a satisfy claim keeps the review blocked.
-        unassessed = rocket()["rocket.sysml"].replace(
+        unclaimed = rocket()["rocket.sysml"].replace(
             "  satisfy liftoffMass by vehicle;", ""
         )
         await project.sysml.commit(
             summary="Fixture",
-            files={"rocket.sysml": unassessed},
+            files={"rocket.sysml": unclaimed},
             derived_from=(self.brief, self.r1),
-        )
-        self.assertEqual(
-            project.sysml.review_issues(),
-            (
-                (
-                    "R1: SysML model revision 1 does not show it satisfied; send the "
-                    "verified design to the systems engineer to assess"
-                ),
-            ),
         )
         model, invalidated = await project.sysml.commit(
             summary="Fixture", files=rocket(), derived_from=(self.brief, self.r1)
         )
         self.assertEqual((model.revision, invalidated), (2, {}))
+        # A satisfy claim is model content; only an assessment unblocks the review.
+        self.assertEqual(
+            project.sysml.review_issues(),
+            (
+                (
+                    "R1: no compliance assessment against SysML model revision 2; "
+                    "send the passed evidence to the systems engineer to assess"
+                ),
+            ),
+        )
+
+        def assess(measurements, requirements=(self.r1,), measurement=""):
+            evidence = passed_evidence(
+                project, requirements, measurements, id=f"ev-{len(project.events())}"
+            )
+            claim = Compliance(requirement="R1", measurement=measurement)
+            return evidence, project.sysml.assess(
+                Assessment(
+                    id="assessment",
+                    evidence=evidence,
+                    satisfied=(claim,),
+                    explanation="x",
+                )
+            )
+
+        kg = Quantity(value=42.0, unit="kg")
+        for measurements, requirements, error in (
+            ({"R1": Quantity(value=60.0, unit="kg")}, (self.r1,), "violates R1"),
+            ({"R1": Quantity(value=42e3, unit="g")}, (self.r1,), "reported in 'kg'"),
+            ({"R1": kg}, (), "does not cover it"),
+            ({"mass": kg}, (self.r1,), "no measurement 'R1'"),
+        ):
+            with self.subTest(error=error), self.assertRaisesRegex(ValueError, error):
+                assess(measurements, requirements)
+        evidence, assessment = assess({"mass": kg}, measurement="mass")
         self.assertEqual(project.sysml.review_issues(), ())
+        # Assessing stales nothing it assessed, unlike a model revision would.
+        self.assertFalse(project.store.resolve(evidence).stale)
+        self.assertEqual(project.sysml.current().ref, model)
         exported = project.sandbox / "sysml"
         self.assertEqual(
             (exported / "rocket.sysml").read_text(), rocket()["rocket.sysml"]
@@ -279,6 +309,7 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(project.sysml.state(engineer=False)["status"], "incomplete")
         project.record_requirement(requirement(self.brief, limit=40))  # Revises R1.
         self.assertTrue(project.sysml.current().stale)
+        self.assertTrue(project.store.resolve(assessment).stale)
         with self.assertRaisesRegex(DecisionBlocked, "stale"):
             await project.decisions.choose(motors, selected="A", explanation="Fixture")
         self.assertTrue(project.sysml.review_issues())
@@ -372,7 +403,7 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertEqual(project.sysml.status("A1"), ("proposed", None))
         self.assertEqual(
-            project.sysml.review_issues(),
+            amendment_issues(project),
             ("Amendment A1 is proposed: Add a payload bay",),
         )
         with self.assertRaisesRegex(ValueError, "A1 is proposed"):
@@ -399,7 +430,7 @@ class TruthGateTests(unittest.IsolatedAsyncioTestCase):
             project.store.get("decision", decision).ref,
             project.store.get("system_model", "system").dependencies,
         )
-        self.assertEqual(project.sysml.review_issues(), ())
+        self.assertEqual(amendment_issues(project), ())
 
         relax = Amendment(
             id="A2",
@@ -471,6 +502,55 @@ class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
             engineer = project.store.model("agent", run["engineer_id"], AgentSpec)
             self.assertEqual(engineer.task_id, "systems_engineer")
             self.assertEqual(engineer.objective, OBJECTIVE)
+
+    async def test_engineer_records_requirements_in_one_turn_or_none(self):
+        class Engineer(TestReasoning):
+            def __init__(self):
+                self.observations = []
+
+            async def respond(self, packet):
+                data = json.loads(packet.prompt)
+                if data["agent"]["task_id"] == "systems_engineer":
+                    action = self.systems_engineer(data)
+                else:
+                    action = Wait(reason="Fixture idle")
+                return AgentTurn(
+                    rationale=Rationale(objective="Fixture", explanation="Fixture"),
+                    action=action,
+                )
+
+            def systems_engineer(self, data):
+                self.observations.append(data["state"]["last_observation"])
+                if len(self.observations) > 2:
+                    return Wait(reason="Fixture idle")
+                brief = project.store.get("source", "brief").ref
+                r2 = Requirement(
+                    id="R2",
+                    wording="fixture",
+                    source=brief,
+                    source_quote="TEST FIXTURE" if self.observations[1:] else "absent",
+                )
+                return Record(records=(requirement(brief), r2))
+
+        engineer = Engineer()
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=engineer) as project,
+        ):
+            await project.run(
+                ProjectRequest(
+                    description=f"TEST FIXTURE. {WORDING}.",
+                    context=ContextSpec(max_input_tokens=200_000),
+                    budget=Budget(max_seconds=60),
+                )
+            )
+            # A bad quote rejects the whole batch, naming the failing record.
+            self.assertIn("R2", engineer.observations[1]["detail"])
+            self.assertEqual(len(engineer.observations[2]["refs"]), 2)
+            self.assertEqual(
+                {s.ref.id: s.ref.revision for s in project.store.list("requirement")},
+                {"R1": 1, "R2": 1},
+            )
 
     async def test_systems_engineer_maintains_truth_beside_the_chief(self):
         rationale = Rationale(objective="Fixture", explanation="Fixture")
@@ -634,6 +714,11 @@ class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(question.message.payload["text"], "Which mass bound applies?")
         self.assertIsNotNone(question.acknowledged_at)
         self.assertFalse(any("systems_engineer" in item for item in result.open_items))
+
+
+def amendment_issues(project):
+    """Review issues from amendments, apart from the unassessed requirements."""
+    return tuple(i for i in project.sysml.review_issues() if i.startswith("Amendment"))
 
 
 if __name__ == "__main__":

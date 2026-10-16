@@ -10,6 +10,7 @@ from typing import Any
 from ..context import (
     IMAGE_TYPES,
     ContextOverflow,
+    InvalidTurn,
     ProviderError,
     ReasoningProvider,
     preview,
@@ -24,6 +25,7 @@ from ..contracts import (
     Amend,
     AmendmentRecord,
     AskHuman,
+    Assess,
     Compact,
     ContextPacket,
     Decide,
@@ -72,6 +74,7 @@ from .systems_engineer import SYSTEMS_ENGINEER
 
 # Share of its measured trials in a family a tier must pass to be routed that work.
 MIN_PASS_RATE = 0.8
+OPEN_ITEM_FIELDS = ("description", "kind", "blocking_stages", "requirements")
 
 
 class Runtime:
@@ -496,6 +499,7 @@ class Runtime:
             if not s.data["resolved_by"] or s.stale
         ]
         open_items.extend(self.project.sysml.review_issues())
+        paused = False
         for agent in self._agents():
             state = store.model("agent_state", agent.id, AgentState)
             idle = agent.id == self.engineer_id and state.status == "waiting"
@@ -503,6 +507,11 @@ class Runtime:
                 open_items.append(
                     f"{agent.task_id}: {state.status}: {encode(state.observation)}"
                 )
+            # A usage limit or outage is no verdict on the work: resume once fixed.
+            paused |= (
+                state.status == "blocked"
+                and state.observation.get("error_type") == "ProviderError"
+            )
         result = ProjectResult(
             run_id=self.run_id,
             status="complete"
@@ -516,6 +525,8 @@ class Runtime:
             if awaiting_human
             else "awaiting_review"
             if awaiting
+            else "paused"
+            if paused
             else "incomplete",
             reviews=reviews,
             human_requests=tuple(
@@ -598,8 +609,15 @@ class Runtime:
             # So did pinned records, which arrive whole among the sources, and other
             # agents' tool records, one pair per call in the run; only the Chief,
             # which weighs everyone's results, keeps their tool_result refs.
+            # Open items come whole: they are short, and the Chief spent a turn
+            # reading back the six it had just recorded.
             "records": [
                 s.ref.model_dump(mode="json")
+                | (
+                    {k: s.data[k] for k in OPEN_ITEM_FIELDS if k in s.data}
+                    if s.ref.kind == "open_item"
+                    else {}
+                )
                 for s in store.list(
                     "source",
                     "requirement",
@@ -615,6 +633,7 @@ class Runtime:
                     "job_file",
                     "system_model",
                     "amendment",
+                    "assessment",
                 )
                 if not s.stale
                 and (s.ref.kind, s.ref.id, s.ref.revision) not in pins
@@ -997,6 +1016,10 @@ class Runtime:
                 )
                 if self.project.human.version(self.run_id) != human_version:
                     return
+                if turn.acknowledge:
+                    observation = observation | self._acknowledge(
+                        agent, turn.acknowledge
+                    )
                 changed = changed.model_copy(
                     update={"observation": observation, "status": status}
                 )
@@ -1047,6 +1070,12 @@ class Runtime:
             if self.project.human.version(self.run_id) != human_version:
                 return
             invalid_rationale = phase == "rationale" and isinstance(exc, ValueError)
+            # A malformed answer is the model's to correct, once: blocking the Chief
+            # on its first one ended a run.
+            invalid_turn = (
+                isinstance(exc, InvalidTurn)
+                and state.observation.get("error_type") != "InvalidTurn"
+            )
             invalid_read = (
                 phase == "action"
                 and isinstance(turn.action, Read)
@@ -1095,7 +1124,7 @@ class Runtime:
                     )
                 }
             )
-            if phase != "action" and not invalid_rationale:
+            if phase != "action" and not invalid_rationale and not invalid_turn:
                 changed = changed.model_copy(update={"status": "blocked"})
                 activity.transition(
                     state.request_id,
@@ -1156,19 +1185,22 @@ class Runtime:
         is_engineer = agent.id == self.engineer_id
         if isinstance(action, (Decide, Spawn, Review)) and not is_chief:
             raise PermissionError("Only the Chief has this operation")
-        if isinstance(action, Record) and not (
-            is_engineer
-            if isinstance(action.record, Requirement)
-            else is_chief or is_engineer
-        ):
-            raise PermissionError(
-                "Only the systems engineer records requirements; send it the change "
-                "and its source"
-                if isinstance(action.record, Requirement)
-                else "Only the Chief and the systems engineer record open items"
-            )
+        if isinstance(action, Record) and not is_engineer:
+            if any(isinstance(r, Requirement) for r in action.records):
+                raise PermissionError(
+                    "Only the systems engineer records requirements; send it the "
+                    "change and its source"
+                )
+            if not is_chief:
+                raise PermissionError(
+                    "Only the Chief and the systems engineer record open items"
+                )
         if isinstance(action, (UpdateModel, Amend)) and not is_engineer:
             raise PermissionError("Only the systems engineer changes the SysML model")
+        if isinstance(action, Assess) and not is_engineer:
+            raise PermissionError(
+                "Only the systems engineer assesses compliance; send it the evidence"
+            )
         if isinstance(action, Finish) and is_engineer:
             raise PermissionError("The systems engineer serves the whole run; use wait")
         match action:
@@ -1482,11 +1514,15 @@ class Runtime:
                         activity.acknowledge(agent.id, message_id)
                 return {"acknowledged": list(action.message_ids)}, "active"
             case Record():
-                if isinstance(action.record, Requirement):
-                    ref = project.record_requirement(action.record, actor=agent.id)
-                else:
-                    ref = project.record_open_item(action.record, actor=agent.id)
-                return {"ref": ref.model_dump(mode="json")}, "active"
+                # One turn for every record ready now, not one per record.
+                with store.atomic():
+                    refs = [
+                        project.record_requirement(r, actor=agent.id)
+                        if isinstance(r, Requirement)
+                        else project.record_open_item(r, actor=agent.id)
+                        for r in action.records
+                    ]
+                return {"refs": [r.model_dump(mode="json") for r in refs]}, "active"
             case Read():
                 found = project.contexts.search(action.search)
                 refs = (*action.refs, *found)
@@ -1689,7 +1725,24 @@ class Runtime:
                     "report": record.report.model_dump(mode="json"),
                     "changes": record.changes.model_dump(mode="json"),
                 }, "active"
+            case Assess():
+                ref = project.sysml.assess(action.assessment, actor=agent.id)
+                return {
+                    "ref": ref.model_dump(mode="json"),
+                    "review_issues": [*project.sysml.review_issues()],
+                }, "active"
         raise TypeError("Unsupported action")
+
+    def _acknowledge(self, agent: AgentSpec, message_ids: tuple[str, ...]) -> JSON:
+        """Acknowledge what a turn dealt with; a bad ID never undoes its action."""
+        refused = []
+        with self.project.store.atomic():
+            for message_id in message_ids:
+                try:
+                    self.project.activity.acknowledge(agent.id, message_id)
+                except (KeyError, PermissionError):
+                    refused.append(message_id)
+        return {"not_acknowledged": [*refused]} if refused else {}
 
     def _model_usable(self) -> bool:
         try:

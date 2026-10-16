@@ -1,7 +1,9 @@
 import asyncio
+import io
 import json
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 
 from runtime_support import TestReasoning, plan_request
@@ -15,7 +17,15 @@ from guacamole import (
     Requirement,
     ToolRegistry,
 )
-from guacamole.contracts import Decide, Rationale, ToolCall, Wait
+from guacamole.console import notifications
+from guacamole.contracts import (
+    Decide,
+    MessageEnvelope,
+    Note,
+    Rationale,
+    ToolCall,
+    Wait,
+)
 from guacamole.tools.mcp import ToolSession
 from guacamole.websocket import Command, HumanReply, Interject, WebSocketBridge
 
@@ -86,6 +96,63 @@ class HumanTests(unittest.IsolatedAsyncioTestCase):
             self.assertFalse(
                 any(e.type == "agent.human_redirected" for e in project.events())
             )
+
+    async def test_notifications_skip_answered_and_pre_launch_activity(self):
+        class Waiting(TestReasoning):
+            def requirements(self):
+                return payload(project)
+
+            async def respond(self, packet):
+                requirement = project.store.get("requirement", "payload").ref
+                action = (
+                    Wait(reason="Fixture waits")
+                    if project.store.list("decision")
+                    else Decide(request=plan_request(requirement), selected="fixture")
+                )
+                return turn(action)
+
+        def message(text, sender=None):
+            agent = project.store.list("agent")[0].ref.id
+            project.activity.deliver(
+                MessageEnvelope(
+                    project_id=project.store.project_id,
+                    run_id=result.run_id,
+                    sender=sender or agent,
+                    recipient=agent,
+                    kind="finding",
+                    schema_id="Note@1",
+                    payload=Note(text=text).model_dump(mode="json"),
+                )
+            )
+
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            Project(Path(directory), reasoning=Waiting()) as project,
+        ):
+            result = await project.run(brief())
+            ask = AskHuman(question="Already answered?", blocking=False)
+            answered = project.human.ask(ask, sender="watchdog", run_id=result.run_id)
+            project.human.reply(answered, "Yes", author="test human")
+            ask = AskHuman(question="Still open?", blocking=False)
+            project.human.ask(ask, sender="watchdog", run_id=result.run_id)
+            message("Before launch")
+            output = io.StringIO()
+            with redirect_stdout(output):
+                monitor = asyncio.create_task(notifications(project))
+                await asyncio.sleep(0.1)
+                message("After launch")
+                message("Watchdog note", sender="watchdog")
+                await asyncio.sleep(0.7)
+                monitor.cancel()
+            text = output.getvalue()
+            self.assertIn("Still open?", text)
+            self.assertNotIn("Already answered?", text)
+            self.assertIn("finding\nAfter launch", text)
+            self.assertNotIn("Before launch", text)
+            self.assertNotIn("Watchdog note", text)
+            log = (Path(directory) / "watchdog.log").read_text(encoding="utf-8")
+            self.assertIn("[watchdog -> ", log)
+            self.assertIn("Watchdog note", log)
 
     async def test_question_reply_restart_and_amended_requirement(self):
         class Questioner(TestReasoning):

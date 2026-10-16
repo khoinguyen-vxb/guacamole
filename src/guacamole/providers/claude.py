@@ -15,6 +15,7 @@ from pydantic import JsonValue, ValidationError
 from ..context import (
     CONTINUED,
     IMAGE_TOKENS,
+    InvalidTurn,
     ProviderError,
     failure_label,
     image_data,
@@ -266,14 +267,14 @@ class ClaudeReasoning:
                             + packet.reserved_output_tokens
                             > self.context_capacity_tokens
                         ):
-                            raise ProviderError(
+                            raise InvalidTurn(
                                 "Claude response failed validation and correction feedback "
                                 "exceeds model capacity; no action executed "
                                 f"({detail})."
                             ) from None
                         retried = True
                         continue
-                    raise ProviderError(
+                    raise InvalidTurn(
                         "Claude did not return a valid AgentTurn JSON object; no action "
                         f"executed ({detail})."
                     ) from None

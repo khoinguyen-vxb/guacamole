@@ -15,6 +15,7 @@ from pydantic import ValidationError
 from ..context import (
     CONTINUED,
     IMAGE_TOKENS,
+    InvalidTurn,
     ProviderError,
     failure_label,
     image_data,
@@ -258,14 +259,14 @@ class CodexReasoning:
                             > self.context_capacity_tokens
                             or stable + len(prompt) > self.max_input_chars
                         ):
-                            raise ProviderError(
+                            raise InvalidTurn(
                                 "Codex response failed validation and correction feedback "
                                 "exceeds model capacity or CLI input limit; no action executed "
                                 f"({detail})."
                             ) from None
                         retried = True
                         continue
-                    raise ProviderError(
+                    raise InvalidTurn(
                         "Codex did not return a valid AgentTurn JSON object; no action executed "
                         f"({detail})."
                     ) from None

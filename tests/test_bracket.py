@@ -20,7 +20,15 @@ from guacamole import (
     ToolRegistry,
     WorkPlan,
 )
-from guacamole.contracts import Deliverable, Evidence, Rationale, Ref, Wait
+from guacamole.contracts import (
+    Assessment,
+    Compliance,
+    Deliverable,
+    Evidence,
+    Rationale,
+    Ref,
+    Wait,
+)
 
 SOURCE = Ref(kind="source", id="brief", revision=1, sha256="0" * 64)
 
@@ -142,30 +150,35 @@ class BracketTests(unittest.IsolatedAsyncioTestCase):
             bracket.floating(bracket.bracket_pmi(features, m6, loose), bom)
         )
 
-    async def test_benchmark_answers_blocking_questions_then_reports(self):
-        class Asking(TestReasoning):
-            calls = 0
+    async def test_benchmark_answers_every_question_then_reports(self):
+        for blocking in (True, False):
 
-            async def respond(self, packet):
-                self.calls += 1
-                return AgentTurn(
-                    rationale=Rationale(objective="fixture", explanation="Fixture"),
-                    action=AskHuman(question="Which wall material?")
-                    if self.calls == 1
-                    else Wait(reason="Answered"),
-                )
+            class Asking(TestReasoning):
+                calls, asks_blocking = 0, blocking
 
-        with (
-            tempfile.TemporaryDirectory() as directory,
-            patch.object(bracket, "reasoning", Asking),
-        ):
-            brief = Path(directory) / "fixture.md"
-            brief.write_text("TEST FIXTURE: hold 10 N")
-            result = await bracket.run_brief(brief, Path(directory) / "runs")
-        self.assertEqual(result["scripted_replies"], 1)
-        self.assertEqual(result["status"], "incomplete")
-        self.assertFalse(result["passed"])
-        self.assertGreater(result["estimated_input_tokens"], 0)
+                async def respond(self, packet):
+                    self.calls += 1
+                    return AgentTurn(
+                        rationale=Rationale(objective="fixture", explanation="Fixture"),
+                        action=AskHuman(
+                            question="Which wall material?", blocking=self.asks_blocking
+                        )
+                        if self.calls == 1
+                        else Wait(reason="Answered"),
+                    )
+
+            with (
+                self.subTest(blocking=blocking),
+                tempfile.TemporaryDirectory() as directory,
+                patch.object(bracket, "reasoning", Asking),
+            ):
+                brief = Path(directory) / "fixture.md"
+                brief.write_text("TEST FIXTURE: hold 10 N")
+                result = await bracket.run_brief(brief, Path(directory) / "runs")
+                self.assertEqual(result["scripted_replies"], 1)
+                self.assertEqual(result["status"], "incomplete")
+                self.assertFalse(result["passed"])
+                self.assertGreater(result["estimated_input_tokens"], 0)
 
 
 @unittest.skipUnless(
@@ -331,13 +344,24 @@ class FreeCADBracketTests(unittest.IsolatedAsyncioTestCase):
                     )
                 )
                 # Bounded requirements block the review until the systems
-                # engineer's model shows the verified values satisfy them.
+                # engineer assesses the passed evidence against the model.
                 waiting = await project.reviews.generate(decision)
                 self.assertIn(
-                    "R1: SysML model revision 1 does not show it satisfied",
+                    "R1: no compliance assessment against SysML model revision 1",
                     "\n".join(project.store.resolve(waiting).data["open_items"]),
                 )
-                await commit_fixture_model(project, result.measurements)
+                project.sysml.assess(
+                    Assessment(
+                        id="bracket-assessment",
+                        evidence=evidence,
+                        satisfied=tuple(
+                            Compliance(requirement=r.id) for r in requirements
+                        ),
+                        explanation="TEST FIXTURE",
+                    )
+                )
+                # Unlike a model revision, the assessment leaves the work current.
+                self.assertFalse(project.store.resolve(evidence).stale)
                 project.store.put(
                     "rationale",
                     "fixture-rationale",

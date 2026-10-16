@@ -16,13 +16,16 @@ from ...contracts import (
     JSON,
     Amendment,
     AmendmentRecord,
+    Assessment,
     Candidate,
     DecisionRecord,
+    Evidence,
     ModelChanges,
     ModelReport,
     Ref,
     Requirement,
     SystemModel,
+    VerificationResult,
 )
 from ...decision import DecisionBlocked
 from ...storage import Snapshot
@@ -413,6 +416,74 @@ class SysMLRegistry:
                     + "); requirement changes need updated requirement records first"
                 )
 
+    def assess(self, assessment: Assessment, *, actor: str = "script") -> Ref:
+        """Record compliance claims the evidence's measurements and the model bear out."""
+        store = self.project.store
+        snapshot = self.gate()
+        model = _system(snapshot)
+        if assessment.evidence.kind != "evidence":
+            raise ValueError("An assessment cites an evidence record")
+        store.resolve(assessment.evidence, current=True)
+        evidence = store.model("evidence", assessment.evidence.id, Evidence)
+        if evidence.outcome != "passed":
+            raise ValueError(
+                f"Evidence {evidence.id} is {evidence.outcome}; only passed evidence "
+                "shows compliance"
+            )
+        result = VerificationResult.model_validate_json(
+            encode(self.project.activity.get(evidence.request_id).result)
+        )
+        parents = {r.id: r.parent for r in model.report.requirements}
+        covered = {r.id for r in evidence.requirements}
+        problems = []
+        for claim in assessment.satisfied:
+            id, key = claim.requirement, claim.measurement or claim.requirement
+            # ponytail: one measurement per requirement; a requirement bounding two
+            # metrics is modelled as derived requirements, one bound each.
+            bounds = [b for b in model.report.bounds if b.requirement == id]
+            lineage, parent = {id}, parents.get(id)
+            while parent and parent not in lineage:  # Derived ones trace to records.
+                lineage.add(parent)
+                parent = parents.get(parent)
+            quantity = result.measurements.get(key)
+            if not bounds:
+                problems.append(
+                    f"{id}: no bound in SysML model revision {snapshot.ref.revision}"
+                )
+            elif not lineage & covered:
+                problems.append(f"{id}: evidence {evidence.id} does not cover it")
+            elif quantity is None:
+                problems.append(
+                    f"{id}: evidence {evidence.id} has no measurement {key!r}; it has "
+                    f"{sorted(result.measurements)}"
+                )
+            elif len(metrics := {b.metric for b in bounds}) > 1:
+                problems.append(
+                    f"{id} bounds {sorted(metrics)}; model one derived requirement "
+                    "per metric and assess each"
+                )
+            else:
+                problems.extend(validator.violations(bounds, {metrics.pop(): quantity}))
+        if problems:
+            raise ValueError("Assessment rejected: " + "; ".join(problems))
+        return store.put(
+            "assessment",
+            assessment.id,
+            assessment,
+            actor=actor,
+            dependencies=(snapshot.ref, assessment.evidence),
+        )
+
+    def assessed(self) -> set[str]:
+        """Requirement IDs a current assessment shows satisfied by the current model."""
+        snapshot = self.current()
+        return {
+            claim.requirement
+            for s in self.project.store.list("assessment")
+            if snapshot is not None and not s.stale and snapshot.ref in s.dependencies
+            for claim in Assessment.model_validate_json(encode(s.data)).satisfied
+        }
+
     def review_issues(self) -> tuple[str, ...]:
         """Why the model cannot yet be baselined in a review."""
         try:
@@ -420,17 +491,14 @@ class SysMLRegistry:
         except DecisionBlocked as exc:
             return (str(exc),)
         model = _system(snapshot)
-        # The systems engineer's compliance assessment: each bounded requirement
-        # needs a satisfy claim whose design values meet it.
-        satisfied = {
-            s.requirement for s in model.report.satisfactions if s.status == "satisfied"
-        }
-        bounded = sorted({b.requirement for b in model.report.bounds} - satisfied)
+        # The systems engineer's compliance gate: each bounded requirement needs a
+        # current assessment of passed evidence against this model revision.
+        bounded = sorted({b.requirement for b in model.report.bounds} - self.assessed())
         return (
             *(
-                f"{id}: SysML model revision {snapshot.ref.revision} does not show "
-                "it satisfied; send the verified design to the systems engineer "
-                "to assess"
+                f"{id}: no compliance assessment against SysML model revision "
+                f"{snapshot.ref.revision}; send the passed evidence to the systems "
+                "engineer to assess"
                 for id in bounded
             ),
             *(
@@ -483,6 +551,11 @@ class SysMLRegistry:
                 "summary": model.summary,
                 "uncovered_requirements": [*uncovered],
                 "bounds": [b.model_dump(mode="json") for b in model.report.bounds],
+                "unassessed_requirements": [
+                    *sorted(
+                        {b.requirement for b in model.report.bounds} - self.assessed()
+                    )
+                ],
                 "amendments": [*self.amendments(model.files)],
             }
             if engineer:

@@ -135,9 +135,11 @@ uv sync --extra bracket
 ```
 
 Each brief in [briefs/](briefs) runs as a fresh project under `runs/<timestamp>/`.
-A blocking question gets one scripted reply asking the agents to proceed on recorded
-assumptions; the final review is left to a human. A brief passes when its run
-reaches a ready PDR review. `runs/<timestamp>/benchmark.json` records status,
+Every question, blocking or not, gets one scripted reply as it is asked, telling the
+agents to proceed on recorded assumptions; the final review is left to a human. A
+brief passes when its run reaches a ready PDR review. A provider failure such as a
+usage limit pauses the brief and stops the benchmark there, so later briefs are not
+burned in seconds; resume that run once the cause is fixed. `runs/<timestamp>/benchmark.json` records status,
 estimated input tokens and time for each brief. `BUDGET.max_run_input_tokens` caps
 each run (17M by default). Snap and Flatpak FreeCAD builds can read `$HOME` but not
 `/tmp`, so keep `RUNS` under your home directory.

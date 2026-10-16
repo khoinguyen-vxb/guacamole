@@ -14,7 +14,7 @@ from guacamole import (
     Usage,
     Watchdog,
 )
-from guacamole.contracts import Rationale, Read, Send, Wait
+from guacamole.contracts import Rationale, Read, Record, Ref, Requirement, Send, Wait
 
 
 class WatchdogTests(unittest.IsolatedAsyncioTestCase):
@@ -133,3 +133,18 @@ class WatchdogTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(
                     project.requests(agent="watchdog")[0].status, "completed"
                 )
+
+    def test_stored_record_turns_reload(self):
+        """The watchdog reloads every turn from JSON, nested tuples included."""
+        source = Ref(kind="source", id="brief", revision=1, sha256="0" * 64)
+        requirement = Requirement(
+            id="R1", wording="w", source=source, source_quote="q", unknowns=("u",)
+        )
+        turn = AgentTurn(
+            rationale=Rationale(objective="o", explanation="e"),
+            action=Record(records=(requirement,)),
+        )
+        stored = json.loads(turn.model_dump_json())
+        self.assertEqual(AgentTurn.model_validate_json(json.dumps(stored)), turn)
+        stored["action"] = {"kind": "record", "record": stored["action"]["records"][0]}
+        self.assertEqual(AgentTurn.model_validate_json(json.dumps(stored)), turn)

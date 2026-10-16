@@ -311,10 +311,10 @@ class Project:
             requirement.source.kind != "source"
             or not isinstance(text, str)
             or not requirement.source_quote
-            or requirement.source_quote not in text
+            or not _quoted(requirement.source_quote, text)
         ):
             raise ValueError(
-                "Requirement quotation must be present in its cited source"
+                f"{requirement.id}: quotation must be present in its cited source"
             )
         dependencies = [requirement.source]
         if (withdrawal := requirement.withdrawn) is not None:
@@ -323,7 +323,7 @@ class Project:
             if (
                 withdrawal.source.kind != "source"
                 or self.store.maybe("requirement", requirement.id) is None
-                or withdrawal.quote not in str(said.data.get("text") or "")
+                or not _quoted(withdrawal.quote, str(said.data.get("text") or ""))
             ):
                 raise ValueError(
                     f"Withdrawing {requirement.id} needs it recorded first and a human "
@@ -429,8 +429,19 @@ class Project:
         )
 
     def record_open_item(self, item: OpenItem, *, actor: str = "script") -> Ref:
+        tracked = []
+        for id in item.requirements:
+            requirement = self.store.maybe("requirement", id)
+            if requirement is None or requirement.stale:
+                raise ValueError(f"{item.id}: {id} is not a current requirement")
+            tracked.append(requirement.ref)
+        # A revised requirement stales the item, so its new unknowns block again.
         return self.store.put(
-            "open_item", item.id, item, actor=actor, dependencies=item.resolved_by
+            "open_item",
+            item.id,
+            item,
+            actor=actor,
+            dependencies=(*item.resolved_by, *tracked),
         )
 
     def extract(self, request_id: str, *, actor: str) -> Ref:
@@ -542,9 +553,12 @@ class Project:
             )
         verification = VerificationResult.model_validate_json(encode(request.result))
         inputs = self.store.get("job_inputs", request.id).dependencies
-        if any(ref not in inputs for ref in evidence.artifacts):
+        if extra := [ref for ref in evidence.artifacts if ref not in inputs]:
+            # Name them: a worker re-sent the same claim, its plan said "cite all".
             raise ValueError(
-                "Verification must actually depend on every claimed artifact revision"
+                "Verification must actually depend on every claimed artifact "
+                f"revision; request {request.id} did not take "
+                + ", ".join(f"{ref.id} rev {ref.revision}" for ref in extra)
             )
         if any(ref.kind != "artifact" for ref in evidence.artifacts) or any(
             ref.kind != "requirement" for ref in evidence.requirements
@@ -584,6 +598,22 @@ class Project:
             r.kind != "evidence" for r in deliverable.evidence
         ):
             raise ValueError("Deliverable references have incorrect record types")
+        plan_ref = self.store.get("decision", decision_id).ref
+        current = self.store.maybe("deliverable", deliverable.spec_id)
+        if (
+            current is not None
+            and not current.stale
+            and plan_ref in current.dependencies
+            and (stored := Deliverable.model_validate_json(encode(current.data)))
+            and (stored.artifacts, stored.evidence)
+            == (deliverable.artifacts, deliverable.evidence)
+        ):
+            # A Chief re-delivered an unchanged package, paying a turn for nothing.
+            raise ValueError(
+                f"{deliverable.spec_id} is already delivered with these artifacts and "
+                f"evidence (revision {current.ref.revision}); deliver again only when "
+                "they change"
+            )
         return self.store.put(
             "deliverable",
             deliverable.spec_id,
@@ -592,7 +622,7 @@ class Project:
             dependencies=(
                 *deliverable.artifacts,
                 *deliverable.evidence,
-                self.store.get("decision", decision_id).ref,
+                plan_ref,
             ),
         )
 
@@ -695,3 +725,9 @@ class Project:
 
 
 _squash = squash  # Case- and space-insensitive, so "AS1210" states "AS 1210"
+
+
+def _quoted(quote: str, text: str) -> bool:
+    """Verbatim up to whitespace: briefs hard-wrap, so quotes span line breaks."""
+    quote = " ".join(quote.split())
+    return bool(quote) and quote in " ".join(text.split())

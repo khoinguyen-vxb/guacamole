@@ -73,6 +73,10 @@ class ProviderError(RuntimeError):
     """A locally constructed provider diagnostic safe to persist without secrets."""
 
 
+class InvalidTurn(ProviderError):
+    """The model answered, but not with a valid AgentTurn; its next turn may correct it."""
+
+
 # CLI error text may echo prompts or credentials, so only these labels are kept.
 _FAILURES = (
     ("usage limit", ("usage limit", "quota", "credit")),

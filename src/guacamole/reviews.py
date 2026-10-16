@@ -66,16 +66,25 @@ class Reviews:
         if catalogue is not None:
             baseline.append(catalogue.ref)
         current: list[Requirement] = []
+        # Unknowns an open item tracks block only the stages that item blocks.
+        tracked = {
+            id
+            for s in store.list("open_item")
+            if not s.stale
+            for id in OpenItem.model_validate_json(encode(s.data)).requirements
+        }
         for requirement in store.list("requirement"):
             record = Requirement.model_validate_json(encode(requirement.data))
             if record.withdrawn:
                 continue
             if not requirement.stale:
                 current.append(record)
-            issues.extend(
-                f"{requirement.ref.id}: unresolved input {unknown}"
-                for unknown in record.unknowns
-            )
+            if requirement.ref.id not in tracked:
+                issues.extend(
+                    f"{requirement.ref.id}: unresolved input {unknown}; record an "
+                    "open item for it with requirements and the stages it blocks"
+                    for unknown in record.unknowns
+                )
             if (pin := record.standard) and not pin.text and not requirement.stale:
                 issues.append(
                     f"{requirement.ref.id}: no licensed text of {pin.id}:{pin.edition} "
@@ -367,6 +376,7 @@ class Reviews:
             lines += ["", f"Disposition by {manifest.human}: {manifest.disposition}"]
         lines += self._changes(manifest)
 
+        assessed = self.project.sysml.assessed()
         lines += [
             "",
             "## Requirements and traceability",
@@ -423,6 +433,8 @@ class Reviews:
             if by and not measured:
                 # Passing evidence that never checks this requirement is no pass for it.
                 measured.append("not checked")
+            if requirement.id in assessed:
+                by.append("systems engineer assessment")
             lines.append(
                 "| "
                 + " | ".join(
