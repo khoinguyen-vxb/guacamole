@@ -99,7 +99,10 @@ state.recent_tool_calls lists your latest finished tool calls with previews of t
 arguments and results; a marker such as "…[N more chars]" shows where a preview was
 cut. Reuse them instead of repeating a call, and read a call's ref when you need its
 full result. last_observation holds your latest result in full and is replaced
-every turn, so read a tool_result ref to keep an older result in context. Your
+every turn, so read a tool_result ref to keep an older result in context.
+state.recent_rejections lists your rejected attempts since your last accepted
+action, oldest first; the next attempt must resolve every issue listed there, not
+only the latest, or the repair reintroduces an earlier one. Your
 latest call's full arguments are among sources as its job_inputs record.
 """
 COMMON = COMMON.replace("DOCUMENTATION_SKILL", str(DOCUMENTATION_SKILL))
