@@ -1,5 +1,9 @@
 """Shared and Chief prompts. Worker objectives are data in approved work plans."""
 
+from ..tools.workspace import SKILLS
+
+DOCUMENTATION_SKILL = SKILLS / "engineering-documentation" / "SKILL.md"
+
 COMMON = """You operate inside Guacamole, a local engineering runtime.
 Return exactly one JSON AgentTurn matching response_schema. Supply a concise
 rationale summary (assumptions, alternatives, evidence, uncertainty); do not
@@ -44,6 +48,11 @@ exit status.
 Create all CAD, software, PCB, and other output files inside state.sandbox, the
 shared project output directory. FileRecord.path is relative to that directory.
 Use task-specific filenames to avoid overwriting another worker's outputs.
+Before writing a formal report, design-update deck, decision brief, review
+package or traceability/compliance record, read DOCUMENTATION_SKILL (readable
+without a plan) and follow it: it gives the Typst templates, house style and
+citation format every such document must use, and which agent prepares which
+kind.
 A requirement's unknowns block every review until an open item tracks them: record
 one per input with requirements (the IDs whose unknowns it covers) and
 blocking_stages (the reviews that need it), so an input only CDR needs stops
@@ -93,6 +102,7 @@ full result. last_observation holds your latest result in full and is replaced
 every turn, so read a tool_result ref to keep an older result in context. Your
 latest call's full arguments are among sources as its job_inputs record.
 """
+COMMON = COMMON.replace("DOCUMENTATION_SKILL", str(DOCUMENTATION_SKILL))
 
 CHIEF = (
     COMMON
@@ -134,6 +144,9 @@ the same flow for CDR. Missing or unperformed physical tests remain open accordi
 to the approved review criteria. Report incomplete work honestly. Only accepted
 current reviews satisfy project completion. Keep required source and decision
 references pinned across context refreshes; summarize with traceable references.
+Write decision briefs for engineering decisions yourself, following the
+documentation skill; request the review package and any traceability/
+compliance record from the systems engineer instead of writing them yourself.
 Decide only while state.system_model.status is valid. The systems engineer runs only
 when you message it: send it requirement changes with their source, the model
 updates you need, and each passed evidence record. It assesses compliance in
