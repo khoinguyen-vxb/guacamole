@@ -5,6 +5,9 @@ toolsets over stdio, loading only `project` and `config` at startup. Each call
 here runs a fresh server process, loads the owning toolset, then calls the tool,
 so nothing depends on the user's auto_load_toolsets setting. Exports and checks
 need kicad-cli; live-board tools also need KiCad running with its IPC API on.
+The server runs on the host or, with a Container, in a fresh container per call
+(tools/containers.py); a containerized server reaches files only in the sandbox
+and inputs, and no host KiCad.
 """
 
 import os
@@ -18,6 +21,7 @@ from mcp.types import CallToolResult, ImageContent, TextContent
 from pydantic import Field
 
 from ..contracts import JSON, Model, ProducedFile
+from ..tools.containers import Container, runner
 
 if TYPE_CHECKING:
     from ..project import Project
@@ -25,14 +29,9 @@ if TYPE_CHECKING:
 type Severity = Literal["error", "warning", "info"]
 type Limit = Annotated[int, Field(ge=1, le=500)]
 
-# kicad-cli lookup, the macOS/Linux config path, the Windows config path, the
-# KiCad IPC socket and log level; the reasoning API key is never passed.
+# A host server's kicad-cli lookup, the Windows config path, the KiCad IPC socket
+# and log level, over the minimal host environment; the API key is never passed.
 ENVIRONMENT = {
-    "PATH",
-    "HOME",
-    "USER",
-    "LANG",
-    "TMPDIR",
     "KICAD_API_SOCKET",
     "RUST_LOG",
     "APPDATA",
@@ -48,15 +47,10 @@ class KiCadExport(Model):
 
 
 @asynccontextmanager
-async def _session(binary: Path, config: Path | None):
-    parameters = StdioServerParameters(
-        command=str(binary),
-        args=["--config", str(config)] if config else [],
-        env={k: v for k, v in os.environ.items() if k in ENVIRONMENT},
-    )
+async def _session(server: StdioServerParameters):
     with Path(os.devnull).open("w") as errlog:  # noqa: ASYNC230 - /dev/null is local.
         async with (
-            stdio_client(parameters, errlog=errlog) as (reader, writer),
+            stdio_client(server, errlog=errlog) as (reader, writer),
             ClientSession(reader, writer, read_timeout_seconds=30.0) as session,
         ):
             await session.initialize()
@@ -78,39 +72,49 @@ async def _call(
 
 
 async def call(
-    binary: Path,
-    config: Path | None,
+    server: StdioServerParameters,
     toolset: str | None,
     name: str,
     arguments: JSON,
     timeout_s: float,
 ) -> tuple[str, tuple[ImageContent, ...]]:
     """Load toolset (None for always-visible meta-tools), then call the tool."""
-    async with _session(binary, config) as session:
+    async with _session(server) as session:
         if toolset is not None:
             await _call(session, "load_toolset", {"name": toolset}, 30.0)
         return await _call(session, name, arguments, timeout_s)
 
 
 def register_konnect_tools(
-    project: "Project", binary: Path, config: Path | None = None
+    project: "Project",
+    binary: Path,
+    config: Path | None = None,
+    container: Container | None = None,
 ) -> None:
     """Register the KiCad checks and exports on the binary.
 
     Each tool is typed, with every file argument resolved inside the sandbox; wrap
     further Konnect tools the same way rather than passing arguments through.
     config is an optional Konnect config file (kicad_cli path, IPC socket, JLCPCB
-    database); without it Konnect uses its own search path and defaults.
+    database); without it Konnect uses its own search path and defaults. With
+    container, binary is its path inside the image and config, a host file, must
+    be in the sandbox or one of the container's inputs.
     """
-    binary = binary.resolve()
+    runs = runner(
+        project, container, {k: v for k, v in os.environ.items() if k in ENVIRONMENT}
+    )
+    command = [str(binary.resolve()) if container is None else binary.as_posix()]
+    if config is not None:
+        command += ["--config", runs.path(config.resolve())]
+    server = runs.server(command, cwd=project.sandbox)
 
     def sandbox(path: str) -> str:
-        return str(project.output_path(Path(path)))
+        return runs.path(project.output_path(Path(path)))
 
     async def run(
         toolset: str | None, name: str, arguments: JSON, timeout_s: float
     ) -> str:
-        return (await call(binary, config, toolset, name, arguments, timeout_s))[0]
+        return (await call(server, toolset, name, arguments, timeout_s))[0]
 
     async def konnect_status() -> str:
         """Report the Konnect build, binary path, kicad-cli version and redacted KiCad IPC endpoint.
@@ -220,7 +224,7 @@ def register_konnect_tools(
             "export_schematic_pdf",
             {
                 "schematic": sandbox(schematic),
-                "output": str(destination),
+                "output": runs.path(destination),
                 "black_and_white": black_and_white,
                 "all_sheets": all_sheets,
             },
@@ -256,7 +260,7 @@ def register_konnect_tools(
         before = stamps()
         arguments: JSON = {
             "board": sandbox(board),
-            "output_dir": str(directory),
+            "output_dir": runs.path(directory),
             "fab_house": fab_house,
             "include_assembly": include_assembly,
         }

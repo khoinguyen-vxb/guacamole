@@ -6,11 +6,13 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
 
+from mcp import StdioServerParameters
 from mcp.types import CallToolResult, TextContent
 from pydantic import ValidationError
 
 from guacamole import Project
 from guacamole.integrations import konnect
+from guacamole.tools.containers import Container
 
 CALL = "guacamole.integrations.konnect.call"
 READERS = (
@@ -151,9 +153,10 @@ class KonnectTests(unittest.IsolatedAsyncioTestCase):
             ):
                 result = await self.project.call(self.tool(name), arguments)
                 self.assertEqual(result, '{"ok":true}')
-                binary, config, *rest = call.call_args.args
-                self.assertEqual(binary, self.binary.resolve())
-                self.assertEqual(config.name, "konnect.toml")
+                server, *rest = call.call_args.args
+                self.assertEqual(server.command, str(self.binary.resolve()))
+                self.assertEqual(server.args[0], "--config")
+                self.assertTrue(server.args[1].endswith("konnect.toml"))
                 self.assertEqual(rest[:3], [toolset, target, expected])
 
     async def test_exports_return_only_files_they_wrote(self):
@@ -161,7 +164,7 @@ class KonnectTests(unittest.IsolatedAsyncioTestCase):
         out.mkdir()
         (out / "stale.txt").write_text("from an earlier run")
 
-        async def export(binary, config, toolset, name, arguments, timeout_s):
+        async def export(server, toolset, name, arguments, timeout_s):
             if name == "export_schematic_pdf":
                 Path(arguments["output"]).write_text("%PDF fixture")
             else:
@@ -177,7 +180,7 @@ class KonnectTests(unittest.IsolatedAsyncioTestCase):
                 {"schematic": "board/board.kicad_sch", "output": "docs/schematic.pdf"},
             )
             self.assertEqual(
-                call.call_args.args[2:4], ("sch_export", "export_schematic_pdf")
+                call.call_args.args[1:3], ("sch_export", "export_schematic_pdf")
             )
             self.assertEqual([Path(f.path).name for f in pdf.files], ["schematic.pdf"])
             package = await self.project.call(
@@ -190,9 +193,9 @@ class KonnectTests(unittest.IsolatedAsyncioTestCase):
                 },
             )
         self.assertEqual(
-            call.call_args.args[2:4], ("manufacturing", "export_manufacturing_package")
+            call.call_args.args[1:3], ("manufacturing", "export_manufacturing_package")
         )
-        arguments = call.call_args.args[4]
+        arguments = call.call_args.args[3]
         self.assertEqual(arguments["fab_house"], "jlcpcb")
         self.assertEqual(arguments["bom_fields"], "Reference,Value,MPN")
         self.assertEqual(
@@ -219,13 +222,16 @@ class KonnectTests(unittest.IsolatedAsyncioTestCase):
             call.assert_not_called()
 
 
+SERVER = StdioServerParameters(command="konnect")
+
+
 class SessionTests(unittest.IsolatedAsyncioTestCase):
     def session(self, *results):
         session = MagicMock()
         session.call_tool = AsyncMock(side_effect=results)
 
         @asynccontextmanager
-        async def opened(binary, config):
+        async def opened(server):
             yield session
 
         return session, patch("guacamole.integrations.konnect._session", opened)
@@ -236,7 +242,7 @@ class SessionTests(unittest.IsolatedAsyncioTestCase):
         )
         with opened:
             reply, images = await konnect.call(
-                Path("konnect"), None, "verification", "run_drc", {"board": "b"}, 9.0
+                SERVER, "verification", "run_drc", {"board": "b"}, 9.0
             )
         self.assertEqual((reply, images), ('{"ok":1}', ()))
         names = [c.args[:2] for c in session.call_tool.call_args_list]
@@ -248,33 +254,64 @@ class SessionTests(unittest.IsolatedAsyncioTestCase):
     async def test_meta_tools_skip_loading_and_errors_raise(self):
         session, opened = self.session(text('{"message":"no kicad-cli"}', error=True))
         with opened, self.assertRaisesRegex(RuntimeError, "no kicad-cli"):
-            await konnect.call(
-                Path("konnect"), None, None, "get_installation_info", {}, 9.0
-            )
+            await konnect.call(SERVER, None, "get_installation_info", {}, 9.0)
         self.assertEqual(session.call_tool.call_args.args[0], "get_installation_info")
 
-    async def test_server_environment_excludes_secrets(self):
-        captured = {}
 
-        class Stop(Exception):
-            pass
+class ServerTests(unittest.IsolatedAsyncioTestCase):
+    """How the server starts: on the host, or in a container."""
 
-        def stdio(parameters, errlog):
-            captured["parameters"] = parameters
-            raise Stop
+    def setUp(self):
+        self.directory = tempfile.TemporaryDirectory()
+        self.root = Path(self.directory.name).resolve()
+        self.project = Project(self.root / "state", sandbox=self.root / "outputs")
+        self.config = self.project.sandbox / "konnect.toml"
+        self.config.write_text("")
 
+    def tearDown(self):
+        self.project.close()
+        self.directory.cleanup()
+
+    async def started(self, **options):
+        """The server and arguments a kicad_erc call hands to Konnect."""
+        konnect.register_konnect_tools(
+            self.project, Path("/opt/konnect/bin/konnect"), self.config, **options
+        )
+        with patch(CALL, AsyncMock(return_value=("{}", ()))) as call:
+            await self.project.call(
+                self.project.tools.get("kicad_erc@1"),
+                {"schematic": "board/board.kicad_sch"},
+            )
+        return call.call_args.args[0], call.call_args.args[3]
+
+    async def test_host_server_environment_excludes_secrets(self):
         environment = {"ANTHROPIC_API_KEY": "secret", "KICAD_API_SOCKET": "s"}
-        with (
-            patch.dict("os.environ", environment),
-            patch("guacamole.integrations.konnect.stdio_client", stdio),
-            self.assertRaises(Stop),
-        ):
-            async with konnect._session(Path("/bin/konnect"), Path("k.toml")):
-                pass
-        parameters = captured["parameters"]
-        self.assertNotIn("ANTHROPIC_API_KEY", parameters.env)
-        self.assertEqual(parameters.env["KICAD_API_SOCKET"], "s")
-        self.assertEqual(parameters.args, ["--config", "k.toml"])
+        with patch.dict("os.environ", environment):
+            server, _ = await self.started()
+        self.assertNotIn("ANTHROPIC_API_KEY", server.env)
+        self.assertEqual(server.env["KICAD_API_SOCKET"], "s")
+
+    async def test_a_container_server_sees_only_container_paths(self):
+        engine = self.root / "engine"
+        engine.write_text(f'#!/bin/sh\necho "$*" >> {self.root}/engine.log\n')
+        engine.chmod(0o755)
+        image = "konnect@sha256:" + "0" * 64
+        with patch.dict("os.environ", {"ANTHROPIC_API_KEY": "secret"}):
+            server, arguments = await self.started(
+                container=Container(image=image, engine=str(engine))
+            )
+        self.assertEqual(server.command, str(engine))
+        self.assertIn("--interactive", server.args)
+        after = server.args[server.args.index(image) + 1 :]
+        self.assertEqual(
+            after, ["/opt/konnect/bin/konnect", "--config", "/work/konnect.toml"]
+        )
+        self.assertEqual(arguments["schematic"], "/work/board/board.kicad_sch")
+        self.assertNotIn("ANTHROPIC_API_KEY", server.env)
+        reaped = (self.root / "engine.log").read_text()
+        self.assertIn(
+            f"label=guacamole.project={self.project.store.project_id}", reaped
+        )
 
 
 if __name__ == "__main__":

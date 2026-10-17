@@ -1,42 +1,48 @@
 """OpenFOAM for workers: tutorial cases, dictionary edits, runs and their logs.
 
 OpenFOAM is a set of command-line applications with no session to hold, so this
-drives them directly. Cases live in the sandbox and start from the installation's
-own tutorials, which are correct for its fork and version by construction.
-Dictionaries are read and edited through OpenFOAM's own foamDictionary, so every
-edit is parsed the way the installed version parses it. register_openfoam_tools
-sources an OpenFOAM etc/bashrc once (or takes an already-sourced environment);
-tool processes get that environment and nothing else from the host.
+drives them directly, on the host or in a container (tools/containers.py). Every
+command sources the installation's etc/bashrc first, so both run the same way and
+no other host environment reaches OpenFOAM. Cases live in the sandbox and start
+from the installation's own tutorials, which are correct for its fork and version
+by construction. Dictionaries are read and edited through OpenFOAM's own
+foamDictionary, so every edit is parsed the way the installed version parses it.
 
 Solver logs are parsed for residuals and checkMesh logs for mesh quality. A
 converged run is numerical convergence, never physical validation.
 """
 
 import asyncio
-import json
 import math
-import os
 import re
 import shutil
-import signal
-import subprocess
-import sys
-from contextlib import suppress
+from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING, Annotated, Literal
 
 from pydantic import Field
 
 from ..contracts import Model, ProducedFile
+from ..tools.containers import Container, runner
 from ..tools.workspace import Count, Offset
 
 if TYPE_CHECKING:
     from ..project import Project
 
-BASE = ("PATH", "HOME", "USER", "LANG", "LC_ALL", "TMPDIR")
 APPLICATION = re.compile(r"[A-Za-z][A-Za-z0-9_.+-]*")
 TEXT = 16_000
 TAIL = 60
+# Run "$@" in the installation's environment; $1 is its bashrc.
+SOURCED = 'source "$1" >/dev/null 2>&1; shift; exec "$@"'
+DISCOVER = r"""source "$1" >/dev/null 2>&1
+printf 'WM_PROJECT=%s\nWM_PROJECT_VERSION=%s\nFOAM_TUTORIALS=%s\nMPIRUN=%s\n' \
+    "$WM_PROJECT" "$WM_PROJECT_VERSION" "$FOAM_TUTORIALS" "$(command -v mpirun)"
+for d in "$FOAM_USER_APPBIN" "$FOAM_SITE_APPBIN" "$FOAM_APPBIN"; do
+    [ -d "$d" ] && for f in "$d"/*; do [ -f "$f" ] && [ -x "$f" ] && echo "APP=${f##*/}"; done
+done
+[ -d "$FOAM_TUTORIALS" ] && find "$FOAM_TUTORIALS" -path '*/system/controlDict' | sed 's/^/TUTORIAL=/'
+true
+"""
 
 type RunSeconds = Annotated[float, Field(gt=0, le=86_400)]
 type Processors = Annotated[int, Field(ge=1, le=1024)]
@@ -54,6 +60,7 @@ class OpenFOAMInfo(Model):
     project: str
     version: str
     fork: Literal["foundation", "esi"]
+    runtime: str  # "host", or the container image
     tutorials: str
     applications: tuple[str, ...]
 
@@ -95,7 +102,8 @@ class MeshCheck(Model):
 
 class OpenFOAMRun(Model):
     application: str
-    command: tuple[str, ...]
+    command: tuple[str, ...]  # As the runtime ran it, after sourcing the bashrc
+    runtime: str  # "host", or the container image that produced the results
     returncode: int
     timed_out: bool
     fatal_error: str
@@ -115,34 +123,47 @@ class OpenFOAMTable(Model):
     nonfinite_rows: int
 
 
-def environment(bashrc: Path | None = None) -> dict[str, str]:
-    """The OpenFOAM environment: bashrc sourced over a minimal host environment."""
-    base = {k: v for k, v in os.environ.items() if k in BASE}
-    if bashrc is None:
-        env = {
-            k: v
-            for k, v in os.environ.items()
-            if k in BASE
-            or k.startswith(("WM_", "FOAM_", "MPI_"))
-            or k in {"LD_LIBRARY_PATH", "DYLD_LIBRARY_PATH"}
-        }
-    else:
-        dump = "import json, os, sys; sys.stdout.write(json.dumps(dict(os.environ)))"
-        output = subprocess.run(
-            ["bash", "-c", 'source "$1" >/dev/null 2>&1; exec "$2" -c "$3"', "bash"]
-            + [str(bashrc), sys.executable, dump],
-            env=base,
-            capture_output=True,
-            check=True,
-            timeout=120,
-        ).stdout
-        env = json.loads(output)
-    if not env.get("WM_PROJECT_DIR"):
+@dataclass(frozen=True)
+class Installation:
+    project: str
+    version: str
+    tutorials: str  # As the runtime sees it
+    mpirun: bool
+    applications: frozenset[str]
+    cases: tuple[str, ...]  # Tutorial-relative
+
+
+def discover(output: str) -> Installation:
+    """Read DISCOVER's output."""
+    values: dict[str, str] = {}
+    applications, tutorials = set(), []
+    for line in output.splitlines():
+        key, _, value = line.partition("=")
+        if key == "APP":
+            applications.add(value)
+        elif key == "TUTORIAL":
+            tutorials.append(value)
+        elif key:
+            values[key] = value
+    if not values.get("WM_PROJECT_VERSION"):
         raise RuntimeError(
-            "No OpenFOAM environment: pass the installation's etc/bashrc, or source "
-            "it before starting"
+            "No OpenFOAM installation: sourcing the bashrc set no WM_PROJECT_VERSION"
         )
-    return env
+    root, suffix = values.get("FOAM_TUTORIALS", "").rstrip("/"), "/system/controlDict"
+    return Installation(
+        project=values.get("WM_PROJECT", ""),
+        version=values["WM_PROJECT_VERSION"],
+        tutorials=root,
+        mpirun=bool(values.get("MPIRUN")),
+        applications=frozenset(applications),
+        cases=tuple(
+            sorted(
+                t[len(root) + 1 : -len(suffix)]
+                for t in tutorials
+                if t.startswith(root + "/") and t.endswith(suffix)
+            )
+        ),
+    )
 
 
 def _float(text: str) -> float:
@@ -262,23 +283,26 @@ def _times(case: Path) -> tuple[str, ...]:
     return tuple(name for _, name in sorted(times))
 
 
-def register_openfoam_tools(project: "Project", bashrc: Path | None = None) -> None:
-    """Register the OpenFOAM tools on the installation bashrc sources.
+def register_openfoam_tools(
+    project: "Project", bashrc: Path, container: Container | None = None
+) -> None:
+    """Register the OpenFOAM tools for the installation bashrc sets up.
 
-    Without bashrc the host must already have sourced OpenFOAM.
+    bashrc is the installation's etc/bashrc: a host path, or with container a path
+    inside its image, such as /opt/openfoam12/etc/bashrc.
     """
-    env = environment(bashrc)
-    bins = os.pathsep.join(
-        directory
-        for key in ("FOAM_USER_APPBIN", "FOAM_SITE_APPBIN", "FOAM_APPBIN")
-        if (directory := env.get(key))
+    runs = runner(project, container)
+    source = str(bashrc.resolve()) if container is None else bashrc.as_posix()
+    install = discover(
+        runs.check(["bash", "-c", DISCOVER, "bash", source], cwd=project.sandbox)
     )
-    tutorials = Path(env.get("FOAM_TUTORIALS", "")).resolve()
-    version = env.get("WM_PROJECT_VERSION", "")
     # ESI versions are named vYYMM; the Foundation's are plain numbers.
     fork: Literal["foundation", "esi"] = (
-        "esi" if version.startswith("v") else "foundation"
+        "esi" if install.version.startswith("v") else "foundation"
     )
+
+    def sourced(*command: str) -> list[str]:
+        return ["bash", "-c", SOURCED, "bash", source, *command]
 
     def case_dir(case: str, *, existing: bool = True) -> Path:
         path = project.output_path(Path(case))
@@ -297,66 +321,40 @@ def register_openfoam_tools(project: "Project", bashrc: Path | None = None) -> N
         return path
 
     def installed(name: str) -> str:
-        if (
-            not APPLICATION.fullmatch(name)
-            or (found := shutil.which(name, path=bins)) is None
-        ):
+        if not APPLICATION.fullmatch(name) or name not in install.applications:
             raise ValueError(
                 f"{name} is not an OpenFOAM application; openfoam_info lists them, and "
                 "case scripts run as ./Allrun"
             )
-        return found
-
-    async def capture(argv: list[str], cwd: Path, timeout_s: float) -> tuple[int, str]:
-        process = await asyncio.create_subprocess_exec(
-            *argv,
-            cwd=cwd,
-            env=env,
-            stdin=asyncio.subprocess.DEVNULL,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.STDOUT,
-            start_new_session=True,
-        )
-        try:
-            output, _ = await asyncio.wait_for(process.communicate(), timeout_s)
-        except (TimeoutError, asyncio.CancelledError):
-            with suppress(ProcessLookupError):
-                os.killpg(process.pid, signal.SIGKILL)
-            await process.wait()
-            raise
-        return process.returncode or 0, output.decode(errors="replace")
+        return name
 
     async def dictionary(case: str, file: str, *options: str) -> tuple[Path, str]:
         path = case_dir(case)
         target = inside(path, file)
         if not target.is_file():
             raise ValueError(f"No dictionary {file} in {case}")
-        code, output = await capture(
-            [installed("foamDictionary"), str(target), *options], path, 120.0
+        code, output = await runs.capture(
+            sourced(installed("foamDictionary"), runs.path(target), *options),
+            cwd=path,
+            timeout_s=120.0,
         )
         if code:
             raise RuntimeError(f"foamDictionary failed:\n{output[-4000:]}")
         return target, output
 
     async def openfoam_info() -> OpenFOAMInfo:
-        """The OpenFOAM installation: fork, version, tutorials and applications.
+        """The OpenFOAM installation: fork, version, runtime, tutorials, applications.
 
         Foundation versions (e.g. 12) run solvers as foamRun -solver <module>; ESI
         versions (e.g. v2406) name solvers directly (simpleFoam, pimpleFoam).
         """
-        names = {
-            p.name
-            for directory in bins.split(os.pathsep)
-            if Path(directory).is_dir()
-            for p in Path(directory).iterdir()
-            if p.is_file() and os.access(p, os.X_OK)
-        }
         return OpenFOAMInfo(
-            project=env.get("WM_PROJECT", ""),
-            version=version,
+            project=install.project,
+            version=install.version,
             fork=fork,
-            tutorials=str(tutorials),
-            applications=tuple(sorted(names)),
+            runtime=runs.runtime,
+            tutorials=install.tutorials,
+            applications=tuple(sorted(install.applications)),
         )
 
     async def openfoam_tutorials(
@@ -366,11 +364,7 @@ def register_openfoam_tools(project: "Project", bashrc: Path | None = None) -> N
 
         Start a case from the closest tutorial with openfoam_copy_tutorial.
         """
-        cases = sorted(
-            str(p.parent.parent.relative_to(tutorials))
-            for p in tutorials.rglob("system/controlDict")
-        )
-        matching = [c for c in cases if filter.lower() in c.lower()]
+        matching = [c for c in install.cases if filter.lower() in c.lower()]
         return tuple(matching[offset : offset + limit])
 
     async def openfoam_copy_tutorial(
@@ -381,11 +375,7 @@ def register_openfoam_tools(project: "Project", bashrc: Path | None = None) -> N
         replace deletes an existing case there first. Then change it with
         openfoam_set (or write_text for whole files, such as a new blockMeshDict).
         """
-        source = (tutorials / tutorial).resolve()
-        if (
-            not source.is_relative_to(tutorials)
-            or not (source / "system/controlDict").is_file()
-        ):
+        if tutorial not in install.cases:
             raise ValueError(
                 f"{tutorial} is not a tutorial case; openfoam_tutorials lists them"
             )
@@ -394,7 +384,14 @@ def register_openfoam_tools(project: "Project", bashrc: Path | None = None) -> N
             if not replace:
                 raise ValueError(f"{case} exists; pass replace to start it over")
             shutil.rmtree(destination)
-        await asyncio.to_thread(shutil.copytree, source, destination)
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        code, output = await runs.capture(
+            ["cp", "-R", f"{install.tutorials}/{tutorial}", runs.path(destination)],
+            cwd=project.sandbox,
+            timeout_s=600.0,
+        )
+        if code:
+            raise RuntimeError(f"Copying {tutorial} failed:\n{output[-2000:]}")
         return OpenFOAMCase(
             case=str(destination),
             files=tuple(
@@ -503,52 +500,37 @@ def register_openfoam_tools(project: "Project", bashrc: Path | None = None) -> N
             script = inside(path, application)
             if not script.is_file() or processors > 1:
                 raise ValueError(f"{application} is not a case script to run serially")
-            argv, name = ["bash", str(script)], script.name
+            command, name = ["bash", runs.path(script)], script.name
         else:
-            argv, name = [installed(application)], application
+            command, name = [installed(application)], application
             if processors > 1:
-                mpirun = shutil.which("mpirun", path=env.get("PATH"))
-                if mpirun is None:
+                if not install.mpirun:
                     raise ValueError(
                         "Parallel runs need mpirun in the OpenFOAM environment"
                     )
-                argv = [mpirun, "-np", str(processors), *argv, "-parallel"]
+                command = ["mpirun", "-np", str(processors), *command, "-parallel"]
         for arg in args:
             if arg == "-case":
                 raise ValueError("Runs use their case directory; do not pass -case")
-            if (arg.startswith("/") or ".." in Path(arg).parts) and not (
-                path / arg
-            ).resolve().is_relative_to(project.sandbox):
-                raise ValueError(f"{arg} is outside the sandbox")
-        argv.extend(args)
+            if arg.startswith("/") or ".." in Path(arg).parts:
+                resolved = (path / arg).resolve()
+                if not resolved.is_relative_to(project.sandbox):
+                    raise ValueError(f"{arg} is outside the sandbox")
+                # Absolute paths are translated; relative ones mean the same in both.
+                arg = runs.path(resolved) if arg.startswith("/") else arg
+            command.append(arg)
         log = path / f"log.{name}"
-        timed_out = False
-        with log.open("wb") as output:
-            process = await asyncio.create_subprocess_exec(
-                *argv,
-                cwd=path,
-                env=env,
-                stdin=asyncio.subprocess.DEVNULL,
-                stdout=output,
-                stderr=asyncio.subprocess.STDOUT,
-                start_new_session=True,
-            )
-            try:
-                await asyncio.wait_for(process.wait(), timeout_s)
-            except (TimeoutError, asyncio.CancelledError) as exc:
-                with suppress(ProcessLookupError):
-                    os.killpg(process.pid, signal.SIGKILL)
-                await process.wait()
-                if isinstance(exc, asyncio.CancelledError):
-                    raise
-                timed_out = True
+        returncode, timed_out = await runs.run(
+            sourced(*command), cwd=path, log=log, timeout_s=timeout_s
+        )
         text = await asyncio.to_thread(
             log.read_text, encoding="utf-8", errors="replace"
         )
         return OpenFOAMRun(
             application=name,
-            command=tuple(argv),
-            returncode=process.returncode if process.returncode is not None else -1,
+            command=tuple(command),
+            runtime=runs.runtime,
+            returncode=returncode,
             timed_out=timed_out,
             fatal_error=_fatal(text),
             tail="\n".join(text.splitlines()[-TAIL:]),

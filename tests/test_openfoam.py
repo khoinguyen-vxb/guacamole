@@ -1,16 +1,18 @@
+import json
 import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 from guacamole import Project
 from guacamole.integrations.openfoam import (
-    environment,
     parse_mesh,
     parse_residuals,
     parse_table,
     register_openfoam_tools,
 )
+from guacamole.tools.containers import Container
 
 TUTORIAL = "incompressible/simpleFoam/pitzDaily"
 SOLVER_LOG = """Create time
@@ -72,6 +74,39 @@ def script(path: Path, body: str) -> None:
     path.chmod(0o755)
 
 
+def fake_install(root: Path) -> Path:
+    """A fake OpenFOAM: a real bashrc and scripted applications; returns the bashrc."""
+    foam = root / "foam"
+    (foam / "etc").mkdir(parents=True)
+    (foam / "etc/bashrc").write_text(
+        "export WM_PROJECT=OpenFOAM WM_PROJECT_VERSION=12\n"
+        f"export WM_PROJECT_DIR={foam} FOAM_APPBIN={foam}/bin\n"
+        f"export FOAM_TUTORIALS={foam}/tutorials PATH={foam}/bin:$PATH\n"
+    )
+    for name, text in (
+        ("solver.log", SOLVER_LOG),
+        ("mesh.log", MESH_LOG),
+        ("fatal.log", FATAL_LOG),
+    ):
+        (foam / name).write_text(text)
+    script(foam / "bin/simpleFoam", f"cat {foam}/solver.log\nmkdir -p 100\n")
+    script(foam / "bin/checkMesh", f"cat {foam}/mesh.log\n")
+    script(foam / "bin/failFoam", f"cat {foam}/fatal.log\nexit 1\n")
+    script(foam / "bin/slowFoam", "sleep 30\n")
+    script(foam / "bin/envFoam", "env\n")
+    script(
+        foam / "bin/foamDictionary",
+        'file="$1"; shift; echo "$*" >> "$file.calls"; echo "uniform (1 0 0)"\n',
+    )
+    tutorial = foam / "tutorials" / TUTORIAL
+    (tutorial / "system").mkdir(parents=True)
+    (tutorial / "0").mkdir()
+    (tutorial / "system/controlDict").write_text("application simpleFoam;\n")
+    (tutorial / "0/U").write_text("internalField uniform (0 0 0);\n")
+    script(tutorial / "Allrun", f"echo ran > allrun.out\ncat {foam}/solver.log\n")
+    return foam / "etc/bashrc"
+
+
 class ParserTests(unittest.TestCase):
     def test_residuals_take_each_fields_first_solve_per_time_step(self):
         report = parse_residuals(SOLVER_LOG, 1e-3)
@@ -115,40 +150,12 @@ class ParserTests(unittest.TestCase):
 
 
 class OpenFOAMToolTests(unittest.IsolatedAsyncioTestCase):
-    """Runs against a fake installation: a real bashrc and scripted applications."""
+    """Runs on the host against a fake installation."""
 
     async def asyncSetUp(self):
         self.directory = tempfile.TemporaryDirectory()
         root = Path(self.directory.name).resolve()
-        foam = root / "foam"
-        (foam / "etc").mkdir(parents=True)
-        (foam / "etc/bashrc").write_text(
-            "export WM_PROJECT=OpenFOAM WM_PROJECT_VERSION=12\n"
-            f"export WM_PROJECT_DIR={foam} FOAM_APPBIN={foam}/bin\n"
-            f"export FOAM_TUTORIALS={foam}/tutorials PATH={foam}/bin:$PATH\n"
-        )
-        for name, text in (
-            ("solver.log", SOLVER_LOG),
-            ("mesh.log", MESH_LOG),
-            ("fatal.log", FATAL_LOG),
-        ):
-            (foam / name).write_text(text)
-        script(foam / "bin/simpleFoam", f"cat {foam}/solver.log\nmkdir -p 100\n")
-        script(foam / "bin/checkMesh", f"cat {foam}/mesh.log\n")
-        script(foam / "bin/failFoam", f"cat {foam}/fatal.log\nexit 1\n")
-        script(foam / "bin/slowFoam", "sleep 30\n")
-        script(foam / "bin/envFoam", "env\n")
-        script(
-            foam / "bin/foamDictionary",
-            'file="$1"; shift; echo "$*" >> "$file.calls"; echo "uniform (1 0 0)"\n',
-        )
-        tutorial = foam / "tutorials" / TUTORIAL
-        (tutorial / "system").mkdir(parents=True)
-        (tutorial / "0").mkdir()
-        (tutorial / "system/controlDict").write_text("application simpleFoam;\n")
-        (tutorial / "0/U").write_text("internalField uniform (0 0 0);\n")
-        script(tutorial / "Allrun", f"echo ran > allrun.out\ncat {foam}/solver.log\n")
-        self.bashrc = foam / "etc/bashrc"
+        self.bashrc = fake_install(root)
         self.project = Project(root / "state", sandbox=root / "outputs")
         register_openfoam_tools(self.project, self.bashrc)
         await self.call("openfoam_copy_tutorial", tutorial=TUTORIAL, case="cases/pitz")
@@ -166,15 +173,6 @@ class OpenFOAMToolTests(unittest.IsolatedAsyncioTestCase):
         return await self.call(
             "openfoam_run", case="cases/pitz", application=application, **arguments
         )
-
-    def test_environment_is_bashrc_over_a_minimal_host(self):
-        os.environ["GUACAMOLE_TEST_SECRET"] = "leak"
-        try:
-            env = environment(self.bashrc)
-        finally:
-            del os.environ["GUACAMOLE_TEST_SECRET"]
-        self.assertEqual(env["WM_PROJECT_VERSION"], "12")
-        self.assertNotIn("GUACAMOLE_TEST_SECRET", env)
 
     async def test_tutorials_are_listed_copied_and_protected(self):
         info = await self.call("openfoam_info")
@@ -287,3 +285,88 @@ class OpenFOAMToolTests(unittest.IsolatedAsyncioTestCase):
             self.assertFalse(tools.get(f"{name}@1").definition.requires_plan)
         for name in ("openfoam_copy_tutorial", "openfoam_set", "openfoam_run"):
             self.assertTrue(tools.get(f"{name}@1").definition.requires_plan)
+
+
+class OpenFOAMContainerTests(unittest.IsolatedAsyncioTestCase):
+    """The same tools in a container: the fake engine maps /work and the image's
+    bashrc back to the host, then runs the command as the container would."""
+
+    IMAGE = "openfoam/openfoam12@sha256:" + "c" * 64
+    BASHRC = "/opt/openfoam12/etc/bashrc"
+
+    async def asyncSetUp(self):
+        self.directory = tempfile.TemporaryDirectory()
+        root = Path(self.directory.name).resolve()
+        bashrc = fake_install(root)
+        self.project = Project(root / "state", sandbox=root / "outputs")
+        self.calls = root / "calls"
+        engine = root / "engine"
+        engine.write_text(
+            f"#!{sys.executable}\n"
+            "import json, os, sys\n"
+            "argv = sys.argv[1:]\n"
+            f"open({str(self.calls)!r}, 'a').write(json.dumps(argv) + '\\n')\n"
+            "if argv[0] != 'run': sys.exit(0)\n"
+            f"mapped = (('/work', {str(self.project.sandbox)!r}), ({self.BASHRC!r}, {str(bashrc)!r}))\n"
+            "def host(a):\n"
+            "    for inside, outside in mapped:\n"
+            "        if a == inside or a.startswith(inside + '/'):\n"
+            "            return outside + a[len(inside):]\n"
+            "    return a\n"
+            f"i = argv.index({self.IMAGE!r})\n"
+            "os.chdir(host(argv[argv.index('--workdir') + 1]))\n"
+            "command = [host(a) for a in argv[i + 1:]]\n"
+            "os.execvp(command[0], command)\n"
+        )
+        engine.chmod(0o755)
+        register_openfoam_tools(
+            self.project,
+            Path(self.BASHRC),
+            Container(image=self.IMAGE, engine=str(engine)),
+        )
+
+    async def asyncTearDown(self):
+        await self.project.drain()
+        self.project.close()
+        self.directory.cleanup()
+
+    async def call(self, name: str, **arguments):
+        return await self.project.call(self.project.tools.get(f"{name}@1"), arguments)
+
+    def runs(self) -> list[list[str]]:
+        calls = [json.loads(line) for line in self.calls.read_text().splitlines()]
+        return [c for c in calls if c[0] == "run"]
+
+    async def test_a_case_runs_end_to_end_in_the_container(self):
+        info = await self.call("openfoam_info")
+        self.assertEqual((info.runtime, info.version), (self.IMAGE, "12"))
+        await self.call("openfoam_copy_tutorial", tutorial=TUTORIAL, case="cases/pitz")
+        case = self.project.sandbox / "cases/pitz"
+        self.assertTrue((case / "0/U").is_file())
+        await self.call(
+            "openfoam_set", case="cases/pitz", file="0/U", changes={"a": "1"}
+        )
+        self.assertEqual((case / "0/U.calls").read_text(), "-entry a -set 1\n")
+        control = str(case / "system/controlDict")
+        run = await self.call(
+            "openfoam_run",
+            case="cases/pitz",
+            application="simpleFoam",
+            args=["-dict", control],
+            tolerance=1e-3,
+        )
+        self.assertEqual(
+            (run.runtime, run.residuals.verdict), (self.IMAGE, "converged")
+        )
+        self.assertEqual(
+            run.command, ("simpleFoam", "-dict", "/work/cases/pitz/system/controlDict")
+        )
+        solver = self.runs()[-1]
+        self.assertEqual(solver[solver.index("--workdir") + 1], "/work/cases/pitz")
+        self.assertIn(self.BASHRC, solver)
+        self.assertNotIn(control, solver)
+        # Every container got the same locked-down launch.
+        for launch in self.runs():
+            self.assertIn("--rm", launch)
+            self.assertEqual(launch[launch.index("--network") + 1], "none")
+            self.assertEqual(launch[launch.index("--cap-drop") + 1], "ALL")
