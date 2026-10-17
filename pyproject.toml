@@ -43,6 +43,8 @@ pythonpath = ["."]  # tests import examples.*
 
 [tool.ruff]
 target-version = "py313"
+# Agent-written run outputs; reformatting one breaks its recorded hash.
+extend-exclude = ["examples/*/results", "examples/*/runs"]
 
 [tool.ty.environment]
 python-version = "3.13"
