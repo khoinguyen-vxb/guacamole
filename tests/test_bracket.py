@@ -1,4 +1,3 @@
-import importlib.util
 import json
 import tempfile
 import unittest
@@ -225,10 +224,7 @@ class BracketTests(unittest.IsolatedAsyncioTestCase):
             )
 
 
-@unittest.skipUnless(
-    bracket.FREECAD and all(map(importlib.util.find_spec, ("ezdxf", "OCP"))),
-    "needs FreeCAD (freecadcmd or freecad.cmd) and the bracket extra (ezdxf, OCP)",
-)
+@unittest.skipUnless(bracket.FREECAD, "needs FreeCAD (freecadcmd or freecad.cmd)")
 class FreeCADBracketTests(unittest.IsolatedAsyncioTestCase):
     async def test_generated_bracket_reaches_an_accepted_review_with_its_report(self):
         # Snap and Flatpak FreeCAD builds see $HOME but not /tmp.

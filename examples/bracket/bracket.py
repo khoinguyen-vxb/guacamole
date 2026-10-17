@@ -1,6 +1,6 @@
 """Wall-mounted L-brackets: Milestone B's prompt-to-review-package benchmark.
 
-Run with: uv sync
+Run with: uv sync --extra langchain --extra graphiti --extra mem0
           .venv/bin/python -m examples.bracket.bracket [runs/<timestamp>]
 
 Every brief in briefs/ runs as its own project under runs/<timestamp>/. A brief
@@ -24,6 +24,7 @@ import re
 import sys
 import time
 from collections.abc import Iterable
+from contextlib import AsyncExitStack
 from pathlib import Path
 from typing import Annotated, Literal, NamedTuple
 
@@ -45,8 +46,11 @@ from guacamole import (
 from guacamole.console import host, preflight
 from guacamole.contracts import ArtifactRecord
 from guacamole.integrations import ap242, drafting
+from guacamole.integrations.drawing import SCRIPT as VIEWS_SCRIPT
 from guacamole.integrations.freecad import FREECAD, run_job
+from guacamole.middleware import standard_middleware
 from guacamole.providers.claude import ClaudeReasoning
+from guacamole.tools.workspace import register_workspace_tools
 from guacamole.tools.registry import encode
 
 # Configuration. Paths are relative to this file. FreeCAD must see the runs
@@ -507,6 +511,7 @@ def register_tools(project: Project) -> None:
         built = await run_job(
             {
                 "mode": "generate",
+                "integrations": str(VIEWS_SCRIPT.parent),
                 "holes": d.holes_per_leg,
                 "features": feature_specs(d),
                 "parameters": {
@@ -626,6 +631,7 @@ def register_tools(project: Project) -> None:
         measured = await run_job(
             {
                 "mode": "inspect",
+                "integrations": str(VIEWS_SCRIPT.parent),
                 "native": str(files["native"]),
                 "step": str(files["step"]),
                 "features": drafting.specs(pmi),
@@ -685,15 +691,20 @@ async def run_brief(brief: Path, runs: Path) -> dict[str, object]:
         max_concurrent_calls=MAX_CONCURRENT_CALLS,
     ) as project:
         register_tools(project)
+        # The generic readers, write_text, execute and verify_command, on its outputs.
+        register_workspace_tools(project, ROOT, ())
         text = brief.read_text(encoding="utf-8")
-        result = await host(
-            project,
-            lambda context: project_request(text, context),
-            port=CONTROL_PORT,
-            context=CONTEXT,
-            budget=BUDGET,
-            reply=SCRIPTED_REPLY,
-        )
+        # Opened after the workspace lock: the graph and vector stores live in it.
+        async with AsyncExitStack() as cleanup:
+            project.middleware = await standard_middleware(workspace / "state", cleanup)
+            result = await host(
+                project,
+                lambda context: project_request(text, context),
+                port=CONTROL_PORT,
+                context=CONTEXT,
+                budget=BUDGET,
+                reply=SCRIPTED_REPLY,
+            )
         events = project.events()
         return {
             "brief": brief.stem,
@@ -719,7 +730,12 @@ async def run_brief(brief: Path, runs: Path) -> dict[str, object]:
 async def main() -> None:
     if FREECAD is None:
         raise SystemExit("Needs FreeCAD (freecadcmd or freecad.cmd) on PATH.")
-    preflight(reasoning().executable, "Needs the reasoning CLI on PATH, logged in.")
+    preflight(
+        reasoning().executable,
+        "Needs the reasoning CLI on PATH, logged in.",
+        ("langchain", "langchain_litellm", "graphiti_core", "mem0"),
+        "Run 'uv sync --extra langchain --extra graphiti --extra mem0'.",
+    )
     runs = (
         Path(sys.argv[1]).resolve()
         if len(sys.argv) > 1

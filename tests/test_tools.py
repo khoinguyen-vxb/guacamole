@@ -362,7 +362,9 @@ with Project(Path(sys.argv[1]), sandbox=Path(sys.argv[2]), tools=tools) as proje
                 )
             ) as client:
                 listing = await client.list_tools()
-                self.assertEqual(len(listing.tools), 2)
+                self.assertLessEqual(
+                    {"distance@1", "nested@1"}, {t.name for t in listing.tools}
+                )
                 result = await client.call_tool(
                     "distance@1",
                     {"point": {"x": -2.0}},

@@ -9,6 +9,7 @@ import signal
 from contextlib import suppress
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from typing import ClassVar
 
 from pydantic import JsonValue, ValidationError
 
@@ -39,6 +40,13 @@ class ClaudeReasoning:
     context_capacity_tokens = 1_050_000
     token_count_method = "utf8_upper_bound"
     image_tokens = IMAGE_TOKENS
+    # Worker tiers: model, effort and context window. Project copies this provider at
+    # each; a task family runs on one only once qualify.py's records qualify it.
+    tier_profiles: ClassVar[dict[str, tuple[str, str, int]]] = {
+        "haiku-low": ("claude-haiku-5-5", "low", 1_000_000),
+        "sonnet-medium": ("claude-sonnet-5-5", "medium", 1_000_000),
+        "opus-high": (model, "high", context_capacity_tokens),
+    }
 
     def __init__(
         self,

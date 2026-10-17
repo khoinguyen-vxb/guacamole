@@ -39,6 +39,8 @@ class KonnectTests(unittest.IsolatedAsyncioTestCase):
         root = Path(self.directory.name)
         self.binary = root / "konnect"
         self.project = Project(root / "state", sandbox=root / "outputs")
+        # Every Project registers the CAD tools; Konnect adds exactly its own.
+        self.preset = {d.grant.name for d in self.project.tools.definitions()}
         konnect.register_konnect_tools(self.project, self.binary, root / "konnect.toml")
         (self.project.sandbox / "board").mkdir()
         for name in ("board.kicad_pro", "board.kicad_sch", "board.kicad_pcb"):
@@ -63,7 +65,7 @@ class KonnectTests(unittest.IsolatedAsyncioTestCase):
             self.assertFalse(definition.retry_safe, name)
         self.assertIn("kicad-cli", self.tool("konnect_status").definition.description)
         self.assertEqual(
-            {d.grant.name for d in self.project.tools.definitions()},
+            {d.grant.name for d in self.project.tools.definitions()} - self.preset,
             set(READERS) | set(WRITERS),
         )
 

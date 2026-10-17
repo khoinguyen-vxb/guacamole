@@ -6,12 +6,12 @@
 # ]
 # [tool.uv.sources]
 # guacamole-engineering = { path = "../..", editable = true }
-# freecad-mcp = { path = "freecad-mcp", editable = true }
+# freecad-mcp = { path = "../../vendor/freecad-mcp", editable = true }
 # ///
 """Run with: uv run examples/RDE/RDE.py
 
 Or: uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra mem0
-    uv sync --project examples/ehopper/freecad-mcp --locked --no-dev
+    uv sync --project vendor/freecad-mcp --locked --no-dev
     .venv/bin/python -m examples.RDE.RDE
 
 Edit the configuration below; this script has no command-line arguments.
@@ -41,7 +41,7 @@ from guacamole import (
     Watchdog,
 )
 from guacamole.console import host, preflight
-from guacamole.integrations.freecad import register_freecad_tools
+from guacamole.integrations.freecad import SERVER as FREECAD_MCP
 from guacamole.middleware import standard_middleware
 from guacamole.providers.claude import ClaudeReasoning
 from guacamole.tools.workspace import inventory, register_workspace_tools, tool_paths
@@ -52,7 +52,6 @@ DOCUMENTS = ROOT / "context"
 TOOLING = ROOT / "tooling"
 WORKSPACE = ROOT / ".guacamole"
 SANDBOX = ROOT / "results"
-FREECAD_MCP = ROOT / "freecad-mcp"
 RESUME_RUN_ID: str | None = None  # None automatically resumes a single saved run.
 CONTROL_PORT = 8766
 CONTEXT = ContextSpec(max_input_tokens=12800000, reserved_output_tokens=20000)
@@ -134,7 +133,6 @@ def register_tools(project: Project) -> None:
     register_workspace_tools(
         project, ROOT, (DOCUMENTS, TOOLING), tools, PYTHON_EXECUTABLES
     )
-    register_freecad_tools(project, FREECAD_MCP)
 
 
 def project_request(project: Project, context: ContextSpec) -> ProjectRequest:

@@ -68,6 +68,7 @@ from guacamole.contracts import (
     Wait,
 )
 from guacamole.decision import DecisionBlocked
+from guacamole.providers.claude import ClaudeReasoning
 from guacamole.providers.litellm import LiteLLMReasoning
 from guacamole.providers.litellm import _usage as litellm_usage
 
@@ -366,9 +367,20 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             list(data)[:3], ["instructions", "response_schema", "result_schema"]
         )
         self.assertEqual(list(data)[-2:], ["messages", "state"])
-        # The Chief's own tools are in tool_schemas; the catalogue lists the rest.
+        # The Chief's own tools are in tool_schemas; the catalogue lists the rest,
+        # including the CAD tools every project registers.
         self.assertEqual([t["grant"]["name"] for t in data["tool_schemas"]], ["probe"])
-        self.assertEqual([t["grant"]["name"] for t in data["catalogue"]], ["other"])
+        self.assertEqual(
+            [t["grant"]["name"] for t in data["catalogue"]],
+            [
+                "other",
+                "freecad_status",
+                "freecad_view",
+                "freecad_run",
+                "draw_part",
+                "mbd_annotate",
+            ],
+        )
         stable, semi = first.cache_breakpoints
         self.assertTrue(first.prompt[stable:].startswith('"agent":'))
         self.assertTrue(first.prompt[semi:].startswith('"messages":'))
@@ -582,7 +594,7 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                         ProjectRequest(
                             description="Read prioritisation fixture",
                             context=ContextSpec(
-                                max_input_tokens=150_000, selected=(old, wanted)
+                                max_input_tokens=170_000, selected=(old, wanted)
                             ),
                         )
                     )
@@ -1165,12 +1177,9 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         chief, fast = Tiered("big"), Tiered("small")
         with (
             tempfile.TemporaryDirectory() as directory,
-            Project(
-                Path(directory),
-                reasoning=chief,
-                tiers={"fast": fast, "slow": Tiered("medium")},
-            ) as project,
+            Project(Path(directory), reasoning=chief) as project,
         ):
+            project.tiers = {"fast": fast, "slow": Tiered("medium")}
             await project.run(
                 ProjectRequest(
                     description="fixture",
@@ -1190,9 +1199,10 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertIn("unconfigured reasoning tier: ghost", seen[1][2]["detail"])
         self.assertEqual(worker["tier"], "slow")
+        # The escalated worker's next turn runs on the new tier.
         self.assertEqual(
             [(d["model"], d["tier"], d["effort"]) for d in dispatched],
-            [("small", "fast", "low")],
+            [("small", "fast", "low"), ("medium", "slow", "low")],
         )
         self.assertEqual({m for m, t, _ in seen if t == "chief"}, {"big"})
 
@@ -1214,19 +1224,17 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             tempfile.TemporaryDirectory() as directory,
-            Project(
-                Path(directory),
-                tiers={"cheap": Tier("small"), "dear": Tier("big")},
-                qualifications=(
-                    measured("small", "extraction", 2, 2, 0.10),
-                    measured("big", "extraction", 2, 2, 1.00),
-                    # Cheaper per trial, but a failure makes each verified result dearer.
-                    measured("small", "analysis", 5, 4, 1.00),
-                    measured("big", "analysis", 5, 5, 1.10),
-                    measured("small", "diagnosis", 2, 1, 0.10),
-                ),
-            ) as project,
+            Project(Path(directory)) as project,
         ):
+            project.tiers = {"cheap": Tier("small"), "dear": Tier("big")}
+            project.qualifications = (
+                measured("small", "extraction", 2, 2, 0.10),
+                measured("big", "extraction", 2, 2, 1.00),
+                # Cheaper per trial, but a failure makes each verified result dearer.
+                measured("small", "analysis", 5, 4, 1.00),
+                measured("big", "analysis", 5, 5, 1.10),
+                measured("small", "diagnosis", 2, 1, 0.10),
+            )
             runtime = Runtime(project, TestReasoning())
 
             def route(family, tier=None):
@@ -1245,6 +1253,23 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             self.assertIn("unqualified", runtime.tier_menu)
         with self.assertRaises(ValueError):
             measured("small", "extraction", 1, 2, 0.1)
+
+    def test_projects_route_to_their_providers_tiers_unconfigured(self):
+        chief = ClaudeReasoning(web_search=True, effort="xhigh")
+        with tempfile.TemporaryDirectory() as directory:
+            with Project(Path(directory), reasoning=chief) as project:
+                tiers = project.tiers
+            # Tiers keep the Chief's options; only model, effort and window change.
+            self.assertEqual(
+                {k: (t.model, t.effort, t.web_search) for k, t in tiers.items()},
+                {
+                    k: (model, effort, True)
+                    for k, (model, effort, _) in chief.tier_profiles.items()
+                },
+            )
+            self.assertEqual(chief.effort, "xhigh")
+            with Project(Path(directory) / "other") as project:
+                self.assertEqual(project.tiers, {})
 
     async def test_rejected_action_explains_runtime_errors_but_not_tool_errors(self):
         secret = "fixture-secret-must-not-persist"

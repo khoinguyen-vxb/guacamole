@@ -12,7 +12,7 @@ from guacamole import (
 )
 from guacamole.console import host, preflight
 from guacamole.middleware import standard_middleware
-from guacamole.providers.codex import CodexReasoning
+from guacamole.providers.claude import ClaudeReasoning
 from guacamole.tools.workspace import inventory, register_workspace_tools, tool_paths
 
 # Project configuration. Paths are relative to this file, never the shell's cwd.
@@ -25,7 +25,7 @@ RESUME_RUN_ID: str | None = None  # None automatically resumes a single saved ru
 CONTROL_PORT = 8765
 CONTEXT = ContextSpec(max_input_tokens=12800000, reserved_output_tokens=20000)
 # The watchdog prints a status report at this interval and helps looping or
-# context-saturated agents using its own low-effort Codex process (no web search).
+# context-saturated agents using its own low-effort claude process (no web search).
 WATCHDOG_REPORT_S = 600
 BUDGET = Budget(
     max_steps=20000, max_tool_calls=15000, max_seconds=720000, max_agents=24
@@ -86,11 +86,12 @@ def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
 
 async def main() -> None:
     preflight(
-        "codex",
-        "Install Codex CLI on PATH and run 'codex login' with your ChatGPT account.",
+        "claude",
+        "Install the Claude Code CLI on PATH and log in to it.",
         (
             "websockets",
             "pypdf",
+            "pypdfium2",
             "openpyxl",
             "pptx",
             "langchain",
@@ -106,9 +107,10 @@ async def main() -> None:
         WORKSPACE,
         sandbox=SANDBOX,
         tools=ToolRegistry(),
-        reasoning=CodexReasoning(),
+        # Workers route to cheaper Claude tiers where measured records qualify them.
+        reasoning=ClaudeReasoning(web_search=True, effort="xhigh"),
         watchdog=Watchdog(
-            CodexReasoning(web_search=False), report_interval_s=WATCHDOG_REPORT_S
+            ClaudeReasoning(web_search=False), report_interval_s=WATCHDOG_REPORT_S
         ),  # Runs at the lowest reasoning effort to reserve usage budget.
     ) as project:
         register_tools(project)

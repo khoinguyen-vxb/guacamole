@@ -1,4 +1,3 @@
-import importlib.util
 import math
 import tempfile
 import unittest
@@ -374,9 +373,6 @@ class DraftingTests(unittest.TestCase):
         self.assertEqual(found, {"top": features["top"]})
         self.assertEqual(failed, ["side: 2 matches in the model, not exactly one"])
 
-    @unittest.skipUnless(
-        importlib.util.find_spec("ezdxf"), "needs ezdxf (--extra bracket)"
-    )
     def test_a_compiled_drawing_shows_its_pmi_and_conformance_catches_edits(self):
         import ezdxf
 
@@ -448,9 +444,6 @@ class DraftingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "does not look along"):
             drafting.compile_drawing(spec, across, views)
 
-    @unittest.skipUnless(
-        importlib.util.find_spec("ezdxf"), "needs ezdxf (--extra bracket)"
-    )
     def test_widths_radii_locations_and_datum_targets_are_drawn(self):
         import ezdxf
 
@@ -495,9 +488,6 @@ class DraftingTests(unittest.TestCase):
             drafting.problems(doubled),
         )
 
-    @unittest.skipUnless(
-        importlib.util.find_spec("ezdxf"), "needs ezdxf (--extra bracket)"
-    )
     def test_iso_pmi_restated_for_asme_keeps_its_meaning_and_draws(self):
         import ezdxf
 

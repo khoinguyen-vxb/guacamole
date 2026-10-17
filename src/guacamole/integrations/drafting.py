@@ -1,6 +1,6 @@
 """ISO GPS part drawings compiled from canonical PMI and projected model geometry.
 
-Product tools import it to publish drawings; ezdxf (the `bracket` extra) loads on use.
+Product tools and draw_part (drawing.py) import it to publish drawings; ezdxf loads on use.
 The PMI (named features, datums, size and geometrical specifications, and the general
 specification) carries the engineering meaning and is tied to the geometry it was
 made for. compile_drawing turns it, three projected views and a title block into an

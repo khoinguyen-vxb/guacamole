@@ -1,7 +1,7 @@
 """Generic tools for host scripts: read supplied inputs, write and run in the sandbox.
 
 Register them with register_workspace_tools. Readers need no plan; writing and
-running do. Document readers import pypdf, python-pptx and openpyxl on first use.
+running do. Document readers import pypdf, pypdfium2, python-pptx and openpyxl on first use.
 Tool processes keep the user's OS permissions; the sandbox is not an OS sandbox.
 """
 
@@ -203,6 +203,29 @@ def extract_document(
     return text[offset : offset + 16_000], locator, offset + 16_000 < len(text)
 
 
+def render_pdf(path: Path, first: int, count: int, out: Path) -> tuple[Path, ...]:
+    """PDF pages as JPEGs at most 2000 px a side, the multi-image limit models take."""
+    import pypdfium2
+
+    document = pypdfium2.PdfDocument(path)
+    try:
+        if first > len(document):
+            raise ValueError("Page is beyond the document")
+        out.mkdir(parents=True, exist_ok=True)
+        pages = []
+        for i in range(first - 1, min(first + count - 1, len(document))):
+            page = document[i]
+            # Up to 200 dpi, so small pages are not blown up past legibility.
+            scale = min(2000 / max(page.get_size()), 200 / 72)
+            target = out / f"{path.stem}-page-{i + 1}.jpg"
+            # JPEG keeps a dense 2000 px page well under the attachment size limit.
+            page.render(scale=scale).to_pil().save(target, quality=90)
+            pages.append(target)
+        return tuple(pages)
+    finally:
+        document.close()
+
+
 def register_workspace_tools(
     project: "Project",
     root: Path,
@@ -274,7 +297,7 @@ def register_workspace_tools(
 
         Supply source also in the tool action's inputs, then use extract on this job.
         first is 1-based; offset paginates text within the chosen page/slide/row range.
-        This tool extracts text; read image sources to see pictures.
+        This tool extracts text; render_pages shows PDF figures as images.
         """
         saved = project.store.resolve(source, current=True)
         file = FileRecord.model_validate_json(json.dumps(saved.data))
@@ -291,6 +314,24 @@ def register_workspace_tools(
                 "Figures and diagrams have not been visually interpreted",
             ),
         )
+
+    async def render_pages(
+        source: Ref, first: First = 1, count: Annotated[int, Field(ge=1, le=20)] = 1
+    ) -> tuple[ProducedFile, ...]:
+        """Render PDF pages to images; read the returned job files to see them.
+
+        Supply source also in the tool action's inputs. first is 1-based. Use it for
+        figures, drawings and photos text extraction cannot show; cite page numbers.
+        """
+        saved = project.store.resolve(source, current=True)
+        file = FileRecord.model_validate_json(json.dumps(saved.data))
+        path = await asyncio.to_thread(project.verify_file, file)
+        if path.suffix.lower() != ".pdf":
+            raise ValueError("render_pages reads PDF sources only")
+        pages = await asyncio.to_thread(
+            render_pdf, path, first, count, project.output_path(Path("renders"))
+        )
+        return tuple(ProducedFile.from_path(p) for p in pages)
 
     async def execute(
         command: Command,
@@ -403,7 +444,7 @@ def register_workspace_tools(
             )
 
     # Local file and document errors hold no secrets; agents fix calls with them.
-    for function in (list_files, read_text, read_document):
+    for function in (list_files, read_text, read_document, render_pages):
         project.tools.register(
             function, retry_safe=True, requires_plan=False, show_errors=True
         )

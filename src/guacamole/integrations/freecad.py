@@ -1,9 +1,9 @@
 """FreeCAD for host scripts: headless job scripts, and tools through freecad-mcp.
 
 run_job runs a FreeCAD-side script on one JSON job in headless FreeCAD (FREECAD).
-register_freecad_tools uses a supplied freecad-mcp server rather than bypassing its
-CAD execution tools; headless runs need only FreeCADCmd, status, views and GUI runs
-need its addon.
+register_freecad_tools, which every Project calls, uses the vendored freecad-mcp
+server (SERVER) rather than bypassing its CAD execution tools; headless runs need
+only FreeCADCmd, status, views and GUI runs need its addon.
 """
 
 import asyncio
@@ -33,6 +33,8 @@ FREECAD = next(
     (p for n in ("freecadcmd", "FreeCADCmd", "freecad.cmd") if (p := shutil.which(n))),
     None,
 )
+# The freecad-mcp checkout, shared by every project: uv sync --project it to set it up.
+SERVER = Path(__file__).resolve().parents[3] / "vendor/freecad-mcp"
 
 
 async def run_job(
@@ -124,7 +126,7 @@ async def call(
     return reply, tuple(i for i in result.content if isinstance(i, ImageContent))
 
 
-def register_freecad_tools(project: "Project", server: Path) -> None:
+def register_freecad_tools(project: "Project", server: Path = SERVER) -> None:
     """Register freecad_status, freecad_view and freecad_run on the server checkout."""
 
     def save_views(images: tuple[ImageContent, ...]) -> tuple[ProducedFile, ...]:

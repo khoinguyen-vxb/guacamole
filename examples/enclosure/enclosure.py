@@ -3,7 +3,7 @@
 Run with: .venv/bin/python -m examples.enclosure.enclosure
 
 Needs `uv sync --all-extras`, the Claude Code CLI logged in (`claude login`), the
-freecad-mcp checkout (`uv sync --project examples/ehopper/freecad-mcp --locked
+freecad-mcp checkout (`uv sync --project vendor/freecad-mcp --locked
 --no-dev`) with FreeCAD installed, typst on PATH, and the two podman images built
 from containers/ (their IDs are pinned below; rebuild and update them together).
 
@@ -24,7 +24,7 @@ from guacamole import (
     Watchdog,
 )
 from guacamole.console import host, preflight
-from guacamole.integrations.freecad import register_freecad_tools
+from guacamole.integrations.freecad import SERVER as FREECAD_MCP
 from guacamole.integrations.konnect import register_konnect_tools
 from guacamole.integrations.openfoam import register_openfoam_tools
 from guacamole.integrations.usd.twin import register_twin_tools
@@ -38,7 +38,6 @@ ROOT = Path(__file__).resolve().parent
 TOOLING = ROOT / "tooling"
 WORKSPACE = ROOT / ".guacamole"
 SANDBOX = ROOT / "results"
-FREECAD_MCP = ROOT.parent / "ehopper" / "freecad-mcp"
 CONTROL_PORT = 8768
 
 # Local podman images from containers/*.Containerfile, pinned by image ID.
@@ -175,7 +174,6 @@ async def main() -> None:
     ) as project:
         tools = tool_paths(TOOLING, FREECAD_MCP)
         register_workspace_tools(project, ROOT, (KICAD_LIBS,), tools)
-        register_freecad_tools(project, FREECAD_MCP)
         register_openfoam_tools(project, OPENFOAM_BASHRC, OPENFOAM)
         register_konnect_tools(project, KONNECT_BINARY, container=KONNECT)
         register_twin_tools(project)

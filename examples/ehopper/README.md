@@ -17,7 +17,7 @@ An alternative using the existing repository environment is:
 
 ```bash
 uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra mem0
-uv sync --project examples/ehopper/freecad-mcp --locked --no-dev
+uv sync --project vendor/freecad-mcp --locked --no-dev
 .venv/bin/python -m examples.ehopper.ehopper
 ```
 
@@ -50,7 +50,7 @@ defaults to its `execute_code_headless` tool, which detects `freecadcmd`,
 `FreeCADCmd`, Snap's `freecad.cmd`, or the FreeCAD Flatpak. It runs saved Python
 scripts from the output directory and returns declared exports and a response
 log. GUI mode also requires the
-[FreeCAD MCP addon](freecad-mcp/docs/installation.md) running on localhost:9875;
+[FreeCAD MCP addon](../../vendor/freecad-mcp/docs/installation.md) running on localhost:9875;
 `freecad_status` checks that addon. Set `FREECAD_MCP_TOKEN` in the environment
 when the addon requires authentication. No token belongs in the brief or files.
 With the addon, `freecad_view` and GUI-mode `freecad_run` save screenshots under
@@ -58,8 +58,8 @@ With the addon, `freecad_view` and GUI-mode `freecad_run` save screenshots under
 `context/reference_images/` are ingested with the other documents.
 
 Edit configuration in `ehopper.py`; there are no command-line arguments.
-The project inventories `context/`, both `tooling/` repositories and
-`freecad-mcp/` including its setup/execution documentation. Outputs go to
+The project inventories `context/`, both `tooling/` repositories and the shared
+`vendor/freecad-mcp/` including its setup/execution documentation. Outputs go to
 `results/`, history to `.guacamole/`. Rerunning resumes a single saved run.
 Human control uses `ws://127.0.0.1:8766`, with the authorization token printed
 at startup; root README documents inbox, reply, correction and review commands.

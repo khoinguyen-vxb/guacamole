@@ -4,7 +4,7 @@ A scripted Chief (no model calls) plans one task per family and spawns it on
 the tier under test. Each tier and trial runs in its own project, so workers
 cannot read each other's outputs. A check the workers never see verifies each
 result; the event log gives turns, rejected actions, time and provider-reported
-cost. Pass the written records to Project(qualifications=...) to route tasks.
+cost. It writes guacamole/qualifications.json, which every Project routes by.
 
     uv run python examples/qualification/qualify.py --trials 1
 """
@@ -47,32 +47,32 @@ from guacamole import (
     WorkPlan,
 )
 from guacamole.context import ProviderError
-from guacamole.contracts import AgentState, Decide, Rationale, Record, Spawn, Wait
+from guacamole.contracts import (
+    AgentState,
+    Decide,
+    Rationale,
+    Record,
+    Spawn,
+    UpdateModel,
+    Wait,
+)
+from guacamole.project import QUALIFICATIONS_FILE, worker_tiers
 from guacamole.providers.claude import ClaudeReasoning
 
 ROOT = Path(__file__).resolve().parent
 BRIEF = "Qualify worker reasoning tiers on fixed, independently checked tasks."
 TASK_BUDGET = Budget(max_steps=20, max_tool_calls=15, max_seconds=1500)
+MODEL = f"""package Qualification {{
+  requirement <'qualification'> qualification {{
+    doc /* {BRIEF} */
+  }}
+}}
+"""
 
 
 def tiers() -> dict[str, ClaudeReasoning]:
-    """Profiles under test; context windows as the Claude CLI reports them."""
-    options = {"web_search": False, "timeout_s": 900}
-    return {
-        "haiku-low": ClaudeReasoning(
-            model="claude-haiku-5-5",
-            effort="low",
-            context_capacity_tokens=1_000_000,
-            **options,
-        ),
-        "sonnet-medium": ClaudeReasoning(
-            model="claude-sonnet-5-5",
-            effort="medium",
-            context_capacity_tokens=1_000_000,
-            **options,
-        ),
-        "opus-high": ClaudeReasoning(effort="high", **options),
-    }
+    """The tiers every Claude project routes to (ClaudeReasoning.tier_profiles)."""
+    return worker_tiers(ClaudeReasoning(web_search=False, timeout_s=900))
 
 
 class MotorExtract(Model):
@@ -374,7 +374,8 @@ FAMILIES: dict[str, tuple[str, str, Callable[[Path, JsonValue], str | None]]] = 
 
 
 class ScriptedChief:
-    """Records the brief, plans the fixed tasks and spawns them; no model calls."""
+    """Scripts the Systems Engineer, which records and models the brief, and the
+    Chief, which plans the fixed tasks and spawns them; no model calls."""
 
     name, model, context_capacity_tokens = "scripted-chief", "none", 10_000_000
 
@@ -389,18 +390,31 @@ class ScriptedChief:
         observation = data["state"]["last_observation"]
         if "error_type" in observation:
             raise ProviderError(f"Scripted plan rejected: {observation['detail']}")
-        turn, self.turns = self.turns, self.turns + 1
         refs = {r.kind: r for r in packet.sources}
-        if turn == 0:
-            action = Record(
-                record=Requirement(
-                    id="qualification",
-                    wording=BRIEF,
-                    source=refs["source"],
-                    source_quote=BRIEF,
+        if data["agent"]["task_id"] == "systems_engineer":
+            if "requirement" not in refs:
+                action = Record(
+                    record=Requirement(
+                        id="qualification",
+                        wording=BRIEF,
+                        source=refs["source"],
+                        source_quote=BRIEF,
+                    )
                 )
+            elif data["state"]["system_model"]["status"] != "valid":
+                action = UpdateModel(
+                    summary="The qualification requirement",
+                    files={"qualification.sysml": MODEL},
+                    derived_from=(refs["requirement"],),
+                )
+            else:
+                action = Wait(reason="The model is current")
+            return AgentTurn(
+                rationale=Rationale(objective=BRIEF, explanation="Scripted engineer"),
+                action=action,
             )
-        elif turn == 1:
+        turn, self.turns = self.turns, self.turns + 1
+        if turn == 0:
             requirement = refs["requirement"]
             plan = WorkPlan(
                 stage="PDR",
@@ -428,10 +442,10 @@ class ScriptedChief:
                     ),
                 ),
             )
-        elif turn - 2 < len(self.tasks):
+        elif turn - 1 < len(self.tasks):
             action = Spawn(
                 decision_id=data["agent"]["decision_id"],
-                task_id=self.tasks[turn - 2].id,
+                task_id=self.tasks[turn - 1].id,
             )
         else:
             action = Wait(reason="Workers run their tasks")
@@ -450,9 +464,9 @@ async def trial(tier: str, number: int, directory: Path) -> list[Trial]:
         directory / "workspace",
         sandbox=directory / "sandbox",
         tools=registry,
-        tiers={tier: provider},
         max_concurrent_calls=2,
     ) as project:
+        project.tiers = {tier: provider}
         shutil.copytree(ROOT / "inputs", project.sandbox / "inputs")
         grants = register_tools(project)
         project.reasoning = ScriptedChief(
@@ -567,7 +581,7 @@ async def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--trials", type=int, default=1)
     parser.add_argument("--tiers", default=",".join(tiers()))
-    parser.add_argument("--out", type=Path, default=ROOT / "qualifications.json")
+    parser.add_argument("--out", type=Path, default=QUALIFICATIONS_FILE)
     args = parser.parse_args()
     if shutil.which("claude") is None:
         raise SystemExit("Install the Claude Code CLI and run 'claude login'.")

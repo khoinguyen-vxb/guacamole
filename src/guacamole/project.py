@@ -1,13 +1,16 @@
 """Scripting interface, local artifacts, revisions, and workflow entry point."""
 
+import copy
 import fcntl
 import hashlib
 import mimetypes
 import re
-from collections.abc import Mapping, Sequence
+from collections.abc import Sequence
 from contextlib import ExitStack
 from pathlib import Path
 from typing import TYPE_CHECKING, Self
+
+from pydantic import TypeAdapter
 
 from .activity import Activity
 from .agents.systems_engineer import SystemsEngineer
@@ -43,6 +46,9 @@ from .contracts import (
 )
 from .decision import Decisions
 from .human import Humans
+from .integrations.drawing import register_drawing_tools
+from .integrations.freecad import register_freecad_tools
+from .integrations.mbd import register_mbd_tools
 from .integrations.sysml.registry import SysMLRegistry
 from .integrations.sysml.runtime import standard_library
 from .reviews import Reviews
@@ -56,6 +62,22 @@ if TYPE_CHECKING:
     from .agents.watchdog import Watchdog
     from .middleware import ContextMiddleware
 
+# Measured by examples/qualification/qualify.py; they route worker tasks to tiers.
+QUALIFICATIONS_FILE = Path(__file__).with_name("qualifications.json")
+QUALIFICATIONS = TypeAdapter(tuple[Qualification, ...]).validate_json(
+    QUALIFICATIONS_FILE.read_bytes()
+)
+
+
+def worker_tiers(provider: ReasoningProvider | None) -> dict[str, ReasoningProvider]:
+    """Copies of the provider at each of its tier_profiles' model and effort."""
+    tiers, profiles = {}, getattr(provider, "tier_profiles", {})
+    for key, (model, effort, capacity) in profiles.items():
+        tier = copy.copy(provider)
+        vars(tier).update(model=model, effort=effort, context_capacity_tokens=capacity)
+        tiers[key] = tier
+    return tiers
+
 
 class Project:
     def __init__(
@@ -65,8 +87,6 @@ class Project:
         sandbox: Path | None = None,
         tools: ToolRegistry | None = None,
         reasoning: ReasoningProvider | None = None,
-        tiers: Mapping[str, ReasoningProvider] | None = None,
-        qualifications: Sequence[Qualification] = (),
         watchdog: "Watchdog | None" = None,
         systems_engineer: SystemsEngineer | None = None,
         middleware: "Sequence[ContextMiddleware]" = (),
@@ -123,11 +143,16 @@ class Project:
             ):
                 if name not in self.tools.schemas:
                     self.tools.schema(name, annotation)
+            # Every project's agents get the CAD integrations: FreeCAD, drawings, MBD.
+            if not any(d.grant.name == "draw_part" for d in self.tools.definitions()):
+                register_freecad_tools(self)
+                register_drawing_tools(self)
+                register_mbd_tools(self)
             self.reasoning = reasoning
-            # Worker reasoning providers a work-plan task may name; see TaskAuthorization.tier.
-            self.tiers = dict(tiers or {})
-            # Measured tier results per task family; they route tasks to tiers.
-            self.qualifications = tuple(qualifications)
+            # Cheaper copies of the provider that workers may run on, and the measured
+            # records that route a task family to one; see TaskAuthorization.tier.
+            self.tiers = worker_tiers(reasoning)
+            self.qualifications = QUALIFICATIONS
             self.watchdog = watchdog
             # Every project runs a Systems Engineer; None uses the defaults.
             self.systems_engineer = systems_engineer or SystemsEngineer()
