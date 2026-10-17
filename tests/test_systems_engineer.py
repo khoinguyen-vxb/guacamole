@@ -43,8 +43,8 @@ from guacamole.contracts import (
     Wait,
 )
 from guacamole.decision import DecisionBlocked
-from guacamole.integrations.sysml import validator
-from guacamole.integrations.sysml.registry import ModelRejected
+from guacamole.integrations.lib.sysml import validator
+from guacamole.integrations.lib.sysml.registry import ModelRejected
 
 try:
     sysml.standard_library()

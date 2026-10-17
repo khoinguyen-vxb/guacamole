@@ -1,7 +1,7 @@
 """The Systems Engineer: owner of the project's authoritative SysML v2 model.
 
 The agent writes SysML; the runtime validates every revision with the SysML Toolkit
-and gates every decision on the current model (integrations/sysml/registry.py).
+and gates every decision on the current model (integrations/lib/sysml/registry.py).
 """
 
 from ..contracts import AgentSpec, Budget, ContextSpec

@@ -64,7 +64,7 @@ from ..contracts import (
     uid,
 )
 from ..decision import DecisionBlocked
-from ..integrations.sysml.registry import ModelRejected
+from ..integrations.lib.sysml.registry import ModelRejected
 from ..middleware import ContextMiddleware, Invocation
 from ..project import Project
 from ..tools.execution import Job, ToolError

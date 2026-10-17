@@ -31,7 +31,7 @@ from typing import Any
 
 from pydantic import Field
 
-from ..contracts import Model
+from ...contracts import Model
 from . import drafting
 from .drafting import (
     PMI,

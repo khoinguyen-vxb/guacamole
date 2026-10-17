@@ -5,8 +5,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from guacamole.integrations import drafting
-from guacamole.integrations.drafting import Location, Size, Target, Tolerance
+from guacamole.integrations.lib import drafting
+from guacamole.integrations.lib.drafting import Location, Size, Target, Tolerance
 
 NIST = os.environ.get("GUACAMOLE_NIST_PMI")  # NIST-PMI-STEP-Files, unzipped
 
@@ -254,7 +254,7 @@ def matrix(features):
 @unittest.skipUnless(importlib.util.find_spec("OCP"), "needs OCP (--extra bracket)")
 class AP242Tests(unittest.TestCase):
     def setUp(self):
-        from guacamole.integrations import ap242
+        from guacamole.integrations.lib import ap242
 
         self.ap242 = ap242
         directory = tempfile.TemporaryDirectory()

@@ -117,7 +117,7 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                 call = AsyncMock(
                     return_value=("Headless FreeCAD script finished (exit 0).", ())
                 )
-                with patch("guacamole.integrations.freecad.call", call):
+                with patch("guacamole.integrations.mcp.freecad.call", call):
                     result = await project.call(
                         tool,
                         {"script": "cad.py", "outputs": ["model.FCStd", "absent.step"]},

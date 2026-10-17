@@ -43,8 +43,8 @@ from .contracts import (
 )
 from .decision import Decisions
 from .human import Humans
-from .integrations.sysml.registry import SysMLRegistry
-from .integrations.sysml.runtime import standard_library
+from .integrations.lib.sysml.registry import SysMLRegistry
+from .integrations.lib.sysml.runtime import standard_library
 from .reviews import Reviews
 from .standards import parse, squash
 from .storage import Store
