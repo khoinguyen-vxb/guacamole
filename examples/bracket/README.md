@@ -127,11 +127,11 @@ and BOM inline, every check and measurement, and open items.
 
 ## Running
 
-Needs FreeCAD (`freecadcmd`, or the snap's `freecad.cmd`), the `bracket` extra (ezdxf
-for the drawing, CadQuery's OCP for the AP242 STEP) and the Claude Code CLI, logged in:
+Needs FreeCAD (`freecadcmd`, or the snap's `freecad.cmd`) and the Claude Code CLI,
+logged in:
 
 ```bash
-uv sync --extra bracket
+uv sync --extra langchain --extra graphiti --extra mem0
 .venv/bin/python -m examples.bracket.bracket
 ```
 

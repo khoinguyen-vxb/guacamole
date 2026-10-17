@@ -193,7 +193,8 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                 self.assertIn(repo / "README.md", request.documents)
                 self.assertIn("30000", request.description.replace(",", ""))
                 self.assertEqual(request.context.max_input_tokens, 128_000)
-                self.assertEqual(len(project.tools.definitions()), 6)
+                # Its six workspace tools, beside the five every project registers.
+                self.assertEqual(len(project.tools.definitions()), 11)
                 listing = project.tools.get("list_files@1")
                 (root / ".env").write_text("private fixture")
                 expected_roots = tuple(
@@ -342,10 +343,10 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                         reader, {"source": source.model_dump(mode="json"), "first": 2}
                     )
 
-    async def test_launch_uses_codex_without_api_key(self):
+    async def test_launch_uses_claude_without_api_key(self):
         with (
             patch.dict(os.environ, {}, clear=True),
-            patch("guacamole.console.shutil.which", return_value="/usr/bin/codex"),
+            patch("guacamole.console.shutil.which", return_value="/usr/bin/claude"),
             patch("guacamole.console.importlib.util.find_spec", return_value=True),
             patch("builtins.print"),
             patch.object(
@@ -355,7 +356,7 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
         ):
             await kookaburra.main()
         self.assertIsInstance(
-            project.call_args.kwargs["reasoning"], kookaburra.CodexReasoning
+            project.call_args.kwargs["reasoning"], kookaburra.ClaudeReasoning
         )
 
     async def test_launch_requires_readers_without_creating_workspace(self):
@@ -364,7 +365,7 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
             with (
                 patch.dict(os.environ),
                 patch.object(kookaburra, "WORKSPACE", workspace),
-                patch("guacamole.console.shutil.which", return_value="/usr/bin/codex"),
+                patch("guacamole.console.shutil.which", return_value="/usr/bin/claude"),
                 patch("guacamole.console.importlib.util.find_spec", return_value=None),
                 patch("builtins.print"),
             ):
@@ -374,7 +375,7 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                     await kookaburra.main()
                 self.assertFalse(workspace.exists())
 
-    async def test_launch_requires_codex_without_creating_workspace(self):
+    async def test_launch_requires_claude_without_creating_workspace(self):
         with tempfile.TemporaryDirectory() as directory:
             workspace = Path(directory) / "workspace"
             with (
@@ -386,7 +387,7 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                 patch("guacamole.console.shutil.which", return_value=None),
                 patch("builtins.print"),
             ):
-                with self.assertRaisesRegex(SystemExit, "codex login"):
+                with self.assertRaisesRegex(SystemExit, "Claude Code CLI"):
                     await kookaburra.main()
                 self.assertFalse(workspace.exists())
 

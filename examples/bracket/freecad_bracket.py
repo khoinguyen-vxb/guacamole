@@ -10,11 +10,11 @@ including the named features, without judging it.
 import csv
 import json
 import os
+import sys
 
 import FreeCAD as App
 import Import
 import Part
-import TechDraw
 
 # Third-angle views of the part. Rows map model axes (x along the wall, y out of it,
 # z up) to sheet right, sheet up and toward the viewer; FRONT looks at the wall.
@@ -209,40 +209,6 @@ def bom(components):
     ]
 
 
-def edges(*compounds):
-    """Projected edges in sheet mm at 1:1: lines, full circles, other curves as polylines."""
-    found = {"lines": [], "circles": [], "polylines": []}
-    for compound in compounds:
-        for edge in compound.Edges:
-            curve = edge.Curve
-            if isinstance(curve, Part.Line):
-                a, b = edge.Vertexes[0].Point, edge.Vertexes[-1].Point
-                found["lines"].append([a.x, a.y, b.x, b.y])
-            elif isinstance(curve, Part.Circle) and edge.isClosed():
-                found["circles"].append([curve.Center.x, curve.Center.y, curve.Radius])
-            else:
-                points = edge.discretize(Deflection=0.01)
-                found["polylines"].append([[p.x, p.y] for p in points])
-    return found
-
-
-def project(shape):
-    """Each view's visible and hidden edges: hard edges and silhouettes."""
-    views = {}
-    for name, rows in VIEWS.items():
-        matrix = App.Matrix(*rows[0], 0, *rows[1], 0, *rows[2], 0, 0, 0, 0, 1)
-        view = shape.copy()
-        view.transformShape(matrix)
-        # projectEx: visible hard, smooth, seam, outline, iso; then the hidden five.
-        groups = TechDraw.projectEx(view, App.Vector(0, 0, 1))
-        views[name] = {
-            "rows": rows,
-            "visible": edges(groups[0], groups[3]),
-            "hidden": edges(groups[5], groups[8]),
-        }
-    return views
-
-
 def features(shape, specs):
     """Fingerprint named features: the one face on each plane, or each set of holes.
 
@@ -323,7 +289,7 @@ def generate(job):
     return {
         "components": len(components),
         "volume": part.Volume,
-        "views": project(part),
+        "views": project(part, VIEWS),
         "features": features(part, job["features"]),
     }
 
@@ -385,6 +351,9 @@ def inspect(job):
 
 with open(os.environ["GUACAMOLE_JOB"], encoding="utf-8") as f:
     job = json.load(f)
+sys.path.insert(0, job["integrations"])  # The backend's FreeCAD-side scripts
+from drawing_freecad import project  # noqa: E402
+
 result = generate(job) if job["mode"] == "generate" else inspect(job)
 with open(job["result"], "w", encoding="utf-8") as f:
     json.dump(result, f)

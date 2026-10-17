@@ -6,17 +6,17 @@
 # ]
 # [tool.uv.sources]
 # guacamole-engineering = { path = "../..", editable = true }
-# freecad-mcp = { path = "freecad-mcp", editable = true }
+# freecad-mcp = { path = "../../vendor/freecad-mcp", editable = true }
 # ///
 """Run with: uv run examples/ehopper/ehopper.py
 
 Or: uv sync --extra sounding-rocket --extra langchain --extra graphiti --extra mem0
-    uv sync --project examples/ehopper/freecad-mcp --locked --no-dev
+    uv sync --project vendor/freecad-mcp --locked --no-dev
     .venv/bin/python -m examples.ehopper.ehopper
 
 Edit the configuration below; this script has no command-line arguments.
-Install the Codex CLI and run codex login with your ChatGPT account before running.
-Reasoning uses a local codex exec process with GPT-6 Astra; no API key is needed.
+Install the Claude Code CLI and log in to it before running.
+Reasoning uses a local claude process with Claude Opus at xhigh effort; no API key is needed.
 Optional OPENAI_API_KEY adds context summarization and Graphiti/mem0 memory.
 uv installs this script's document readers; backend installations are separate.
 See https://docs.astral.sh/uv/guides/scripts/ for inline dependency metadata.
@@ -41,9 +41,9 @@ from guacamole import (
     Watchdog,
 )
 from guacamole.console import host, preflight
-from guacamole.integrations.freecad import register_freecad_tools
+from guacamole.integrations.freecad import SERVER as FREECAD_MCP
 from guacamole.middleware import standard_middleware
-from guacamole.providers.codex import CodexReasoning
+from guacamole.providers.claude import ClaudeReasoning
 from guacamole.tools.workspace import inventory, register_workspace_tools, tool_paths
 
 # Project configuration. Paths are relative to this file, never the shell's cwd.
@@ -52,15 +52,14 @@ DOCUMENTS = ROOT / "context"
 TOOLING = ROOT / "tooling"
 WORKSPACE = ROOT / ".guacamole"
 SANDBOX = ROOT / "results"
-FREECAD_MCP = ROOT / "freecad-mcp"
 RESUME_RUN_ID: str | None = None  # None automatically resumes a single saved run.
 CONTROL_PORT = 8766
 CONTEXT = ContextSpec(max_input_tokens=12800000, reserved_output_tokens=20000)
 WORKER_MAX_INPUT_TOKENS = CONTEXT.max_input_tokens
 # The watchdog prints a status report at this interval and helps looping or
-# context-saturated agents using its own low-effort codex process (no web search).
+# context-saturated agents using its own low-effort claude process (no web search).
 WATCHDOG_REPORT_S = 600.0
-# Agent model calls running at once; others queue. Lower it if codex rate-limits.
+# Agent model calls running at once; others queue. Lower it if claude rate-limits.
 MAX_CONCURRENT_CALLS = 4
 BUDGET = Budget(
     max_steps=200000, max_tool_calls=15000, max_seconds=720000, max_agents=24
@@ -153,7 +152,6 @@ def register_tools(project: Project) -> None:
     register_workspace_tools(
         project, ROOT, (DOCUMENTS, TOOLING), tools, PYTHON_EXECUTABLES
     )
-    register_freecad_tools(project, FREECAD_MCP)
 
 
 def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
@@ -183,8 +181,8 @@ def project_request(project: Project, context: ContextSpec) -> ProjectRequest:
 
 async def main() -> None:
     preflight(
-        "codex",
-        "Install the Codex CLI on PATH and run 'codex login' with your ChatGPT account.",
+        "claude",
+        "Install the Claude Code CLI on PATH and log in to it.",
         (
             "websockets",
             "pypdf",
@@ -204,9 +202,9 @@ async def main() -> None:
         sandbox=SANDBOX,
         tools=ToolRegistry(),
         max_concurrent_calls=MAX_CONCURRENT_CALLS,
-        reasoning=CodexReasoning(web_search=True),
+        reasoning=ClaudeReasoning(web_search=True, effort="xhigh"),
         watchdog=Watchdog(
-            CodexReasoning(web_search=False), report_interval_s=WATCHDOG_REPORT_S
+            ClaudeReasoning(web_search=False), report_interval_s=WATCHDOG_REPORT_S
         ),  # Runs at the lowest reasoning effort to reserve usage budget.
     ) as project:
         register_tools(project)

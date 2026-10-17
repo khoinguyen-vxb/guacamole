@@ -30,6 +30,7 @@ guacamole/
 │       ├── py.typed                 # Installed package typing marker
 │       ├── contracts.py             # Strict shared runtime models and IDs
 │       ├── project.py               # Project scripting API, sources, artifacts, evidence
+│       ├── qualifications.json      # Measured worker tiers; routes task families to them
 │       ├── storage.py               # Shared SQLite revisions and atomic activity log
 │       ├── context.py               # Sources, images, inbox context, saved packets and budgets
 │       ├── activity.py              # Message routing, inbox/sent views, request traces
@@ -53,7 +54,9 @@ guacamole/
 │       │   └── runtime.py           # Spawner, context budgets, grants, provider boundary
 │       │
 │       ├── integrations/
-│       │   ├── freecad.py           # Headless FreeCAD jobs; tools through a freecad-mcp checkout
+│       │   ├── freecad.py           # Headless FreeCAD jobs; default tools through vendor/freecad-mcp
+│       │   ├── drawing.py           # draw_part, a default tool: any one-part STEP to drawing + AP242
+│       │   ├── drawing_freecad.py   # Its headless FreeCAD side: projected views of the part
 │       │   ├── drafting.py          # ISO GPS drawings from typed PMI; DXF read-back checks
 │       │   ├── ap242.py             # STEP AP242 semantic PMI: write on faces, read back, compare
 │       │   ├── mbd.py               # PMI through the FreeCAD MBD Workbench, checked by ap242.read
@@ -70,13 +73,16 @@ guacamole/
 │       │
 │       └── websocket.py             # Optional local script control/events bridge
 │
+├── vendor/
+│   └── freecad-mcp/                  # The FreeCAD MCP server every project's tools use
+│
 ├── examples/
 │   ├── bracket/
 │   │   ├── bracket.py                # Bracket family tools, drafting rules, benchmark loop
 │   │   ├── review.py                 # Accepts or rejects the brief's ready review
-│   │   └── freecad_bracket.py        # Headless FreeCAD model, views and named features
+│   │   └── freecad_bracket.py        # Headless FreeCAD model and named features
 │   ├── qualification/
-│   │   ├── qualify.py                # Measures worker tiers on hidden-checked tasks
+│   │   ├── qualify.py                # Measures worker tiers; writes qualifications.json
 │   │   └── inputs/                   # Task inputs copied into each trial's sandbox
 │   └── sounding_rocket/
 │       ├── kookaburra.py             # Script configuration, supplied tools/docs, human control
@@ -95,6 +101,7 @@ guacamole/
     ├── test_drafting.py             # PMI checks, drawing compile and DXF read-back
     ├── test_ap242.py                # AP242 round-trip matrix, edited files, NIST coverage
     ├── test_mbd.py                  # Bracket PMI through the MBD Workbench and read back
+    ├── test_drawing.py              # draw_part on a plain plate, through real FreeCAD
     ├── test_sounding_rocket.py       # Example tool execution, document readers and launch guard
     ├── test_console.py              # Host loop holds at human requests
     └── test_project_workflow.py     # Source evidence, artifacts, PDR/CDR, invalidation

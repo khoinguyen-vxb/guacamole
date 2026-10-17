@@ -1,6 +1,6 @@
 """STEP AP242 semantic PMI: write a part's PMI onto its faces, read it back, compare.
 
-Over OCCT through CadQuery's OCP (the `bracket` extra, loaded on first use). write() reads
+Over OCCT through CadQuery's OCP, loaded on first use. write() reads
 a model's STEP, finds the faces each PMI feature's fingerprint names, and writes AP242
 with semantic GD&T: datums, sizes, locations and ISO 1101 frames with their zones,
 modifiers and datum systems. Each also carries graphical PMI: drawn as on the
@@ -125,7 +125,7 @@ class Found(Model):
 
 
 def _ocp() -> Any:
-    """OCP modules, imported on first use: the bracket extra installs them."""
+    """OCP modules, imported on first use."""
     import OCP.BRep
     import OCP.BRepAdaptor
     import OCP.BRepGProp

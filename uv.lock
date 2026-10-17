@@ -910,6 +910,8 @@ name = "guacamole-engineering"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "cadquery-ocp" },
+    { name = "ezdxf" },
     { name = "mcp" },
     { name = "pydantic" },
     { name = "sysml" },
@@ -917,10 +919,6 @@ dependencies = [
 ]
 
 [package.optional-dependencies]
-bracket = [
-    { name = "cadquery-ocp" },
-    { name = "ezdxf" },
-]
 graphiti = [
     { name = "graphiti-core", extra = ["falkordblite"] },
 ]
@@ -953,8 +951,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "cadquery-ocp", marker = "extra == 'bracket'", specifier = ">=7.9.3,<7.10" },
-    { name = "ezdxf", marker = "extra == 'bracket'", specifier = ">=1.4,<2" },
+    { name = "cadquery-ocp", specifier = ">=7.9.3,<7.10" },
+    { name = "ezdxf", specifier = ">=1.4,<2" },
     { name = "graphiti-core", extras = ["falkordblite"], marker = "extra == 'graphiti'", specifier = ">=0.30,<1" },
     { name = "langchain", marker = "extra == 'langchain'", specifier = ">=1.4,<2" },
     { name = "langchain-litellm", marker = "extra == 'langchain'", specifier = ">=0.11,<1" },
@@ -970,7 +968,7 @@ requires-dist = [
     { name = "websockets", marker = "extra == 'sounding-rocket'", specifier = ">=15,<17" },
     { name = "websockets", marker = "extra == 'websocket'", specifier = ">=15,<17" },
 ]
-provides-extras = ["websocket", "litellm", "langchain", "graphiti", "mem0", "bracket", "sounding-rocket"]
+provides-extras = ["websocket", "litellm", "langchain", "graphiti", "mem0", "sounding-rocket"]
 
 [package.metadata.requires-dev]
 dev = [

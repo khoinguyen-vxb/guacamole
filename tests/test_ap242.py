@@ -1,4 +1,3 @@
-import importlib.util
 import math
 import os
 import tempfile
@@ -251,7 +250,6 @@ def matrix(features):
     )
 
 
-@unittest.skipUnless(importlib.util.find_spec("OCP"), "needs OCP (--extra bracket)")
 class AP242Tests(unittest.TestCase):
     def setUp(self):
         from guacamole.integrations import ap242

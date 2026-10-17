@@ -245,8 +245,9 @@ class TaskAuthorization(Model):
     budget: Budget = Field(default_factory=Budget)
     depends_on: tuple[str, ...] = ()
     # Kind of work, e.g. extraction or diagnosis; the runtime gives it the cheapest
-    # tier qualified for that family. tier overrides that choice: a Project.tiers
-    # key, where None leaves the choice to the family (the Chief's model if unqualified).
+    # tier qualified for that family. tier overrides that choice: a tier named in the
+    # Chief's instructions, where None leaves it to the family (the Chief's model if
+    # unqualified).
     family: str | None = None
     tier: str | None = None
 

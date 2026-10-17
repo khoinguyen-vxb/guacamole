@@ -1,4 +1,3 @@
-import importlib.util
 import re
 import tempfile
 import unittest
@@ -11,11 +10,8 @@ from guacamole.integrations.drafting import PMI
 
 
 @unittest.skipUnless(
-    bracket.FREECAD
-    and mbd.available()
-    and all(map(importlib.util.find_spec, ("ezdxf", "OCP"))),
-    "needs FreeCAD, the MBD Workbench and pythonocc-core (see guacamole/integrations/mbd.py) "
-    "and the bracket extra (ezdxf, OCP)",
+    bracket.FREECAD and mbd.available(),
+    "needs FreeCAD, the MBD Workbench and pythonocc-core (see guacamole/integrations/mbd.py)",
 )
 class MBDWorkbenchTests(unittest.IsolatedAsyncioTestCase):
     async def test_the_bracket_pmi_goes_through_the_workbench_and_reads_back(self):

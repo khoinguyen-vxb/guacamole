@@ -269,45 +269,29 @@ the offline tests exercise orchestration with labelled fixtures.
 
 ## Worker reasoning tiers
 
-`Project(tiers={...})` names further reasoning providers that workers may run on;
-the Chief and systems engineer always use `reasoning`. A work-plan task names its
+Routing is automatic; a project script configures nothing. A project copies its
+`reasoning` provider at each of the provider's `tier_profiles` (Claude: Haiku low,
+Sonnet medium, Opus high), keeping its other options such as web search; the Chief
+and systems engineer always run on `reasoning` itself. A work-plan task names its
 `family`, the kind of work, and the runtime spawns its worker on the cheapest tier
-qualified for that family. A `Qualification` record qualifies a tier when it passed
-at least `MIN_PASS_RATE` (80%) of its measured trials in the family; qualified tiers
-are ranked by measured cost per verified completion, so failed trials count against
-a cheap tier. Work no tier is qualified for runs on the Chief's model, and a task's
-`tier` overrides the choice. The Chief's instructions list each tier with its
-records. A worker keeps its tier on restart, and a tier dropped from the
-configuration blocks it rather than moving it to another model. A replacement plan
-reroutes running workers, which is how the Chief escalates a task. Each spawn
+qualified for that family by the records in
+[qualifications.json](src/guacamole/qualifications.json). A record qualifies a tier
+when it passed at least `MIN_PASS_RATE` (80%) of its measured trials in the family;
+qualified tiers are ranked by measured cost per verified completion, so failed
+trials count against a cheap tier. Work no tier is qualified for runs on the Chief's
+model, as does every task under a provider without `tier_profiles` (Codex,
+LiteLLM). The Chief's instructions list each tier with its records, and a task's
+`tier` overrides the choice. A worker keeps its tier on restart, and a tier dropped
+from the provider blocks it rather than moving it to another model. A replacement
+plan reroutes running workers, which is how the Chief escalates a task. Each spawn
 records an `agent.routed` event with the reason; every `provider.dispatched` event
 records the tier, model and effort.
 
-```python
-from pydantic import TypeAdapter
-from guacamole import Project, Qualification
-from guacamole.providers.claude import ClaudeReasoning
-
-records = TypeAdapter(list[Qualification]).validate_json(
-    Path("examples/qualification/qualifications.json").read_bytes()
-)
-project = Project(
-    workspace,
-    reasoning=ClaudeReasoning(),
-    tiers={
-        "haiku-low": ClaudeReasoning(model="claude-haiku-5-5", effort="low",
-                                     context_capacity_tokens=1_000_000),
-        "sonnet-medium": ClaudeReasoning(model="claude-sonnet-5-5", effort="medium",
-                                         context_capacity_tokens=1_000_000),
-    },
-    qualifications=records,
-)
-```
-
 Records match a tier by provider, model and effort. They come from
-[qualify.py](examples/qualification/qualify.py): a scripted Chief, which makes no
-model calls, gives every tier the same extraction, simulation, implementation and
-diagnosis tasks, each tier and trial in its own project. A check the workers never
+[qualify.py](examples/qualification/qualify.py): a scripted Chief and systems
+engineer, which make no model calls, give every tier the same extraction,
+simulation, implementation and diagnosis tasks, each tier and trial in its own
+project; it rewrites qualifications.json. A check the workers never
 see verifies each result, and the event log supplies turns, rejected actions, time
 and CLI-reported cost, including provider retries of malformed responses.
 
@@ -656,15 +640,14 @@ instructions, and its product tools. The rest is in the backend:
 
 ```python
 from guacamole.console import host, preflight
-from guacamole.integrations.freecad import register_freecad_tools
+from guacamole.integrations.freecad import SERVER
 from guacamole.middleware import standard_middleware
 from guacamole.tools.workspace import inventory, register_workspace_tools, tool_paths
 
 preflight("codex", "Run 'codex login'.", ("pypdf",), "Run 'uv sync --extra ...'.")
 with Project(WORKSPACE, sandbox=SANDBOX, tools=ToolRegistry(), reasoning=...) as project:
-    tools = tool_paths(TOOLING, FREECAD_MCP)
+    tools = tool_paths(TOOLING, SERVER)  # SERVER: the freecad-mcp docs, for agents
     register_workspace_tools(project, ROOT, (DOCUMENTS, TOOLING), tools)
-    register_freecad_tools(project, FREECAD_MCP)
     async with AsyncExitStack() as cleanup:
         project.middleware = await standard_middleware(WORKSPACE, cleanup)
         await host(project, build_request, port=8766, context=CONTEXT, budget=BUDGET)
@@ -676,8 +659,12 @@ with Project(WORKSPACE, sandbox=SANDBOX, tools=ToolRegistry(), reasoning=...) as
   `read_document` (no plan needed), and `write_text`, `execute` and
   `verify_command`. `tool_paths` names the supplied checkouts; `inventory` lists
   documents, tools and executables in a pinned source.
-- `register_freecad_tools` adds `freecad_status`, `freecad_view` and `freecad_run`
-  through a local freecad-mcp checkout.
+- Every `Project` already registers the CAD integrations' tools: `freecad_status`,
+  `freecad_view` and `freecad_run` through the vendored
+  [freecad-mcp](vendor/freecad-mcp) checkout (set it up with
+  `uv sync --project vendor/freecad-mcp --locked --no-dev`), and `draw_part`, which
+  turns any one-part STEP and its PMI into an ISO GPS or ASME drawing (DXF, SVG,
+  PDF) and an AP242 STEP carrying the PMI, both read back and checked.
 - `standard_middleware` always edits context; with `OPENAI_API_KEY` it also
   summarizes and keeps Graphiti and mem0 memory in the workspace.
 - `host` runs a new request, or resumes the single saved run (`run_id` picks one).
@@ -694,9 +681,9 @@ with Project(WORKSPACE, sandbox=SANDBOX, tools=ToolRegistry(), reasoning=...) as
 The runtime lives in `src/guacamole` and tests live in `tests`.
 [outline.txt](outline.txt) lists the files and their responsibilities.
 Engineering tools, their schemas, and numerical dependencies belong in supplied
-project code or separately installed packages. The opt-in modules under
-`guacamole.integrations` are shared ones: imported on demand, each loads its own
-dependencies on first use.
+project code or separately installed packages. The modules under
+`guacamole.integrations` are the shared ones, and every project's agents get their
+tools; ezdxf and OCCT load on first use.
 
 ### Wall-bracket benchmark
 
@@ -713,20 +700,22 @@ same PMI into STEP AP242 on the model's faces through OCCT, and reads AP242 file
 back independently, listing whatever the typed PMI cannot hold.
 [integrations.mbd](src/guacamole/integrations/mbd.py) writes the PMI a second way, through the FreeCAD MBD
 Workbench, and checks that file with the same reader. `integrations.freecad.run_job`
-runs these FreeCAD-side scripts headless. They need FreeCAD and the `bracket` extra;
-the benchmark also needs a logged-in Claude Code CLI.
+runs these FreeCAD-side scripts headless. They need FreeCAD; the benchmark also
+needs a logged-in Claude Code CLI. The `draw_part` tool every project registers
+uses the same compiler and writer on any one-part STEP.
 
 ### Sounding-rocket example
 
 [kookaburra.py](examples/sounding_rocket/kookaburra.py) uses the supplied
 `technical_documents/` and `tooling/` trees, including `nsga.py`, plus the
 `Parachute-Opening-Shock/` checkout at the repository root when present.
-Edit its configuration constants, install Codex CLI, and sign in with your ChatGPT
-account. Kookaburra uses local Codex processes with GPT-6 Astra; no API key or
-`.env` file is needed. No script arguments are required:
+Edit its configuration constants, install the Claude Code CLI, and log in to it.
+Kookaburra uses local Claude processes (Opus at xhigh effort, workers routed to
+qualified cheaper tiers); no API key or `.env` file is needed. No script arguments
+are required:
 
 ```bash
-codex login
+claude auth login
 uv run examples/sounding_rocket/kookaburra.py
 ```
 
