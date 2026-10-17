@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from .contracts import (
+    JSON,
     ArtifactRecord,
     AskHuman,
     Catalogue,
@@ -303,6 +304,7 @@ class Reviews:
         lock = [
             {"requirement": ref.model_dump(mode="json")}
             | pin.model_dump(mode="json")
+            | self._library(pin)
             | {"clauses": clauses}
             for ref, pin, clauses in self._standards(manifest.baseline)
         ]
@@ -630,6 +632,17 @@ class Reviews:
         if model:
             lines += ["", "## SysML model", "", *model]
         return "\n".join(lines) + "\n"
+
+    def _library(self, pin: Standard) -> JSON:
+        """The library snapshot a selection's text is pinned to, when it has one."""
+        if pin.text is None:
+            return {}
+        data = self.project.store.resolve(pin.text).data
+        if data.get("kind") != "library_pin":
+            return {}
+        return {
+            "library": {k: data[k] for k in ("snapshot", "scope", "sha256", "name")}
+        }
 
     def _standards(
         self, baseline: tuple[Ref, ...]

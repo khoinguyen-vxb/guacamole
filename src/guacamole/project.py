@@ -27,6 +27,7 @@ from .contracts import (
     Evidence,
     FileRecord,
     InboxEntry,
+    LibraryPin,
     MessageEnvelope,
     Note,
     OpenItem,
@@ -37,6 +38,7 @@ from .contracts import (
     Ref,
     RequestRecord,
     Requirement,
+    Scope,
     SourceExcerpt,
     Status,
     Summary,
@@ -51,6 +53,7 @@ from .integrations.freecad import register_freecad_tools
 from .integrations.mbd import register_mbd_tools
 from .integrations.sysml.registry import SysMLRegistry
 from .integrations.sysml.runtime import standard_library
+from .library import Library, register_library_tools
 from .reviews import Reviews
 from .standards import parse, squash
 from .storage import Store
@@ -92,6 +95,7 @@ class Project:
         middleware: "Sequence[ContextMiddleware]" = (),
         max_concurrent_calls: int = 4,
         read_only: bool = False,
+        library: Library | None = None,
     ) -> None:
         if max_concurrent_calls < 1:
             raise ValueError("max_concurrent_calls must be at least 1")
@@ -148,6 +152,12 @@ class Project:
                 register_freecad_tools(self)
                 register_drawing_tools(self)
                 register_mbd_tools(self)
+            # The shared reference library, owned by the caller; the project's own
+            # scope lives in its workspace. Agents get readers once either is in use.
+            self.library = library
+            self._project_library: Library | None = None
+            if library is not None or (workspace / "library").exists():
+                self._library_readers()
             self.reasoning = reasoning
             # Cheaper copies of the provider that workers may run on, and the measured
             # records that route a task family to one; see TaskAuthorization.tier.
@@ -194,6 +204,8 @@ class Project:
     def close(self) -> None:
         if any(not j._task.done() for j in self.executor.jobs.values()):
             raise RuntimeError("Await project.drain() before closing running tools")
+        if self._project_library is not None:
+            self._project_library.close()
         self.store.close()
         if self._lock is not None:
             self._lock.close()
@@ -302,6 +314,65 @@ class Project:
     ) -> Ref:
         file = self._file(path, metadata=metadata, missing_metadata=missing_metadata)
         return self.store.put("source", source_id or uid(), file, actor="script")
+
+    @property
+    def project_library(self) -> Library:
+        """The project's own library scope, kept in its workspace: client specs, site data."""
+        if self._project_library is None:
+            self._project_library = Library(
+                self.store.directory / "library", scope="project"
+            )
+        return self._project_library
+
+    @property
+    def libraries(self) -> dict[Scope, Library]:
+        """Attached libraries by scope, the shared one first."""
+        scopes: dict[Scope, Library] = {}
+        if self.library is not None:
+            scopes["shared"] = self.library
+        scopes["project"] = self.project_library
+        return scopes
+
+    def _library_readers(self) -> None:
+        if not any(d.grant.name == "get_element" for d in self.tools.definitions()):
+            register_library_tools(self)
+
+    def pin(
+        self, snapshot: str, *, source_id: str | None = None, actor: str = "script"
+    ) -> Ref:
+        """Record the project's binding to a library snapshot as a source.
+
+        A standard's text points at the returned ref. One pin per designation:
+        pinning another snapshot of it revises the pin, so everything quoting the
+        old one goes stale for reassessment. Pinning the current one again is a no-op.
+        """
+        for scope, library in self.libraries.items():
+            try:
+                found = library.snapshot(snapshot)
+            except KeyError:
+                continue
+            break
+        else:
+            raise KeyError(f"No library attached to this project holds {snapshot}")
+        pin = LibraryPin(
+            snapshot=found.id,
+            scope=scope,
+            designation=found.designation,
+            edition=found.edition,
+            name=found.file_name,
+            sha256=found.file_sha256,
+            label=found.label,
+        )
+        id = source_id or f"library:{_squash(found.designation)}"
+        current = self.store.maybe("source", id)
+        if (
+            current is not None
+            and not current.stale
+            and current.data == pin.model_dump(mode="json")
+        ):
+            return current.ref
+        self._library_readers()
+        return self.store.put("source", id, pin, actor=actor)
 
     def capture_files(self, request_id: str, payload: object) -> None:
         if isinstance(payload, dict):

@@ -22,9 +22,12 @@ from .contracts import (
     DecisionResult,
     Deliverable,
     DeliverableSpec,
+    Element,
     Evidence,
     Fact,
     HumanInput,
+    Label,
+    LibraryPin,
     Model,
     ModelReport,
     Note,
@@ -37,6 +40,7 @@ from .contracts import (
     Ref,
     Requirement,
     SourceExcerpt,
+    SourceSnapshot,
     Standard,
     SystemModel,
     TaskAuthorization,
@@ -48,6 +52,7 @@ from .contracts import (
     WorkPlan,
 )
 from .decision import DecisionBlocked
+from .library import Library
 from .project import Project
 from .tools.execution import Job
 from .tools.registry import Tool, ToolRegistry
@@ -73,10 +78,14 @@ __all__ = [
     "DecisionResult",
     "Deliverable",
     "DeliverableSpec",
+    "Element",
     "Evidence",
     "Fact",
     "HumanInput",
     "Job",
+    "Label",
+    "Library",
+    "LibraryPin",
     "Model",
     "ModelReport",
     "Note",
@@ -90,6 +99,7 @@ __all__ = [
     "Ref",
     "Requirement",
     "SourceExcerpt",
+    "SourceSnapshot",
     "Standard",
     "SystemModel",
     "SystemsEngineer",

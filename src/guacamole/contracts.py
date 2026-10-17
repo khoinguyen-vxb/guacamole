@@ -333,6 +333,95 @@ class Clause(Model):
     reference: str = Field(pattern=r"\S")  # e.g. "3.3.1" or "Table 3.21"
 
 
+type Level = Literal["public", "licensed", "internal", "restricted"]
+LEVELS: tuple[Level, ...] = ("public", "licensed", "internal", "restricted")
+type Scope = Literal["shared", "project"]
+
+
+class Label(Model):
+    """Who may receive library content: at most this level, holding every compartment.
+
+    Compartments name an owner or licence, e.g. "client:acme"; a holder cleared to a
+    higher level still needs each one."""
+
+    level: Level = "internal"
+    compartments: tuple[str, ...] = ()
+
+
+type LinkType = Literal[
+    "refers_to", "defines", "uses", "assumes", "limits", "cites", "supersedes"
+]
+
+
+class Link(Model):
+    """A typed dependency from one library element to another, or to text unresolved."""
+
+    type: LinkType
+    target: str = Field(min_length=1)  # Element ID when resolved, else the text cited
+    resolved: bool
+    confidence: float = Field(ge=0, le=1)
+
+
+class Provenance(Model):
+    page: int = Field(ge=1)
+    # Left, top, right, bottom in PDF points from the page's top-left; None: text only.
+    bbox: tuple[float, float, float, float] | None = None
+
+
+class Element(Model):
+    """An addressable unit of a library source: a clause, table, equation or page.
+
+    Its profile names it and sets its kind; text is what a requirement quotes."""
+
+    id: str = Field(min_length=1)  # e.g. "3.3.1", "Table 3.3.1(B)", "p12.3"
+    parent: str | None = None
+    kind: str = Field(min_length=1)  # Profile vocabulary: normative, note, page, ...
+    heading: str = ""
+    text: str
+    links: tuple[Link, ...] = ()
+    provenance: tuple[Provenance, ...] = ()
+    verified: Literal["unverified", "passed", "disputed"] = "unverified"
+
+
+class SourceSnapshot(Model):
+    """One frozen, ingested edition of a library source, without its elements.
+
+    id derives from the content, elements included, so the same file ingested the
+    same way in either scope yields the same snapshot."""
+
+    id: str = Field(pattern=r"^snap-[0-9a-f]{16}$")
+    designation: str = Field(pattern=r"\S")  # e.g. "AS 1210", or a book's short title
+    edition: str = Field(pattern=r"\S")
+    title: str = ""
+    file_name: str
+    file_sha256: str = Field(pattern=r"^[0-9a-f]{64}$")
+    profile: str  # name@version
+    parser: str  # name@version
+    label: Label
+    licence: str = ""
+    elements: int = Field(ge=0)
+
+
+class LibraryPin(Model):
+    """A project's binding to one library snapshot, recorded as a source.
+
+    A standard's text points at it; revising the pin to another snapshot makes
+    everything quoting the old one stale."""
+
+    kind: Literal["library_pin"] = "library_pin"
+    snapshot: str = Field(pattern=r"^snap-[0-9a-f]{16}$")
+    scope: Scope
+    designation: str
+    edition: str
+    name: str  # The original file's name, as reviews show it
+    sha256: str = Field(pattern=r"^[0-9a-f]{64}$")  # The original file's content
+    label: Label
+    note: str = (
+        "Library source: read it with library_outline and get_element, "
+        "supplying this ref in the tool action's inputs."
+    )
+
+
 class Fact(Model):
     """A project property that applicability rules read, as the requirement states it.
 

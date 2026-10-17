@@ -32,6 +32,8 @@ sounding-rocket = [
     "pypdfium2>=5,<6",
 ]
 usd = ["usd-core>=25.5,<27"]
+# Reference library: Docling parses layout; pypdf is the text-only fallback.
+library = ["docling>=2,<3", "pypdf>=6,<7"]
 
 [dependency-groups]
 dev = ["pytest>=9.1.1", "ruff>=0.16", "ty>=0.0.84"]
