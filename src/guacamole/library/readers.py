@@ -126,29 +126,42 @@ def register_library_tools(project: "Project") -> None:
                 "find IDs with library_outline or search_library"
             )
         children: dict[str | None, list[str]] = {}
+        # An exception may be written in either clause, so a limits link is
+        # followed both ways: a rule is read with every clause that limits it.
+        limited_by: dict[str, list[str]] = {}
         for e in elements.values():
             children.setdefault(e.parent, []).append(e.id)
+            for link in e.links:
+                if link.type == "limits" and link.resolved:
+                    limited_by.setdefault(link.target, []).append(e.id)
         main = _subtree(element, children)
         seen, frontier = set(main), main
         dependencies: list[tuple[str, str]] = []  # (id, why it is shown)
         for _ in range(depth):
             reached = []
             for id in frontier:
-                for link in elements[id].links:
-                    if link.resolved and link.target not in seen:
-                        # A dependency brings its own notes and tables, not its
-                        # sub-clauses and figures: those are read on request.
-                        attached = [
-                            c
-                            for c in children.get(link.target, [])
-                            if elements[c].kind in ATTACHED
-                        ]
-                        for dependency in (link.target, *attached):
-                            if dependency not in seen:
-                                seen.add(dependency)
-                                reached.append(dependency)
-                                why = f"{link.type} from {id}"
-                                dependencies.append((dependency, why))
+                followed = [
+                    (link.target, f"{link.type} from {id}")
+                    for link in elements[id].links
+                    if link.resolved
+                ] + [(other, f"limits {id}") for other in limited_by.get(id, [])]
+                # Exceptions first, so an element both cited and limiting says so.
+                followed.sort(key=lambda f: "limits" not in f[1])
+                for target, why in followed:
+                    if target in seen:
+                        continue
+                    # A dependency brings its own notes and tables, not its
+                    # sub-clauses and figures: those are read on request.
+                    attached = [
+                        c
+                        for c in children.get(target, [])
+                        if elements[c].kind in ATTACHED
+                    ]
+                    for dependency in (target, *attached):
+                        if dependency not in seen:
+                            seen.add(dependency)
+                            reached.append(dependency)
+                            dependencies.append((dependency, why))
             frontier = reached
         root = elements[element]
         shown = [_shown(elements[id]) for id in main]

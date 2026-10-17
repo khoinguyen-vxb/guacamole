@@ -123,16 +123,23 @@ _TERM = re.compile(r"^(.{3,60}?)\s*(?:—|–|:| - )")
 # when unresolved, the others only when the number is an element (not a value).
 _CITE = re.compile(
     r"\b(?:(?P<strong>[Cc]lauses?|[Ss]ubclauses?|[Ss]ubsections?|[Ss]ections?"
-    r"|[Pp]aragraphs?|[Pp]aras?\.)"
+    r"|[Pp]aragraphs?|[Pp]aras?\.?)"
     rf"|(?P<weak>see|in|with|under|per|to|and|or|of))\s+(?P<id>{_NUMBER})\b"
 )
 # Further numbers in a cited list: "paras. 1.4.1, 1.4.2 through 1.4.10".
 _CITE_MORE = re.compile(rf"(?:,\s*|\s+(?:and|or|through|to)\s+)({_NUMBER})\b")
 _CITE_CAPTION = re.compile(rf"\b(Table|Figure)\s+({_CAPTION_NUMBER})")
 _CITE_APPENDIX = re.compile(r"\bAppendix\s+([A-Z])\b")
+# Words that make a citation an exception: read the two together. ("Other than"
+# mostly narrows scope, so it is not one.)
 _EXCEPTION = re.compile(
-    r"\b(?:except|unless|other than|does not apply|need not)\b", re.IGNORECASE
+    r"\b(?:except|exceptions?|unless|notwithstanding|in lieu of|overrides?"
+    r"|(?:does|do) not apply|not applicable|need not|(?:is|are) not required"
+    r"|may be omitted)\b",
+    re.IGNORECASE,
 )
+# A provision cited by name: "Rule #1: The Envelope Principle".
+_NAMED = re.compile(r"^([A-Z][A-Za-z]+\s+#?\d+[A-Za-z]?)\s*:")
 # Where a laid-out paragraph runs a note or caption on after a sentence.
 _RUN_ON = re.compile(
     r"(?<=[.:])\s+(?=(?:NOTES?|EXAMPLES?)\b|(?:TABLE|FIGURE)\s+[A-Z]?\d)"
@@ -312,6 +319,9 @@ class NumberedClauseProfile:
             if draft.kind == "normative" and informative(draft):
                 draft.kind = "informative"
         ids = set(drafts)
+        names = {
+            m.group(1): d.id for d in drafts.values() if (m := _NAMED.match(d.heading))
+        }
         terms = {
             d.id: _forms(term)
             for d in drafts.values()
@@ -324,7 +334,7 @@ class NumberedClauseProfile:
                 kind=d.kind,
                 heading=d.heading,
                 text="\n".join(d.lines),
-                links=_links(d, ids, terms),
+                links=_links(d, ids, terms, names),
                 provenance=_provenance(d.blocks),
             )
             for d in drafts.values()
@@ -350,7 +360,10 @@ def _first_term(lines: list[str]) -> str:
 
 
 def _links(
-    draft: _Draft, ids: set[str], terms: dict[str, tuple[re.Pattern[str], ...]]
+    draft: _Draft,
+    ids: set[str],
+    terms: dict[str, tuple[re.Pattern[str], ...]],
+    names: dict[str, str],
 ) -> tuple[Link, ...]:
     text = "\n".join(draft.lines)
     links: dict[tuple[str, str], Link] = {}
@@ -396,6 +409,9 @@ def _links(
             add(target, m.start(), True, "uses")
     for m in _CITE_APPENDIX.finditer(text):
         add(f"Appendix {m.group(1)}", m.start(), True)
+    for name, id in names.items():
+        for m in re.finditer(rf"\b{re.escape(name)}(?![\w])", text):
+            add(id, m.start(), True)
     if draft.kind not in {"definition", "front"}:
         for id, forms in terms.items():
             if any(form.search(text) for form in forms):

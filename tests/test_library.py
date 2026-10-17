@@ -236,6 +236,10 @@ class LibraryTests(unittest.IsolatedAsyncioTestCase):
                         "Figure 4-1 Datum Features",
                         "# 4.2.2 Measurement",
                         "Dimensions shall be measured at 20°C.",
+                        "# 4.3 Rule #1: Envelope Principle",
+                        "Form shall be within the size limits.",
+                        "# 4.4 Exceptions to Rule #1",
+                        "Rule #1 does not apply to stock.",
                     ],
                     [
                         "# MANDATORY APPENDIX I",
@@ -286,6 +290,10 @@ class LibraryTests(unittest.IsolatedAsyncioTestCase):
                 {(l.type, l.target) for l in elements["4.2.1"].links},
             )
             self.assertEqual(elements["Figure 4-1"].parent, "4.2.1")
+            # A rule cited by name; its exception, written in the citing clause.
+            self.assertIn(
+                ("limits", "4.3"), {(l.type, l.target) for l in elements["4.4"].links}
+            )
             # A figure is its caption; the clause's text does not run into it.
             self.assertEqual(elements["Figure 4-1"].text, "Figure 4-1 Datum Features")
             self.assertEqual(
@@ -374,6 +382,12 @@ class LibraryTests(unittest.IsolatedAsyncioTestCase):
                     "Extraction not independently verified", excerpt.missing_metadata
                 )
                 quoted = project.extract(job.id, actor="test")
+                # Read the other way, the exception brings the rule it qualifies.
+                exempting = await project.call(
+                    reader,
+                    {"source": pin.model_dump(mode="json"), "element": "3.2.4"},
+                )
+                self.assertIn("[3.3.1] (normative, limits 3.2.4)", exempting.text)
 
                 outline = await project.call(
                     project.tools.get("library_outline@1"),
