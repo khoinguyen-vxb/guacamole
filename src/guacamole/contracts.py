@@ -414,6 +414,43 @@ class Verification(Model):
     at: str = Field(default_factory=now)
 
 
+class ElementChange(Model):
+    """How one element fared between two snapshots of a source.
+
+    Similarity matched the pair; reasons say, by rule, why the change matters (an
+    obligation, value, limit, scope or reference changed). Unchanged or wording
+    only: no reasons."""
+
+    old: str | None = None
+    new: str | None = None
+    change: Literal["unchanged", "modified", "moved", "new", "deleted"]
+    similarity: float = Field(default=0.0, ge=0, le=1)
+    reasons: tuple[str, ...] = ()
+
+
+class AffectedRecord(Model):
+    """A project record resting on elements a new snapshot changes significantly."""
+
+    record: Ref
+    elements: tuple[str, ...]  # Old element IDs it quotes or depends on
+    reasons: tuple[str, ...]
+
+
+class RevisionProposal(Model):
+    """Moving a pin to a new snapshot: what changed and what in the project it hits.
+
+    Recorded for a human to accept by pinning the new snapshot, which makes the
+    affected records stale for reassessment, or to reject."""
+
+    pin: Ref
+    designation: str
+    from_snapshot: str
+    to_snapshot: str
+    changes: tuple[ElementChange, ...]  # Every element that is not unchanged
+    unchanged: int = Field(ge=0)
+    affected: tuple[AffectedRecord, ...]
+
+
 class LibraryPin(Model):
     """A project's binding to one library snapshot, recorded as a source.
 

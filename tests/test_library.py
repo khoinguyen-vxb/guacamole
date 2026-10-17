@@ -21,7 +21,7 @@ from guacamole import (
     Standard,
 )
 from guacamole.clearance import label_of, permits
-from guacamole.contracts import Rationale, Wait
+from guacamole.contracts import Link, Rationale, RevisionProposal, Wait
 from guacamole.library import (
     DoclingParser,
     PypdfParser,
@@ -29,6 +29,7 @@ from guacamole.library import (
     compare,
     verify,
 )
+from guacamole.library.editions import align
 
 
 def write_pdf(path: Path, pages: list[list[str]]) -> Path:
@@ -537,6 +538,85 @@ class LibraryTests(unittest.IsolatedAsyncioTestCase):
                     )
                 )
                 self.assertGreater(provider.calls, 0)
+            shared.close()
+
+    def test_editions_align_and_changes_are_judged_by_rule(self):
+        def clause(id, text, kind="normative", links=()):
+            return Element(id=id, kind=kind, text=f"{id} {text}", links=links)
+
+        uses = (Link(type="uses", target="1.4.1", resolved=True, confidence=0.8),)
+        old = [
+            clause("1.4.1", "Design pressure: the maximum pressure.", "definition"),
+            clause("3.3.1", "Shells shall be not less than 3 mm thick.", links=uses),
+            clause("3.3.2", "Heads shall be not less than 5 mm thick at the knuckle."),
+            clause("3.4", "Hydrostatic test\nTest at 1.25 times the design pressure."),
+            clause("5.1", "Marking\nVessels shall be marked."),
+        ]
+        new = [
+            clause(
+                "1.4.1", "Design pressure: the maximum internal pressure.", "definition"
+            ),
+            clause("3.3.1", "Shells should be not less than 3 mm thick.", links=uses),
+            clause("3.3.2", "Heads shall be not less than 6 mm thick at the knuckle."),
+            clause("3.5", "Hydrostatic test\nTest at 1.25 times the design pressure."),
+            clause("6.1", "Records\nKeep records."),
+        ]
+        changes = {(c.old, c.new): c for c in align(old, new)}
+        self.assertEqual(
+            {k: (c.change, c.reasons) for k, c in changes.items()},
+            {
+                ("1.4.1", "1.4.1"): ("modified", ("definition reworded",)),
+                ("3.3.1", "3.3.1"): ("modified", ("obligation: shall → should",)),
+                # Nearly identical text, but a value changed.
+                ("3.3.2", "3.3.2"): ("modified", ("value: 5 → 6",)),
+                # Renumbered, not changed: its number is not its content.
+                ("3.4", "3.5"): ("moved", ()),
+                ("5.1", None): ("deleted", ()),
+                (None, "6.1"): ("new", ()),
+            },
+        )
+        self.assertGreater(changes["3.3.2", "3.3.2"].similarity, 0.9)
+
+    async def test_a_revision_proposal_names_what_a_new_snapshot_hits(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shared = Library(root / "shared")
+            ingest = {
+                "designation": "TF 1210",
+                "edition": "2010",
+                "label": LICENSED,
+                "parser": PypdfParser(),
+            }
+            first = shared.ingest(fixture_standard(root / "a.pdf"), **ingest)
+            corrected = shared.ingest(
+                fixture_standard(root / "b.pdf", minimum="4"), **ingest
+            )
+            with Project(root / "ws", library=shared) as project:
+                pin, excerpt, clause = await licensed_clause(project, root, first.id)
+                ref = project.propose_revision(corrected.id)
+                proposal = project.store.model(ref.kind, ref.id, RevisionProposal)
+                self.assertEqual(
+                    (proposal.from_snapshot, proposal.to_snapshot),
+                    (first.id, corrected.id),
+                )
+                self.assertEqual(
+                    [(c.old, c.reasons) for c in proposal.changes],
+                    [("Table 3.3.1(B)", ("value: 3 → 4",))],
+                )
+                # 3.3.1 uses the changed table, so the extract showing both and the
+                # clause requirement quoting it are hit; the selection is not.
+                self.assertEqual(
+                    {(a.record.id, a.elements) for a in proposal.affected},
+                    {
+                        (excerpt.id, ("3.3.1", "Table 3.3.1(B)")),
+                        (clause.id, ("3.3.1", "Table 3.3.1(B)")),
+                    },
+                )
+                # Proposing changes nothing; accepting is pinning.
+                self.assertEqual(project.store.get("source", pin.id).ref, pin)
+                self.assertFalse(project.store.get("requirement", "thickness").stale)
+                project.pin(corrected.id)
+                self.assertTrue(project.store.get("requirement", "thickness").stale)
             shared.close()
 
     def test_any_pdf_falls_back_to_pages_and_paragraphs(self):

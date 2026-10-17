@@ -19,6 +19,7 @@ from .context import ContextBuilder, ReasoningProvider
 from .contracts import (
     JSON,
     ActivityEvent,
+    AffectedRecord,
     AgentSpec,
     ArtifactRecord,
     AskHuman,
@@ -40,8 +41,10 @@ from .contracts import (
     Ref,
     RequestRecord,
     Requirement,
+    RevisionProposal,
     Scope,
     SourceExcerpt,
+    SourceSnapshot,
     Status,
     Summary,
     TaskReport,
@@ -56,6 +59,7 @@ from .integrations.mbd import register_mbd_tools
 from .integrations.sysml.registry import SysMLRegistry
 from .integrations.sysml.runtime import standard_library
 from .library import Library, register_library_tools
+from .library.editions import align
 from .reviews import Reviews
 from .standards import parse, squash
 from .storage import Store
@@ -342,6 +346,94 @@ class Project:
         if not any(d.grant.name == "get_element" for d in self.tools.definitions()):
             register_library_tools(self)
 
+    def _snapshot(self, snapshot: str) -> tuple[Scope, Library, SourceSnapshot]:
+        for scope, library in self.libraries.items():
+            try:
+                return scope, library, library.snapshot(snapshot)
+            except KeyError:
+                continue
+        raise KeyError(f"No library attached to this project holds {snapshot}")
+
+    def propose_revision(
+        self, snapshot: str, *, source_id: str | None = None, actor: str = "script"
+    ) -> Ref:
+        """Record what moving a pin to another snapshot would change, for a human.
+
+        Elements are aligned across the two snapshots and changes judged by rule
+        (editions.significance); a reworded definition changes every element using
+        it. Affected are the extracts quoting a changed element and the records
+        resting on them. Nothing is re-pinned: accepting is pinning the snapshot,
+        which makes the affected records stale for reassessment.
+        """
+        _, new_library, target = self._snapshot(snapshot)
+        id = source_id or f"library:{_squash(target.designation)}"
+        current = self.store.get("source", id)
+        pinned = LibraryPin.model_validate_json(encode(current.data))
+        old = self.libraries[pinned.scope].elements(pinned.snapshot)
+        changes = align(old, new_library.elements(target.id))
+        why = {
+            c.old: c.reasons or ("deleted",)
+            for c in changes
+            if c.old and (c.reasons or c.change == "deleted")
+        }
+        for e in old:
+            used = [l.target for l in e.links if l.type == "uses" and l.target in why]
+            if used and e.id not in why:
+                why[e.id] = tuple(f"uses changed {u}" for u in used)
+        affected: dict[tuple[str, str], AffectedRecord] = {}
+        extracts: dict[str, tuple[str, ...]] = {}
+        for record in self.store.list("source"):
+            # Extracted excerpts cite the pin; other sources are files or replies.
+            if record.stale or "source" not in record.data:
+                continue
+            excerpt = SourceExcerpt.model_validate_json(encode(record.data))
+            if excerpt.source.id != id:
+                continue
+            included = excerpt.metadata.get("included")
+            quoted = (
+                [str(e) for e in included]
+                if isinstance(included, list)
+                else [str(excerpt.metadata.get("element"))]
+            )
+            if hits := tuple(e for e in quoted if e in why):
+                extracts[record.ref.id] = hits
+        for record in self.store.list("source", "requirement", "summary", "decision"):
+            if record.stale:
+                continue
+            hits = extracts.get(record.ref.id) or tuple(
+                h
+                for d in record.dependencies
+                if d.kind == "source"
+                for h in extracts.get(d.id, ())
+            )
+            if record.ref.kind == "requirement":
+                clause = Requirement.model_validate_json(encode(record.data)).clause
+                if clause is not None and clause.reference in why:
+                    hits = (*hits, clause.reference)
+            if hits:
+                hits = tuple(dict.fromkeys(hits))
+                affected[(record.ref.kind, record.ref.id)] = AffectedRecord(
+                    record=record.ref,
+                    elements=hits,
+                    reasons=tuple(dict.fromkeys(r for h in hits for r in why[h])),
+                )
+        proposal = RevisionProposal(
+            pin=current.ref,
+            designation=target.designation,
+            from_snapshot=pinned.snapshot,
+            to_snapshot=target.id,
+            changes=tuple(c for c in changes if c.change != "unchanged"),
+            unchanged=sum(c.change == "unchanged" for c in changes),
+            affected=tuple(affected.values()),
+        )
+        return self.store.put(
+            "revision_proposal",
+            uid(),
+            proposal,
+            actor=actor,
+            dependencies=(current.ref,),
+        )
+
     def pin(
         self, snapshot: str, *, source_id: str | None = None, actor: str = "script"
     ) -> Ref:
@@ -351,14 +443,7 @@ class Project:
         pinning another snapshot of it revises the pin, so everything quoting the
         old one goes stale for reassessment. Pinning the current one again is a no-op.
         """
-        for scope, library in self.libraries.items():
-            try:
-                found = library.snapshot(snapshot)
-            except KeyError:
-                continue
-            break
-        else:
-            raise KeyError(f"No library attached to this project holds {snapshot}")
+        scope, _, found = self._snapshot(snapshot)
         if self.clearance is not None and not permits(self.clearance, found.label):
             raise PermissionError(
                 f"{found.designation}:{found.edition} is labelled {found.label.level} "
