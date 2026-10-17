@@ -9,6 +9,7 @@ __pycache__/
 dist/
 *.egg-info/
 examples/kookaburra/technical_documentation/*
+examples/RDE/
 
 # Bulky run outputs; the project database keeps their hashes. Summaries,
 # manifests and generator scripts under results/ stay tracked.
@@ -26,4 +27,4 @@ examples/**/*.stp
 examples/bracket/runs/
 
 # KiCad libraries copied out of the pinned image (containers/kicad-libs.sh).
-examples/enclosure/kicad-libs/
+examples/*/kicad-libs/

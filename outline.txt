@@ -39,7 +39,7 @@ guacamole/
 │       ├── reviews.py               # Deliverable manifests, PDR/CDR packages and gates
 │       ├── standards.py             # Edition ordering and catalogue applicability rules
 │       ├── middleware.py            # Optional Graphiti/mem0 memory, LangChain context edits
-│       ├── console.py               # Host scripts: preflight, run/resume/wait loop, notices
+│       ├── console.py               # Host scripts: preflight, run/resume/wait loop, notices, watch
 │       │
 │       ├── tools/
 │       │   ├── registry.py          # Explicit typed callable registration
@@ -77,6 +77,12 @@ guacamole/
 │   └── freecad-mcp/                  # The FreeCAD MCP server every project's tools use
 │
 ├── examples/
+│   ├── RDE/
+│   │   ├── RDE.py                    # RDE and its test system to PDR: every integration, every drawing
+│   │   ├── interject.py, watch.py    # Corrections and a read-only activity log
+│   │   ├── containers/               # detonationFoam, KiCad + Konnect and PicoGK runtime builds, any arch
+│   │   ├── context/                  # User-supplied RDE papers and research report
+│   │   └── tooling/                  # detonationFoam and PicoGK checkouts (topology optimisation unused)
 │   ├── bracket/
 │   │   ├── bracket.py                # Bracket family tools, drafting rules, benchmark loop
 │   │   ├── review.py                 # Accepts or rejects the brief's ready review

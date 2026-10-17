@@ -675,6 +675,8 @@ with Project(WORKSPACE, sandbox=SANDBOX, tools=ToolRegistry(), reasoning=...) as
   reviews.
 - `guacamole.websocket.control(port, name)` connects a control script, such as
   `examples/ehopper/interject.py`, to a running host.
+- `watch(workspace, argv)` follows a running project's activity log read-only
+  beside its host (`--all`, `--detail`, `--tools`), as `examples/RDE/watch.py` does.
 
 ## Repository layout
 
@@ -703,6 +705,24 @@ Workbench, and checks that file with the same reader. `integrations.freecad.run_
 runs these FreeCAD-side scripts headless. They need FreeCAD; the benchmark also
 needs a logged-in Claude Code CLI. The `draw_part` tool every project registers
 uses the same compiler and writer on any one-part STEP.
+
+### Rotating detonation engine example
+
+[examples/RDE/RDE.py](examples/RDE/RDE.py) takes a 5 kN, 30 kN·s aerospike RDE and
+its ground test system (fluids, test stand, electronics) to PDR, with a
+propellant trade study, no manufacturing or budget constraints, and an individual
+drawing or schematic for every component. Agents explore cooling and channel
+geometries with PicoGK (its Linux runtime is built from source by
+`containers/picogk.Containerfile`; .NET 9 runs it) and the NSGA-II genetic
+algorithm from the sounding-rocket tooling. It uses every shared integration:
+Cantera thermochemistry (`--extra rde`); detonationFoam V2.0 and
+rhoCentralFoam through the `openfoam_*` tools, in an OpenFOAM 8 container built
+from source because the Foundation ships no arm64 OpenFOAM 8; KiCad 10 through the
+`kicad_*` tools, in a container with Konnect built from source for the same
+reason; FreeCAD with `draw_part` and `mbd_annotate`; the USD digital twin; and
+typst documents through the documentation skill. The Containerfiles are in
+[examples/RDE/containers](examples/RDE/containers), and the setup steps are in the
+script's docstring.
 
 ### Sounding-rocket example
 

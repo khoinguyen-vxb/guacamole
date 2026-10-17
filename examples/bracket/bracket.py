@@ -68,7 +68,7 @@ BUDGET = Budget(
 )
 CONTEXT = ContextSpec(max_input_tokens=400_000, reserved_output_tokens=20_000)
 MAX_CONCURRENT_CALLS = 2
-CONTROL_PORT = 8767  # ehopper/RDE use 8766, kookaburra 8765.
+CONTROL_PORT = 8767  # ehopper 8766, kookaburra 8765, enclosure 8768, RDE 8769.
 FREECAD_TIMEOUT_S = 300
 SCRIPTED_REPLY = (
     "Benchmark reply: no further input is available. Proceed on explicit "

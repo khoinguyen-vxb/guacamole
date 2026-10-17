@@ -11,7 +11,10 @@ import json
 import os
 import shutil
 import sys
-from collections.abc import Callable, Iterable
+import textwrap
+import time
+from collections.abc import Callable, Iterable, Sequence
+from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -325,3 +328,94 @@ async def notifications(project: "Project") -> None:
             elif event.type == "watchdog.report":
                 write(event.timestamp, str(event.details["text"]))
         await asyncio.sleep(0.5)
+
+
+QUIET = (
+    "message.dispatched",
+    "message.delivered",
+    "message.included_in_context",
+    "agent_state.recorded",
+    "context.saved",
+)
+RATIONALE = ("objective", "explanation", "assumptions", "alternatives", "uncertainty")
+
+
+def _clock(timestamp: str) -> str:
+    return datetime.fromisoformat(timestamp).astimezone().strftime("%H:%M:%S")
+
+
+def _line(event) -> str:
+    details = event.details if isinstance(event.details, dict) else {}
+    extra = {k: v for k, v in details.items() if k not in ("ref", "components")}
+    actor = event.actor[:8] if len(event.actor) == 32 else event.actor
+    text = str(extra)[:110] if extra else ""
+    return f"{_clock(event.timestamp)} {actor:<16} {event.type:<28} {text}"
+
+
+def _indented(text: object) -> str:
+    lines = text if isinstance(text, list) else [text]
+    return "\n".join(
+        textwrap.fill(
+            str(item), 100, initial_indent="    - ", subsequent_indent="      "
+        )
+        for item in lines
+        if item
+    )
+
+
+def _detail(history: "Project", event) -> str | None:
+    if event.type == "rationale.recorded":
+        content = history.store.get("rationale", event.entity_id).data["content"]
+        if not isinstance(content, dict):
+            return None
+        return "\n".join(
+            f"  {key}:\n{_indented(content[key])}"
+            for key in RATIONALE
+            if content.get(key)
+        )
+    if event.type.endswith(".rejected") or event.type.endswith(".failed"):
+        return textwrap.indent(json.dumps(event.details, indent=2), "    ")
+    return None
+
+
+def _tool_calls(history: "Project") -> None:
+    tasks = {
+        a.data["id"]: a.data["task_id"]
+        for a in history.store.list("agent")
+        if isinstance(a.data, dict)
+    }
+    calls = (r for r in history.activity.requests() if r.kind == "tool")
+    for call in sorted(calls, key=lambda r: r.created_at):
+        task = tasks.get(call.requester, call.requester[:8])
+        arguments = json.dumps(call.arguments)[:80]
+        print(
+            f"{_clock(call.created_at)} {task:<18} {call.target:<30} "
+            f"{call.status:<10} {arguments}"
+        )
+
+
+def watch(workspace: Path, argv: Sequence[str] = ()) -> None:
+    """Follow a running project's activity log read-only, beside its host.
+
+    Prints one line per event as it is recorded. Without --all, the high-volume
+    bookkeeping (message delivery, agent state and context records) is hidden.
+    With --detail, each agent rationale and every rejection is printed in full.
+    With --tools, every tool call so far is listed once, then it returns.
+    """
+    from .project import Project
+
+    everything, detailed = "--all" in argv, "--detail" in argv
+    if "--tools" in argv:
+        with Project(workspace, read_only=True) as history:
+            _tool_calls(history)
+        return
+    after = 0
+    while True:
+        with Project(workspace, read_only=True) as history:
+            for event in history.events(after=after):
+                after = event.sequence
+                if everything or event.type not in QUIET:
+                    print(_line(event), flush=True)
+                    if detailed and (text := _detail(history, event)):
+                        print(text, flush=True)
+        time.sleep(2)
