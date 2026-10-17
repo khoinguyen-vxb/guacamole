@@ -1,21 +1,34 @@
 import json
 import os
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
 
-from runtime_support import commit_fixture_model, plan_request
+from runtime_support import TestReasoning, commit_fixture_model, plan_request
 
 from guacamole import (
+    AgentTurn,
     Clause,
+    ContextSpec,
+    Element,
     HumanInput,
     Label,
     Library,
     Project,
+    ProjectRequest,
     Requirement,
     Standard,
 )
-from guacamole.library import DoclingParser, PypdfParser
+from guacamole.clearance import label_of, permits
+from guacamole.contracts import Rationale, Wait
+from guacamole.library import (
+    DoclingParser,
+    PypdfParser,
+    TesseractReader,
+    compare,
+    verify,
+)
 
 
 def write_pdf(path: Path, pages: list[list[str]]) -> Path:
@@ -76,48 +89,121 @@ def write_pdf(path: Path, pages: list[list[str]]) -> Path:
     return path
 
 
-def fixture_standard(path: Path, edition: str = "2010", minimum: str = "3") -> Path:
-    return write_pdf(
-        path,
+def FIXTURE_PAGES(edition: str = "2010", minimum: str = "3") -> list[list[str]]:
+    return [
         [
-            [
-                f"# TEST FIXTURE STANDARD TF 1210-{edition}",
-                "Pressure vessels",
-                "# CONTENTS",
-                "1 SCOPE AND GENERAL .......... 2",
-                "3.3.1 Minimum thickness .......... 3",
-            ],
-            [
-                "# SECTION 1 SCOPE AND GENERAL",
-                "# 1.1 Scope",
-                "This Standard specifies requirements for pressure vessels.",
-                "# 1.4 Definitions",
-                "1.4.1 Design pressure: the maximum pressure the vessel is designed for.",
-                "",
-                "1.4.2 Hydrostatic test: a pressure test using water.",
-                "# SECTION 3 DESIGN",
-            ],
-            [
-                "# 3.2 Corrosion allowance",
-                "# 3.2.4 Exemption for clad vessels",
-                "Clad vessels need no corrosion allowance where cladding is 3 mm thick.",
-                "# 3.3 Thickness",
-                "# 3.3.1 Minimum thickness",
-                "The thickness of shells shall be not less than that given in Table",
-                "3.3.1(B), except as permitted in 3.2.4. The design pressure shall be",
-                "used.",
-                "",
-                "NOTE: Thicker shells may be needed for external loads.",
-                "",
-                "TABLE 3.3.1(B) MINIMUM SHELL THICKNESS",
-                f"Diameter up to 1000 mm: {minimum} mm",
-                "Diameter over 1000 mm: 5 mm",
-                "# 3.4 Hydrostatic test",
-                "The vessel shall pass a hydrostatic test at 1.25 times the design",
-                "pressure.",
-            ],
+            f"# TEST FIXTURE STANDARD TF 1210-{edition}",
+            "Pressure vessels",
+            "# CONTENTS",
+            "1 SCOPE AND GENERAL .......... 2",
+            "3.3.1 Minimum thickness .......... 3",
         ],
+        [
+            "# SECTION 1 SCOPE AND GENERAL",
+            "# 1.1 Scope",
+            "This Standard specifies requirements for pressure vessels.",
+            "# 1.4 Definitions",
+            "1.4.1 Design pressure: the maximum pressure the vessel is designed for.",
+            "",
+            "1.4.2 Hydrostatic test: a pressure test using water.",
+            "# SECTION 3 DESIGN",
+        ],
+        [
+            "# 3.2 Corrosion allowance",
+            "# 3.2.4 Exemption for clad vessels",
+            "Clad vessels need no corrosion allowance where cladding is 3 mm thick.",
+            "# 3.3 Thickness",
+            "# 3.3.1 Minimum thickness",
+            "The thickness of shells shall be not less than that given in Table",
+            "3.3.1(B), except as permitted in 3.2.4. The design pressure shall be",
+            "used.",
+            "",
+            "NOTE: Thicker shells may be needed for external loads.",
+            "",
+            "TABLE 3.3.1(B) MINIMUM SHELL THICKNESS",
+            f"Diameter up to 1000 mm: {minimum} mm",
+            "Diameter over 1000 mm: 5 mm",
+            "# 3.4 Hydrostatic test",
+            "The vessel shall pass a hydrostatic test at 1.25 times the design",
+            "pressure.",
+        ],
+    ]
+
+
+def fixture_standard(path: Path, edition: str = "2010", minimum: str = "3") -> Path:
+    return write_pdf(path, FIXTURE_PAGES(edition, minimum))
+
+
+class ScriptedReader:
+    """OCR that returns each page's text as given."""
+
+    name = "scripted@1"
+
+    def __init__(self, pages: dict[int, list[str]]) -> None:
+        self.pages = pages
+
+    def read(self, image: Path) -> str:
+        return "\n".join(self.pages[int(image.stem.removeprefix("page-"))])
+
+
+LICENSED = Label(level="licensed", compartments=("licence:fixture",))
+
+
+async def licensed_clause(project: Project, root: Path, snapshot: str):
+    """Pin a licensed snapshot and record a clause requirement quoted from it."""
+    pin = project.pin(snapshot)
+    job = project.submit(
+        project.tools.get("get_element@1"),
+        {"source": pin.model_dump(mode="json"), "element": "3.3.1"},
+        inputs=(pin,),
     )
+    await job.collect()
+    excerpt = project.extract(job.id, actor="test")
+    yes = project.store.put(
+        "source",
+        "yes",
+        HumanInput(
+            run_id="fixture",
+            author="fixture human",
+            text="Yes.",
+            question="Design to TF 1210-2010?",
+        ),
+        actor="human:fixture",
+    )
+    selected = project.record_requirement(
+        Requirement(
+            id="code",
+            wording="Designed to TF 1210-2010",
+            source=yes,
+            source_quote="Yes.",
+            standard=Standard(id="TF 1210", edition="2010", text=pin),
+        )
+    )
+    clause = project.record_requirement(
+        Requirement(
+            id="thickness",
+            wording="Shell thickness",
+            source=excerpt,
+            source_quote="The thickness of shells shall be not less than",
+            clause=Clause(standard=selected, reference="3.3.1"),
+        )
+    )
+    return pin, excerpt, clause
+
+
+class Waiting(TestReasoning):
+    systems_engineer = None  # Scripts every agent itself: each waits
+
+    def __init__(self, clearance: Label) -> None:
+        self.clearance = clearance
+        self.calls = 0
+
+    async def respond(self, packet):
+        self.calls += 1
+        return AgentTurn(
+            rationale=Rationale(objective="fixture", explanation="Fixture"),
+            action=Wait(reason="fixture"),
+        )
 
 
 class LibraryTests(unittest.IsolatedAsyncioTestCase):
@@ -307,6 +393,151 @@ class LibraryTests(unittest.IsolatedAsyncioTestCase):
                     ("A-1.1", "A-1", "informative"),
                 ],
             )
+
+    def test_numbers_must_match_and_most_words_be_read(self):
+        clause = Element(
+            id="3.3.1",
+            kind="normative",
+            text="Not less than 3 mm.\nDiameter up to 1000 mm: 3 mm",
+        )
+        self.assertEqual(
+            compare(clause, "Not less than 3 mm. Diameter up to 1000 mm: 3 mm").status,
+            "passed",
+        )
+        # One misread digit is a dispute, however similar the rest.
+        misread = compare(clause, "Not less than 8 mm. Diameter up to 1000 mm: 8 mm")
+        self.assertEqual(misread.status, "disputed")
+        self.assertIn("numbers not on the page: 3", misread.detail)
+        # A number printed across a line ("4-" then "15") is 4-15, so a parser
+        # that dropped the hyphen ("415") is caught.
+        figure = Element(id="f", kind="normative", text="See Figure 4-15.")
+        self.assertEqual(compare(figure, "See Figure 4-\n15.").status, "passed")
+        dropped = Element(id="g", kind="normative", text="See Figure 415.")
+        self.assertEqual(compare(dropped, "See Figure 4-\n15.").status, "disputed")
+        # Words run together by a text layer are not read on the page.
+        run = Element(
+            id="h", kind="normative", text="Tolerancing,Interpretationof Limits"
+        )
+        self.assertIn(
+            "words not read",
+            compare(run, "Tolerancing, Interpretation of Limits").detail,
+        )
+
+    def test_disputes_are_raised_resolved_and_shown_to_readers(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            pages = [
+                [line.removeprefix("# ") for line in page if line]
+                for page in FIXTURE_PAGES()
+            ]
+            pdf = fixture_standard(root / "tf1210.pdf")
+            with Library(root / "library") as library:
+                snapshot = library.ingest(
+                    pdf, designation="TF 1210", edition="2010", parser=PypdfParser()
+                )
+                # The page as OCR reads it disagrees on one table value.
+                read = {i + 1: list(p) for i, p in enumerate(pages)}
+                read[3] = [l.replace("1000 mm: 3 mm", "1000 mm: 8 mm") for l in read[3]]
+                report = verify(library, snapshot.id, ScriptedReader(read))
+                self.assertEqual(report.disputed, 1)
+                self.assertEqual(report.passed + report.disputed, snapshot.elements)
+                (dispute,) = library.disputes(snapshot.id)
+                self.assertEqual(dispute.element, "Table 3.3.1(B)")
+                self.assertEqual(dispute.method, "ocr:scripted@1")
+                with self.assertRaisesRegex(ValueError, "Say what was compared"):
+                    library.resolve(
+                        snapshot.id, dispute.element, "passed", reviewer="j", reason=""
+                    )
+                library.resolve(
+                    snapshot.id,
+                    dispute.element,
+                    "passed",
+                    reviewer="fixture reviewer",
+                    reason="Page 3 of the original shows 3 mm; OCR misread it.",
+                )
+                self.assertEqual(library.disputes(snapshot.id), ())
+                self.assertEqual(
+                    library.verifications(snapshot.id)[dispute.element].method,
+                    "human:fixture reviewer",
+                )
+
+    @unittest.skipUnless(shutil.which("tesseract"), "tesseract is not installed")
+    def test_tesseract_reads_the_fixture_pages_back(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with Library(root / "library") as library:
+                snapshot = library.ingest(
+                    fixture_standard(root / "tf1210.pdf"),
+                    designation="TF 1210",
+                    edition="2010",
+                    parser=PypdfParser(),
+                )
+                report = verify(library, snapshot.id, TesseractReader())
+                self.assertEqual(
+                    (report.disputed, library.disputes(snapshot.id)), (0, ())
+                )
+                self.assertEqual(report.passed, snapshot.elements)
+
+    async def test_labels_follow_content_to_pins_and_providers(self):
+        self.assertTrue(permits(LICENSED, Label(level="public")))
+        self.assertFalse(permits(Label(level="restricted"), LICENSED))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shared = Library(root / "shared")
+            snapshot = shared.ingest(
+                fixture_standard(root / "tf1210.pdf"),
+                designation="TF 1210",
+                edition="2010",
+                label=LICENSED,
+                parser=PypdfParser(),
+            )
+            # A project cleared below the label cannot pin it.
+            with (
+                Project(
+                    root / "uncleared",
+                    library=shared,
+                    clearance=Label(level="restricted"),
+                ) as project,
+                self.assertRaisesRegex(PermissionError, "licence:fixture"),
+            ):
+                project.pin(snapshot.id)
+            # The excerpt and the requirement quoting it carry the pin's label.
+            provider = Waiting(Label(level="internal"))
+            with Project(
+                root / "blocked", library=shared, reasoning=provider
+            ) as project:
+                _, excerpt, clause = await licensed_clause(project, root, snapshot.id)
+                for ref in (excerpt, clause):
+                    self.assertEqual(label_of(project.store, ref, {}), LICENSED)
+                result = await project.run(
+                    ProjectRequest(
+                        description="fixture",
+                        context=ContextSpec(max_input_tokens=200_000),
+                    )
+                )
+                # The requirement is in every agent's context: nothing was sent.
+                self.assertEqual(provider.calls, 0)
+                self.assertFalse(
+                    [e for e in project.events() if e.type == "provider.dispatched"]
+                )
+                self.assertIn(
+                    "carries licensed content in licence:fixture",
+                    "".join(result.open_items),
+                )
+            # A provider holding the compartment receives it.
+            provider = Waiting(LICENSED)
+            with Project(
+                root / "cleared", library=shared, reasoning=provider
+            ) as project:
+                await licensed_clause(project, root, snapshot.id)
+                await project.run(
+                    ProjectRequest(
+                        description="fixture",
+                        context=ContextSpec(max_input_tokens=200_000),
+                    )
+                )
+                self.assertGreater(provider.calls, 0)
+            shared.close()
 
     def test_any_pdf_falls_back_to_pages_and_paragraphs(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -2,15 +2,16 @@
 
 The same class serves the shared scope (standards, textbooks, company procedures)
 and each project's own scope inside its workspace. Snapshots are never changed;
-a correction or a better parse is a new snapshot.
+a correction or a better parse is a new snapshot. Verifications of a snapshot's
+elements are appended beside it; the latest for an element is its status.
 """
 
 import hashlib
 import sqlite3
 from pathlib import Path
-from typing import Self
+from typing import Literal, Self
 
-from ..contracts import Element, Label, Scope, SourceSnapshot
+from ..contracts import Element, Label, Scope, SourceSnapshot, Verification
 from ..tools.registry import encode
 from .parsing import LayoutParser, default_parser
 from .profiles import choose
@@ -39,6 +40,15 @@ class Library:
                 BEGIN SELECT RAISE(ABORT, 'immutable snapshots'); END;
             CREATE TRIGGER IF NOT EXISTS elements_no_delete BEFORE DELETE ON elements
                 BEGIN SELECT RAISE(ABORT, 'immutable snapshots'); END;
+            CREATE TABLE IF NOT EXISTS verifications (
+                sequence INTEGER PRIMARY KEY AUTOINCREMENT,
+                snapshot TEXT NOT NULL REFERENCES snapshots(id),
+                element TEXT NOT NULL, data TEXT NOT NULL
+            );
+            CREATE TRIGGER IF NOT EXISTS verifications_no_update BEFORE UPDATE ON verifications
+                BEGIN SELECT RAISE(ABORT, 'append-only verifications'); END;
+            CREATE TRIGGER IF NOT EXISTS verifications_no_delete BEFORE DELETE ON verifications
+                BEGIN SELECT RAISE(ABORT, 'append-only verifications'); END;
         """)
 
     def __enter__(self) -> Self:
@@ -160,3 +170,57 @@ class Library:
         if hashlib.sha256(path.read_bytes()).hexdigest() != snapshot.file_sha256:
             raise ValueError(f"{snapshot.file_name} changed since it was ingested")
         return path
+
+    def record(self, snapshot: str, results: list[Verification]) -> None:
+        """Append verifications of a snapshot's elements, all or none."""
+        ids = {e.id for e in self.elements(snapshot)}
+        if unknown := [r.element for r in results if r.element not in ids]:
+            raise KeyError(f"No element {unknown[0]} in {snapshot}")
+        self.db.execute("BEGIN IMMEDIATE")
+        try:
+            self.db.executemany(
+                "INSERT INTO verifications(snapshot,element,data) VALUES (?,?,?)",
+                ((snapshot, r.element, r.model_dump_json()) for r in results),
+            )
+        except BaseException:
+            self.db.execute("ROLLBACK")
+            raise
+        self.db.execute("COMMIT")
+
+    def verifications(self, snapshot: str) -> dict[str, Verification]:
+        """Each checked element's latest verification; absent ones are unverified."""
+        return {
+            element: Verification.model_validate_json(data)
+            for element, data in self.db.execute(
+                "SELECT element, data FROM verifications WHERE snapshot=? ORDER BY sequence",
+                (snapshot,),
+            )
+        }
+
+    def disputes(self, snapshot: str) -> tuple[Verification, ...]:
+        """Elements whose latest verification is a dispute, for a person to resolve."""
+        return tuple(
+            v for v in self.verifications(snapshot).values() if v.status == "disputed"
+        )
+
+    def resolve(
+        self,
+        snapshot: str,
+        element: str,
+        status: Literal["passed", "disputed"],
+        *,
+        reviewer: str,
+        reason: str,
+    ) -> Verification:
+        """A person's judgement of an element against its original pages.
+
+        Passing a dispute says the extracted text is right as it stands; a wrong
+        extraction stays disputed until a corrected snapshot replaces it.
+        """
+        if not reason.strip():
+            raise ValueError("Say what was compared and why it is right or wrong")
+        result = Verification(
+            element=element, status=status, method=f"human:{reviewer}", detail=reason
+        )
+        self.record(snapshot, [result])
+        return result

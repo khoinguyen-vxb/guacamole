@@ -1,12 +1,14 @@
 """One cooperative runtime for the Chief and task-defined workers."""
 
 import asyncio
+import json
 import time
 from collections.abc import Awaitable
 from pathlib import Path
 from types import CoroutineType
 from typing import Any
 
+from ..clearance import check
 from ..context import (
     IMAGE_TYPES,
     ContextOverflow,
@@ -75,6 +77,22 @@ from .systems_engineer import SYSTEMS_ENGINEER
 # Share of its measured trials in a family a tier must pass to be routed that work.
 MIN_PASS_RATE = 0.8
 OPEN_ITEM_FIELDS = ("description", "kind", "blocking_stages", "requirements")
+
+
+def shown(packet: ContextPacket) -> tuple[Ref, ...]:
+    """Records whose content a packet carries: its sources, attached images, and
+    the tool results previewed among its recent calls (other records are listed
+    by reference only)."""
+    try:
+        recent = json.loads(packet.prompt).get("state", {}).get("recent_tool_calls", [])
+    except (ValueError, AttributeError):
+        recent = []
+    results = tuple(
+        Ref.model_validate_json(encode(call["ref"]))
+        for call in recent
+        if isinstance(call, dict) and isinstance(call.get("ref"), dict)
+    )
+    return (*packet.sources, *(image.source for image in packet.images), *results)
 
 
 class Runtime:
@@ -919,6 +937,9 @@ class Runtime:
                             f"of {cap:,} estimated tokens sent; raise "
                             "max_run_input_tokens to continue"
                         )
+                    # Nothing labelled beyond the provider's clearance leaves the machine.
+                    if (holder := getattr(provider, "clearance", None)) is not None:
+                        check(store, shown(packet), holder, provider.name)
                     # Counted here, before any await, so concurrent turns cannot overshoot.
                     self.input_tokens += packet.input_tokens
                     store.event(

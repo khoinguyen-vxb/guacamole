@@ -1252,6 +1252,7 @@ langchain = [
 library = [
     { name = "docling" },
     { name = "pypdf" },
+    { name = "pypdfium2" },
 ]
 litellm = [
     { name = "litellm" },
@@ -1295,6 +1296,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.12,<3" },
     { name = "pypdf", marker = "extra == 'library'", specifier = ">=6,<7" },
     { name = "pypdf", marker = "extra == 'sounding-rocket'", specifier = ">=6,<7" },
+    { name = "pypdfium2", marker = "extra == 'library'", specifier = ">=5,<6" },
     { name = "pypdfium2", marker = "extra == 'sounding-rocket'", specifier = ">=5,<6" },
     { name = "python-pptx", marker = "extra == 'sounding-rocket'", specifier = ">=1,<2" },
     { name = "sysml", specifier = ">=0.1.0" },

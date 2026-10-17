@@ -14,6 +14,7 @@ from pydantic import TypeAdapter
 
 from .activity import Activity
 from .agents.systems_engineer import SystemsEngineer
+from .clearance import permits
 from .context import ContextBuilder, ReasoningProvider
 from .contracts import (
     JSON,
@@ -27,6 +28,7 @@ from .contracts import (
     Evidence,
     FileRecord,
     InboxEntry,
+    Label,
     LibraryPin,
     MessageEnvelope,
     Note,
@@ -96,6 +98,7 @@ class Project:
         max_concurrent_calls: int = 4,
         read_only: bool = False,
         library: Library | None = None,
+        clearance: Label | None = None,
     ) -> None:
         if max_concurrent_calls < 1:
             raise ValueError("max_concurrent_calls must be at least 1")
@@ -155,6 +158,8 @@ class Project:
             # The shared reference library, owned by the caller; the project's own
             # scope lives in its workspace. Agents get readers once either is in use.
             self.library = library
+            # Library content this project may pin; None: not checked.
+            self.clearance = clearance
             self._project_library: Library | None = None
             if library is not None or (workspace / "library").exists():
                 self._library_readers()
@@ -354,6 +359,12 @@ class Project:
             break
         else:
             raise KeyError(f"No library attached to this project holds {snapshot}")
+        if self.clearance is not None and not permits(self.clearance, found.label):
+            raise PermissionError(
+                f"{found.designation}:{found.edition} is labelled {found.label.level} "
+                f"{list(found.label.compartments)}; this project is cleared to "
+                f"{self.clearance.level} {list(self.clearance.compartments)}"
+            )
         pin = LibraryPin(
             snapshot=found.id,
             scope=scope,

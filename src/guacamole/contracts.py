@@ -380,7 +380,6 @@ class Element(Model):
     text: str
     links: tuple[Link, ...] = ()
     provenance: tuple[Provenance, ...] = ()
-    verified: Literal["unverified", "passed", "disputed"] = "unverified"
 
 
 class SourceSnapshot(Model):
@@ -400,6 +399,19 @@ class SourceSnapshot(Model):
     label: Label
     licence: str = ""
     elements: int = Field(ge=0)
+
+
+class Verification(Model):
+    """One check of an element against an independent reading of its pages.
+
+    Kept beside the frozen snapshot, latest first: an automatic comparison, then
+    a person's resolution of any dispute it raised."""
+
+    element: str
+    status: Literal["passed", "disputed"]
+    method: str  # e.g. "ocr:tesseract@5.5.3", or "human:<reviewer>"
+    detail: str = ""  # What disagreed, or the reviewer's reason
+    at: str = Field(default_factory=now)
 
 
 class LibraryPin(Model):

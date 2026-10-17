@@ -60,9 +60,19 @@ def register_library_tools(project: "Project") -> None:
             raise ValueError(f"This project has no {pin.scope} library attached")
         return pin, library
 
-    def missing(pin: LibraryPin, library: "Library") -> tuple[str, ...]:
+    def missing(
+        pin: LibraryPin, library: "Library", element: str | None = None
+    ) -> tuple[str, ...]:
         snapshot = library.snapshot(pin.snapshot)
-        gaps = ["Extraction not independently verified"]
+        gaps = []
+        check = library.verifications(pin.snapshot).get(element or "")
+        if check is None:
+            gaps.append("Extraction not independently verified")
+        elif check.status == "disputed":
+            gaps.append(
+                f"Extraction disputed ({check.detail}); check the original page "
+                "before relying on it"
+            )
         if snapshot.profile.startswith("fallback@"):
             gaps.append("Ingested as pages and paragraphs: dependencies are unknown")
         return tuple(gaps)
@@ -164,6 +174,8 @@ def register_library_tools(project: "Project") -> None:
                             dependencies.append((dependency, why))
             frontier = reached
         root = elements[element]
+        checks = library.verifications(pin.snapshot)
+        disputed = {id for id, check in checks.items() if check.status == "disputed"}
         shown = [_shown(elements[id]) for id in main]
         included: list[JsonValue]
         deferred: list[JsonValue]
@@ -192,14 +204,17 @@ def register_library_tools(project: "Project") -> None:
                 "snapshot": pin.snapshot,
                 "element": element,
                 "kind": root.kind,
-                "verified": root.verified,
+                "verified": checks[element].status
+                if element in checks
+                else "unverified",
+                "disputed": [id for id in included if id in disputed],
                 "pages": [*sorted({p.page for p in root.provenance})],
                 "links": [l.model_dump(mode="json") for l in root.links],
                 "included": included,
                 "deferred": deferred,
                 "more_text": more,
             },
-            missing_metadata=missing(pin, library),
+            missing_metadata=missing(pin, library, element),
         )
 
     async def search_library(
