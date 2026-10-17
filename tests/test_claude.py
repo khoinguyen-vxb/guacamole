@@ -52,10 +52,14 @@ class ClaudeTests(unittest.IsolatedAsyncioTestCase):
             "invalid = '\"invalid_once\"' in stdin and attempt == 1\n"
             "usage = {'input_tokens': 100, 'cache_read_input_tokens': 900,\n"
             "         'cache_creation_input_tokens': 0, 'output_tokens': 40}\n"
+            "wrapped = '\"prose_wrapped\"' in stdin\n"
+            "result = json.dumps(turn)\n"
+            "if wrapped:  # A sentence, a brace in prose, then the fenced object\n"
+            "    result = 'Next {step}:\\n```json\\n' + result + '\\n```\\nDone.'\n"
             "print(json.dumps({'type': 'system', 'subtype': 'init'}))\n"
             "print(json.dumps({\n"
             "    'type': 'result', 'is_error': False, 'total_cost_usd': 0.25, 'usage': usage,\n"
-            "    'result': 'fixture-invalid' if invalid else json.dumps(turn),\n"
+            "    'result': 'fixture-invalid' if invalid else result,\n"
             "}))\n"
         )
         self.executable.chmod(0o755)
@@ -101,6 +105,14 @@ class ClaudeTests(unittest.IsolatedAsyncioTestCase):
                 cost_usd=0.25,
             ),
         )
+        # An object wrapped in prose and a fence is read without a retry.
+        self.capture.unlink()
+        wrapped = packet.model_copy(
+            update={"prompt": prompt.replace('"ok"', '"prose_wrapped"')}
+        )
+        result = await self.provider.respond(wrapped)
+        self.assertEqual(json.loads(self.capture.read_text())["attempt"], 1)
+        self.assertIsInstance(result.action, Wait)
         # A corrected retry resends only the rest, and both attempts count.
         self.capture.unlink()
         retry = packet.model_copy(

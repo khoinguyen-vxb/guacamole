@@ -333,8 +333,31 @@ def _usage(envelope: JsonValue) -> Usage:
 
 
 def _strip_fence(text: str) -> str:
+    """The JSON object a reply holds, alone, fenced, or within prose.
+
+    Replies that opened with a sentence before the object cost a whole corrective
+    retry. Only where the object is changes; AgentTurn validation is unchanged,
+    and text with no complete object is returned as it was for that to reject.
+    """
     text = text.strip()
     if text.startswith("```") and text.endswith("```"):
         text = text[3:-3]
         text = text.removeprefix("json")
-    return text.strip()
+    text = text.strip()
+    if text.startswith("{"):
+        return text
+    decoder = json.JSONDecoder()
+    start = text.find("{")
+    # ponytail: the first 20 braces; a reply's object comes early, after a sentence.
+    for _ in range(20):
+        if start < 0:
+            break
+        try:
+            value, end = decoder.raw_decode(text, start)
+        except json.JSONDecodeError:
+            start = text.find("{", start + 1)
+            continue
+        if isinstance(value, dict):
+            return text[start:end]
+        start = text.find("{", end)
+    return text
