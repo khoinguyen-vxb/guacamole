@@ -60,10 +60,17 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                 Project(root, reasoning=Idle()) as project,
                 redirect_stdout(io.StringIO()) as output,
             ):
+
+                def added() -> str:
+                    """A tool registered after the Chief spawned."""
+                    return ""
+
+                tool = project.tools.register(added)
                 context = refresh_limits(project, limits, budget, result.run_id)
                 self.assertEqual(context.max_input_tokens, 480_000)
                 self.assertIn("480000", output.getvalue())
                 saved = project.store.model("agent", before.id, AgentSpec)
+                self.assertIn(tool.definition.grant, saved.tools)
                 self.assertEqual(
                     saved.context,
                     before.context.model_copy(
@@ -194,7 +201,7 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                 self.assertIn("30000", request.description.replace(",", ""))
                 self.assertEqual(request.context.max_input_tokens, 128_000)
                 # Its six workspace tools, beside the five every project registers.
-                self.assertEqual(len(project.tools.definitions()), 11)
+                self.assertEqual(len(project.tools.definitions()), 12)
                 listing = project.tools.get("list_files@1")
                 (root / ".env").write_text("private fixture")
                 expected_roots = tuple(
@@ -286,7 +293,10 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                     )
 
     @unittest.skipUnless(
-        all(importlib.util.find_spec(name) for name in ("pypdf", "openpyxl", "pptx")),
+        all(
+            importlib.util.find_spec(name)
+            for name in ("pypdf", "pypdfium2", "openpyxl", "pptx")
+        ),
         "Install the sounding-rocket extra to check its document readers",
     )
     async def test_document_readers_preserve_locators_and_provenance(self):
@@ -342,6 +352,17 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                     await project.call(
                         reader, {"source": source.model_dump(mode="json"), "first": 2}
                     )
+                # Rendered pages become image job files an agent reads as pixels.
+                renderer = project.tools.get("render_pages@1")
+                self.assertFalse(renderer.definition.requires_plan)
+                job = project.submit(
+                    renderer, {"source": source.model_dump(mode="json")}
+                )
+                (page,) = await job.collect()
+                (snapshot,) = project.store.list("job_file")
+                self.assertEqual(snapshot.data["sha256"], page.sha256)
+                self.assertEqual(snapshot.data["media_type"], "image/jpeg")
+                self.assertEqual(snapshot.data["name"], "drawing-page-1.jpg")
 
     async def test_launch_uses_claude_without_api_key(self):
         with (

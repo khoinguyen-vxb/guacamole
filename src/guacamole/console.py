@@ -72,7 +72,8 @@ def refresh_limits(
     """context within the provider's capacity; applied to a saved run on resume.
 
     A resumed run keeps its saved engineering context; only its input and output
-    limits and budget change, for the run, the Chief and the systems engineer.
+    limits and budget change, for the run, the Chief and the systems engineer, and
+    the Chief is granted tools registered since it spawned.
     Live workers are raised to worker_max_input_tokens when it is given.
     """
     if project.reasoning is None:
@@ -117,12 +118,14 @@ def refresh_limits(
                 event="run.budgets_updated",
             )
         for agent in roots:
-            updated = agent.model_copy(
-                update={
-                    "context": agent.context.model_copy(update=limits),
-                    "budget": budget,
-                }
-            )
+            update = {
+                "context": agent.context.model_copy(update=limits),
+                "budget": budget,
+            }
+            if agent.id == run["chief_id"]:
+                # As at spawn, the Chief holds every tool, including ones added since.
+                update["tools"] = tuple(t.grant for t in project.tools.definitions())
+            updated = agent.model_copy(update=update)
             if updated != agent:
                 store.put(
                     "agent",

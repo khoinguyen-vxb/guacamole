@@ -91,6 +91,7 @@ async def main() -> None:
         (
             "websockets",
             "pypdf",
+            "pypdfium2",
             "openpyxl",
             "pptx",
             "langchain",
