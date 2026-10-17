@@ -6,18 +6,21 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from .contracts import (
+    JSON,
     ArtifactRecord,
     AskHuman,
     Catalogue,
     DecisionRecord,
     Deliverable,
     Evidence,
+    LibraryPin,
     OpenItem,
     Quantity,
     Ref,
     Requirement,
     ReviewManifest,
     ReviewStage,
+    SourceExcerpt,
     Standard,
     SystemModel,
     VerificationResult,
@@ -89,6 +92,11 @@ class Reviews:
                 issues.append(
                     f"{requirement.ref.id}: no licensed text of {pin.id}:{pin.edition} "
                     "in the project to verify against"
+                )
+            if not requirement.stale and (disputed := self._disputed(record)):
+                issues.append(
+                    f"{requirement.ref.id}: quotes {disputed}; resolve it against the "
+                    "original page (Library.resolve) or quote a corrected snapshot"
                 )
         if catalogue is not None and catalogue.stale:
             issues.append("standards catalogue: its source changed; record it again")
@@ -303,6 +311,7 @@ class Reviews:
         lock = [
             {"requirement": ref.model_dump(mode="json")}
             | pin.model_dump(mode="json")
+            | self._library(pin)
             | {"clauses": clauses}
             for ref, pin, clauses in self._standards(manifest.baseline)
         ]
@@ -630,6 +639,44 @@ class Reviews:
         if model:
             lines += ["", "## SysML model", "", *model]
         return "\n".join(lines) + "\n"
+
+    def _disputed(self, requirement: Requirement) -> str:
+        """The library element a requirement quotes, when its extraction is disputed."""
+        source = self.project.store.resolve(requirement.source).data
+        if "source" not in source:
+            return ""  # Not an extract
+        excerpt = SourceExcerpt.model_validate_json(encode(source))
+        pinned = self.project.store.resolve(excerpt.source).data
+        if pinned.get("kind") != "library_pin":
+            return ""
+        pin = LibraryPin.model_validate_json(encode(pinned))
+        library = self.project.libraries.get(pin.scope)
+        if library is None:
+            return ""
+        checks = library.verifications(pin.snapshot)
+        quote = " ".join(requirement.source_quote.split())
+        included = excerpt.metadata.get("included")
+        for id in included if isinstance(included, list) else ():
+            check = checks.get(str(id))
+            if check is None or check.status != "disputed":
+                continue
+            if quote in " ".join(library.element(pin.snapshot, str(id)).text.split()):
+                return (
+                    f"{pin.designation}:{pin.edition} {id}, whose extraction is "
+                    f"disputed ({check.detail})"
+                )
+        return ""
+
+    def _library(self, pin: Standard) -> JSON:
+        """The library snapshot a selection's text is pinned to, when it has one."""
+        if pin.text is None:
+            return {}
+        data = self.project.store.resolve(pin.text).data
+        if data.get("kind") != "library_pin":
+            return {}
+        return {
+            "library": {k: data[k] for k in ("snapshot", "scope", "sha256", "name")}
+        }
 
     def _standards(
         self, baseline: tuple[Ref, ...]

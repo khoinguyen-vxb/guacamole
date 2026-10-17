@@ -20,7 +20,7 @@ from ..context import (
     failure_label,
     image_data,
 )
-from ..contracts import AgentTurn, ContextPacket, Usage
+from ..contracts import AgentTurn, ContextPacket, Label, Usage
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +42,7 @@ class CodexReasoning:
         effort: str = "ultra",
         model: str = model,
         context_capacity_tokens: int = context_capacity_tokens,
+        clearance: Label | None = None,
     ):
         self.executable = executable
         self.timeout_s = timeout_s
@@ -49,6 +50,8 @@ class CodexReasoning:
         self.effort = effort
         self.model = model
         self.context_capacity_tokens = context_capacity_tokens
+        # Library content this provider may receive; None: not checked.
+        self.clearance = clearance
 
     async def count_tokens(self, prompt: str) -> int:
         # ponytail: encoding estimate, not an exact Astra mapping; retain headroom

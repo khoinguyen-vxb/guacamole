@@ -12,7 +12,7 @@ import litellm
 from pydantic import JsonValue, ValidationError
 
 from ..context import IMAGE_TOKENS, InvalidTurn, ProviderError, image_data
-from ..contracts import JSON, AgentTurn, ContextPacket, Usage
+from ..contracts import JSON, AgentTurn, ContextPacket, Label, Usage
 from .claude import _strip_fence
 
 _INSTRUCTIONS = (
@@ -48,6 +48,7 @@ class LiteLLMReasoning:
         effort: str | None = None,
         timeout_s: float = 600.0,
         prompt_caching: bool | None = None,
+        clearance: Label | None = None,
         **options: JsonValue,
     ) -> None:
         """options pass through to litellm.acompletion (api_base, num_retries, ...).
@@ -71,6 +72,8 @@ class LiteLLMReasoning:
         # None: the context builder leaves image sources unattached for this model.
         self.image_tokens = IMAGE_TOKENS if litellm.supports_vision(model) else None
         self.effort, self.timeout_s, self.options = effort, timeout_s, options
+        # Library content this provider may receive; None: not checked.
+        self.clearance = clearance
         self.prompt_caching = (
             "claude" in model.casefold() and bool(info.get("supports_prompt_caching"))
             if prompt_caching is None
