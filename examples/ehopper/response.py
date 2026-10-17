@@ -1,11 +1,5 @@
-import json
-from getpass import getpass
+from guacamole.websocket import control
 
-from websockets.sync.client import connect
-
-# The token changes on every EHopper start; paste the one it printed.
-token = getpass("Current EHopper authorization token: ").strip()
-token = token.removeprefix("Authorization:").strip().removeprefix("Bearer").strip()
 request_id = "6e46c666b10b43f99860727c92f405d3"
 reply = f"""
 Referring to: {request_id}
@@ -61,31 +55,10 @@ MY ULTIMATE REC IS THAT IF there are other viable alternatives with these questi
 
 """
 
-message = {
-    "id": f"reply-{request_id}",
-    "command": {
-        "kind": "reply_human",
-        "request_id": request_id,
-        "author": "Khoi",
-        "text": reply,
-    },
-}
-
-print("Connecting to EHopper on 127.0.0.1:8766...", flush=True)
-with connect(
-    "ws://127.0.0.1:8766",
-    additional_headers={"Authorization": f"Bearer {token}"},
-    proxy=None,
-    # EHopper serves this socket on its busy run loop; allow a slow handshake.
-    open_timeout=120,
-) as ws:
-    print("Connected; sending reply...", flush=True)
-    ws.send(json.dumps(message))
-    print("Reply sent; waiting up to 120 seconds for acknowledgement...", flush=True)
-    try:
-        print(ws.recv(timeout=120), flush=True)
-    except TimeoutError:
-        raise SystemExit(
-            "No acknowledgement received. Check the EHopper event log; rerunning "
-            "this script is safe because it reuses the same command ID."
-        ) from None
+# The token changes on every EHopper start; paste the one it printed.
+with control(8766, "EHopper") as send:
+    send(
+        {"kind": "reply_human", "request_id": request_id, "author": "Khoi", "text": reply},
+        # Rerunning is safe: the same ID returns the stored result.
+        id=f"reply-{request_id}",
+    )

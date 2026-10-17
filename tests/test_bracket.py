@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -179,6 +180,49 @@ class BracketTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(result["status"], "incomplete")
                 self.assertFalse(result["passed"])
                 self.assertGreater(result["estimated_input_tokens"], 0)
+
+    async def test_a_resumed_benchmark_reruns_only_the_paused_and_unstarted_briefs(
+        self,
+    ):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            briefs, runs = root / "briefs", root / "runs" / "earlier"
+            briefs.mkdir()
+            runs.mkdir(parents=True)
+            for name in ("a", "b", "c"):
+                (briefs / f"{name}.md").write_text("TEST FIXTURE")
+            totals = {"passed": True, "estimated_input_tokens": 1}
+            earlier = [
+                {"brief": "a", "status": "complete", "seconds": 7, **totals},
+                {"brief": "b", "status": "paused", "seconds": 5, **totals},
+            ]
+            (runs / "benchmark.json").write_text(json.dumps(earlier))
+            ran = []
+
+            async def run_brief(brief, where):
+                ran.append((brief.stem, where))
+                return {
+                    "brief": brief.stem,
+                    "status": "complete",
+                    "seconds": 1,
+                    **totals,
+                }
+
+            with (
+                patch.object(bracket, "BRIEFS", briefs),
+                patch.object(bracket, "FREECAD", "/usr/bin/freecadcmd"),
+                patch.object(bracket, "preflight"),
+                patch.object(bracket, "run_brief", run_brief),
+                patch.object(bracket.sys, "argv", ["bracket", str(runs)]),
+                patch("builtins.print"),
+            ):
+                await bracket.main()
+            self.assertEqual(ran, [("b", runs), ("c", runs)])
+            saved = json.loads((runs / "benchmark.json").read_text())
+            self.assertEqual(
+                [(r["brief"], r["status"], r["seconds"]) for r in saved],
+                [("a", "complete", 7), ("b", "complete", 6), ("c", "complete", 1)],
+            )
 
 
 @unittest.skipUnless(

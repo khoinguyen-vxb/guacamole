@@ -38,6 +38,9 @@ class ClaudeTests(unittest.IsolatedAsyncioTestCase):
             "    'blocks': [b['type'] for b in content],\n"
             "    'images': [b['source'] for b in content if b['type'] == 'image'],\n"
             "}))\n"
+            "if '\"stderr_limit\"' in stdin:\n"
+            '    sys.stderr.write("You\'ve hit your limit · resets 3pm fixture-secret\\n")\n'
+            "    sys.exit(1)\n"
             "if '\"limit\"' in stdin:\n"
             "    print(json.dumps({'type': 'result', 'is_error': True,\n"
             "                      'result': 'Claude AI usage limit reached|1 fixture-secret'}))\n"
@@ -152,6 +155,12 @@ class ClaudeTests(unittest.IsolatedAsyncioTestCase):
             input_tokens=100,
             reserved_output_tokens=1000,
         )
+        with self.assertRaises(ProviderError) as raised:
+            await self.provider.respond(packet)
+        self.assertIn("status 1 (usage limit)", str(raised.exception))
+        self.assertNotIn("fixture-secret", str(raised.exception))
+        # The subscription limit message can arrive on stderr, without a result.
+        packet = packet.model_copy(update={"prompt": '{"mode":"stderr_limit"}'})
         with self.assertRaises(ProviderError) as raised:
             await self.provider.respond(packet)
         self.assertIn("status 1 (usage limit)", str(raised.exception))

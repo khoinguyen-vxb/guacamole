@@ -6,8 +6,11 @@ recorded as middleware.failed events and never stop the run. Pinned material is
 never shown to a middleware; anything removed is cited or recorded as deferred.
 """
 
+import os
+from contextlib import AsyncExitStack
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from .contracts import JSON, AgentSpec, AgentTurn, Omission, Ref, Summary
@@ -227,3 +230,79 @@ class LangChainMiddleware(ContextMiddleware):
                 )
                 for key in sorted(cleared)
             ]
+
+
+async def standard_middleware(
+    workspace: Path,
+    cleanup: AsyncExitStack,
+    *,
+    summary_model: str = "openai/gpt-6-luna",
+    summarize_at_tokens: int = 150_000,
+    clear_at_tokens: int = 400_000,
+) -> tuple[ContextMiddleware, ...]:
+    """Context editing, and with OPENAI_API_KEY also summaries and memory.
+
+    Editing hides tool reads beyond the latest 8 once sources exceed
+    clear_at_tokens, and needs no API key. With a key, sources above
+    summarize_at_tokens are compacted by summary_model, and every turn feeds a
+    Graphiti knowledge graph and mem0 memory kept in workspace (billed usage).
+    Needs the langchain extra, plus graphiti and mem0 with a key. Close cleanup
+    after the run to stop the embedded stores.
+    """
+    from langchain.agents.middleware import (
+        ClearToolUsesEdit,
+        ContextEditingMiddleware,
+        SummarizationMiddleware,
+    )
+
+    editing = LangChainMiddleware(
+        ContextEditingMiddleware(
+            edits=[ClearToolUsesEdit(trigger=clear_at_tokens, keep=8)]
+        )
+    )
+    if not os.environ.get("OPENAI_API_KEY"):
+        print(
+            "OPENAI_API_KEY is unset: context editing only, without summarization "
+            "or Graphiti/mem0 memory.",
+            flush=True,
+        )
+        return (editing,)
+    # Keep project activity out of the libraries' usage telemetry.
+    os.environ.setdefault("GRAPHITI_TELEMETRY_ENABLED", "false")
+    os.environ.setdefault("MEM0_TELEMETRY", "False")
+    from graphiti_core import Graphiti
+    from graphiti_core.driver.falkordb_driver import FalkorDriver
+    from langchain_litellm import ChatLiteLLM
+    from mem0 import AsyncMemory
+    from redislite.async_falkordb_client import AsyncFalkorDB
+
+    # Embedded FalkorDB; its append-only log keeps the graph through crashes.
+    graph_db = AsyncFalkorDB(
+        str(workspace / "graph.db"), serverconfig={"appendonly": "yes"}
+    )
+    cleanup.push_async_callback(graph_db.client.close)
+    # redislite's async close leaves its embedded server running until exit.
+    cleanup.push_async_callback(graph_db.client.shutdown)
+    graphiti = Graphiti(graph_driver=FalkorDriver(falkor_db=graph_db))
+    cleanup.push_async_callback(graphiti.close)
+    await graphiti.build_indices_and_constraints()
+    memory = AsyncMemory.from_config(
+        {
+            "vector_store": {
+                "provider": "qdrant",
+                "config": {"path": str(workspace / "mem0"), "on_disk": True},
+            },
+            "history_db_path": str(workspace / "mem0-history.db"),
+        }
+    )
+    cleanup.callback(memory.close)
+    summarizing = LangChainMiddleware(
+        SummarizationMiddleware(
+            ChatLiteLLM(model=summary_model),
+            trigger=("tokens", summarize_at_tokens),
+            # Keep less than clear_at_tokens so compacted context is not cleared too.
+            keep=("tokens", 50_000),
+        )
+    )
+    # Summarize first: context editing hides cleared sources from later middleware.
+    return summarizing, editing, GraphitiMemory(graphiti), Mem0Memory(memory)

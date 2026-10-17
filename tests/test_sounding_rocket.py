@@ -2,6 +2,7 @@
 
 import importlib.util
 import io
+import os
 import tempfile
 import unittest
 from contextlib import redirect_stdout
@@ -21,6 +22,7 @@ from guacamole import (
     ProjectRequest,
     ToolRegistry,
 )
+from guacamole.console import refresh_limits
 from guacamole.contracts import Rationale, ToolCall, Wait
 
 
@@ -51,19 +53,14 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                     for key in ("chief_id", "engineer_id")
                 )
             budget = Budget(max_steps=300, max_tool_calls=250, max_seconds=9000)
+            limits = ContextSpec(
+                max_input_tokens=12_800_000, reserved_output_tokens=20_000
+            )
             with (
                 Project(root, reasoning=Idle()) as project,
-                patch.object(
-                    kookaburra,
-                    "CONTEXT",
-                    ContextSpec(
-                        max_input_tokens=12_800_000, reserved_output_tokens=20_000
-                    ),
-                ),
-                patch.object(kookaburra, "BUDGET", budget),
                 redirect_stdout(io.StringIO()) as output,
             ):
-                context = kookaburra.configure_run(project, result.run_id)
+                context = refresh_limits(project, limits, budget, result.run_id)
                 self.assertEqual(context.max_input_tokens, 480_000)
                 self.assertIn("480000", output.getvalue())
                 saved = project.store.model("agent", before.id, AgentSpec)
@@ -88,7 +85,7 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(request["context"]["max_input_tokens"], 480_000)
                 self.assertEqual(request["budget"], budget.model_dump(mode="json"))
                 events = len(project.events())
-                kookaburra.configure_run(project, result.run_id)
+                refresh_limits(project, limits, budget, result.run_id)
                 self.assertEqual(len(project.events()), events)
 
     async def test_document_reads_before_planning_preserve_grants_and_write_gate(self):
@@ -347,9 +344,10 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_launch_uses_codex_without_api_key(self):
         with (
-            patch.dict(kookaburra.os.environ, {}, clear=True),
-            patch.object(kookaburra.shutil, "which", return_value="/usr/bin/codex"),
-            patch.object(kookaburra.importlib.util, "find_spec", return_value=True),
+            patch.dict(os.environ, {}, clear=True),
+            patch("guacamole.console.shutil.which", return_value="/usr/bin/codex"),
+            patch("guacamole.console.importlib.util.find_spec", return_value=True),
+            patch("builtins.print"),
             patch.object(
                 kookaburra, "Project", side_effect=RuntimeError("startup reached")
             ) as project,
@@ -364,9 +362,11 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
         with tempfile.TemporaryDirectory() as directory:
             workspace = Path(directory) / "workspace"
             with (
+                patch.dict(os.environ),
                 patch.object(kookaburra, "WORKSPACE", workspace),
-                patch.object(kookaburra.shutil, "which", return_value="/usr/bin/codex"),
-                patch.object(kookaburra.importlib.util, "find_spec", return_value=None),
+                patch("guacamole.console.shutil.which", return_value="/usr/bin/codex"),
+                patch("guacamole.console.importlib.util.find_spec", return_value=None),
+                patch("builtins.print"),
             ):
                 with self.assertRaisesRegex(
                     SystemExit, "uv sync --extra sounding-rocket"
@@ -382,8 +382,9 @@ class SoundingRocketTests(unittest.IsolatedAsyncioTestCase):
                     kookaburra, "ROOT", Path(directory) / "examples/sounding_rocket"
                 ),
                 patch.object(kookaburra, "WORKSPACE", workspace),
-                patch.dict(kookaburra.os.environ, {}, clear=True),
-                patch.object(kookaburra.shutil, "which", return_value=None),
+                patch.dict(os.environ, {}, clear=True),
+                patch("guacamole.console.shutil.which", return_value=None),
+                patch("builtins.print"),
             ):
                 with self.assertRaisesRegex(SystemExit, "codex login"):
                     await kookaburra.main()

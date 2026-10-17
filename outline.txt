@@ -38,10 +38,12 @@ guacamole/
 │       ├── reviews.py               # Deliverable manifests, PDR/CDR packages and gates
 │       ├── standards.py             # Edition ordering and catalogue applicability rules
 │       ├── middleware.py            # Optional Graphiti/mem0 memory, LangChain context edits
+│       ├── console.py               # Host scripts: preflight, run/resume/wait loop, notices
 │       │
 │       ├── tools/
 │       │   ├── registry.py          # Explicit typed callable registration
 │       │   ├── execution.py         # Validation, local jobs, results, provenance
+│       │   ├── workspace.py         # Generic readers, write/execute/verify, input inventory
 │       │   └── mcp.py               # Generated MCP exposure from that registry
 │       │
 │       ├── agents/
@@ -51,6 +53,7 @@ guacamole/
 │       │   └── runtime.py           # Spawner, context budgets, grants, provider boundary
 │       │
 │       ├── integrations/
+│       │   ├── freecad.py           # FreeCAD tools through a local freecad-mcp checkout
 │       │   └── sysml/
 │       │       ├── adapter.py       # SysML Toolkit reads: requirements, bounds, satisfy
 │       │       ├── validator.py     # Deterministic truth checks, bound checks, diffs
@@ -70,6 +73,7 @@ guacamole/
 │   ├── mbd_freecad.py                # Its headless FreeCAD side: Workbench objects on faces, export
 │   ├── bracket/
 │   │   ├── bracket.py                # Bracket family tools, drafting rules, benchmark loop
+│   │   ├── review.py                 # Accepts or rejects the brief's ready review
 │   │   └── freecad_bracket.py        # Headless FreeCAD model, views and named features
 │   ├── qualification/
 │   │   ├── qualify.py                # Measures worker tiers on hidden-checked tasks
@@ -92,6 +96,7 @@ guacamole/
     ├── test_ap242.py                # AP242 round-trip matrix, edited files, NIST coverage
     ├── test_mbd.py                  # Bracket PMI through the MBD Workbench and read back
     ├── test_sounding_rocket.py       # Example tool execution, document readers and launch guard
+    ├── test_console.py              # Host loop holds at human requests
     └── test_project_workflow.py     # Source evidence, artifacts, PDR/CDR, invalidation
 
 USER PROJECTS AND TOOL PACKAGES

@@ -155,7 +155,7 @@ class ClaudeReasoning:
                         env=environment,
                         stdin=asyncio.subprocess.PIPE,
                         stdout=asyncio.subprocess.PIPE,
-                        stderr=asyncio.subprocess.DEVNULL,
+                        stderr=asyncio.subprocess.PIPE,
                         start_new_session=True,
                     )
                 except OSError:
@@ -172,7 +172,7 @@ class ClaudeReasoning:
                     },
                 }
                 try:
-                    stdout, _ = await asyncio.wait_for(
+                    stdout, stderr = await asyncio.wait_for(
                         process.communicate(json.dumps(message).encode() + b"\n"),
                         max(0.0, deadline - loop.time()),
                     )
@@ -189,7 +189,7 @@ class ClaudeReasoning:
                     # CLI output may echo prompts or credentials; never persist it.
                     raise ProviderError(
                         f"Claude exited with status {process.returncode} "
-                        f"({_failure(stdout)}); run 'claude auth status' and check "
+                        f"({_failure(stdout, stderr)}); run 'claude auth status' and check "
                         "model access, usage limits, and connectivity."
                     )
                 response: bytes | None = None
@@ -299,12 +299,13 @@ def _result(stdout: bytes) -> JsonValue:
     return None
 
 
-def _failure(stdout: bytes) -> str:
-    """A fixed label for the error the final result event reports."""
+def _failure(stdout: bytes, stderr: bytes = b"") -> str:
+    """A fixed label for the error the final result event or stderr reports."""
     envelope = _result(stdout)
+    text = stderr.decode(errors="replace")
     if isinstance(envelope, dict) and envelope.get("is_error"):
-        return failure_label(f"{envelope.get('subtype')} {envelope.get('result')}")
-    return failure_label("")
+        text = f"{envelope.get('subtype')} {envelope.get('result')} {text}"
+    return failure_label(text)
 
 
 def _usage(envelope: JsonValue) -> Usage:

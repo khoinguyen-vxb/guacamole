@@ -2009,7 +2009,12 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
                     worker = TaskAuthorization(id="A", objective="w", peers=("chief",))
                     if count in (0, 1):
                         # The first plan names an unknown peer; the Chief sees why.
-                        peers = ("chief", "ghost") if count == 0 else ("chief",)
+                        # Root agents need no grant, but naming them is harmless.
+                        peers = (
+                            ("chief", "ghost")
+                            if count == 0
+                            else ("chief", "systems_engineer")
+                        )
                         action = Decide(
                             selected="fixture",
                             request=plan_request(
@@ -2059,6 +2064,11 @@ class RuntimeTests(unittest.IsolatedAsyncioTestCase):
             states = [s.data["status"] for s in project.store.list("agent_state")]
         self.assertIn(
             "['ghost']", provider.chief_seen[1]["state"]["last_observation"]["detail"]
+        )
+        # The accepted plan settled the rejected one: nothing left to clean up.
+        self.assertNotIn(
+            "decision",
+            [r["kind"] for r in provider.chief_seen[2]["state"]["requests"]],
         )
         self.assertEqual(states.count("completed"), 2)
         # Woken after its mid-turn Wait, the Chief saw both worker replies, and the

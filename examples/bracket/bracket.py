@@ -1,15 +1,17 @@
 """Wall-mounted L-brackets: Milestone B's prompt-to-review-package benchmark.
 
 Run with: uv sync
-          .venv/bin/python -m examples.bracket.bracket
+          .venv/bin/python -m examples.bracket.bracket [runs/<timestamp>]
 
 Every brief in briefs/ runs as its own project under runs/<timestamp>/. A brief
 passes when its run reaches a ready PDR review: native CAD, STEP, drawing and BOM
 published, checked and delivered, with no open review issues. Every question gets
-one scripted reply as it is asked; final acceptance stays with a human. A brief
-paused by a provider failure (usage limit, outage) stops the benchmark there.
+one scripted reply as it is asked; each brief holds at its review until a human
+accepts it or requests changes (review.py). A brief paused by a provider failure
+(usage limit, outage) stops the benchmark there: pass its runs/<timestamp> to
+resume it, keeping the briefs that finished.
 
-Edit the configuration below; this script has no command-line arguments.
+Edit the configuration below; the only argument is a runs directory to resume.
 Install FreeCAD (freecadcmd, or the snap's freecad.cmd) and the Claude Code CLI, and
 log in to it before running. Model calls count against that account's usage.
 """
@@ -22,6 +24,7 @@ import os
 import re
 import shutil
 import signal
+import sys
 import time
 from collections.abc import Iterable
 from contextlib import suppress
@@ -44,12 +47,10 @@ from guacamole import (
     VerificationResult,
     Watchdog,
 )
-from guacamole.console import notifications
+from guacamole.console import host, preflight
 from guacamole.contracts import ArtifactRecord
 from guacamole.providers.claude import ClaudeReasoning
-from guacamole.tools.mcp import ToolSession
 from guacamole.tools.registry import encode
-from guacamole.websocket import WebSocketBridge
 
 # Configuration. Paths are relative to this file. FreeCAD must see the runs
 # directory: snap and Flatpak builds can read $HOME but not /tmp.
@@ -704,41 +705,17 @@ def register_tools(project: Project) -> None:
     project.tools.register(bracket_check, retry_safe=True)
 
 
-def project_request(brief: str) -> ProjectRequest:
+def project_request(brief: str, context: ContextSpec) -> ProjectRequest:
     return ProjectRequest(
         description=brief,
-        context=CONTEXT.model_copy(update={"instructions": INSTRUCTIONS}),
+        context=context.model_copy(update={"instructions": INSTRUCTIONS}),
         target_reviews=("PDR",),
         budget=BUDGET,
     )
 
 
-def reply_all(project: Project, replies: list[int]) -> int:
-    """Give every open question, blocking or not, the scripted reply."""
-    answered = 0
-    for entry in project.human.inbox():
-        request = project.activity.get(entry.message.request_id or "")
-        if "review" in request.arguments:
-            continue  # Review disposition stays with a human.
-        try:
-            project.human.reply(request.id, SCRIPTED_REPLY, author="benchmark")
-        except ValueError:
-            continue  # Answered or withdrawn since the inbox was read.
-        answered += 1
-    replies[0] += answered
-    return answered
-
-
-async def answer(project: Project, replies: list[int]) -> None:
-    """Answer questions while the run goes on: agents gated on the benchmark wait."""
-    while True:
-        # ponytail: 2 s poll; a reply restarts turns in flight, so answer promptly.
-        await asyncio.sleep(2)
-        reply_all(project, replies)
-
-
 async def run_brief(brief: Path, runs: Path) -> dict[str, object]:
-    """One brief, one fresh project; answer questions, stop at review or failure."""
+    """One brief, one project; resumes the brief's saved run if it has one."""
     workspace = runs / brief.stem
     started = time.monotonic()
     with Project(
@@ -750,41 +727,29 @@ async def run_brief(brief: Path, runs: Path) -> dict[str, object]:
         max_concurrent_calls=MAX_CONCURRENT_CALLS,
     ) as project:
         register_tools(project)
-        replies = [0]
-        answering = asyncio.create_task(answer(project, replies))
-        monitor = asyncio.create_task(notifications(project))
-        bridge = WebSocketBridge(ToolSession(project))
-        try:
-            async with bridge.serve(port=CONTROL_PORT):
-                print(f"Human control: ws://127.0.0.1:{CONTROL_PORT}", flush=True)
-                print(f"Authorization: Bearer {bridge.token}", flush=True)
-                print(
-                    f"Outputs: {project.sandbox}\nSend corrections with interject at any time.",
-                    flush=True,
-                )
-                result = await project.run(
-                    project_request(brief.read_text(encoding="utf-8"))
-                )
-                for _ in range(5):  # A question the run stopped on, before an answer.
-                    if result.status in {"awaiting_review", "complete", "paused"}:
-                        break
-                    if not reply_all(project, replies):
-                        break
-                    result = await project.run(resume=result.run_id)
-        finally:
-            answering.cancel()
-            monitor.cancel()
-            await asyncio.gather(monitor, return_exceptions=True)
-        await project.drain()
+        text = brief.read_text(encoding="utf-8")
+        result = await host(
+            project,
+            lambda context: project_request(text, context),
+            port=CONTROL_PORT,
+            context=CONTEXT,
+            budget=BUDGET,
+            reply=SCRIPTED_REPLY,
+        )
+        events = project.events()
         return {
             "brief": brief.stem,
             "run_id": result.run_id,
-            "passed": result.status == "awaiting_review",
+            "passed": any(e.type == "review.ready" for e in events),
             "status": result.status,
-            "scripted_replies": replies[0],
+            # A human reply also reaches the other agents as findings.
+            "scripted_replies": sum(
+                (s.data["sender"], s.data["kind"]) == ("human:unattended", "reply")
+                for s in project.store.list("message")
+            ),
             "estimated_input_tokens": sum(
                 int(str(e.details.get("input_tokens", 0)))
-                for e in project.events()
+                for e in events
                 if e.type == "provider.dispatched"
             ),
             "seconds": round(time.monotonic() - started),
@@ -794,25 +759,38 @@ async def run_brief(brief: Path, runs: Path) -> dict[str, object]:
 
 
 async def main() -> None:
-    if FREECAD is None or shutil.which(reasoning().executable) is None:
-        raise SystemExit(
-            "Needs FreeCAD (freecadcmd or freecad.cmd) and the reasoning CLI on PATH, "
-            "logged in."
-        )
-    runs = RUNS / time.strftime("%Y%m%d-%H%M%S")
+    if FREECAD is None:
+        raise SystemExit("Needs FreeCAD (freecadcmd or freecad.cmd) on PATH.")
+    preflight(reasoning().executable, "Needs the reasoning CLI on PATH, logged in.")
+    runs = (
+        Path(sys.argv[1]).resolve()
+        if len(sys.argv) > 1
+        else RUNS / time.strftime("%Y%m%d-%H%M%S")
+    )
+    saved = runs / "benchmark.json"
+    earlier = (
+        {r["brief"]: r for r in json.loads(saved.read_text(encoding="utf-8"))}
+        if saved.exists()
+        else {}
+    )
     results = []
     for brief in sorted(BRIEFS.glob("*.md")):
-        results.append(await run_brief(brief, runs))
-        if results[-1]["status"] == "paused":
+        previous = earlier.get(brief.stem)
+        if previous and previous["status"] != "paused":
+            results.append(previous)  # Finished on an earlier start.
+            continue
+        result = await run_brief(brief, runs)
+        if previous:
+            result["seconds"] += previous["seconds"]
+        results.append(result)
+        saved.write_text(json.dumps(results, indent=2), encoding="utf-8")
+        if result["status"] == "paused":
             # A usage limit would fail every later brief in seconds.
             print(
-                f"{brief.stem} paused on a provider failure; fix it, then resume run "
-                f"{results[-1]['run_id']} in {runs / brief.stem}"
+                f"{brief.stem} paused on a provider failure; fix it, then resume with "
+                f".venv/bin/python -m examples.bracket.bracket {runs}"
             )
             break
-    (runs / "benchmark.json").write_text(
-        json.dumps(results, indent=2), encoding="utf-8"
-    )
     for r in results:
         print(
             f"{r['brief']:<12} {r['status']:<16} {r['estimated_input_tokens']:>11,} "

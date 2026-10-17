@@ -78,9 +78,12 @@ class InvalidTurn(ProviderError):
 
 
 # CLI error text may echo prompts or credentials, so only these labels are kept.
-_FAILURES = (
-    ("usage limit", ("usage limit", "quota", "credit")),
+_FAILURES = (  # First match wins: "rate limit reached" is not a usage limit.
     ("rate limit", ("rate limit", "rate_limit", "429", "too many requests")),
+    (
+        "usage limit",
+        ("usage limit", "quota", "credit", "limit reached", "hit your limit"),
+    ),
     (
         "authentication",
         ("log in", "login", "sign in", "unauthorized", "authentication", "api key"),

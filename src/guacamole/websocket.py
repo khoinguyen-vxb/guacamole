@@ -3,8 +3,10 @@
 import asyncio
 import hmac
 import ipaddress
+import json
 import secrets
-from contextlib import asynccontextmanager
+from collections.abc import Callable, Iterator
+from contextlib import asynccontextmanager, contextmanager
 from http import HTTPStatus
 from typing import Annotated, Literal
 
@@ -284,3 +286,43 @@ class WebSocketBridge:
             process_request=process_request,
         ) as server:
             yield server
+
+
+@contextmanager
+def control(port: int, name: str) -> Iterator[Callable[..., JSON]]:
+    """Connect a control script to a running host; yields send(command, id=None).
+
+    Asks for the token the host printed; the whole "Authorization: Bearer <token>"
+    line is accepted. send prints and returns each result. Rerunning a command with
+    the same id returns its stored result instead of acting twice.
+    """
+    from getpass import getpass
+
+    from websockets.sync.client import connect
+
+    token = getpass(f"Current {name} authorization token: ").strip()
+    token = token.removeprefix("Authorization:").strip().removeprefix("Bearer").strip()
+    print(f"Connecting to {name} on 127.0.0.1:{port}...", flush=True)
+    with connect(
+        f"ws://127.0.0.1:{port}",
+        additional_headers={"Authorization": f"Bearer {token}"},
+        proxy=None,
+        # Hosts serve this socket on their busy run loop; allow a slow handshake.
+        open_timeout=120,
+    ) as socket:
+
+        def send(command: JSON, id: str | None = None) -> JSON:
+            socket.send(json.dumps({"command": command} | ({"id": id} if id else {})))
+            try:
+                reply = json.loads(socket.recv(timeout=120))
+            except TimeoutError:
+                raise SystemExit(
+                    f"No acknowledgement within 120 s. Check the {name} event log; "
+                    "rerunning is safe when the command keeps its id."
+                ) from None
+            print(json.dumps(reply), flush=True)
+            if "result" not in reply:
+                raise SystemExit(f"{name} rejected the command: {reply}")
+            return reply["result"]
+
+        yield send

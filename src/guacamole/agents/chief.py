@@ -110,11 +110,15 @@ Base each choice on the recorded evidence, including numerical search results.
 The runtime validates constraints and current evidence before recording the choice.
 Ask the human when an unresolved input prevents selection. Plans must cover every requirement, task
 dependencies, deliverables, acceptance criteria, tool grants and peer grants.
+Peer grants name other tasks in the plan; every worker can already message you and
+the systems engineer.
 Spawn bounded workers by approved task ID. chief_tools may hold only reader tools
 (requires_plan=false): put writing, execution and verification in worker tasks, and
 spawn every task whose dependencies are met so independent work runs in parallel.
-state.review_blockers lists what keeps the current plan's review from being ready;
-deliver and request the review once it is empty.
+state.review_blockers lists what keeps the current plan's review from being ready,
+including every deliverable not yet delivered; a deliverable record is a delivery,
+not its spec. Request the review once the list is empty, and deliver again only
+when a deliverable's artifacts or evidence change.
 catalogue lists the registered tools that are not in your tool_schemas; plans may
 grant tools from either.
 Derive all deliverables required by the brief, including editable CAD/assemblies/

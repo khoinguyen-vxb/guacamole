@@ -3,6 +3,7 @@
 from graphlib import TopologicalSorter
 from typing import TYPE_CHECKING
 
+from .agents.systems_engineer import TASK_ID as ENGINEER
 from .contracts import (
     Candidate,
     DecisionRecord,
@@ -33,9 +34,9 @@ class Decisions:
         if len({d.id for d in plan.deliverables}) != len(plan.deliverables):
             raise ValueError("Deliverable IDs must be unique")
         for task in plan.tasks:
-            # Workers can always message their parent, so a "chief" peer grant is a no-op.
+            # Workers can always message the root agents, so their grants are no-ops.
             unknown = (
-                set(task.depends_on) | (set(task.peers) - {"chief"})
+                set(task.depends_on) | (set(task.peers) - {"chief", ENGINEER})
             ) - tasks.keys()
             if unknown:
                 raise ValueError(
@@ -149,7 +150,7 @@ class Decisions:
             # The authoritative SysML model must be usable before any choice.
             model = self.project.sysml.gate()
         except DecisionBlocked as exc:
-            activity.transition(record.id, "blocked", actor="runtime", reason=str(exc))
+            activity.transition(record.id, "failed", actor="runtime", reason=str(exc))
             raise
         candidates, references = [], list(self.project.human.references(run_id))
         rejected: dict[str, str] = {}
@@ -171,7 +172,7 @@ class Decisions:
             reason = "Selected candidate is unknown or ineligible: " + rejected.get(
                 selected, "no candidate has this id"
             )
-            activity.transition(record.id, "blocked", actor="runtime", reason=reason)
+            activity.transition(record.id, "failed", actor="runtime", reason=reason)
             raise DecisionBlocked(reason)
         try:
             # No external invocation: validation and recording have no async gap.
@@ -214,11 +215,25 @@ class Decisions:
                     actor="runtime",
                     result=result.model_dump(mode="json"),
                 )
+                # This choice corrects the requester's rejected ones; the Chief spent
+                # turns trying to settle them by hand.
+                for failed in activity.requests(status="failed"):
+                    if (
+                        failed.kind == "decision"
+                        and failed.requester == actor
+                        and failed.parent_id == parent_id
+                    ):
+                        activity.supersede(
+                            failed.id,
+                            by=record.id,
+                            actor=actor,
+                            reason="A later decision by the same requester completed",
+                        )
             return record.id
         except (ValueError, KeyError) as exc:
             activity.transition(
                 record.id,
-                "blocked",
+                "failed",
                 actor="runtime",
                 reason="Invalid choice or stale decision inputs",
             )

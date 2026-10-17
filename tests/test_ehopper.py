@@ -13,6 +13,8 @@ from mcp.types import ImageContent
 
 from examples.ehopper import ehopper
 from guacamole import ContextSpec, Project
+from guacamole.console import preflight
+from guacamole.tools.workspace import tool_paths
 
 
 class EhopperTests(unittest.IsolatedAsyncioTestCase):
@@ -22,6 +24,8 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
             patch("websockets.sync.client.connect") as connect,
             patch("builtins.print"),
         ):
+            socket = connect.return_value.__enter__.return_value
+            socket.recv.return_value = '{"id": "fixture", "result": {}}'
             for _ in range(2):
                 runpy.run_module("examples.ehopper.interject", run_name="__main__")
         messages = connect.return_value.__enter__.return_value.send.call_args_list
@@ -32,8 +36,11 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_launcher_enables_live_web_research(self):
         with (
-            patch.object(ehopper.shutil, "which", return_value="/usr/bin/codex"),
-            patch.object(ehopper.importlib.util, "find_spec", return_value=True),
+            # preflight points SysML at the checkout; keep that out of other tests.
+            patch.dict(os.environ),
+            patch("guacamole.console.shutil.which", return_value="/usr/bin/codex"),
+            patch("guacamole.console.importlib.util.find_spec", return_value=True),
+            patch("builtins.print"),
             patch.object(
                 ehopper, "Project", side_effect=RuntimeError("startup reached")
             ) as project,
@@ -51,9 +58,11 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
 
         with (
             patch.dict(os.environ, {}, clear=True),
-            patch.object(ehopper.Path, "glob", side_effect=glob),
+            patch.object(Path, "glob", side_effect=glob),
+            patch("guacamole.console.shutil.which", return_value="/usr/bin/codex"),
+            patch("builtins.print"),
         ):
-            ehopper.configure_sysml_runtime()
+            preflight("codex", "unused")
             self.assertEqual(os.environ["GUACAMOLE_SYSML_LIBRARY"], str(library))
             self.assertEqual(os.environ["SYSMLV2_ABI"], str(native))
 
@@ -75,8 +84,9 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                 self.assertIn("5 minutes", request.description)
                 self.assertIn("below 500", request.description)
                 self.assertNotIn("Kookaburra", request.description)
-                self.assertIn("6dof_hopper", ehopper.tool_paths())
-                self.assertIn("freecad-mcp", ehopper.tool_paths())
+                tools = tool_paths(ehopper.TOOLING, ehopper.FREECAD_MCP)
+                self.assertIn("6dof_hopper", tools)
+                self.assertIn("freecad-mcp", tools)
                 inventory = (project.sandbox / "context/inventory.md").read_text()
                 self.assertIn("freecad.cmd", inventory)
                 for name in ("freecad_status@1", "freecad_view@1"):
@@ -107,7 +117,7 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                 call = AsyncMock(
                     return_value=("Headless FreeCAD script finished (exit 0).", ())
                 )
-                with patch.object(ehopper, "_freecad_call", call):
+                with patch("guacamole.integrations.freecad.call", call):
                     result = await project.call(
                         tool,
                         {"script": "cad.py", "outputs": ["model.FCStd", "absent.step"]},
@@ -115,8 +125,8 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                     self.assertEqual(len(result.files), 1)
                     self.assertEqual(len(result.missing_outputs), 1)
                     self.assertTrue(Path(result.log.path).is_file())
-                    self.assertEqual(call.call_args.args[0], "execute_code_headless")
-                    self.assertIn("saved CAD script", call.call_args.args[1]["code"])
+                    self.assertEqual(call.call_args.args[1], "execute_code_headless")
+                    self.assertIn("saved CAD script", call.call_args.args[2]["code"])
                     self.assertTrue(result.succeeded)
                     call.return_value = (
                         "Failed to run headless code: backend absent",
@@ -137,14 +147,14 @@ class EhopperTests(unittest.IsolatedAsyncioTestCase):
                     gui = await project.call(
                         tool, {"script": "cad.py", "headless": False}
                     )
-                    self.assertEqual(call.call_args.args[0], "execute_code")
+                    self.assertEqual(call.call_args.args[1], "execute_code")
                     (view,) = gui.views
                     self.assertEqual(Path(view.path).read_bytes(), b"fixture png")
                     view_tool = project.tools.get("freecad_view@1")
                     call.return_value = ("", (screenshot,))
                     shown = await project.call(view_tool, {"view": "Front"})
                     self.assertEqual(
-                        call.call_args.args[:2], ("get_view", {"view_name": "Front"})
+                        call.call_args.args[1:3], ("get_view", {"view_name": "Front"})
                     )
                     self.assertTrue(shown.view.path.endswith(".png"))
                     call.return_value = ("Cannot get screenshot in this view", ())

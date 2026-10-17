@@ -752,7 +752,11 @@ class Send(Model):
     kind: Literal["send"] = "send"
     recipient: str
     schema_id: str = "Note@1"
-    payload: JsonValue
+    # Agents guessed Note fields when the schema only said JsonValue.
+    payload: JsonValue = Field(
+        description='Matches schema_id exactly. Note@1: {"text": str, "evidence": '
+        "[Ref, ...]} and no other fields; cite every record in evidence."
+    )
     request: bool = False
     reply_to: str | None = None
 

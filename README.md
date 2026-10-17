@@ -649,6 +649,46 @@ These commands call the same Python APIs and use the same mutation deduplication
 Keep `project.run(...)` running in the host script for live interaction; if it has
 returned while awaiting input, the host resumes it after recording the response.
 
+## Host scripts
+
+An example script holds only what is its own: configuration, the brief and
+instructions, and its product tools. The rest is in the backend:
+
+```python
+from guacamole.console import host, preflight
+from guacamole.integrations.freecad import register_freecad_tools
+from guacamole.middleware import standard_middleware
+from guacamole.tools.workspace import inventory, register_workspace_tools, tool_paths
+
+preflight("codex", "Run 'codex login'.", ("pypdf",), "Run 'uv sync --extra ...'.")
+with Project(WORKSPACE, sandbox=SANDBOX, tools=ToolRegistry(), reasoning=...) as project:
+    tools = tool_paths(TOOLING, FREECAD_MCP)
+    register_workspace_tools(project, ROOT, (DOCUMENTS, TOOLING), tools)
+    register_freecad_tools(project, FREECAD_MCP)
+    async with AsyncExitStack() as cleanup:
+        project.middleware = await standard_middleware(WORKSPACE, cleanup)
+        await host(project, build_request, port=8766, context=CONTEXT, budget=BUDGET)
+```
+
+- `preflight` prints the logo, points SysML at the checkout's assets, and stops
+  before any workspace exists when the reasoning CLI or a module is missing.
+- `register_workspace_tools` registers `list_files`, `read_text` and
+  `read_document` (no plan needed), and `write_text`, `execute` and
+  `verify_command`. `tool_paths` names the supplied checkouts; `inventory` lists
+  documents, tools and executables in a pinned source.
+- `register_freecad_tools` adds `freecad_status`, `freecad_view` and `freecad_run`
+  through a local freecad-mcp checkout.
+- `standard_middleware` always edits context; with `OPENAI_API_KEY` it also
+  summarizes and keeps Graphiti and mem0 memory in the workspace.
+- `host` runs a new request, or resumes the single saved run (`run_id` picks one).
+  It applies `context` within provider capacity and `budget` to a resumed run, and
+  serves the control socket. It prints questions, reviews and messages, and
+  waits at every human or review gate. Results go to `result.json` and
+  `timeline.jsonl`. With `reply=`, it answers every question itself, but never
+  reviews.
+- `guacamole.websocket.control(port, name)` connects a control script, such as
+  `examples/ehopper/interject.py`, to a running host.
+
 ## Repository layout
 
 The runtime lives in `src/guacamole` and tests live in `tests`.
