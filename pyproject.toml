@@ -28,6 +28,7 @@ sounding-rocket = [
     "openpyxl>=3.1,<4",
     "python-pptx>=1,<2",
 ]
+usd = ["usd-core>=25.5,<27"]
 
 [dependency-groups]
 dev = ["pytest>=9.1.1", "ruff>=0.16", "ty>=0.0.84"]
@@ -52,5 +53,5 @@ include = ["src/guacamole"]
 exclude = ["src/guacamole/integrations/lib/mbd_freecad.py"]
 
 [tool.ty.analysis]
-# OCP's partial stubs omit most OCCT classes.
-replace-imports-with-any = ["OCP.**"]
+# OCP's and USD's partial stubs omit most of their compiled classes.
+replace-imports-with-any = ["OCP.**", "pxr.**"]
