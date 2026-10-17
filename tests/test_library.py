@@ -20,6 +20,7 @@ from guacamole import (
     ProjectRequest,
     Requirement,
     Standard,
+    Verification,
 )
 from guacamole.clearance import label_of, permits
 from guacamole.contracts import Link, Rationale, RevisionProposal, Wait
@@ -849,6 +850,56 @@ class LibraryTests(unittest.IsolatedAsyncioTestCase):
                 ("refers_to", "Eq. 4.12"),
                 {(l.type, l.target) for l in elements["Example 4.1"].links},
             )
+
+    async def test_a_quote_from_disputed_text_blocks_review(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            shared = Library(root / "shared")
+            snapshot = shared.ingest(
+                fixture_standard(root / "tf1210.pdf"),
+                designation="TF 1210",
+                edition="2010",
+                label=LICENSED,
+                parser=PypdfParser(),
+            )
+            with Project(root / "ws", library=shared) as project:
+                _, _, clause = await licensed_clause(project, root, snapshot.id)
+                await commit_fixture_model(project)
+                plan = await project.decisions.choose(
+                    plan_request(clause, project.store.get("requirement", "code").ref),
+                    selected="fixture",
+                    explanation="TEST FIXTURE",
+                )
+                blockers = project.reviews.checks(plan)[2]
+                self.assertFalse([b for b in blockers if "disputed" in b])
+                shared.record(
+                    snapshot.id,
+                    [
+                        Verification(
+                            element="3.3.1",
+                            status="disputed",
+                            method="ocr:fixture",
+                            detail="words not read: thickness",
+                        )
+                    ],
+                )
+                self.assertIn(
+                    "thickness: quotes TF 1210:2010 3.3.1, whose extraction is "
+                    "disputed (words not read: thickness); resolve it against the "
+                    "original page (Library.resolve) or quote a corrected snapshot",
+                    project.reviews.checks(plan)[2],
+                )
+                shared.resolve(
+                    snapshot.id,
+                    "3.3.1",
+                    "passed",
+                    reviewer="fixture reviewer",
+                    reason="Page 3 reads as extracted.",
+                )
+                self.assertFalse(
+                    [b for b in project.reviews.checks(plan)[2] if "disputed" in b]
+                )
+            shared.close()
 
     def test_any_pdf_falls_back_to_pages_and_paragraphs(self):
         with tempfile.TemporaryDirectory() as directory:
