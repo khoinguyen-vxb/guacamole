@@ -12,7 +12,7 @@ from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from ....contracts import (
+from ...contracts import (
     JSON,
     Amendment,
     AmendmentRecord,
@@ -27,13 +27,13 @@ from ....contracts import (
     SystemModel,
     VerificationResult,
 )
-from ....decision import DecisionBlocked
-from ....storage import Snapshot
-from ....tools.registry import encode
+from ...decision import DecisionBlocked
+from ...storage import Snapshot
+from ...tools.registry import encode
 from . import validator
 
 if TYPE_CHECKING:
-    from ....project import Project
+    from ...project import Project
 
 MODEL_ID = "system"
 EXPORT = Path("sysml")

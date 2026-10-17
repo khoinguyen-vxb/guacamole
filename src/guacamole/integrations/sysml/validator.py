@@ -11,7 +11,7 @@ from collections.abc import Iterable, Mapping, Sequence
 from pathlib import PurePosixPath
 from typing import TYPE_CHECKING
 
-from ....contracts import (
+from ...contracts import (
     Constraint,
     ModelBound,
     ModelChanges,
@@ -22,7 +22,7 @@ from ....contracts import (
     Requirement,
     Satisfaction,
 )
-from ....tools.registry import encode
+from ...tools.registry import encode
 
 if TYPE_CHECKING:
     from .adapter import Bound, SysMLAdapter

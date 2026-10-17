@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 
 from guacamole import Project
-from guacamole.integrations.lib.openfoam import (
+from guacamole.integrations.openfoam import (
     environment,
     parse_mesh,
     parse_residuals,

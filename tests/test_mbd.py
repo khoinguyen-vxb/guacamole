@@ -6,15 +6,15 @@ from pathlib import Path
 
 from examples.bracket import bracket
 from guacamole import Project, ToolRegistry
-from guacamole.integrations.lib import mbd
-from guacamole.integrations.lib.drafting import PMI
+from guacamole.integrations import mbd
+from guacamole.integrations.drafting import PMI
 
 
 @unittest.skipUnless(
     bracket.FREECAD
     and mbd.available()
     and all(map(importlib.util.find_spec, ("ezdxf", "OCP"))),
-    "needs FreeCAD, the MBD Workbench and pythonocc-core (see guacamole/integrations/lib/mbd.py) "
+    "needs FreeCAD, the MBD Workbench and pythonocc-core (see guacamole/integrations/mbd.py) "
     "and the bracket extra (ezdxf, OCP)",
 )
 class MBDWorkbenchTests(unittest.IsolatedAsyncioTestCase):

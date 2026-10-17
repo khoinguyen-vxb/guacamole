@@ -10,9 +10,9 @@ from mcp.types import CallToolResult, TextContent
 from pydantic import ValidationError
 
 from guacamole import Project
-from guacamole.integrations.mcp import konnect
+from guacamole.integrations import konnect
 
-CALL = "guacamole.integrations.mcp.konnect.call"
+CALL = "guacamole.integrations.konnect.call"
 READERS = (
     "konnect_status",
     "kicad_project_info",
@@ -228,7 +228,7 @@ class SessionTests(unittest.IsolatedAsyncioTestCase):
         async def opened(binary, config):
             yield session
 
-        return session, patch("guacamole.integrations.mcp.konnect._session", opened)
+        return session, patch("guacamole.integrations.konnect._session", opened)
 
     async def test_call_loads_the_toolset_then_calls_the_tool(self):
         session, opened = self.session(
@@ -266,7 +266,7 @@ class SessionTests(unittest.IsolatedAsyncioTestCase):
         environment = {"ANTHROPIC_API_KEY": "secret", "KICAD_API_SOCKET": "s"}
         with (
             patch.dict("os.environ", environment),
-            patch("guacamole.integrations.mcp.konnect.stdio_client", stdio),
+            patch("guacamole.integrations.konnect.stdio_client", stdio),
             self.assertRaises(Stop),
         ):
             async with konnect._session(Path("/bin/konnect"), Path("k.toml")):

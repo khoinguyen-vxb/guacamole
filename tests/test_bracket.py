@@ -29,7 +29,7 @@ from guacamole.contracts import (
     Ref,
     Wait,
 )
-from guacamole.integrations.lib import drafting
+from guacamole.integrations import drafting
 
 SOURCE = Ref(kind="source", id="brief", revision=1, sha256="0" * 64)
 

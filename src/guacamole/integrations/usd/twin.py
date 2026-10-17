@@ -26,16 +26,16 @@ from typing import TYPE_CHECKING, Annotated, Literal
 from pxr import Gf, Sdf, Usd, UsdGeom, Vt
 from pydantic import Field
 
-from ....contracts import FileRecord, Model, ProducedFile, Quantity, Ref, SystemModel
-from ....storage import Snapshot
-from ....tools.execution import CURRENT_REQUEST
-from ....tools.registry import encode
-from ....tools.workspace import Offset
+from ...contracts import FileRecord, Model, ProducedFile, Quantity, Ref, SystemModel
+from ...storage import Snapshot
+from ...tools.execution import CURRENT_REQUEST
+from ...tools.registry import encode
+from ...tools.workspace import Offset
 from ..sysml.registry import CITABLE
 from .structure import ROOT, Node, derive
 
 if TYPE_CHECKING:
-    from ....project import Project
+    from ...project import Project
 
 KIND = "twin_layer"
 EXPORT = Path("twin")

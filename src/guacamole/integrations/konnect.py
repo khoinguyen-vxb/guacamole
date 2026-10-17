@@ -17,10 +17,10 @@ from mcp.client.stdio import stdio_client
 from mcp.types import CallToolResult, ImageContent, TextContent
 from pydantic import Field
 
-from ...contracts import JSON, Model, ProducedFile
+from ..contracts import JSON, Model, ProducedFile
 
 if TYPE_CHECKING:
-    from ...project import Project
+    from ..project import Project
 
 type Severity = Literal["error", "warning", "info"]
 type Limit = Annotated[int, Field(ge=1, le=500)]

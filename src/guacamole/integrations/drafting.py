@@ -27,7 +27,7 @@ from typing import Annotated, Any, Literal, NamedTuple
 
 from pydantic import Field, TypeAdapter
 
-from ...contracts import Model
+from ..contracts import Model
 
 PROFILE = "ISO_GPS_MECHANICAL"
 ASME = "ASME_Y14_5_2018"

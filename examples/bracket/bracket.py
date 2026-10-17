@@ -44,8 +44,8 @@ from guacamole import (
 )
 from guacamole.console import host, preflight
 from guacamole.contracts import ArtifactRecord
-from guacamole.integrations.lib import ap242, drafting
-from guacamole.integrations.lib.freecad import FREECAD, run_job
+from guacamole.integrations import ap242, drafting
+from guacamole.integrations.freecad import FREECAD, run_job
 from guacamole.providers.claude import ClaudeReasoning
 from guacamole.tools.registry import encode
 

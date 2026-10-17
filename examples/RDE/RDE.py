@@ -41,7 +41,7 @@ from guacamole import (
     Watchdog,
 )
 from guacamole.console import host, preflight
-from guacamole.integrations.mcp.freecad import register_freecad_tools
+from guacamole.integrations.freecad import register_freecad_tools
 from guacamole.middleware import standard_middleware
 from guacamole.providers.claude import ClaudeReasoning
 from guacamole.tools.workspace import inventory, register_workspace_tools, tool_paths

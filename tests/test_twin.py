@@ -39,7 +39,7 @@ def Cube "Body"
 @unittest.skipUnless(importlib.util.find_spec("pxr"), "needs usd-core (--extra usd)")
 class TwinTests(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
-        from guacamole.integrations.lib.usd.twin import register_twin_tools
+        from guacamole.integrations.usd.twin import register_twin_tools
 
         self.directory = tempfile.TemporaryDirectory()
         root = Path(self.directory.name)

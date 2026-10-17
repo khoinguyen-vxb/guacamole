@@ -27,11 +27,11 @@ from typing import TYPE_CHECKING, Annotated, Literal
 
 from pydantic import Field
 
-from ...contracts import Model, ProducedFile
-from ...tools.workspace import Count, Offset
+from ..contracts import Model, ProducedFile
+from ..tools.workspace import Count, Offset
 
 if TYPE_CHECKING:
-    from ...project import Project
+    from ..project import Project
 
 BASE = ("PATH", "HOME", "USER", "LANG", "LC_ALL", "TMPDIR")
 APPLICATION = re.compile(r"[A-Za-z][A-Za-z0-9_.+-]*")
