@@ -214,7 +214,9 @@ def verify(
                 regions := _regions(element, images, out)
             ):
                 method += "+region"
-                result = compare(element, "\n".join(reader.read(r) for r in regions))
+                # Either reading may hold what the other missed.
+                regional = "\n".join(reader.read(r) for r in regions)
+                result = compare(element, f"{reading}\n{regional}")
             results.append(result.model_copy(update={"method": method}))
     library.record(snapshot, results)
     passed = sum(r.status == "passed" for r in results)
