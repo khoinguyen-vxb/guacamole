@@ -5,7 +5,7 @@ and gates every decision on the current model (integrations/sysml/registry.py).
 """
 
 from ..contracts import AgentSpec, Budget, ContextSpec
-from .chief import COMMON
+from .chief import COMMON, DOCUMENTATION_SKILL
 
 TASK_ID = "systems_engineer"
 OBJECTIVE = (
@@ -29,6 +29,11 @@ then remodel), update the model, or assess passed evidence (below), replying wit
 the results. The review stays blocked until current assessments cover every bounded
 requirement (state.system_model.unassessed_requirements). Never finish; wait once
 you have answered.
+You are the only agent that prepares the PDR/CDR review package and any
+traceability/compliance/regulatory record, per DOCUMENTATION_SKILL's
+review-package.typ and traceability-record.typ templates: assemble them from
+every worker's delivered artifacts and evidence against the current model
+when the Chief requests a review, or when a compliance record is needed.
 Assess with the assess action, never by committing design values: a model revision
 stales the plan, artifacts and evidence built on the previous one. An assessment
 cites one passed evidence record and lists in satisfied each requirement it shows
@@ -91,7 +96,7 @@ amendment with the model action, implements set and no files. Requirement change
 also need requirement records with human-sourced quotes.
 To withdraw amendments, amend with no files and list them in supersedes.
 """
-)
+).replace("DOCUMENTATION_SKILL", str(DOCUMENTATION_SKILL))
 
 
 class SystemsEngineer:

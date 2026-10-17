@@ -2,6 +2,7 @@
 
 import asyncio
 import inspect
+from contextvars import ContextVar
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
@@ -10,6 +11,9 @@ from .registry import Tool, encode
 
 if TYPE_CHECKING:
     from ..project import Project
+
+# The request a tool function is running for, so tools can record provenance.
+CURRENT_REQUEST: ContextVar[str | None] = ContextVar("current_request", default=None)
 
 
 @dataclass(frozen=True)
@@ -199,6 +203,8 @@ class Executor:
             raise
         activity.transition(record.id, "dispatched", actor="runtime")
         activity.transition(record.id, "running", actor="runtime")
+        # Each job runs in its own task, so this never leaks into other jobs.
+        CURRENT_REQUEST.set(record.id)
         try:
             if inspect.iscoroutinefunction(tool.function):
                 raw = await tool.function(**args)

@@ -691,6 +691,12 @@ class SystemsEngineerRuntimeTests(unittest.IsolatedAsyncioTestCase):
         # The draft was rejected with its full report; the valid model was recorded.
         rejection = next(o for o in observations if "report" in o)
         self.assertEqual(rejection["report"]["issues"][0]["code"], "syntax")
+        # The rejection stays listed until an action is accepted, then clears.
+        retry = observations.index(rejection)
+        [listed] = engineer_packets[retry]["state"]["recent_rejections"]
+        self.assertEqual(listed["phase"], "action")
+        self.assertEqual(listed["issues"][0]["code"], "syntax")
+        self.assertEqual(engineer_packets[retry + 1]["state"]["recent_rejections"], [])
         # The chief starts once the engineer's model is valid, and cannot record
         # requirements itself.
         self.assertEqual(chief_packets[0]["state"]["system_model"]["status"], "valid")

@@ -939,6 +939,9 @@ sounding-rocket = [
     { name = "python-pptx" },
     { name = "websockets" },
 ]
+usd = [
+    { name = "usd-core" },
+]
 websocket = [
     { name = "websockets" },
 ]
@@ -967,10 +970,11 @@ requires-dist = [
     { name = "python-pptx", marker = "extra == 'sounding-rocket'", specifier = ">=1,<2" },
     { name = "sysml", specifier = ">=0.1.0" },
     { name = "tiktoken", specifier = ">=0.12,<1" },
+    { name = "usd-core", marker = "extra == 'usd'", specifier = ">=25.5,<27" },
     { name = "websockets", marker = "extra == 'sounding-rocket'", specifier = ">=15,<17" },
     { name = "websockets", marker = "extra == 'websocket'", specifier = ">=15,<17" },
 ]
-provides-extras = ["websocket", "litellm", "langchain", "graphiti", "mem0", "sounding-rocket"]
+provides-extras = ["websocket", "litellm", "langchain", "graphiti", "mem0", "sounding-rocket", "usd"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -3282,6 +3286,19 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/e3/05/b17359e1cefb4f909b5e40b1b90a496d987258916dbbf88e842c729f510e/urllib3-2.8.0.tar.gz", hash = "sha256:63bf2ead4c879426ebf22ef2a781eeb4aa3b4ae798a0435506f8687fd5bb9b63", size = 458972, upload-time = "2026-09-15T19:29:36.253Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl", hash = "sha256:0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3", size = 135717, upload-time = "2026-09-15T19:29:34.577Z" },
+]
+
+[[package]]
+name = "usd-core"
+version = "26.8"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/79/fd/7060951a8fef299c9adcd89493219884c9f53f14492f7972238b83a6eb17/usd_core-26.8-cp313-none-macosx_10_15_universal2.whl", hash = "sha256:150bc967f4760000b8087ab4bd669f1477043f07433dcbcd8a80a97c73c47545", size = 40698029, upload-time = "2026-07-20T14:32:30.566Z" },
+    { url = "https://files.pythonhosted.org/packages/f8/e8/aee0809bedc47032a4bee4cd0b1b65e7bc65522c5ac9b28418974a47b5c7/usd_core-26.8-cp313-none-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:cd08c65edccd3fd3b5be5354593a8b54175adb8b45e3d84eb5e1644af5e904fb", size = 29531140, upload-time = "2026-07-20T14:32:34.047Z" },
+    { url = "https://files.pythonhosted.org/packages/ca/54/83e0f3810f74c88a85a56dc9cf950bc7b74a342cea3d5c4e441b3a11b4bb/usd_core-26.8-cp313-none-win_amd64.whl", hash = "sha256:8de2d62f148d11a33936634b9e43ded9c691ce565430218b606e8235bdb9cbf2", size = 13888333, upload-time = "2026-07-20T14:32:36.645Z" },
+    { url = "https://files.pythonhosted.org/packages/94/56/1b14f82eaa8db9d054246ec6c4abad146c21eb4e914e742d4ad153f8325a/usd_core-26.8-cp314-none-macosx_10_15_universal2.whl", hash = "sha256:fec6ba0ddcf6b285e1757494fcb66e57c23993098cb3cb26bf8db263567bb945", size = 40856543, upload-time = "2026-07-20T14:32:39.783Z" },
+    { url = "https://files.pythonhosted.org/packages/4f/ce/76e0476d04c387cbf435f11aafb36ff4f79345215d7b9dbb677a7a1efa11/usd_core-26.8-cp314-none-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:114f39723ccfc9a269cfdf6a7b80fec53aa96530806e510a6cccfd577401a07c", size = 29575839, upload-time = "2026-07-20T14:32:43.582Z" },
+    { url = "https://files.pythonhosted.org/packages/fc/87/d5cd29f5326bb945cf90198d28c7f3fca45a950e7512851360ced2e0a7e9/usd_core-26.8-cp314-none-win_amd64.whl", hash = "sha256:c780f28b624f4efb3d8f78af805f17082b3976f61ba18da8171bb898ce31f2be", size = 14451875, upload-time = "2026-07-20T14:32:46.461Z" },
 ]
 
 [[package]]

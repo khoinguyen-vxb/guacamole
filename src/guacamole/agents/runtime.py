@@ -583,6 +583,7 @@ class Runtime:
             "workspace": str(store.directory),
             "sandbox": str(self.project.sandbox),
             "last_observation": state.observation,
+            "recent_rejections": list(state.rejections),
             # Inbox context drops acknowledged mail and never shows outgoing mail, so
             # workers re-sent the same report every turn without this.
             # ponytail: last 5 sends, payloads cut at 2000 chars.
@@ -1021,7 +1022,11 @@ class Runtime:
                         agent, turn.acknowledge
                     )
                 changed = changed.model_copy(
-                    update={"observation": observation, "status": status}
+                    update={
+                        "observation": observation,
+                        "status": status,
+                        "rejections": (),
+                    }
                 )
                 if status == "waiting":
                     activity.transition(
@@ -1107,9 +1112,20 @@ class Runtime:
                     else "Action rejected; inspect request records. Exception text omitted."
                 )
             )
+            # last_observation keeps only this rejection, so agents repairing one
+            # issue reintroduced another they had fixed a turn earlier.
+            # ponytail: last 5 rejections, each with at most 10 issues.
+            rejection: JSON = {"phase": phase, "detail": detail[:500]}
+            if isinstance(exc, ModelRejected):
+                errors = [i for i in exc.report.issues if i.severity == "error"]
+                rejection["issues"] = [
+                    i.model_dump(mode="json", include={"code", "element", "detail"})
+                    for i in errors[:10]
+                ]
             # The next turn can correct a rejected proposal; failed tool work stays visible.
             changed = changed.model_copy(
                 update={
+                    "rejections": (*changed.rejections, rejection)[-5:],
                     "observation": pending_reads
                     | {
                         "error_type": type(exc).__name__,
@@ -1121,7 +1137,7 @@ class Runtime:
                         {"report": exc.report.model_dump(mode="json")}
                         if isinstance(exc, ModelRejected)
                         else {}
-                    )
+                    ),
                 }
             )
             if phase != "action" and not invalid_rationale and not invalid_turn:

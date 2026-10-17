@@ -40,6 +40,9 @@ type Command = Annotated[tuple[str, ...], Field(min_length=1)]
 
 # The directory holding the guacamole package, so tool scripts can import it.
 SOURCE = Path(__file__).resolve().parents[2]
+# Packaged agent skills (e.g. engineering-documentation); always readable so
+# any agent can read_text/list_files a skill's SKILL.md and its assets.
+SKILLS = SOURCE / "guacamole" / "agents" / "skills"
 # Passed to tool processes; the reasoning API key never is.
 ENVIRONMENT = (
     "PATH",
@@ -238,7 +241,12 @@ def register_workspace_tools(
     interpreter; otherwise its .venv/bin/python is used, then this interpreter.
     """
     root = root.resolve()
-    readable = (*(p.resolve() for p in inputs), *tools.values(), project.sandbox)
+    readable = (
+        *(p.resolve() for p in inputs),
+        *tools.values(),
+        project.sandbox,
+        SKILLS,
+    )
 
     def allowed(path: Path) -> bool:
         return any(path == r or path.is_relative_to(r) for r in readable)

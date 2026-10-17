@@ -564,6 +564,8 @@ class AgentState(Model):
     tool_calls: int = 0
     elapsed_s: float = 0.0
     observation: JSON = Field(default_factory=dict)
+    # Consecutive rejected attempts since the last accepted action, oldest first.
+    rejections: tuple[JSON, ...] = ()
 
 
 class HumanInput(Model):
