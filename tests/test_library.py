@@ -783,6 +783,73 @@ class LibraryTests(unittest.IsolatedAsyncioTestCase):
                     changed,
                 )
 
+    async def test_a_textbook_equation_brings_its_assumptions_and_limits(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            pdf = write_pdf(
+                root / "columns.pdf",
+                [
+                    [
+                        "# Chapter 4 Columns",
+                        "# 4.1 Introduction",
+                        "Columns carry axial load; buckling governs slender members.",
+                        "# 4.2 Euler buckling",
+                        "Equation (4.12) assumes a slender, initially straight,",
+                        "linear-elastic column.",
+                        "P = pi^2 E I / (K L)^2 (4.12)",
+                        "where E is the elastic modulus, I the second moment of area",
+                        "and K is taken from Table 4.1.",
+                        "Table 4.1 Effective-length factors",
+                        "Pinned-pinned: K = 1.0",
+                        "Fixed-free: K = 2.0",
+                    ],
+                    [
+                        "# 4.3 Limits of the Euler formula",
+                        "Equation (4.12) is valid only when the slenderness ratio",
+                        "exceeds 100. For stocky columns use Eq. (4.15) instead.",
+                        "P = A (s_y - k (L/r)^2) (4.15)",
+                        "Example 4.1 Buckling load of a strut",
+                        "A pinned strut 2 m long: Eq. (4.12) with K from Table 4.1.",
+                        "Problem 4.1 Find the buckling load of a fixed-free column.",
+                    ],
+                ],
+            )
+            with Library(root / "library") as library:
+                snapshot = library.ingest(
+                    pdf, designation="Columns", edition="1", parser=PypdfParser()
+                )
+                self.assertEqual(snapshot.profile, "textbook@1")
+                elements = {e.id: e for e in library.elements(snapshot.id)}
+            self.assertEqual(
+                {id: (e.kind, e.parent) for id, e in elements.items()},
+                {
+                    "4": ("chapter", None),
+                    "4.1": ("text", "4"),
+                    "4.2": ("text", "4"),
+                    "Eq. 4.12": ("equation", "4.2"),
+                    "Table 4.1": ("table", "4.2"),
+                    "4.3": ("text", "4"),
+                    "Eq. 4.15": ("equation", "4.3"),
+                    "Example 4.1": ("worked example", "4.3"),
+                    "Problem 4.1": ("exercise", "4.3"),
+                },
+            )
+            equation = elements["Eq. 4.12"]
+            # Its symbols come with it, and what they depend on.
+            self.assertIn("K is taken from Table 4.1.", equation.text)
+            self.assertEqual(
+                {(l.type, l.target) for l in equation.links},
+                {("uses", "Table 4.1"), ("assumes", "4.2")},
+            )
+            self.assertIn(
+                ("limits", "Eq. 4.12"),
+                {(l.type, l.target) for l in elements["4.3"].links},
+            )
+            self.assertIn(
+                ("refers_to", "Eq. 4.12"),
+                {(l.type, l.target) for l in elements["Example 4.1"].links},
+            )
+
     def test_any_pdf_falls_back_to_pages_and_paragraphs(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

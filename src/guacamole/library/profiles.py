@@ -458,8 +458,191 @@ def _forms(term: str) -> tuple[re.Pattern[str], ...]:
     )
 
 
+_CHAPTER = re.compile(r"^(?:CHAPTER|Chapter)\s+(\d{1,2})\b[\s:.—–-]*(.*)$")
+_SECTION_HEADING = re.compile(r"^(\d{1,2}(?:\.\d{1,2}){1,3})\s+([A-Z][^.]{0,80})$")
+_EQUATION_TAG = re.compile(r"\((\d{1,2}\.\d{1,3}[a-z]?)\)\s*$")
+_WHERE = re.compile(r"^where\b", re.IGNORECASE)
+_EXAMPLE = re.compile(r"^(?:EXAMPLE|Example)\s+(\d{1,2}\.\d{1,3})\b\s*(.*)$")
+_PROBLEM = re.compile(
+    r"^(?:PROBLEM|Problem|EXERCISE|Exercise)\s+(\d{1,2}\.\d{1,3})\b\s*(.*)$"
+)
+_CITE_EQUATION = re.compile(
+    r"\b(?:Eqs?\.|Equations?)\s*\(?(\d{1,2}\.\d{1,3}[a-z]?)\)?"
+    r"|(?<![\w.])\((\d{1,2}\.\d{1,3}[a-z]?)\)"
+)
+_CITE_NUMBERED = re.compile(
+    r"\b(Section|Example|Problem|Chapter|Table|Figure)s?\s+(\d{1,2}(?:\.\d{1,3})*)\b"
+)
+_ASSUMES = re.compile(
+    r"\b(?:assum\w*|ideali[sz]\w*|derived (?:for|under|assuming)|based on)\b",
+    re.IGNORECASE,
+)
+_VALIDITY = re.compile(
+    r"\b(?:valid|only (?:for|when|if)|not (?:valid|applicable)|should not be used"
+    r"|limited to|breaks down|instead)\b",
+    re.IGNORECASE,
+)
+
+
+class TextbookProfile:
+    """Textbooks: chapters, numbered sections, equations, worked examples, problems.
+
+    An equation keeps the "where E is ..." lines defining its symbols. A sentence
+    elsewhere that cites it with an assumption makes the equation assume that
+    element; one stating where it is valid limits it, so reading the equation
+    brings both, as reading a clause brings its exceptions.
+    """
+
+    name = "textbook@1"
+
+    def fit(self, blocks: tuple[Block, ...]) -> float:
+        equations = sum(bool(_EQUATION_TAG.search(b.text)) for b in blocks)
+        examples = sum(bool(_EXAMPLE.match(b.text)) for b in blocks)
+        chapter = any(_CHAPTER.match(b.text) for b in blocks)
+        return min(1, equations / 4) * 0.5 + min(1, examples / 2) * 0.3 + chapter * 0.2
+
+    def structure(self, blocks: tuple[Block, ...]) -> tuple[Element, ...]:
+        drafts: dict[str, _Draft] = {}
+        current: _Draft | None = None
+        section: str | None = None  # The chapter or section being read
+        symbols: _Draft | None = None  # An equation still taking "where" lines
+        defining = False  # Inside its "where" sentence
+
+        def open_(id: str, parent: str | None, kind: str, heading: str) -> _Draft:
+            if id not in drafts:
+                drafts[id] = _Draft(id, parent, kind, heading)
+            return drafts[id]
+
+        for block in blocks:
+            text = block.text
+            if symbols is not None:
+                # "where E is ..." and its wrapped lines, to the sentence's end.
+                if _WHERE.match(text) or defining:
+                    symbols.add(block)
+                    defining = not _ended(text)
+                    if not defining:
+                        symbols = None
+                    continue
+                symbols = None
+            if m := _CHAPTER.match(text):
+                current = open_(m.group(1), None, "chapter", m.group(2).strip())
+                section = m.group(1)
+            elif (m := _SECTION_HEADING.match(text)) and block.kind != "list_item":
+                id = m.group(1)
+                parent = id.rsplit(".", 1)[0]
+                while parent not in drafts and "." in parent:
+                    parent = parent.rsplit(".", 1)[0]
+                current = open_(
+                    id, parent if parent in drafts else None, "text", m.group(2).strip()
+                )
+                section = id
+            elif m := _EXAMPLE.match(text):
+                current = open_(
+                    f"Example {m.group(1)}",
+                    section,
+                    "worked example",
+                    m.group(2).strip(),
+                )
+            elif m := _PROBLEM.match(text):
+                current = open_(
+                    f"Problem {m.group(1)}", section, "exercise", m.group(2).strip()
+                )
+            elif m := _EQUATION_TAG.search(text):
+                parent = (
+                    current.id
+                    if current and current.kind in {"worked example", "exercise"}
+                    else section
+                )
+                symbols = open_(f"Eq. {m.group(1)}", parent, "equation", "")
+                symbols.add(block)
+                continue
+            elif (caption := _CAPTION_ANY.match(text)) and _titled(caption.group(3)):
+                kind = caption.group(1).lower()
+                draft = open_(
+                    _caption_id(caption.group(1), caption.group(2)),
+                    section,
+                    kind,
+                    caption.group(3).strip(),
+                )
+                draft.add(block)
+                if kind == "table":
+                    current = draft
+                continue
+            elif current is None:
+                current = open_("front", None, "informative", "")
+            else:
+                current.add(block)
+                continue
+            current.add(block)
+        return self.link(
+            tuple(
+                Element(
+                    id=d.id,
+                    parent=d.parent,
+                    kind=d.kind,
+                    heading=d.heading,
+                    text="\n".join(d.lines),
+                    provenance=_provenance(d.blocks),
+                )
+                for d in drafts.values()
+            )
+        )
+
+    def link(self, elements: tuple[Element, ...]) -> tuple[Element, ...]:
+        ids = {e.id for e in elements}
+        found: dict[str, dict[tuple[str, str], Link]] = {e.id: {} for e in elements}
+
+        def add(source: str, type: LinkType, target: str) -> None:
+            if target in ids and target != source:
+                found[source].setdefault(
+                    (type, target),
+                    Link(
+                        type=type,
+                        target=target,
+                        resolved=True,
+                        confidence=0.8 if type in {"assumes", "limits"} else 1.0,
+                    ),
+                )
+
+        for e in elements:
+            text = " ".join(e.text.split())
+            own_tag = e.id.removeprefix("Eq. ") if e.kind == "equation" else None
+            for m in _CITE_NUMBERED.finditer(text):
+                word = m.group(1)
+                target = (
+                    m.group(2)
+                    if word in {"Section", "Chapter"}
+                    else f"{word} {m.group(2)}"
+                )
+                add(
+                    e.id, "uses" if word in {"Table", "Figure"} else "refers_to", target
+                )
+            for sentence in re.split(r"(?<=[.;])\s+", text):
+                for m in _CITE_EQUATION.finditer(sentence):
+                    tag = m.group(1) or m.group(2)
+                    if tag == own_tag:
+                        continue
+                    equation = f"Eq. {tag}"
+                    add(e.id, "refers_to", equation)
+                    # The equation depends on what is assumed of it; what bounds it
+                    # limits it, and is read with it either way.
+                    if _ASSUMES.search(sentence) and equation in ids:
+                        add(equation, "assumes", e.id)
+                    if _VALIDITY.search(sentence):
+                        add(e.id, "limits", equation)
+        return tuple(
+            e.model_copy(update={"links": tuple(found[e.id].values())})
+            for e in elements
+        )
+
+
+def _ended(line: str) -> bool:
+    return line.rstrip().endswith((".", ":", ";", "?", "!"))
+
+
 PROFILES: dict[str, Profile] = {
     "numbered-clause": NumberedClauseProfile(),
+    "textbook": TextbookProfile(),
     "fallback": FallbackProfile(),
 }
 
