@@ -126,8 +126,12 @@ def compare(element: Element, reading: str) -> Verification:
     )
 
 
+DPI = 300  # Sharp enough for OCR of body text and table cells
+PAD = 6  # Points around an element's box when it is read alone
+
+
 def render(
-    pdf: Path, pages: Iterable[int], out: Path, dpi: int = 300
+    pdf: Path, pages: Iterable[int], out: Path, dpi: int = DPI
 ) -> dict[int, Path]:
     """Pages of a PDF as PNG images, sharp enough for OCR."""
     import pypdfium2
@@ -144,6 +148,29 @@ def render(
         document.close()
 
 
+def _regions(element: Element, images: dict[int, Path], out: Path) -> list[Path]:
+    """The element's own boxes cut from its rendered pages, a little padded."""
+    from PIL import Image
+
+    crops = []
+    for i, place in enumerate(element.provenance):
+        if place.bbox is None:
+            continue
+        scale = DPI / 72
+        left, top, right, bottom = place.bbox
+        with Image.open(images[place.page]) as page:
+            box = (
+                max(0, int((left - PAD) * scale)),
+                max(0, int((top - PAD) * scale)),
+                min(page.width, int((right + PAD) * scale)),
+                min(page.height, int((bottom + PAD) * scale)),
+            )
+            target = out / f"region-{i}.png"  # Replaced by the next element's
+            page.crop(box).save(target)
+        crops.append(target)
+    return crops
+
+
 def verify(
     library: Library,
     snapshot: str,
@@ -152,7 +179,12 @@ def verify(
     elements: Iterable[str] | None = None,
     progress: Callable[[int, int], None] | None = None,
 ) -> Report:
-    """Check a snapshot's elements, or the ones named, and record each result."""
+    """Check a snapshot's elements, or the ones named, and record each result.
+
+    Each element is compared with OCR of its whole pages; one that disagrees and
+    has laid-out boxes is read again from its own region, since page-level OCR
+    can skip text it takes for part of a drawing (a figure's caption).
+    """
     reader = reader or TesseractReader()
     frozen = library.snapshot(snapshot)
     chosen = set(elements) if elements is not None else None
@@ -164,23 +196,26 @@ def verify(
     skipped = (len(chosen) if chosen is not None else frozen.elements) - len(targets)
     pages = {p.page for e in targets for p in e.provenance}
     readings: dict[int, str] = {}
+    results = []
     with tempfile.TemporaryDirectory() as directory:
-        images = render(library.original(frozen), pages, Path(directory))
+        out = Path(directory)
+        images = render(library.original(frozen), pages, out)
         for done, (page, image) in enumerate(images.items(), start=1):
             readings[page] = reader.read(image)
             if progress:
                 progress(done, len(images))
-    passed = disputed = 0
-    results = []
-    for element in targets:
-        reading = "\n".join(
-            readings[p] for p in sorted({p.page for p in element.provenance})
-        )
-        result = compare(element, reading).model_copy(
-            update={"method": f"ocr:{reader.name}"}
-        )
-        results.append(result)
-        passed += result.status == "passed"
-        disputed += result.status == "disputed"
+        for element in targets:
+            reading = "\n".join(
+                readings[p] for p in sorted({p.page for p in element.provenance})
+            )
+            method = f"ocr:{reader.name}"
+            result = compare(element, reading)
+            if result.status == "disputed" and (
+                regions := _regions(element, images, out)
+            ):
+                method += "+region"
+                result = compare(element, "\n".join(reader.read(r) for r in regions))
+            results.append(result.model_copy(update={"method": method}))
     library.record(snapshot, results)
-    return Report(passed, disputed, skipped)
+    passed = sum(r.status == "passed" for r in results)
+    return Report(passed, len(results) - passed, skipped)

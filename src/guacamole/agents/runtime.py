@@ -355,6 +355,25 @@ class Runtime:
                 ref = self.project.ingest(path)
                 sources.append(ref)
                 data = store.get("source", ref.id).data
+                # A project using a library reads its PDFs as pinned elements.
+                if (
+                    data["media_type"] == "application/pdf"
+                    and self.project.uses_library
+                ):
+                    try:
+                        snapshot = await asyncio.to_thread(
+                            self.project.project_library.ingest,
+                            path,
+                            designation=path.stem,
+                            edition="as supplied",
+                            label=self.project.clearance,
+                            parser=self.project.library_parser,
+                        )
+                    except ValueError:
+                        pass  # No text layer: the open item below asks for a reader
+                    else:
+                        sources.append(self.project.pin(snapshot.id))
+                        continue
                 # Images reach a provider as pixels when an agent reads them.
                 if data.get("text") is None and data["media_type"] not in IMAGE_TYPES:
                     self.project.record_open_item(

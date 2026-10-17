@@ -58,7 +58,7 @@ from .integrations.freecad import register_freecad_tools
 from .integrations.mbd import register_mbd_tools
 from .integrations.sysml.registry import SysMLRegistry
 from .integrations.sysml.runtime import standard_library
-from .library import Library, register_library_tools
+from .library import LayoutParser, Library, register_library_tools
 from .library.editions import align
 from .reviews import Reviews
 from .standards import parse, squash
@@ -164,6 +164,9 @@ class Project:
             self.library = library
             # Library content this project may pin; None: not checked.
             self.clearance = clearance
+            # How supplied PDFs are parsed into the project library; None: Docling
+            # when installed, else pypdf.
+            self.library_parser: LayoutParser | None = None
             self._project_library: Library | None = None
             if library is not None or (workspace / "library").exists():
                 self._library_readers()
@@ -342,8 +345,13 @@ class Project:
         scopes["project"] = self.project_library
         return scopes
 
+    @property
+    def uses_library(self) -> bool:
+        """Whether agents read library elements here: a library is attached or pinned."""
+        return any(d.grant.name == "get_element" for d in self.tools.definitions())
+
     def _library_readers(self) -> None:
-        if not any(d.grant.name == "get_element" for d in self.tools.definitions()):
+        if not self.uses_library:
             register_library_tools(self)
 
     def _snapshot(self, snapshot: str) -> tuple[Scope, Library, SourceSnapshot]:

@@ -22,8 +22,11 @@ class Library:
         self.directory = directory.expanduser().resolve()
         self.scope: Scope = scope
         self.directory.mkdir(parents=True, exist_ok=True)
+        # Ingestion may run in a worker thread; writes are single transactions.
         self.db = sqlite3.connect(
-            self.directory / "library.sqlite3", isolation_level=None
+            self.directory / "library.sqlite3",
+            isolation_level=None,
+            check_same_thread=False,
         )
         self.db.execute("PRAGMA journal_mode=WAL")
         self.db.executescript("""
@@ -74,7 +77,8 @@ class Library:
     ) -> SourceSnapshot:
         """Parse a PDF, structure it with the best-fitting profile, and freeze it.
 
-        Ingesting the same file the same way again returns the existing snapshot.
+        Ingesting the same file the same way again returns the existing snapshot
+        without parsing it.
         """
         data = path.read_bytes()
         digest = hashlib.sha256(data).hexdigest()
@@ -83,6 +87,16 @@ class Library:
             original.parent.mkdir(parents=True, exist_ok=True)
             original.write_bytes(data)
         parser = parser or default_parser()
+        # The same file parsed the same way again: no need to parse it to know.
+        for existing in self.snapshots():
+            if (
+                (existing.file_sha256, existing.file_name) == (digest, path.name)
+                and existing.parser == parser.name
+                and (profile is None or existing.profile.split("@")[0] == profile)
+                and (existing.designation, existing.edition) == (designation, edition)
+                and existing.label == (label or Label())
+            ):
+                return existing
         blocks = parser.parse(original)
         chosen = choose(blocks, profile)
         elements = chosen.structure(blocks)

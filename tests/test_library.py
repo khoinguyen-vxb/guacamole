@@ -619,6 +619,66 @@ class LibraryTests(unittest.IsolatedAsyncioTestCase):
                 self.assertTrue(project.store.get("requirement", "thickness").stale)
             shared.close()
 
+    async def test_supplied_pdfs_become_pinned_project_snapshots(self):
+        class Counting(PypdfParser):
+            parses = 0
+
+            def parse(self, path):
+                Counting.parses += 1
+                return super().parse(path)
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            spec = write_pdf(
+                root / "client-spec.pdf", [["Shells shall be painted grey."]]
+            )
+            from pypdf import PdfWriter
+
+            blank = PdfWriter()
+            blank.add_blank_page(width=100, height=100)
+            blank.write(root / "scan.pdf")
+            shared = Library(root / "shared")
+            provider = Waiting(LICENSED)
+            with Project(root / "ws", library=shared, reasoning=provider) as project:
+                project.library_parser = Counting()
+                result = await project.run(
+                    ProjectRequest(
+                        description="fixture",
+                        documents=(spec, root / "scan.pdf"),
+                        context=ContextSpec(max_input_tokens=200_000),
+                    )
+                )
+                pin = project.store.get("source", "library:client-spec")
+                self.assertEqual(
+                    (pin.data["scope"], pin.data["designation"]),
+                    ("project", "client-spec"),
+                )
+                (snapshot,) = project.project_library.snapshots()
+                self.assertIn(
+                    "painted grey",
+                    project.project_library.element(snapshot.id, "p1").text,
+                )
+                # A PDF with no text still needs a reader.
+                self.assertEqual(
+                    ["Source scan.pdf requires a supplied reader; original preserved"],
+                    [
+                        s.data["description"]
+                        for s in project.store.list("open_item")
+                        if s.data["kind"] == "missing_tool"
+                    ],
+                )
+                parses = Counting.parses
+                # The same file again is not parsed again.
+                project.project_library.ingest(
+                    spec,
+                    designation="client-spec",
+                    edition="as supplied",
+                    parser=project.library_parser,
+                )
+                self.assertEqual(Counting.parses, parses)
+                self.assertTrue(result.run_id)
+            shared.close()
+
     def test_any_pdf_falls_back_to_pages_and_paragraphs(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
