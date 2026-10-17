@@ -110,6 +110,29 @@ class ContainerTests(unittest.IsolatedAsyncioTestCase):
         self.assertFalse(any("ANTHROPIC" in a or "DOCKER_HOST" in a for a in argv))
         networked = self.contained(network=True).launch(["x"], self.project.sandbox)
         self.assertNotIn("--network", networked.argv)
+        self.assertNotIn("--userns", argv)
+
+    def test_podman_keeps_the_host_user_and_skips_selinux_labels(self):
+        podman = self.root / "bin/podman"
+        podman.parent.mkdir()
+        podman.symlink_to(self.engine)
+        spec = Container(image=IMAGE, engine=str(podman))
+        pairs = set(
+            pairwise(
+                ContainerRunner(self.project, spec)
+                .launch(["x"], self.project.sandbox)
+                .argv
+            )
+        )
+        self.assertIn(("--userns", "keep-id"), pairs)
+        self.assertIn(("--security-opt", "label=disable"), pairs)
+        rootless = Container(image=IMAGE, engine=str(podman), user=None)
+        argv = (
+            ContainerRunner(self.project, rootless)
+            .launch(["x"], self.project.sandbox)
+            .argv
+        )
+        self.assertNotIn("--userns", argv)
 
     async def test_runs_log_output_and_a_timeout_kills_the_container(self):
         runs = self.contained()

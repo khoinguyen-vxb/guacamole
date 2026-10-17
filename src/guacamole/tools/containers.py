@@ -254,6 +254,13 @@ class ContainerRunner(Runner):
             argv += ["--network", "none"]
         if spec.user:
             argv += ["--user", spec.user]
+        if Path(spec.engine).name == "podman":
+            # Rootless podman maps --user through subordinate IDs unless keep-id
+            # maps the host user onto itself, and SELinux hosts deny bind mounts
+            # without a relabel, which would rewrite the labels of host files.
+            if spec.user:
+                argv += ["--userns", "keep-id"]
+            argv += ["--security-opt", "label=disable"]
         for flag, value in (
             ("--shm-size", spec.shm_size),
             ("--memory", spec.memory),
