@@ -1,6 +1,6 @@
 """ISO GPS part drawings compiled from canonical PMI and projected model geometry.
 
-Example tooling, not part of the Guacamole runtime: domain types belong to tools.
+Product tools import it to publish drawings; ezdxf (the `bracket` extra) loads on use.
 The PMI (named features, datums, size and geometrical specifications, and the general
 specification) carries the engineering meaning and is tied to the geometry it was
 made for. compile_drawing turns it, three projected views and a title block into an
@@ -27,7 +27,7 @@ from typing import Annotated, Any, Literal, NamedTuple
 
 from pydantic import Field, TypeAdapter
 
-from guacamole import Model
+from ..contracts import Model
 
 PROFILE = "ISO_GPS_MECHANICAL"
 ASME = "ASME_Y14_5_2018"
@@ -1015,10 +1015,10 @@ def _plan(pmi: PMI, sheet: Sheet, views: dict) -> dict[str, dict[str, list[dict]
                 for points in views[view]["visible"]["polylines"]:
                     mid = points[len(points) // 2]
                     centre = _circumcentre(points[0], mid, points[-1])
-                    if centre is None or abs(math.dist(centre, mid) - f.radius) > 1e-3:
+                    if centre is None or abs(math.dist(centre, mid) - f.radius) > 1e-3:  # ty: ignore[unsupported-operator] -- cylinders have a radius
                         continue
                     gap = math.dist(mid, at)  # The face's centroid lies by its arc
-                    if gap < f.radius and (best is None or gap < best[0]):
+                    if gap < f.radius and (best is None or gap < best[0]):  # ty: ignore[unsupported-operator] -- cylinders have a radius
                         best = (gap, view, (mid[0], mid[1]))
         if best is None:
             raise ValueError(f"{name}: no view shows its radius as an arc")
@@ -1114,7 +1114,8 @@ def _plan(pmi: PMI, sheet: Sheet, views: dict) -> dict[str, dict[str, list[dict]
                     continue  # The primary datum faces the viewer: it orients, not locates.
                 i, at = line
                 values = sorted(
-                    {round(p[i], 6) for p in centers}, key=lambda x: abs(x - at)
+                    {round(p[i], 6) for p in centers},
+                    key=lambda x: abs(x - at),  # ty: ignore[unsupported-operator] -- an edge-on line's offset
                 )
                 if i == 0:  # Vertical datum line: horizontal dimensions above or below.
                     vs = [p[1] for p in centers]
@@ -1157,7 +1158,7 @@ def _plan(pmi: PMI, sheet: Sheet, views: dict) -> dict[str, dict[str, list[dict]
             # A width's size, and its median plane's frames and datums in line with it.
             faces = [
                 Plane(
-                    point=tuple(
+                    point=tuple(  # ty: ignore[invalid-argument-type] -- three coordinates
                         c + s * x * f.width / 2 for c, x in zip(f.center, f.normal)
                     ),
                     normal=f.normal,
@@ -2480,7 +2481,9 @@ def conformance(path: Path, pmi: PMI) -> dict[str, bool]:
     general = next((attribs(i) for i in inserts if i.dxf.name == "GENERAL"), {})
     g = pmi.general
     texts = [e for block in doc.blocks for e in block.query("TEXT ATTDEF")] + [
-        a for i in inserts for a in i.attribs
+        a
+        for i in inserts
+        for a in i.attribs  # ty: ignore[unresolved-attribute] -- INSERT entities
     ]
     scales = {f"{_num(s)}:1" if s > 1 else f"1:{_num(1 / s)}" for s in SCALES}
     required = (

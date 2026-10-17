@@ -4,8 +4,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from examples import drafting
-from examples.drafting import Holes, Plane, Tolerance
+from guacamole.integrations import drafting
+from guacamole.integrations.drafting import Holes, Plane, Tolerance
 
 
 def plate():

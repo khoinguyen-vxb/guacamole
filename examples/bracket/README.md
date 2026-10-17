@@ -28,7 +28,7 @@ do the deterministic work:
 
 ## Drawing and PMI
 
-The drawing follows the ISO GPS subset in [drafting.py](../drafting.py): third-angle
+The drawing follows the ISO GPS subset in [drafting.py](../../src/guacamole/integrations/drafting.py): third-angle
 views of the bracket part, datums A (wall face), B (underside) and C (side face), and
 ISO 129-1 dimensions taken from the model's geometry. It has an ISO 5457 A3 sheet, an
 ISO 7200 title block and an ISO 5455 scale; it is also written as a vector PDF. The
@@ -48,7 +48,7 @@ or other general values. The proposal is checked rather than trusted:
 - `bracket_check` verifies the rule again from the published PMI and BOM.
 
 The PMI is the source of meaning. The DXF is compiled from it and the SVG is rendered
-from the DXF. [ap242.py](../ap242.py) writes the STEP from it through OCCT: datums,
+from the DXF. [ap242.py](../../src/guacamole/integrations/ap242.py) writes the STEP from it through OCCT: datums,
 hole sizes and frames, each attached to the faces the PMI names. Each carries graphical
 PMI too, so STEP viewers show the annotations upright beside their features. The ISO 22081
 general surface profile goes on every face no other surface profile covers, as the
@@ -96,7 +96,7 @@ catch them if they change:
   and `write()` lists what it could not carry.
 - Its reader drops the sign of a lower deviation above nominal.
 
-[mbd.py](../mbd.py) is a second, experimental AP242 writer. It uses the
+[mbd.py](../../src/guacamole/integrations/mbd.py) is a second, experimental AP242 writer. It uses the
 [FreeCAD MBD Workbench](https://github.com/ChipsWoodShop/FreeCAD-MBDWorkbench), an
 LGPL-2.1 preview that follows ASME Y14.5. It puts the PMI on the model's faces as the
 Workbench's own datum, datum system, dimension and frame objects, saves that FreeCAD
@@ -116,8 +116,9 @@ here datum C on the side face, and the read-back flags it. OCCT 7.9 attaches all
 twelve faces.
 
 The Workbench's exporter needs pythonocc-core inside FreeCAD. With the snap FreeCAD,
-a conda environment with `pythonocc-core=7.8.1` works. Set its path and the
-Workbench's in `PYTHONOCC` and `WORKBENCH`. `tests/test_mbd.py` runs only when both
+a conda environment with `pythonocc-core=7.8.1` works. Point `MBD_PYTHONOCC` at its
+site-packages and `MBD_WORKBENCH` at the Workbench if they are not where
+`guacamole.integrations.mbd` looks by default. `tests/test_mbd.py` runs only when both
 are there.
 
 The review's `review.md` is the package document. It includes the requirement

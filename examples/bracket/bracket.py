@@ -20,20 +20,15 @@ import asyncio
 import csv
 import json
 import math
-import os
 import re
-import shutil
-import signal
 import sys
 import time
 from collections.abc import Iterable
-from contextlib import suppress
 from pathlib import Path
 from typing import Annotated, Literal, NamedTuple
 
 from pydantic import Field
 
-from examples import ap242, drafting
 from guacamole import (
     Budget,
     ContextSpec,
@@ -49,6 +44,8 @@ from guacamole import (
 )
 from guacamole.console import host, preflight
 from guacamole.contracts import ArtifactRecord
+from guacamole.integrations import ap242, drafting
+from guacamole.integrations.freecad import FREECAD, run_job
 from guacamole.providers.claude import ClaudeReasoning
 from guacamole.tools.registry import encode
 
@@ -81,10 +78,6 @@ def reasoning() -> ClaudeReasoning:
     return ClaudeReasoning(web_search=False, effort="xhigh")
 
 
-FREECAD = next(
-    (p for n in ("freecadcmd", "FreeCADCmd", "freecad.cmd") if (p := shutil.which(n))),
-    None,
-)
 SCRIPT = ROOT / "freecad_bracket.py"
 
 
@@ -379,45 +372,6 @@ def floating(pmi: drafting.PMI, bom: list[list[str]]) -> bool:
     )
 
 
-async def freecad(
-    job: dict[str, object], directory: Path, script: Path = SCRIPT
-) -> dict:
-    """Run a FreeCAD-side script on one job in its own headless process group.
-
-    The script reads the job file named in BRACKET_JOB and writes the job's result
-    file. A timeout or a cancelled call kills that group, not just the wait for it.
-    """
-    if FREECAD is None:
-        raise RuntimeError("FreeCAD is not installed: no freecadcmd on PATH")
-    path, result = directory / "job.json", directory / "result.json"
-    result.unlink(missing_ok=True)
-    path.write_text(json.dumps({**job, "result": str(result)}), encoding="utf-8")
-    process = await asyncio.create_subprocess_exec(
-        FREECAD,
-        "-c",
-        f"exec(open({str(script)!r}, encoding='utf-8').read())",
-        # Offscreen Qt lets scripts import GUI-backed addons without a display.
-        env={**os.environ, "BRACKET_JOB": str(path), "QT_QPA_PLATFORM": "offscreen"},
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.STDOUT,
-        start_new_session=True,
-    )
-    try:
-        output, _ = await asyncio.wait_for(process.communicate(), FREECAD_TIMEOUT_S)
-    except (TimeoutError, asyncio.CancelledError) as exc:
-        with suppress(ProcessLookupError):
-            os.killpg(process.pid, signal.SIGKILL)
-        await process.wait()
-        if isinstance(exc, asyncio.CancelledError):
-            raise
-        # Not TimeoutError: the runtime would read that as its own turn timing out.
-        raise RuntimeError(f"FreeCAD took over {FREECAD_TIMEOUT_S} s") from None
-    if process.returncode or not result.exists():
-        tail = "\n".join(output.decode(errors="replace").splitlines()[-15:])
-        raise RuntimeError(f"FreeCAD exited {process.returncode}:\n{tail}")
-    return json.loads(result.read_text(encoding="utf-8"))
-
-
 def assess(
     measured: dict,
     published_bom: list[list[str]],
@@ -550,7 +504,7 @@ def register_tools(project: Project) -> None:
             "bom": directory / f"{number}-bom.csv",
         }
         size = f"{d.width_mm:g} x {d.wall_leg_mm:g} x {d.shelf_leg_mm:g} x {d.thickness_mm:g} mm"
-        built = await freecad(
+        built = await run_job(
             {
                 "mode": "generate",
                 "holes": d.holes_per_leg,
@@ -594,6 +548,8 @@ def register_tools(project: Project) -> None:
                 "outputs": {k: str(paths[k]) for k in ("native", "step", "bom")},
             },
             directory,
+            SCRIPT,
+            FREECAD_TIMEOUT_S,
         )
         # The drawing is compiled from the PMI and the model's own geometry; a
         # feature the model no longer holds, or a malformed PMI, is a problem.
@@ -667,7 +623,7 @@ def register_tools(project: Project) -> None:
         pmi = drafting.PMI.model_validate_json(files["pmi"].read_text(encoding="utf-8"))
         directory = project.output_path(Path("cad") / "checks" / native_artifact)
         directory.mkdir(parents=True, exist_ok=True)
-        measured = await freecad(
+        measured = await run_job(
             {
                 "mode": "inspect",
                 "native": str(files["native"]),
@@ -675,6 +631,8 @@ def register_tools(project: Project) -> None:
                 "features": drafting.specs(pmi),
             },
             directory,
+            SCRIPT,
+            FREECAD_TIMEOUT_S,
         )
         found, failed = drafting.features(measured["features"])
         malformed, moved = drafting.problems(pmi), drafting.moved(pmi, found)

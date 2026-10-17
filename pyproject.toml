@@ -48,3 +48,9 @@ python-version = "3.13"
 
 [tool.ty.src]
 include = ["src/guacamole"]
+# Runs inside FreeCAD's own interpreter, which provides FreeCAD, Part and the Workbench.
+exclude = ["src/guacamole/integrations/mbd_freecad.py"]
+
+[tool.ty.analysis]
+# OCP's partial stubs omit most OCCT classes.
+replace-imports-with-any = ["OCP.**"]

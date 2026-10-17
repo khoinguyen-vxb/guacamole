@@ -7,7 +7,6 @@ from unittest.mock import patch
 
 from runtime_support import TestReasoning, commit_fixture_model
 
-from examples import drafting
 from examples.bracket import bracket
 from guacamole import (
     AgentTurn,
@@ -30,6 +29,7 @@ from guacamole.contracts import (
     Ref,
     Wait,
 )
+from guacamole.integrations import drafting
 
 SOURCE = Ref(kind="source", id="brief", revision=1, sha256="0" * 64)
 

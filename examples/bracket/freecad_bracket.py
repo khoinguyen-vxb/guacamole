@@ -1,6 +1,6 @@
 """Runs inside headless FreeCAD: builds or inspects one L-bracket assembly.
 
-bracket.py writes a job file and names it in BRACKET_JOB. Every number arrives in
+bracket.py writes a job file and names it in GUACAMOLE_JOB. Every number arrives in
 the job; the engineering tables stay in bracket.py. "generate" writes the native
 model, STEP and BOM, and returns the bracket's projected views and named features
 for the drawing. "inspect" reopens a native model and reports what it measures,
@@ -383,7 +383,7 @@ def inspect(job):
     return report
 
 
-with open(os.environ["BRACKET_JOB"], encoding="utf-8") as f:
+with open(os.environ["GUACAMOLE_JOB"], encoding="utf-8") as f:
     job = json.load(f)
 result = generate(job) if job["mode"] == "generate" else inspect(job)
 with open(job["result"], "w", encoding="utf-8") as f:

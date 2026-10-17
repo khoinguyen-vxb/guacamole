@@ -53,7 +53,11 @@ guacamole/
 │       │   └── runtime.py           # Spawner, context budgets, grants, provider boundary
 │       │
 │       ├── integrations/
-│       │   ├── freecad.py           # FreeCAD tools through a local freecad-mcp checkout
+│       │   ├── freecad.py           # Headless FreeCAD jobs; tools through a freecad-mcp checkout
+│       │   ├── drafting.py          # ISO GPS drawings from typed PMI; DXF read-back checks
+│       │   ├── ap242.py             # STEP AP242 semantic PMI: write on faces, read back, compare
+│       │   ├── mbd.py               # PMI through the FreeCAD MBD Workbench, checked by ap242.read
+│       │   ├── mbd_freecad.py       # Its headless FreeCAD side: Workbench objects on faces, export
 │       │   └── sysml/
 │       │       ├── adapter.py       # SysML Toolkit reads: requirements, bounds, satisfy
 │       │       ├── validator.py     # Deterministic truth checks, bound checks, diffs
@@ -67,10 +71,6 @@ guacamole/
 │       └── websocket.py             # Optional local script control/events bridge
 │
 ├── examples/
-│   ├── ap242.py                      # STEP AP242 semantic PMI: write on faces, read back, compare
-│   ├── drafting.py                   # ISO GPS drawings from typed PMI; DXF read-back checks
-│   ├── mbd.py                        # PMI through the FreeCAD MBD Workbench, checked by ap242.read
-│   ├── mbd_freecad.py                # Its headless FreeCAD side: Workbench objects on faces, export
 │   ├── bracket/
 │   │   ├── bracket.py                # Bracket family tools, drafting rules, benchmark loop
 │   │   ├── review.py                 # Accepts or rejects the brief's ready review

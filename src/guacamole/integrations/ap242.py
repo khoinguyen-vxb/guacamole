@@ -1,6 +1,6 @@
 """STEP AP242 semantic PMI: write a part's PMI onto its faces, read it back, compare.
 
-Example tooling over OCCT through CadQuery's OCP (the `bracket` extra). write() reads
+Over OCCT through CadQuery's OCP (the `bracket` extra, loaded on first use). write() reads
 a model's STEP, finds the faces each PMI feature's fingerprint names, and writes AP242
 with semantic GD&T: datums, sizes, locations and ISO 1101 frames with their zones,
 modifiers and datum systems. Each also carries graphical PMI: drawn as on the
@@ -31,8 +31,9 @@ from typing import Any
 
 from pydantic import Field
 
-from examples import drafting
-from examples.drafting import (
+from ..contracts import Model
+from . import drafting
+from .drafting import (
     PMI,
     Face,
     Feature,
@@ -49,7 +50,6 @@ from examples.drafting import (
     problems,
     specs,
 )
-from guacamole import Model
 
 TOL = 1e-4  # mm: STEP round trips move geometry by far less
 # ISO 1101 characteristic: OCCT XCAF tolerance type.
@@ -1181,7 +1181,7 @@ def read(path: Path) -> Found:
                 order = None
                 break
             if placed:
-                found_targets[name] = tuple(t for _, t in sorted(placed.items()))
+                found_targets[name] = tuple(t for _, t in sorted(placed.items()))  # ty: ignore[invalid-assignment] -- string reasons broke out above
             target = attached(datum_label, f"datum {name}")
             if target is None:
                 order = None
@@ -1201,7 +1201,7 @@ def read(path: Path) -> Found:
         tolerances.append(
             Tolerance(
                 feature=key,
-                characteristic=characteristic,
+                characteristic=characteristic,  # ty: ignore[invalid-argument-type] -- a CHARACTERISTICS key
                 value=value,
                 diameter=zone == "Diameter",
                 material="" if material == "None" else material,
@@ -1338,7 +1338,11 @@ def _magnitudes(path: Path) -> dict[str, Any]:
     def length(ref: str) -> float | None:
         measure = re.search(measures, entities.get(ref, ""))
         scale = unit_scale(measure.group(2)) if measure else None
-        return None if scale is None else float(measure.group(1)) * scale
+        return (
+            None
+            if measure is None or scale is None
+            else float(measure.group(1)) * scale
+        )
 
     found: dict[str, float | None] = {}
     values: list[float] = []
@@ -1351,7 +1355,7 @@ def _magnitudes(path: Path) -> dict[str, Any]:
         ):
             measure = re.search(measures, body)
             scale = unit_scale(measure.group(2)) if measure else None
-            if scale is not None:
+            if measure and scale is not None:
                 targets.append(float(measure.group(1)) * scale)
         if match := re.search(
             r"\b\w+_TOLERANCE\(\s*'([^']*)'\s*,\s*'[^']*'\s*,\s*#(\d+)", body

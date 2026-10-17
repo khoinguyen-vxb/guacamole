@@ -694,7 +694,9 @@ with Project(WORKSPACE, sandbox=SANDBOX, tools=ToolRegistry(), reasoning=...) as
 The runtime lives in `src/guacamole` and tests live in `tests`.
 [outline.txt](outline.txt) lists the files and their responsibilities.
 Engineering tools, their schemas, and numerical dependencies belong in supplied
-project code or separately installed packages.
+project code or separately installed packages. The opt-in modules under
+`guacamole.integrations` are shared ones: imported on demand, each loads its own
+dependencies on first use.
 
 ### Wall-bracket benchmark
 
@@ -702,16 +704,17 @@ project code or separately installed packages.
 product family through to a ready PDR review package: parametric FreeCAD CAD, STEP,
 PMI, an ISO part drawing (DXF, SVG and PDF) and a BOM, all checked and traced to
 requirements, with no manual CAD or document work. The drawing compiler,
-[drafting.py](examples/drafting.py), is example tooling. It compiles drawings from
+[guacamole.integrations.drafting](src/guacamole/integrations/drafting.py), compiles drawings from
 typed PMI and the model's geometry, and reads a DXF back to check it. The PMI covers
 datums and datum targets, sizes, locations, ISO 1101 frames and the ISO 22081 general
 specification. Drawings can use the ISO GPS or ASME Y14.5-2018 profile, first or
-third angle, on A4 to A0 sheets. [ap242.py](examples/ap242.py) writes the
+third angle, on A4 to A0 sheets. [integrations.ap242](src/guacamole/integrations/ap242.py) writes the
 same PMI into STEP AP242 on the model's faces through OCCT, and reads AP242 files
 back independently, listing whatever the typed PMI cannot hold.
-[mbd.py](examples/mbd.py) writes the PMI a second way, through the FreeCAD MBD
-Workbench, and checks that file with the same reader. Needs FreeCAD, the `bracket`
-extra and a logged-in Claude Code CLI.
+[integrations.mbd](src/guacamole/integrations/mbd.py) writes the PMI a second way, through the FreeCAD MBD
+Workbench, and checks that file with the same reader. `integrations.freecad.run_job`
+runs these FreeCAD-side scripts headless. They need FreeCAD and the `bracket` extra;
+the benchmark also needs a logged-in Claude Code CLI.
 
 ### Sounding-rocket example
 

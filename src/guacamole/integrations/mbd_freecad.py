@@ -1,6 +1,6 @@
 """Runs inside headless FreeCAD: writes a part's PMI through the MBD Workbench.
 
-mbd.py writes a job file and names it in BRACKET_JOB: the native model and the part
+mbd.py writes a job file and names it in GUACAMOLE_JOB: the native model and the part
 to annotate, the PMI as JSON, the output paths, and where pythonocc-core and the
 Workbench are. The part's solid is copied alone into a new document, because the
 Workbench exports every solid it finds. Each PMI feature is found among its faces by
@@ -17,7 +17,7 @@ import sys
 import FreeCAD as App
 import Part
 
-with open(os.environ["BRACKET_JOB"], encoding="utf-8") as f:
+with open(os.environ["GUACAMOLE_JOB"], encoding="utf-8") as f:
     job = json.load(f)
 sys.path.append(job["pythonocc"])  # The Workbench's exporter needs pythonocc-core
 sys.path.insert(0, job["workbench"])
