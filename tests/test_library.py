@@ -9,6 +9,7 @@ from runtime_support import TestReasoning, commit_fixture_model, plan_request
 
 from guacamole import (
     AgentTurn,
+    AmendmentOp,
     Clause,
     ContextSpec,
     Element,
@@ -678,6 +679,109 @@ class LibraryTests(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(Counting.parses, parses)
                 self.assertTrue(result.run_id)
             shared.close()
+
+    def test_an_amendment_is_applied_as_quoted_operations(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            amendment = write_pdf(
+                root / "amdt1.pdf",
+                [
+                    [
+                        "# AMENDMENT No. 1 TO TF 1210-2010",
+                        "1 Delete Clause 3.2.4.",
+                        "2 Replace Table 3.3.1(B) with the following.",
+                        "3 Insert new Clause 3.5 after Clause 3.4.",
+                    ]
+                ],
+            )
+            table = (
+                "TABLE 3.3.1(B) MINIMUM SHELL THICKNESS\n"
+                "Diameter up to 1000 mm: 4 mm\nDiameter over 1000 mm: 5 mm"
+            )
+            operations = [
+                AmendmentOp(
+                    op="delete", target="3.2.4", instruction="Delete Clause 3.2.4."
+                ),
+                AmendmentOp(
+                    op="replace",
+                    target="Table 3.3.1(B)",
+                    text=table,
+                    instruction="Replace Table 3.3.1(B) with the following.",
+                ),
+                AmendmentOp(
+                    op="insert_after",
+                    target="3.4",
+                    id="3.5",
+                    text="3.5 Marking\nVessels shall be marked with the design pressure.",
+                    instruction="Insert new Clause 3.5 after Clause 3.4.",
+                ),
+            ]
+            with Library(root / "library") as library:
+                base = library.ingest(
+                    fixture_standard(root / "tf1210.pdf"),
+                    designation="TF 1210",
+                    edition="2010",
+                    parser=PypdfParser(),
+                )
+                # An operation the amendment does not say is refused.
+                with self.assertRaisesRegex(ValueError, "does not say"):
+                    library.amend(
+                        base.id,
+                        amendment,
+                        name="Amdt 1",
+                        operations=[
+                            AmendmentOp(
+                                op="delete", target="3.4", instruction="Delete 3.4."
+                            )
+                        ],
+                        parser=PypdfParser(),
+                    )
+                amended = library.amend(
+                    base.id,
+                    amendment,
+                    name="Amdt 1",
+                    operations=operations,
+                    parser=PypdfParser(),
+                )
+                self.assertEqual(amended.edition, "2010 + Amdt 1")
+                self.assertEqual(amended.based_on[0], base.id)
+                self.assertTrue(amended.based_on[1].startswith("Amdt 1:"))
+                elements = {e.id: e for e in library.elements(amended.id)}
+                self.assertNotIn("3.2.4", elements)
+                # 3.3.1 lost the exception it pointed at; 3.5 links to its term.
+                self.assertNotIn("3.2.4", {l.target for l in elements["3.3.1"].links})
+                self.assertEqual(elements["3.5"].parent, "3")
+                self.assertIn(
+                    ("uses", "1.4.1"),
+                    {(l.type, l.target) for l in elements["3.5"].links},
+                )
+                self.assertEqual(
+                    elements["Table 3.3.1(B)"].history,
+                    ("Amdt 1: replace “Replace Table 3.3.1(B) with the following.”",),
+                )
+                self.assertEqual(elements["Table 3.3.1(B)"].provenance, ())
+                # The base is unchanged, and the diff is exactly the amendment.
+                self.assertIn("3.2.4", {e.id for e in library.elements(base.id)})
+                changed = {
+                    (c.old, c.new, c.change, c.reasons)
+                    for c in align(
+                        library.elements(base.id), library.elements(amended.id)
+                    )
+                    if c.change != "unchanged"
+                }
+                self.assertLessEqual(
+                    {
+                        ("3.2.4", None, "deleted", ()),
+                        (
+                            "Table 3.3.1(B)",
+                            "Table 3.3.1(B)",
+                            "modified",
+                            ("value: 3 → 4",),
+                        ),
+                        (None, "3.5", "new", ()),
+                    },
+                    changed,
+                )
 
     def test_any_pdf_falls_back_to_pages_and_paragraphs(self):
         with tempfile.TemporaryDirectory() as directory:

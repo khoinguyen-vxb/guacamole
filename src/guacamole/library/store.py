@@ -8,13 +8,21 @@ elements are appended beside it; the latest for an element is its status.
 
 import hashlib
 import sqlite3
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Literal, Self
 
-from ..contracts import Element, Label, Scope, SourceSnapshot, Verification
+from ..contracts import (
+    AmendmentOp,
+    Element,
+    Label,
+    Scope,
+    SourceSnapshot,
+    Verification,
+)
 from ..tools.registry import encode
 from .parsing import LayoutParser, default_parser
-from .profiles import choose
+from .profiles import PROFILES, choose
 
 
 class Library:
@@ -63,66 +71,29 @@ class Library:
     def close(self) -> None:
         self.db.close()
 
-    def ingest(
-        self,
-        path: Path,
-        *,
-        designation: str,
-        edition: str,
-        title: str = "",
-        label: Label | None = None,
-        licence: str = "",
-        profile: str | None = None,
-        parser: LayoutParser | None = None,
-    ) -> SourceSnapshot:
-        """Parse a PDF, structure it with the best-fitting profile, and freeze it.
-
-        Ingesting the same file the same way again returns the existing snapshot
-        without parsing it.
-        """
+    def _original(self, path: Path) -> tuple[str, Path]:
+        """Keep a copy of a file under its hash; return the hash and the copy."""
         data = path.read_bytes()
         digest = hashlib.sha256(data).hexdigest()
         original = self.directory / "originals" / digest / path.name
         if not original.exists():
             original.parent.mkdir(parents=True, exist_ok=True)
             original.write_bytes(data)
-        parser = parser or default_parser()
-        # The same file parsed the same way again: no need to parse it to know.
-        for existing in self.snapshots():
-            if (
-                (existing.file_sha256, existing.file_name) == (digest, path.name)
-                and existing.parser == parser.name
-                and (profile is None or existing.profile.split("@")[0] == profile)
-                and (existing.designation, existing.edition) == (designation, edition)
-                and existing.label == (label or Label())
-            ):
-                return existing
-        blocks = parser.parse(original)
-        chosen = choose(blocks, profile)
-        elements = chosen.structure(blocks)
-        if not elements:
-            raise ValueError(f"{path.name}: no text found; scanned pages need OCR")
-        fields = {
-            "designation": designation,
-            "edition": edition,
-            "title": title,
-            "file_name": path.name,
-            "file_sha256": digest,
-            "profile": chosen.name,
-            "parser": parser.name,
-            "label": (label or Label()).model_dump(mode="json"),
-            "licence": licence,
+        return digest, original
+
+    def _freeze(
+        self, fields: dict, label: Label, elements: Sequence[Element]
+    ) -> SourceSnapshot:
+        """A snapshot of these elements under an ID derived from all of it."""
+        fields = fields | {
+            "label": label.model_dump(mode="json"),
             "elements": len(elements),
         }
         content = encode(
             [fields, [e.model_dump(mode="json") for e in elements]]
         ).encode()
-        snapshot = SourceSnapshot.model_validate(
-            fields
-            | {
-                "id": f"snap-{hashlib.sha256(content).hexdigest()[:16]}",
-                "label": label or Label(),
-            }
+        snapshot = SourceSnapshot.model_validate_json(
+            encode(fields | {"id": f"snap-{hashlib.sha256(content).hexdigest()[:16]}"})
         )
         if self.db.execute(
             "SELECT 1 FROM snapshots WHERE id=?", (snapshot.id,)
@@ -147,6 +118,127 @@ class Library:
             raise
         self.db.execute("COMMIT")
         return snapshot
+
+    def ingest(
+        self,
+        path: Path,
+        *,
+        designation: str,
+        edition: str,
+        title: str = "",
+        label: Label | None = None,
+        licence: str = "",
+        profile: str | None = None,
+        parser: LayoutParser | None = None,
+    ) -> SourceSnapshot:
+        """Parse a PDF, structure it with the best-fitting profile, and freeze it.
+
+        Ingesting the same file the same way again returns the existing snapshot
+        without parsing it.
+        """
+        digest, original = self._original(path)
+        parser = parser or default_parser()
+        label = label or Label()
+        # The same file parsed the same way again: no need to parse it to know.
+        for existing in self.snapshots():
+            if (
+                (existing.file_sha256, existing.file_name) == (digest, path.name)
+                and existing.parser == parser.name
+                and (profile is None or existing.profile.split("@")[0] == profile)
+                and (existing.designation, existing.edition) == (designation, edition)
+                and existing.label == label
+                and not existing.based_on
+            ):
+                return existing
+        blocks = parser.parse(original)
+        chosen = choose(blocks, profile)
+        elements = chosen.structure(blocks)
+        if not elements:
+            raise ValueError(f"{path.name}: no text found; scanned pages need OCR")
+        fields = {
+            "designation": designation,
+            "edition": edition,
+            "title": title,
+            "file_name": path.name,
+            "file_sha256": digest,
+            "profile": chosen.name,
+            "parser": parser.name,
+            "licence": licence,
+        }
+        return self._freeze(fields, label, elements)
+
+    def amend(
+        self,
+        base: str,
+        amendment: Path,
+        *,
+        name: str,
+        operations: Sequence[AmendmentOp],
+        parser: LayoutParser | None = None,
+    ) -> SourceSnapshot:
+        """The base with an amendment applied, as a new snapshot; the base is kept.
+
+        Each operation must quote its instruction from the amendment document.
+        A replaced or deleted element takes its notes and tables with it; changed
+        elements record the amendment in their history and lose the base's page
+        positions, and the base's profile finds every element's links again.
+        """
+        frozen = self.snapshot(base)
+        digest, original = self._original(amendment)
+        said = " ".join(
+            " ".join(
+                b.text for b in (parser or default_parser()).parse(original)
+            ).split()
+        )
+        elements = list(self.elements(base))
+        for op in operations:
+            instruction = " ".join(op.instruction.split())
+            if instruction not in said:
+                raise ValueError(f"{name} does not say: {op.instruction!r}")
+            index = {e.id: i for i, e in enumerate(elements)}
+            if op.target not in index:
+                raise KeyError(f"{name}: no element {op.target} to {op.op}")
+            if op.op == "insert_after" and op.id in index:
+                raise ValueError(f"{name}: {op.id} already exists")
+            note = f"{name}: {op.op} “{instruction}”"
+            subtree = {op.target}
+            for e in elements:  # Parents precede their children
+                if e.parent in subtree:
+                    subtree.add(e.id)
+            target = elements[index[op.target]]
+            if op.op == "replace":
+                elements[index[op.target]] = target.model_copy(
+                    update={
+                        "text": op.text,
+                        "provenance": (),
+                        "history": (*target.history, note),
+                    }
+                )
+            elif op.op == "delete":
+                elements = [e for e in elements if e.id not in subtree]
+            else:
+                last = max(index[id] for id in subtree)
+                elements.insert(
+                    last + 1,
+                    Element(
+                        id=op.id,
+                        parent=target.parent,
+                        kind=op.kind,
+                        text=op.text,
+                        history=(note,),
+                    ),
+                )
+        profile = PROFILES[frozen.profile.split("@")[0]]
+        relinked = profile.link(
+            tuple(e.model_copy(update={"links": ()}) for e in elements)
+        )
+        fields = frozen.model_dump(
+            mode="json", exclude={"id", "label", "elements", "based_on"}
+        ) | {
+            "edition": f"{frozen.edition} + {name}",
+            "based_on": [*(frozen.based_on or (frozen.id,)), f"{name}:{digest}"],
+        }
+        return self._freeze(fields, frozen.label, relinked)
 
     def snapshot(self, id: str) -> SourceSnapshot:
         row = self.db.execute("SELECT data FROM snapshots WHERE id=?", (id,)).fetchone()

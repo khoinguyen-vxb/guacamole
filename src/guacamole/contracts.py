@@ -380,6 +380,29 @@ class Element(Model):
     text: str
     links: tuple[Link, ...] = ()
     provenance: tuple[Provenance, ...] = ()
+    # Amendments that changed it, each with the instruction quoted.
+    history: tuple[str, ...] = ()
+
+
+class AmendmentOp(Model):
+    """One instruction of an amendment, as an operation on the base's elements.
+
+    instruction quotes the amendment document, which must hold those words."""
+
+    op: Literal["replace", "delete", "insert_after"]
+    target: str = Field(min_length=1)  # Element ID in the snapshot being amended
+    text: str = ""  # Replacement or inserted text
+    id: str = ""  # The inserted element's ID
+    kind: str = "normative"  # The inserted element's kind
+    instruction: str = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def _complete(self) -> "AmendmentOp":
+        if self.op != "delete" and not self.text.strip():
+            raise ValueError(f"{self.op} needs the new text")
+        if self.op == "insert_after" and not self.id:
+            raise ValueError("insert_after needs the inserted element's id")
+        return self
 
 
 class SourceSnapshot(Model):
@@ -399,6 +422,8 @@ class SourceSnapshot(Model):
     label: Label
     licence: str = ""
     elements: int = Field(ge=0)
+    # A consolidation: the base snapshot, then each amendment's name and file hash.
+    based_on: tuple[str, ...] = ()
 
 
 class Verification(Model):

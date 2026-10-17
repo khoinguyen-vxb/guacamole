@@ -20,6 +20,10 @@ class Profile(Protocol):
 
     def structure(self, blocks: tuple[Block, ...]) -> tuple[Element, ...]: ...
 
+    def link(self, elements: tuple[Element, ...]) -> tuple[Element, ...]:
+        """The elements with their links found again, after an amendment."""
+        ...
+
 
 @dataclass
 class _Draft:
@@ -96,6 +100,9 @@ class FallbackProfile:
                 )
             ]
         return tuple(elements)
+
+    def link(self, elements: tuple[Element, ...]) -> tuple[Element, ...]:
+        return elements  # Pages and paragraphs have no links
 
 
 _NUMBER = r"\d{1,2}(?:\.\d{1,3}){1,5}"
@@ -318,26 +325,32 @@ class NumberedClauseProfile:
                 draft.kind = "definition"
             if draft.kind == "normative" and informative(draft):
                 draft.kind = "informative"
-        ids = set(drafts)
-        names = {
-            m.group(1): d.id for d in drafts.values() if (m := _NAMED.match(d.heading))
-        }
+        return self.link(
+            tuple(
+                Element(
+                    id=d.id,
+                    parent=d.parent,
+                    kind=d.kind,
+                    heading=d.heading,
+                    text="\n".join(d.lines),
+                    provenance=_provenance(d.blocks),
+                )
+                for d in drafts.values()
+            )
+        )
+
+    def link(self, elements: tuple[Element, ...]) -> tuple[Element, ...]:
+        ids = {e.id for e in elements}
+        names = {m.group(1): e.id for e in elements if (m := _NAMED.match(e.heading))}
         terms = {
-            d.id: _forms(term)
-            for d in drafts.values()
-            if d.kind == "definition" and (term := d.heading or _first_term(d.lines))
+            e.id: _forms(term)
+            for e in elements
+            if e.kind == "definition"
+            and (term := e.heading or _first_term(e.text.splitlines()))
         }
         return tuple(
-            Element(
-                id=d.id,
-                parent=d.parent,
-                kind=d.kind,
-                heading=d.heading,
-                text="\n".join(d.lines),
-                links=_links(d, ids, terms, names),
-                provenance=_provenance(d.blocks),
-            )
-            for d in drafts.values()
+            e.model_copy(update={"links": _links(e, ids, terms, names)})
+            for e in elements
         )
 
 
@@ -360,12 +373,12 @@ def _first_term(lines: list[str]) -> str:
 
 
 def _links(
-    draft: _Draft,
+    element: Element,
     ids: set[str],
     terms: dict[str, tuple[re.Pattern[str], ...]],
     names: dict[str, str],
 ) -> tuple[Link, ...]:
-    text = "\n".join(draft.lines)
+    text = element.text
     links: dict[tuple[str, str], Link] = {}
 
     def add(
@@ -376,7 +389,7 @@ def _links(
         confidence: float = 1.0,
     ) -> None:
         resolved = target in ids
-        if target == draft.id or not (resolved or explicit):
+        if target == element.id or not (resolved or explicit):
             return
         sentence = text[max(text.rfind(".", 0, at), text.rfind(";", 0, at)) + 1 : at]
         if _EXCEPTION.search(sentence):
@@ -412,7 +425,7 @@ def _links(
     for name, id in names.items():
         for m in re.finditer(rf"\b{re.escape(name)}(?![\w])", text):
             add(id, m.start(), True)
-    if draft.kind not in {"definition", "front"}:
+    if element.kind not in {"definition", "front"}:
         for id, forms in terms.items():
             if any(form.search(text) for form in forms):
                 links.setdefault(
